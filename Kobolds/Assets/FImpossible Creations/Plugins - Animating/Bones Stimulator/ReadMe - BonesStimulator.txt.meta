@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 1e1a42105f959dd4ea3199f7d919fcb1
+timeCreated: 1530012526
+licenseType: Store
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 122233
+  packageName: Bones Stimulator
+  packageVersion: 2.0.0
+  assetPath: Assets/FImpossible Creations/Plugins - Animating/Bones Stimulator/ReadMe
+    - BonesStimulator.txt
+  uploadId: 720864

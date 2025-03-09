@@ -6,11 +6,12 @@ namespace P3T.Scripts.AnimatedIntro
     {
         [SerializeField] private Animator Ac;
         [SerializeField] private string AnimationName;
+		[SerializeField] private int AnimationLayer = -1;
 
         private void Awake()
         {
             if (Ac != null)
-                Ac.Play(AnimationName, -1, normalizedTime:Random.value);
+                Ac.Play(AnimationName);
         }
     }
 }

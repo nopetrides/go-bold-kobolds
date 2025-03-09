@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 731543b6a9c668543ba9539adbb60304
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 122233
+  packageName: Bones Stimulator
+  packageVersion: 2.0.0
+  assetPath: Assets/FImpossible Creations/Shared Tools/Editor/Property Drawers/FPD_MinMaxSliderDrawer.cs
+  uploadId: 720864

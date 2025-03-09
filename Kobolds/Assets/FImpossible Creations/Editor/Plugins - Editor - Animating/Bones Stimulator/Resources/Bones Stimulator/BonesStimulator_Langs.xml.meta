@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: ef3f04f8f37f718478f16c56110e93af
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 122233
+  packageName: Bones Stimulator
+  packageVersion: 2.0.0
+  assetPath: Assets/FImpossible Creations/Editor/Plugins - Editor - Animating/Bones
+    Stimulator/Resources/Bones Stimulator/BonesStimulator_Langs.xml
+  uploadId: 720864
