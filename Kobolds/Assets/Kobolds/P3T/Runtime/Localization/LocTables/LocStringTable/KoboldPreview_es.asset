@@ -72,6 +72,14 @@ MonoBehaviour:
       que son bastante malos en su trabajo."
     m_Metadata:
       m_Items: []
+  - m_Id: 47410725101568
+    m_Localized: idioma
+    m_Metadata:
+      m_Items: []
+  - m_Id: 47783430955008
+    m_Localized: "Tambi\xE9n se puede cambiar desde el men\xFA de configuraci\xF3n."
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

@@ -69,6 +69,14 @@ MonoBehaviour:
       the job.'
     m_Metadata:
       m_Items: []
+  - m_Id: 47410725101568
+    m_Localized: Language
+    m_Metadata:
+      m_Items: []
+  - m_Id: 47783430955008
+    m_Localized: Can also be changed from the settings menu
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

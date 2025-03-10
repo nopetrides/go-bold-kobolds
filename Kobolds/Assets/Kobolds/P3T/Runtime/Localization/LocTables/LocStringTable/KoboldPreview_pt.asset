@@ -58,6 +58,14 @@ MonoBehaviour:
       ruins no trabalho."
     m_Metadata:
       m_Items: []
+  - m_Id: 47410725101568
+    m_Localized: linguagem
+    m_Metadata:
+      m_Items: []
+  - m_Id: 47783430955008
+    m_Localized: "\r\nTamb\xE9m pode ser alterado no menu de configura\xE7\xF5es"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

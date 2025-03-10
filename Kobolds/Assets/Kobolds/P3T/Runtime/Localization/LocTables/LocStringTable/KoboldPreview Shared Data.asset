@@ -55,6 +55,14 @@ MonoBehaviour:
     m_Key: TesterSceneDesc
     m_Metadata:
       m_Items: []
+  - m_Id: 47410725101568
+    m_Key: LanguageTitle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 47783430955008
+    m_Key: LanguageDescription
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
