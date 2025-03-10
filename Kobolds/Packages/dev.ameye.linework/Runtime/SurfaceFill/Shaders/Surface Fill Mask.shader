@@ -74,6 +74,15 @@ Shader "Hidden/Outlines/Surface Fill/Mask"
                 UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(OUT); // VR support
 
                 OUT.positionHCS = TransformObjectToHClip(IN.positionOS.xyz);
+
+                // Add depth bias.
+                float depthBias = 0.05f;
+                #if defined(UNITY_REVERSED_Z)
+                OUT.positionHCS.z = OUT.positionHCS.z * (1.0f + depthBias);
+                #else
+                OUT.positionHCS.z = OUT.positionHCS.z * (1.0f - depthBias);
+                #endif
+                
                 #if defined(ALPHA_CUTOUT)
                 OUT.uv = IN.texcoord;
                 #endif

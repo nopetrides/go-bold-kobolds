@@ -573,6 +573,7 @@ namespace Linework.SurfaceFill
         public override void SetupRenderPasses(ScriptableRenderer renderer, in RenderingData renderingData)
         {
             if (settings == null || renderingData.cameraData.cameraType == CameraType.SceneView && !settings.ShowInSceneView) return;
+            if (renderingData.cameraData.cameraType is CameraType.Preview or CameraType.Reflection) return;
 
             surfaceFillPass.ConfigureInput(ScriptableRenderPassInput.Color);
             surfaceFillPass.ConfigureInput(ScriptableRenderPassInput.Depth);

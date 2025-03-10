@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: f946c5586daf9dd4cb0be156c0fca869
+timeCreated: 1460570484
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 44361
+  packageName: ProTips - Tooltip System
+  packageVersion: 1.7.6a
+  assetPath: Assets/ProTips/Tooltip Prefabs/SilverFiligreeTitle.prefab
+  uploadId: 592825

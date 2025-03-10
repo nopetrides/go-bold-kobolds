@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: e6ced107426ed9642a0a3394f29672f9
+timeCreated: 1484022268
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 44361
+  packageName: ProTips - Tooltip System
+  packageVersion: 1.7.6a
+  assetPath: Assets/ProTips/Tooltip Prefabs/MobileFriendlySimple.prefab
+  uploadId: 592825

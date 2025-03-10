@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 1ea022d46d210004c947bb8290e4c45f
+timeCreated: 1440289231
+licenseType: Store
+DefaultImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 44361
+  packageName: ProTips - Tooltip System
+  packageVersion: 1.7.6a
+  assetPath: Assets/ProTips/ProTips User Guide.pdf
+  uploadId: 592825

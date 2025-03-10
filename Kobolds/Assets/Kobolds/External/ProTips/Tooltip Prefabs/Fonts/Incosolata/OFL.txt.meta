@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: b389d66e5b6b91243a04cb1824d33dd0
+timeCreated: 1439446970
+licenseType: Store
+TextScriptImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 44361
+  packageName: ProTips - Tooltip System
+  packageVersion: 1.7.6a
+  assetPath: Assets/ProTips/Tooltip Prefabs/Fonts/Incosolata/OFL.txt
+  uploadId: 592825

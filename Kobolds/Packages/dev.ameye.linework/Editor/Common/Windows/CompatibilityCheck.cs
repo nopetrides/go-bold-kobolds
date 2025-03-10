@@ -30,7 +30,8 @@ namespace Linework.Editor.Common.Windows
             Untested,
             Pass,
             Fail,
-            Warning
+            Warning,
+            Info
         }
 
         private class CheckResult
@@ -82,7 +83,9 @@ namespace Linework.Editor.Common.Windows
                 new("Graphics API", CheckGraphicsAPI),
                 new("Platform", CheckTargetPlatform),
                 new("Anti Aliasing (MSAA)", CheckMSAA),
-                new("SRP Batcher", CheckSRPBatcher)
+                new("SRP Batcher", CheckSRPBatcher),
+                new("Active Pipeline Asset", CheckActiveRenderPipelineAsset),
+                new("STP", CheckSTP)
             };
 
             var container = new VisualElement
@@ -139,7 +142,7 @@ namespace Linework.Editor.Common.Windows
                     paddingLeft = 2
                 }
             };
-            var versionLabel = new Label("1.4.5 • February 2025")
+            var versionLabel = new Label("1.4.6 • March 2025")
             {
                 style =
                 {
@@ -481,7 +484,7 @@ namespace Linework.Editor.Common.Windows
             {
                 if (alpha || beta)
                 {
-                    return new CheckResult(ResultEnum.Warning, unityVersion, "Linework is compatible with Unity 6.1. However, alpha/beta versions of Unity may be unstable.");
+                    return new CheckResult(ResultEnum.Info, unityVersion, "Linework is compatible with Unity 6.1. However, alpha/beta versions of Unity may be unstable.");
                 }
                 return new CheckResult(ResultEnum.Pass, unityVersion, "Linework is compatible with Unity 6.1.");
             }
@@ -489,7 +492,7 @@ namespace Linework.Editor.Common.Windows
             {
                 if (alpha || beta)
                 {
-                    return new CheckResult(ResultEnum.Warning, unityVersion, "Linework is compatible with Unity 6.0. However, alpha/beta versions of Unity may be unstable.");
+                    return new CheckResult(ResultEnum.Info, unityVersion, "Linework is compatible with Unity 6.0. However, alpha/beta versions of Unity may be unstable.");
                 }
                 return new CheckResult(ResultEnum.Pass, unityVersion, "Linework is compatible with Unity 6.0.");
             }
@@ -497,9 +500,9 @@ namespace Linework.Editor.Common.Windows
             {
                 if (alpha || beta)
                 {
-                    return new CheckResult(ResultEnum.Warning, unityVersion, "Linework is compatible with Unity 2022.3. However, alpha/beta versions of Unity may not be stable.");
+                    return new CheckResult(ResultEnum.Info, unityVersion, "Linework is compatible with Unity 2022.3. However, alpha/beta versions of Unity may not be stable.");
                 }
-                return new CheckResult(ResultEnum.Warning, unityVersion,
+                return new CheckResult(ResultEnum.Info, unityVersion,
                     "Linework is compatible with Unity 2022.3. However, Unity no longer develops or improves the rendering path that does not use Render Graph API. Upgrade to Unity 6 to make use of the Render Graph API.");
             }
             if (unityVersion.StartsWith("2023"))
@@ -587,10 +590,10 @@ namespace Linework.Editor.Common.Windows
             var usingRenderGraph = !renderGraphSettings.enableRenderCompatibilityMode;
             return usingRenderGraph
                 ? new CheckResult(ResultEnum.Pass, "Enabled", "Render Graph is enabled.")
-                : new CheckResult(ResultEnum.Warning, "Compatibility Mode",
+                : new CheckResult(ResultEnum.Info, "Compatibility Mode",
                     "Render Graph is available but not in use because Compatibility Mode is enabled. Unity no longer develops or improves the rendering path that does not use Render Graph API. See Edit > Project Settings > Graphics > Render Graph to disable Compatibility Mode.");
 #else
-            return new CheckResult(ResultEnum.Warning, "Not Available", "Unity no longer develops or improves the rendering path that does not use Render Graph API. Upgrade to Unity 6 to make use of the Render Graph API.");
+            return new CheckResult(ResultEnum.Info, "Not Available", "Unity no longer develops or improves the rendering path that does not use Render Graph API. Upgrade to Unity 6 to make use of the Render Graph API.");
 #endif
         }
 
@@ -674,6 +677,27 @@ namespace Linework.Editor.Common.Windows
                 "No outline overrides were found in the scene that break SRP batching."
             ); 
         }
+
+        private CheckResult CheckActiveRenderPipelineAsset()
+        {
+            var activeRenderPipelineAsset = GraphicsSettings.currentRenderPipeline;
+            if (activeRenderPipelineAsset == null) return new CheckResult(ResultEnum.Fail, "Not found", NoActiveRendererFoundDescription);
+            return new CheckResult(ResultEnum.Info, activeRenderPipelineAsset.name, $"You currently active pipeline asset is {activeRenderPipelineAsset.name}. Make sure that you are adding outlines to the renderer of that pipeline asset.");
+        }
+        
+        private CheckResult CheckSTP()
+        {
+#if UNITY_6000_0_OR_NEWER
+           if (GraphicsSettings.currentRenderPipeline == null) return new CheckResult(ResultEnum.Fail, "Not found", NoActiveRendererFoundDescription);
+            var type = GraphicsSettings.currentRenderPipeline.GetType().ToString();
+            if (!type.Contains("UniversalRenderPipelineAsset")) return new CheckResult(ResultEnum.Fail, "Universal pipeline not found", "Universal pipeline not found.");
+            var pipeline = (UniversalRenderPipelineAsset) GraphicsSettings.currentRenderPipeline;
+            if (pipeline.upscalingFilter == UpscalingFilterSelection.STP) return new CheckResult(ResultEnum.Warning, "Enabled", "Spatial-Temporal Post-processing is enabled and might interfere with outline rendering. If you encounter issues, try setting the outline stage to 'Before Post Processing'.");
+            return new CheckResult(ResultEnum.Pass, "Disabled", "Spatial-Temporal Post-processing is disabled.");
+#else
+            return new CheckResult(ResultEnum.Info, "Not Available", "Spatial-Temporal Post-processing is a Unity 6 feature.");
+#endif
+        }
         
         private class Check
         {
@@ -704,6 +728,7 @@ namespace Linework.Editor.Common.Windows
                 ResultEnum.Pass => EditorGUIUtility.isProSkin ? "d_GreenCheckmark" : "GreenCheckmark",
                 ResultEnum.Fail => EditorGUIUtility.isProSkin ? "d_console.erroricon.sml" : "console.erroricon.sml",
                 ResultEnum.Warning => EditorGUIUtility.isProSkin ? "d_console.warnicon.sml" : "console.warnicon.sml",
+                ResultEnum.Info => EditorGUIUtility.isProSkin ? "d_console.infoicon.sml" : "console.infoicon.sml",
                 _ => null
             };
 

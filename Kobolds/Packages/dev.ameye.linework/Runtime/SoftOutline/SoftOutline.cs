@@ -480,7 +480,7 @@ namespace Linework.SoftOutline
                 const float renderTextureScale = 1.0f; 
                 var width = (int)(renderingData.cameraData.cameraTargetDescriptor.width * renderTextureScale);
                 var height = (int)(renderingData.cameraData.cameraTargetDescriptor.height * renderTextureScale);
-
+                
                 var descriptor = new RenderTextureDescriptor(width, height)
                 {
                     dimension = TextureDimension.Tex2D,
@@ -772,6 +772,7 @@ namespace Linework.SoftOutline
         public override void SetupRenderPasses(ScriptableRenderer renderer, in RenderingData renderingData)
         {
             if (settings == null || renderingData.cameraData.cameraType == CameraType.SceneView && !settings.ShowInSceneView) return;
+            if (renderingData.cameraData.cameraType is CameraType.Preview or CameraType.Reflection) return;
 
             softOutlinePass.CreateHandles(renderingData);
             softOutlinePass.SetTarget(renderer.cameraDepthTargetHandle);

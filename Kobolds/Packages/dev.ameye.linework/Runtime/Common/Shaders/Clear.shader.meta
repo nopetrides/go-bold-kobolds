@@ -11,6 +11,6 @@ AssetOrigin:
   serializedVersion: 1
   productId: 294140
   packageName: 'Linework: Outlines and Edge Detection'
-  packageVersion: 1.4.5
+  packageVersion: 1.4.6
   assetPath: Packages/dev.ameye.linework/Runtime/Common/Shaders/Clear.shader
-  uploadId: 735428
+  uploadId: 739078

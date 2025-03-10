@@ -7,7 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <!-- Headers should be listed in this order: Added, Changed, Deprecated, Removed, Fixed, Security -->
 
-## [1.4.5] - 2025-05-24
+## [1.4.6] - 2025-03-08
+
+### Added
+
+- Compatibility Window: Added check to detect the active pipeline asset
+- Compatibility Window: Added check to detect whether Spatial-Temporal Post-processing is enabled
+
+### Fixed
+
+- Unity 2022: Fixed a rendering issue when realtime reflection probes are present
+- Compatibility mode: Fixed a rendering issue when realtime reflection probes are present
+- Unity 2022: Added step to clear stencil buffer after rendering fast outline to avoid unexpected interactions with other effects
+- GPU Instancing: Fixed editor issue for OutlineOverride when showing integer fields
+
+## [1.4.5] - 2025-02-24
 
 ### Changed
 
@@ -17,7 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Improved compatibility with other packages depending on older versions of com.unity.collections
 
-## [1.4.4] - 2025-05-24
+## [1.4.4] - 2025-02-24
 
 ### Fixed
 

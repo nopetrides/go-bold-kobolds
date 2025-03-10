@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 7ad44c950311f0e41bb9942ac4a5b28e
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 44361
+  packageName: ProTips - Tooltip System
+  packageVersion: 1.7.6a
+  assetPath: Assets/ProTips/Tooltip Prefabs/MultiPanelSimple.prefab
+  uploadId: 592825

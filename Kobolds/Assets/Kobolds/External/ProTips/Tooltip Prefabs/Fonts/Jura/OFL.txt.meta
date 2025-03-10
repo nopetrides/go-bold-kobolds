@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 40fe431f1c6285c429e5bf5f48902268
+timeCreated: 1437888048
+licenseType: Store
+TextScriptImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 44361
+  packageName: ProTips - Tooltip System
+  packageVersion: 1.7.6a
+  assetPath: Assets/ProTips/Tooltip Prefabs/Fonts/Jura/OFL.txt
+  uploadId: 592825

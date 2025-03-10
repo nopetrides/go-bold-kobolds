@@ -183,5 +183,14 @@ namespace Linework.Common.Utils
 
             return blending;
         }
+        
+        // public static void RenderDebug(RenderGraph renderGraph, TextureHandle input, UniversalResourceData resourceData)
+        // {
+        //     using var builder = renderGraph.AddRasterRenderPass<PassData>("DEBUG", out _);
+        //     builder.UseTexture(input);
+        //     builder.SetRenderAttachment(resourceData.activeColorTexture, 0);
+        //     builder.AllowPassCulling(false);
+        //     builder.SetRenderFunc((PassData _, RasterGraphContext context) => { Blitter.BlitTexture(context.cmd, input, Vector2.one, 0.0f, false); });
+        // }
     }
 }

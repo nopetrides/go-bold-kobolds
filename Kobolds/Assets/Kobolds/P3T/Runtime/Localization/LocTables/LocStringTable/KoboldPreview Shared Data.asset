@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: KoboldPreview Shared Data
+  m_EditorClassIdentifier: 
+  m_TableCollectionName: KoboldPreview
+  m_TableCollectionNameGuidString: 3ddd5f788f8fa1448b6dc3fae41e7a86
+  m_Entries:
+  - m_Id: 587994079232
+    m_Key: 00_LanguageCode
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10079917940736
+    m_Key: Animation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9415804428288
+    m_Key: Blessing
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10579325329408
+    m_Key: Camera
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10331651678208
+    m_Key: Emotion
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12875979399168
+    m_Key: Kobold_G_Desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12370028896256
+    m_Key: Kobold_R_Desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12632269365248
+    m_Key: Kobold_Y_Desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12960939220992
+    m_Key: Kobold_B_Desc
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10984188911616
+    m_Key: TesterSceneDesc
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 2373895306591338950
+  references:
+    version: 2
+    RefIds:
+    - rid: 2373895306591338950
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1741579679780

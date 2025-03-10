@@ -370,6 +370,12 @@ namespace Linework.WideOutline
                     renderStateBlock.mask |= RenderStateMask.Stencil;
                     renderStateBlock.stencilReference = 1 << i;
                     renderStateBlock.stencilState = stencilState;
+                    
+                    // var rasterState = RasterState.defaultValue;
+                    // rasterState.offsetFactor = settings.offset;
+                    // rasterState.offsetUnits = settings.unit;
+                    // renderStateBlock.rasterState = rasterState;
+                    // renderStateBlock.mask |= RenderStateMask.Raster;
 
                     var handle = new RendererListHandle();
                     RenderUtils.CreateRendererListWithRenderStateBlock(renderGraph, ref renderingData.cullResults, drawingSettings, filteringSettings, renderStateBlock,
@@ -422,7 +428,16 @@ namespace Linework.WideOutline
                     stencilState.SetCompareFunction(outline.occlusion == WideOutlineOcclusion.WhenOccluded ? CompareFunction.NotEqual : CompareFunction.Always);
                     stencilState.SetPassOperation(StencilOp.Replace);
                     stencilState.SetFailOperation(StencilOp.Keep);
-                    stencilState.SetZFailOperation(outline.closedLoop ? StencilOp.Keep : StencilOp.Replace);
+
+                    // TODO: check
+                    if (outline.occlusion == WideOutlineOcclusion.AsMask)
+                    {
+                        stencilState.SetZFailOperation(StencilOp.Keep);
+                    }
+                    else
+                    {
+                        stencilState.SetZFailOperation(outline.closedLoop ? StencilOp.Keep : StencilOp.Replace);
+                    }
                     
                     stencilState.readMask = (byte) (1 << i);
                     stencilState.writeMask = (byte) (1 << i);
@@ -430,7 +445,8 @@ namespace Linework.WideOutline
                     renderStateBlock.stencilReference = 1 << i;
                     renderStateBlock.stencilState = stencilState;
                    
-                    if (outline.vertexAnimation)
+                    // TODO: check
+                    if (outline.vertexAnimation || outline.occlusion == WideOutlineOcclusion.AsMask)
                     {
                         var depthState = DepthState.defaultValue;
                         switch (outline.occlusion)
@@ -445,7 +461,7 @@ namespace Linework.WideOutline
                                 depthState.compareFunction = CompareFunction.LessEqual;
                                 break;
                             case WideOutlineOcclusion.AsMask:
-                                depthState.compareFunction = CompareFunction.Always;
+                                depthState.compareFunction = CompareFunction.LessEqual;
                                 break;
                         }
                         renderStateBlock.mask |= RenderStateMask.Depth;
@@ -549,7 +565,7 @@ namespace Linework.WideOutline
                 out TextureHandle pongHandle)
             {
                 var cameraDescriptor = resourceData.activeColorTexture.GetDescriptor(renderGraph);
-                
+
                 const float renderTextureScale = 1.0f;
                 var width = (int) (cameraDescriptor.width * renderTextureScale);
                 var height = (int) (cameraDescriptor.height * renderTextureScale);
@@ -920,7 +936,8 @@ namespace Linework.WideOutline
         #pragma warning disable 618, 672
         public override void SetupRenderPasses(ScriptableRenderer renderer, in RenderingData renderingData)
         {
-            if (settings == null) return;
+            if (settings == null || renderingData.cameraData.cameraType == CameraType.SceneView && !settings.ShowInSceneView) return;
+            if (renderingData.cameraData.cameraType is CameraType.Preview or CameraType.Reflection) return;
 
             wideOutlinePass.CreateHandles(renderingData);
             wideOutlinePass.ConfigureInput(ScriptableRenderPassInput.Color);

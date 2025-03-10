@@ -126,6 +126,11 @@ namespace Linework.Editor.Common
                     var floatProperty = element.FindPropertyRelative(nameof(ShaderPropertyOverride.floatValue));
                     EditorGUI.PropertyField(new Rect(rect.x, rect.y, rect.width, EditorGUIUtility.singleLineHeight), floatProperty, new GUIContent("Float Value"));
                     break;
+                
+                case ShaderPropertyType.Int:
+                    var intProperty = element.FindPropertyRelative(nameof(ShaderPropertyOverride.intValue));
+                    EditorGUI.PropertyField(new Rect(rect.x, rect.y, rect.width, EditorGUIUtility.singleLineHeight), intProperty, new GUIContent("Int Value"));
+                    break;
 
                 case ShaderPropertyType.Color:
                     var colorProperty = element.FindPropertyRelative(nameof(ShaderPropertyOverride.colorValue));
@@ -193,6 +198,7 @@ namespace Linework.Editor.Common
             switch (type)
             {
                 case ShaderPropertyType.Float:
+                case ShaderPropertyType.Int:
                 case ShaderPropertyType.Color:
                     return baseHeight + EditorGUIUtility.singleLineHeight + 2;
 

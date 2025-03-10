@@ -1,0 +1,74 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: KoboldPreview_en
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: en
+  m_SharedData: {fileID: 11400000, guid: 3ddd5f788f8fa1448b6dc3fae41e7a86, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 587994079232
+    m_Localized: en
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9415804428288
+    m_Localized: Blessing
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10079917940736
+    m_Localized: Animation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10331651678208
+    m_Localized: Emotion
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10579325329408
+    m_Localized: Camera
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10984188911616
+    m_Localized: Use keyboard arrow keys (+ CTRL for shapekeys) or the GUI buttons
+      above to change kobold/animation
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12370028896256
+    m_Localized: <b><kr>Queen's General:</kr></b>\n Jack of all trades, master of
+      none. These kobolds are the mainstay of the forces. With no supernatural gift,
+      the average kobold must use wit and teamwork to overcome obstacles.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12632269365248
+    m_Localized: <b><ky>Queen's Gifted:</ky></b>\n Blessed with a fragment of draconic
+      magic, these sorcerers wield the arcane against their foes. Their attunement
+      to magic makes them excentric and may disturb other kobolds.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12875979399168
+    m_Localized: <b><kg>Queen's Grace:</kg></b>\n A rare few kobolds may be blessed
+      with inheriting the wings of true dragons. Known as <i>"Urds"</i> They are
+      held in high esteem as a sign of favor with the Dragon Lords, but the attention
+      usually get's to their heads.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12960939220992
+    m_Localized: '<b><kb>Queen''s Guard:</kb></b>\n The toughest kobolds are given
+      reponsibilities of protecting the most important things to the tribe: the hatchery,
+      and the treasurey. They''re still kobolds though, so they are pretty bad at
+      the job.'
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

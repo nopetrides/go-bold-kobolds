@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: c5bdd9bd88ce34943abafcdc06a0a363
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 44361
+  packageName: ProTips - Tooltip System
+  packageVersion: 1.7.6a
+  assetPath: Assets/ProTips/Tooltip Prefabs/Fonts/Incosolata/Inconsolata-Bold SDF.asset
+  uploadId: 592825

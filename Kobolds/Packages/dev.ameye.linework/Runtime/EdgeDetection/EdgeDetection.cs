@@ -626,6 +626,7 @@ namespace Linework.EdgeDetection
         public override void SetupRenderPasses(ScriptableRenderer renderer, in RenderingData renderingData)
         {
             if (settings == null || renderingData.cameraData.cameraType == CameraType.SceneView && !settings.ShowInSceneView) return;
+            if (renderingData.cameraData.cameraType is CameraType.Preview or CameraType.Reflection) return;
 
             edgeDetectionPass.CreateHandles(renderingData);
             edgeDetectionPass.SetTarget(renderer.cameraDepthTargetHandle);

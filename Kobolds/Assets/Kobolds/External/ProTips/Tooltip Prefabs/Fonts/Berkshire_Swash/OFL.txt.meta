@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 2275dff893a577943a0875d319b192fe
+timeCreated: 1460138535
+licenseType: Store
+TextScriptImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 44361
+  packageName: ProTips - Tooltip System
+  packageVersion: 1.7.6a
+  assetPath: Assets/ProTips/Tooltip Prefabs/Fonts/Berkshire_Swash/OFL.txt
+  uploadId: 592825

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: d220a5c8c05e3624da5d3801a1c57890
+timeCreated: 1460502915
+licenseType: Store
+TextScriptImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 44361
+  packageName: ProTips - Tooltip System
+  packageVersion: 1.7.6a
+  assetPath: Assets/ProTips/Tooltip Prefabs/Fonts/Aclonica/License for Aclonica Font.txt
+  uploadId: 592825

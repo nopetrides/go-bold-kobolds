@@ -374,12 +374,27 @@ namespace Linework.FastOutline
                         }
                         
                         context.DrawRenderers(renderingData.cullResults, ref drawingSettings, ref filteringSettings, ref renderStateBlock);
-
                     }
                 }
 
                 context.ExecuteCommandBuffer(outlineCmd);
                 CommandBufferPool.Release(outlineCmd);
+                
+                // 3. Clear stencil.
+                // -> Clear the stencil buffer.
+                var clearStencilCmd = CommandBufferPool.Get();
+                
+                using (new ProfilingScope(clearStencilCmd, outlineSampler))
+                {
+                    context.ExecuteCommandBuffer(clearStencilCmd);
+                    clearStencilCmd.Clear();
+                
+                    CoreUtils.SetRenderTarget(clearStencilCmd, renderingData.cameraData.renderer.cameraColorTargetHandle, cameraDepthRTHandle); // if using cameraColorRTHandle this does not render in scene view when rendering after post processing with post processing enabled
+                    clearStencilCmd.DrawProcedural(Matrix4x4.identity, clear, 0, MeshTopology.Triangles, 3, 1); 
+                }
+                
+                context.ExecuteCommandBuffer(clearStencilCmd);
+                CommandBufferPool.Release(clearStencilCmd);
             }
             #pragma warning restore 618, 672
             
@@ -458,6 +473,7 @@ namespace Linework.FastOutline
         public override void SetupRenderPasses(ScriptableRenderer renderer, in RenderingData renderingData)
         {
             if (settings == null || renderingData.cameraData.cameraType == CameraType.SceneView && !settings.ShowInSceneView) return;
+            if (renderingData.cameraData.cameraType is CameraType.Preview or CameraType.Reflection) return;
 
             fastOutlinePass.SetTarget(renderer.cameraDepthTargetHandle);
         }

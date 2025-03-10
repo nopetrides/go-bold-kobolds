@@ -1,0 +1,26 @@
+fileFormatVersion: 2
+guid: e76a7b5a14333084b881a16f03ba84db
+labels:
+- Tooltip
+- Tooltips
+- UGUI
+- GUI
+- Interface
+- Tool
+- Tip
+- Tutorial
+- Barks
+- Prefab
+timeCreated: 1438985192
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 44361
+  packageName: ProTips - Tooltip System
+  packageVersion: 1.7.6a
+  assetPath: Assets/ProTips/Tooltip Prefabs/CleanItemDescription.prefab
+  uploadId: 592825
