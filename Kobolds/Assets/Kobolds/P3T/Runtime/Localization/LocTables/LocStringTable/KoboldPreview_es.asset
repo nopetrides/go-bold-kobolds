@@ -35,7 +35,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 10579325329408
-    m_Localized: "c\xE1mara"
+    m_Localized: "C\xE1mara"
     m_Metadata:
       m_Items: []
   - m_Id: 10984188911616
@@ -73,11 +73,15 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 47410725101568
-    m_Localized: idioma
+    m_Localized: Idioma
     m_Metadata:
       m_Items: []
   - m_Id: 47783430955008
     m_Localized: "Tambi\xE9n se puede cambiar desde el men\xFA de configuraci\xF3n."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 661985019404288
+    m_Localized: Continuar
     m_Metadata:
       m_Items: []
   references:

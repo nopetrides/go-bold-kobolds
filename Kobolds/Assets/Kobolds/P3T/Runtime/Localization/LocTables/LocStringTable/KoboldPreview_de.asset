@@ -30,6 +30,59 @@ MonoBehaviour:
     m_Localized: "Kann auch \xFCber das Einstellungsmen\xFC ge\xE4ndert werden"
     m_Metadata:
       m_Items: []
+  - m_Id: 661985019404288
+    m_Localized: weitermachen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10984188911616
+    m_Localized: "\rVerwenden Sie die Pfeiltasten der Tastatur (+ STRG f\xFCr Shapekeys)
+      oder die GUI-Schaltfl\xE4chen oben, um Kobold/Animation zu \xE4ndern"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10079917940736
+    m_Localized: Lebhaftigkeit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9415804428288
+    m_Localized: Segen
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10331651678208
+    m_Localized: "Gef\xFChl"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10579325329408
+    m_Localized: Kamera
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12875979399168
+    m_Localized: "\r<b><kg>Gnade der K\xF6nigin:</kg></b>\\n Einige wenige Kobolde
+      haben das Gl\xFCck, die Fl\xFCgel echter Drachen zu erben. Diese als <i>\u201EUrds\u201C</i>
+      bekannten Kobolde werden als Zeichen der Gunst der Drachenf\xFCrsten hoch gesch\xE4tzt,
+      doch die Aufmerksamkeit steigt ihnen meist zu Kopf."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12370028896256
+    m_Localized: "<b><kr>General der K\xF6nigin:</kr></b>\\n Allesk\xF6nner, Meister
+      in nichts. Diese Kobolde sind die St\xFCtze der Streitkr\xE4fte. Da der durchschnittliche
+      Kobold keine \xFCbernat\xFCrliche Begabung besitzt, muss er seine F\xE4higkeiten
+      und sein Teamwork einsetzen, um Hindernisse zu \xFCberwinden."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12632269365248
+    m_Localized: "\r<b><ky>Begabung der K\xF6nigin:</ky></b>\\n Diese Zauberer sind
+      mit einem Fragment drakonischer Magie gesegnet und setzen das Geheimnisvolle
+      gegen ihre Feinde ein. Ihre Begabung f\xFCr Magie macht sie exzentrisch und
+      kann andere Kobolde st\xF6ren."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12960939220992
+    m_Localized: "\r<b><kb>Wache der K\xF6nigin:</kb></b>\\n Die h\xE4rtesten Kobolde
+      sind mit dem Schutz der wichtigsten Dinge des Stammes beauftragt: der Brutst\xE4tte
+      und der Schatzkammer. Sie sind aber immer noch Kobolde und daher ziemlich schlecht
+      in ihrer Aufgabe."
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

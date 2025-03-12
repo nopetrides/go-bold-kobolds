@@ -14,7 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_GroupName: Default Local Group
   m_GUID: 1905a870a64e4914aabb24a9eeb772f8
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: bfc7414f45cae8a4aa7d9c04996fa446
+    m_Address: MenuUIMgrCanvas
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 594177e892c4b3f43b4f2b22f9dae243, type: 2}
   m_SchemaSet:

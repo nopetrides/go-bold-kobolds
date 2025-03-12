@@ -23,7 +23,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 10579325329408
-    m_Localized: "c\xE2mera"
+    m_Localized: "C\xE2mera"
     m_Metadata:
       m_Items: []
   - m_Id: 10984188911616
@@ -59,11 +59,27 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 47410725101568
-    m_Localized: linguagem
+    m_Localized: Linguagem
     m_Metadata:
       m_Items: []
   - m_Id: 47783430955008
-    m_Localized: "\r\nTamb\xE9m pode ser alterado no menu de configura\xE7\xF5es"
+    m_Localized: "\rTamb\xE9m pode ser alterado no menu de configura\xE7\xF5es"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 661985019404288
+    m_Localized: Continuar
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10079917940736
+    m_Localized: "Anima\xE7\xE3o"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9415804428288
+    m_Localized: "B\xEAn\xE7\xE3o"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10331651678208
+    m_Localized: "Emo\xE7\xE3o"
     m_Metadata:
       m_Items: []
   references:

@@ -63,6 +63,10 @@ MonoBehaviour:
     m_Key: LanguageDescription
     m_Metadata:
       m_Items: []
+  - m_Id: 661985019404288
+    m_Key: Continue
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

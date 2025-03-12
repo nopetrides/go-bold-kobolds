@@ -74,11 +74,15 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 47410725101568
-    m_Localized: langue
+    m_Localized: Langue
     m_Metadata:
       m_Items: []
   - m_Id: 47783430955008
     m_Localized: "Peut \xE9galement \xEAtre modifi\xE9 \xE0 partir du menu des param\xE8tres"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 661985019404288
+    m_Localized: Continuer
     m_Metadata:
       m_Items: []
   references:
