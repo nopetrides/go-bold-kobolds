@@ -11,7 +11,7 @@ namespace TheraBytes.BetterUi
     [HelpURL("https://documentation.therabytes.de/better-ui/ResolutionMonitor.html")]
     public class ResolutionMonitor : SingletonScriptableObject<ResolutionMonitor>
     {
-        static string FilePath { get { return "TheraBytes/Resources/ResolutionMonitor"; } }
+        static string FilePath { get { return "Kobolds/External/TheraBytes/Resources/ResolutionMonitor"; } }
 
 
         #region Obsolete

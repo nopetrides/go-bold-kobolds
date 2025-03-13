@@ -8,14 +8,15 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Kobolds/Game/Runtime/Scenes/Bootloader.unity
     guid: 2daa5e74ba1f99148bc557b4e9a9e890
-  - enabled: 1
+  - enabled: 0
     path: Assets/Kobolds/Game/Runtime/Scenes/AnimatedScene.unity
     guid: 271735159f24eac43beb4b742dc8a565
-  - enabled: 1
-    path: Assets/Kobolds/Game/Runtime/Scenes/LanguageSelect.unity
+  - enabled: 0
+    path: Assets/Kobolds/Game/Runtime/Scenes/LanguageSelectScene.unity
     guid: bc367bf7953ac394e87c4194cbd7eca3
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: 2b49e6d50b13cde479d928fa05d71d31, type: 2}
-    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+    com.unity.input.settings: {fileID: 11400000, guid: 9e7be553448fa2546aea5752021cbcf7, type: 2}
+    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 77d45937103e261469245a62ff7b432c, type: 3}
     com.unity.localization.settings: {fileID: 11400000, guid: e1cb080f6fd9777449798d6313516a04, type: 2}
   m_UseUCBPForAssetBundles: 0

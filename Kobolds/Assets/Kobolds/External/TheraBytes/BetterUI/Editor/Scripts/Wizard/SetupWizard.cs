@@ -22,7 +22,7 @@ namespace TheraBytes.BetterUi.Editor
             {
                 if(spwd == null)
                 {
-                    string filePath = string.Format("{0}/TheraBytes/BetterUI/Editor/setup~.wizard", Application.dataPath);
+                    string filePath = string.Format("{0}Kobolds/External/TheraBytes/BetterUI/Editor/setup~.wizard", Application.dataPath);
                     spwd = new PersistentWizardData(filePath);
                 }
 

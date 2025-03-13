@@ -26,19 +26,6 @@ namespace P3T.Scripts.Managers
 		private readonly Stack<MenuBase> _activeMenus = new();
 		private readonly Dictionary<Type, MenuBase> _disabledMenus = new();
 
-		private bool TryGetMenu<T>(out T menu) where T : MenuBase
-		{
-			Type menuType = typeof(T);
-			if (_menuInstances.TryGetValue(menuType, out MenuBase baseMenu))
-			{
-				menu = baseMenu as T;
-				return true;
-			}
-
-			menu = null;
-			return false;
-		}
-
 		/// <summary>
 		///     Clear the stack and close all menus
 		/// </summary>
@@ -52,19 +39,25 @@ namespace P3T.Scripts.Managers
 			}
 		}
 
+		public async Task<MenuBase> ShowMenu<T>() where T : MenuBase
+		{
+			return await ShowMenu(typeof(T));
+		}
+
 		/// <summary>
 		///     Show a menu by adding it to the stack
 		/// </summary>
+		/// <param name="menuToOpen"></param>
 		/// <param name="onMenuOpenStarting"></param>
 		/// <param name="onMenuOpenComplete"></param>
 		/// <param name="fadeIn"></param>
 		/// <returns></returns>
-		public async Task<T> ShowMenu<T>(
+		public async Task<MenuBase> ShowMenu(Type menuToOpen,
 			Action onMenuOpenStarting = null,
 			Action onMenuOpenComplete = null,
-			bool fadeIn = true) where T : MenuBase
+			bool fadeIn = true)
 		{
-			var menuBase = await PushMenu<T>();
+			var menuBase = await PushMenu(menuToOpen);
 
 			if (menuBase != null)
 			{
@@ -86,7 +79,7 @@ namespace P3T.Scripts.Managers
 		/// <returns></returns>
 		public async Task<MenuBase> ShowHalfFader(Action onComplete)
 		{
-			var screenFadeOverlay = await ShowMenu<ScreenFadeOverlay>(fadeIn: false);
+			var screenFadeOverlay = await ShowMenu(typeof(ScreenFadeOverlay), fadeIn: false);
 			if (screenFadeOverlay != null)
 				screenFadeOverlay.PerformHalfFadeIn(FadeInDuration, onComplete);
 
@@ -98,15 +91,13 @@ namespace P3T.Scripts.Managers
 		///     Pushes the given menu to the stack
 		/// </summary>
 		/// <returns></returns>
-		private async Task<T> PushMenu<T>() where T : MenuBase
+		private async Task<MenuBase> PushMenu(Type menuType)
 		{
-			Type menuType = typeof(T);
-
-			var menuInstance = await GetMenuInstance<T>(menuType);
+			var menuInstance = await GetMenuInstance(menuType);
 
 			if (_activeMenus.Contains(menuInstance))
 			{
-				Debug.LogError($"Already opened menu {nameof(T)}");
+				Debug.LogError($"Already opened menu {menuType.Name}");
 				return menuInstance;
 			}
 
@@ -127,10 +118,10 @@ namespace P3T.Scripts.Managers
 			return menuInstance;
 		}
 
-		private async Task<T> GetMenuInstance<T>(Type menuType) where T : MenuBase
+		private async Task<MenuBase> GetMenuInstance(Type menuType)
 		{
 			// Check if object already exists
-			if (!TryGetMenu(out T menuInstance))
+			if (!_menuInstances.TryGetValue(menuType, out MenuBase menuInstance))
 			{
 				// load and instantiate the game object
 				string key = menuType.ToString().Split('.').Last();
@@ -140,20 +131,22 @@ namespace P3T.Scripts.Managers
 				if (prefab == null)
 				{
 					Debug.LogError($"Failed to get prefab for type {key}");
-					return menuInstance;
+					return null;
 				}
 
 				var createdObject = Instantiate(prefab, MenuRoot);
 
-				var menu = createdObject.GetComponent<MenuBase>();
-				if (menu == null)
+				menuInstance = createdObject.GetComponent<MenuBase>();
+				if (menuInstance == null)
 				{
 					Debug.LogError($"Could not get {nameof(MenuBase)} from {createdObject.name}");
-					return menuInstance;
+					return null;
 				}
+				
+				menuInstance.OnInstantiate();
+				_menuInstances.Add(menuType, menuInstance);
 
-				menu.OnInstantiate();
-				_menuInstances.Add(menuType, menu);
+				return menuInstance;
 			}
 
 			return menuInstance;

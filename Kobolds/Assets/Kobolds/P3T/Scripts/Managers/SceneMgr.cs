@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using P3T.Scripts.Utils;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -22,12 +23,15 @@ namespace P3T.Scripts.Managers
 
 			await UiMgr.Instance.ShowMenu<ScreenFadeOverlay>();
 			
-			await SceneManager.LoadSceneAsync(sceneToLoad);
+			await P3TAssetLoader.LoadSceneAsync(sceneToLoad);
 
 			UiMgr.Instance.HideMenu(typeof(ScreenFadeOverlay));
+			
+			await UiMgr.Instance.ShowMenu(menuToOpen);
+			
 
 			var method = typeof(UiMgr).GetMethod(
-				nameof(UiMgr.ShowMenu), System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+				nameof(UiMgr.ShowMenu), System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
 			
 			if (method == null)
 			{
@@ -37,10 +41,16 @@ namespace P3T.Scripts.Managers
 			var genericMethod = method.MakeGenericMethod(menuToOpen);
 			
 			// Invoke the method, which returns Task<T>
-			await (Task)genericMethod.Invoke(this, null);
+			var task = (Task)genericMethod.Invoke(UiMgr.Instance, new object[]{menuToOpen});
+			
+			if (task == null)
+			{
+				throw new InvalidOperationException("ShowMenu<T> did not return a valid Task.");
+			}
+
+			await task;
 			
 			Debug.Log("Scene loaded and menu opened");
-			//var task = (Task)genericMethod.Invoke(this, null);
 			
 			/*
 			// if needed to run operations on MenuBase

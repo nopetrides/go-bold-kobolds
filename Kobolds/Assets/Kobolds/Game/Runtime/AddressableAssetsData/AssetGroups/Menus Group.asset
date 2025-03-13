@@ -14,19 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_GroupName: Menus Group
   m_GUID: 0a94d4c2a2915f0438f35a12583ff15b
-  m_SerializeEntries:
-  - m_GUID: 8df63c104bade7448b02d9eddb1b8c72
-    m_Address: ScreenFadeOverlay
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Menus
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 8e0f691f31c2a104a85d66668ec399b9
-    m_Address: LanguageSelectMenu
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Menus
-    FlaggedDuringContentUpdateRestriction: 0
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 594177e892c4b3f43b4f2b22f9dae243, type: 2}
   m_SchemaSet:

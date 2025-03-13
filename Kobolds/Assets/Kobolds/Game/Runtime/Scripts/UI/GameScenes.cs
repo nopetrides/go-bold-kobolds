@@ -6,8 +6,8 @@ namespace Kobolds.Runtime
 	public enum GameScenes
 	{
 		Bootloader,
-		LanguageSelect,
-		AnimatedIntro,
+		LanguageSelectScene,
+		AnimatedScene,
 		MainMenu,
 		MainGame,
 		GameOver

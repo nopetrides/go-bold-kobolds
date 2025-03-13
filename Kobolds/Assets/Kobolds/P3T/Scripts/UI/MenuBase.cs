@@ -3,6 +3,7 @@ using DG.Tweening;
 using DG.Tweening.Core;
 using DG.Tweening.Plugins.Options;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace P3T.Scripts.UI
 {
@@ -12,6 +13,7 @@ namespace P3T.Scripts.UI
 	/// </summary>
 	[RequireComponent(typeof(CanvasGroup))]
 	[RequireComponent(typeof(Canvas))]
+	[RequireComponent(typeof(GraphicRaycaster))]
 	public class MenuBase : MonoBehaviour
 	{
 		private TweenerCore<float, float, FloatOptions> _activeTween;

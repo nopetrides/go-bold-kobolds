@@ -21,6 +21,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8df63c104bade7448b02d9eddb1b8c72
+    m_Address: ScreenFadeOverlay
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Menus
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: bfc7414f45cae8a4aa7d9c04996fa446
     m_Address: MenuUIMgrCanvas
     m_ReadOnly: 0

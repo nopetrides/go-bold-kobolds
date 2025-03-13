@@ -24,12 +24,11 @@ namespace Kobolds.Runtime.Managers
 
 		private async Task LoadDefaultAssets()
 		{
-			_ = await P3TAssetLoader.LoadAndSpawnStoredAssetsByLabelAsync(DefaultLoadAssetLabels);
+			var prefabs = await P3TAssetLoader.LoadAndReturnStoredAssetsByLabelAsync(DefaultLoadAssetLabels);
 
-			if (UiMgr.Instance == null)
+			foreach (var go in prefabs)
 			{
-				Debug.LogError($"Failed to load {nameof(UiMgr)}");
-				return;
+				Instantiate(go, transform);
 			}
 
 			if (SceneMgr.Instance == null)
@@ -37,7 +36,7 @@ namespace Kobolds.Runtime.Managers
 				gameObject.AddComponent<SceneMgr>();
 			}
 			
-			SceneMgr.Instance.LoadScene(GameScenes.LanguageSelect.ToString(), typeof(LanguageSelectMenu));
+			SceneMgr.Instance.LoadScene(GameScenes.LanguageSelectScene.ToString(), typeof(LanguageSelectMenu));
 		}
 	}
 }

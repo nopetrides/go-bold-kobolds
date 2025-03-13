@@ -20,7 +20,7 @@ namespace TheraBytes.BetterUi
     [HelpURL("https://documentation.therabytes.de/better-ui/AboutMaterials.html")]
     public class Materials : SingletonScriptableObject<Materials>
     {
-        static string FilePath { get { return "TheraBytes/Resources/Materials"; } }
+        static string FilePath { get { return "Kobolds/External/TheraBytes/Resources/Materials"; } }
 
         public static readonly StandardMaterial Standard = new StandardMaterial();
         public static readonly GrayscaleMaterial Grayscale = new GrayscaleMaterial();

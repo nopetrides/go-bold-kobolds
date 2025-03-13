@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.ResourceManagement.ResourceProviders;
 using Object = UnityEngine.Object;
 
 namespace P3T.Scripts.Utils
@@ -321,6 +322,12 @@ namespace P3T.Scripts.Utils
 				}, Addressables.MergeMode.Union, // How to combine multiple labels
 				true).Task; // Whether to fail if any asset fails to load
 		}
+
+		public static async Task<SceneInstance> LoadSceneAsync(string sceneName)
+		{
+			return await Addressables.LoadSceneAsync(sceneName).Task;
+		}
+		
 		#endregion
 	}
 }

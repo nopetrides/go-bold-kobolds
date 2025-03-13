@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9594bfd1a6e5c144a7b3cd550101403, type: 3}
   m_Name: ResolutionMonitor
   m_EditorClassIdentifier: 
-  optimizedResolutionFallback: {x: 1080, y: 1920}
+  optimizedResolutionFallback: {x: 1920, y: 1080}
   optimizedDpiFallback: 96
-  fallbackName: Portrait
+  fallbackName: HD
   staticSizerMethods:
   - assemblyName: Assembly-CSharp
     typeName: 
@@ -34,21 +34,21 @@ MonoBehaviour:
   dpiManager:
     overrides: []
   optimizedScreens:
-  - name: Landscape
+  - name: 4K
     checkOrientation:
       expectedOrientation: 1
       isActive: 1
     checkScreenSize:
       measureType: 1
       unitType: 0
-      minSizeInInches: 4.7
-      maxSizeInInches: 7.6
+      minSizeInInches: 0
+      maxSizeInInches: 4.7
       isActive: 0
     checkAspectRatio:
-      minAspect: 0.66
-      maxAspect: 1.5
+      minAspect: 1
+      maxAspect: 2
       inverse: 0
-      isActive: 0
+      isActive: 1
     checkDeviceType:
       expectedDeviceInfo: 0
       isActive: 0
@@ -56,6 +56,31 @@ MonoBehaviour:
       screenTag: 
       isActive: 0
     optimizedScreenInfo:
-      resolution: {x: 1920, y: 1080}
-      dpi: 96
+      resolution: {x: 3840, y: 2160}
+      dpi: 80
+    fallbacks: []
+  - name: Ultrawide
+    checkOrientation:
+      expectedOrientation: 1
+      isActive: 1
+    checkScreenSize:
+      measureType: 1
+      unitType: 0
+      minSizeInInches: 7.6
+      maxSizeInInches: 9999999
+      isActive: 0
+    checkAspectRatio:
+      minAspect: 2
+      maxAspect: 3
+      inverse: 0
+      isActive: 1
+    checkDeviceType:
+      expectedDeviceInfo: 0
+      isActive: 0
+    checkScreenTag:
+      screenTag: 
+      isActive: 0
+    optimizedScreenInfo:
+      resolution: {x: 3440, y: 1400}
+      dpi: 100
     fallbacks: []
