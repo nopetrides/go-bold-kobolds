@@ -6,11 +6,14 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Kobolds/P3T/Runtime/Scenes/Bootloader.unity
+    path: Assets/Kobolds/Game/Runtime/Scenes/Bootloader.unity
     guid: 2daa5e74ba1f99148bc557b4e9a9e890
   - enabled: 1
-    path: Assets/Kobolds/P3T/Runtime/Scenes/AnimatedScene.unity
+    path: Assets/Kobolds/Game/Runtime/Scenes/AnimatedScene.unity
     guid: 271735159f24eac43beb4b742dc8a565
+  - enabled: 1
+    path: Assets/Kobolds/Game/Runtime/Scenes/LanguageSelect.unity
+    guid: bc367bf7953ac394e87c4194cbd7eca3
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: 2b49e6d50b13cde479d928fa05d71d31, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
