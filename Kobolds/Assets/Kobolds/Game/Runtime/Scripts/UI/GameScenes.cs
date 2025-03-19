@@ -8,6 +8,7 @@ namespace Kobolds.Runtime
 		Bootloader,
 		LanguageSelectScene,
 		AnimatedScene,
+        CharactersScene,
 		MainMenu,
 		MainGame,
 		GameOver

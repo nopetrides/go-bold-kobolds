@@ -39,8 +39,8 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 10984188911616
-    m_Localized: Use keyboard arrow keys (+ CTRL for shapekeys) or the GUI buttons
-      above to change kobold/animation
+    m_Localized: Use keyboard arrow keys (+ Ctrl/Opt for shape keys) or the GUI buttons
+      above to changethe  kobold or animation
     m_Metadata:
       m_Items: []
   - m_Id: 12370028896256
