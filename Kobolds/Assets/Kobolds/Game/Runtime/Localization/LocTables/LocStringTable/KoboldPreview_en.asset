@@ -81,6 +81,30 @@ MonoBehaviour:
     m_Localized: Continue
     m_Metadata:
       m_Items: []
+  - m_Id: 2978407515004928
+    m_Localized: Eggs gone?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2978559990538240
+    m_Localized: How? Why?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2978670103601152
+    m_Localized: Shinies too...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2978825984909312
+    m_Localized: Fighting time!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3350680822456320
+    m_Localized: Eggs!!!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3352328202461184
+    m_Localized: <shake>GO OUT THERE AND GET BACK THE <rainb>EGGS</rainb>!!!</shake>
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

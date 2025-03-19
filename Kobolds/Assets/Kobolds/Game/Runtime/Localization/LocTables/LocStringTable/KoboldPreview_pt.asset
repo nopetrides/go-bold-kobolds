@@ -82,6 +82,30 @@ MonoBehaviour:
     m_Localized: "Emo\xE7\xE3o"
     m_Metadata:
       m_Items: []
+  - m_Id: 2978407515004928
+    m_Localized: Os ovos acabaram?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2978559990538240
+    m_Localized: Como? Por que?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2978670103601152
+    m_Localized: "Os brilhantes tamb\xE9m..."
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2978825984909312
+    m_Localized: C'est l'heure du combat!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3350680822456320
+    m_Localized: "\rOvos!!!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3352328202461184
+    m_Localized: "\r<shake>V\xC1 L\xC1 E PEGUEM DE VOLTA OS <rainb>OVOS</rainb>!!!</shake>"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

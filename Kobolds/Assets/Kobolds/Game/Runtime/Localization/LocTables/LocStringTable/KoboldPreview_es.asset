@@ -84,6 +84,30 @@ MonoBehaviour:
     m_Localized: Continuar
     m_Metadata:
       m_Items: []
+  - m_Id: 2978407515004928
+    m_Localized: "\xBFSe acabaron los huevos?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2978559990538240
+    m_Localized: "\r\xBFC\xF3mo? \xBFPor qu\xE9?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2978670103601152
+    m_Localized: Las shinies tambien...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2978825984909312
+    m_Localized: "\xA1Es hora de luchar!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3350680822456320
+    m_Localized: "\xA1\xA1\xA1Huevos!!!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3352328202461184
+    m_Localized: "<shake>\r\xA1SAL AH\xCD Y RECUPERA <rainb>LOS HUEVOS!</shake>"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

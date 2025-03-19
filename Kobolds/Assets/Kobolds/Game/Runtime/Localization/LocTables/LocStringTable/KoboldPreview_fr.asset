@@ -85,6 +85,30 @@ MonoBehaviour:
     m_Localized: Continuer
     m_Metadata:
       m_Items: []
+  - m_Id: 2978407515004928
+    m_Localized: "\rLes \u0153ufs ont disparu?"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2978559990538240
+    m_Localized: Comment? Pourquoi?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2978670103601152
+    m_Localized: Les brillants aussi...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2978825984909312
+    m_Localized: C'est l'heure du combat!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3350680822456320
+    m_Localized: "\r\u0152ufs!!!"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3352328202461184
+    m_Localized: "<shake>SORTEZ ET R\xC9CUP\xC9REZ LES <rainb>\u0152UFS</rainb> !!!</shake>"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

@@ -71,6 +71,30 @@ MonoBehaviour:
       GUI \u6309\u94AE\u6765\u66F4\u6539\u72D7\u5934\u4EBA/\u52A8\u753B"
     m_Metadata:
       m_Items: []
+  - m_Id: 2978407515004928
+    m_Localized: "\u9E21\u86CB\u6CA1\u4E86\uFF1F"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2978559990538240
+    m_Localized: "\r\u5982\u4F55\uFF1F\u4E3A\u4EC0\u4E48\uFF1F"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2978670103601152
+    m_Localized: "\u8FD8\u6709\u95EA\u4EAE\u7684\u2026\u2026"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2978825984909312
+    m_Localized: "\u6218\u6597\u65F6\u95F4\uFF01"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3350680822456320
+    m_Localized: "\r\u9E21\u86CB\uFF01\uFF01\uFF01"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3352328202461184
+    m_Localized: "\r<shake>\u51FA\u53BB\u628A<rainb>\u9E21\u86CB</rainb>\u62FF\u56DE\u6765\uFF01\uFF01\uFF01</shake>"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

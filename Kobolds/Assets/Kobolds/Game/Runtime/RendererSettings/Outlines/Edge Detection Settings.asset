@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67fa42c8932c444987f987ea1e2f4fcb, type: 3}
   m_Name: Edge Detection Settings
   m_EditorClassIdentifier: 
-  injectionPoint: 600
+  injectionPoint: 450
   showInSceneView: 1
   debugView: 0
   debugSectionsRaw: 0

@@ -15,12 +15,12 @@ MonoBehaviour:
   tagID: kr
   timeMode:
     startDelay: 0
-    useUniformTime: 1
-    waveSize: 0
+    useUniformTime: 0
+    waveSize: 0.03
     timeSpeed: 1
   emissionCurve:
     cycles: -1
-    duration: 1
+    duration: 2
     weightOverTime:
       serializedVersion: 2
       m_Curve:

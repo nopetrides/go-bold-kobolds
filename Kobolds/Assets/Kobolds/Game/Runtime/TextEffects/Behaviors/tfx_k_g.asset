@@ -15,8 +15,8 @@ MonoBehaviour:
   tagID: kg
   timeMode:
     startDelay: 0
-    useUniformTime: 1
-    waveSize: 0.97
+    useUniformTime: 0
+    waveSize: 0.03
     timeSpeed: 1
   emissionCurve:
     cycles: -1

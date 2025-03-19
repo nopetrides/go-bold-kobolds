@@ -67,6 +67,30 @@ MonoBehaviour:
     m_Key: Continue
     m_Metadata:
       m_Items: []
+  - m_Id: 2978407515004928
+    m_Key: r_EggsGone
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2978559990538240
+    m_Key: y_HowWhy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2978670103601152
+    m_Key: g_ShiniesToo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2978825984909312
+    m_Key: b_TimeToFight
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3350680822456320
+    m_Key: r_EggsFound
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3352328202461184
+    m_Key: CommandIntro
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
