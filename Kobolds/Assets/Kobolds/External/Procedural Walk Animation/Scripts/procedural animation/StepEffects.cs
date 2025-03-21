@@ -13,13 +13,13 @@ public class StepEffects : MonoBehaviour
     [SerializeField] private AudioClip[] stepSVX;
     [SerializeField] private GameObject stepVFX;
 
-    private proceduralAnimation proceduralAnimation;
+    private ProceduralAnimation proceduralAnimation;
     private AudioSource audioSource;
     void Start()
     {
         TryGetComponent<AudioSource>(out audioSource);
 
-        if (TryGetComponent<proceduralAnimation>(out proceduralAnimation))
+        if (TryGetComponent<ProceduralAnimation>(out proceduralAnimation))
         {
             proceduralAnimation.OnStepFinished += ProceduralAnimation_OnStepFinished;
         }

@@ -911,7 +911,37 @@ PrefabInstance:
       propertyPath: CameraCollisionFilter.m_Bits
       value: 513
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 6713631772607403282, guid: a1a802ecaf6775746bb2a929fb554ad8, type: 3}
+      propertyPath: Target.LookAtTarget
+      value: 
+      objectReference: {fileID: 807640807}
+    - target: {fileID: 6713631772607403282, guid: a1a802ecaf6775746bb2a929fb554ad8, type: 3}
+      propertyPath: Target.TrackingTarget
+      value: 
+      objectReference: {fileID: 807640807}
+    - target: {fileID: 6713631772607403282, guid: a1a802ecaf6775746bb2a929fb554ad8, type: 3}
+      propertyPath: Lens.PhysicalProperties.SensorSize.x
+      value: 2.3206866
+      objectReference: {fileID: 0}
+    - target: {fileID: 6993871785427565985, guid: a1a802ecaf6775746bb2a929fb554ad8, type: 3}
+      propertyPath: CameraDistance
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6993871785427565985, guid: a1a802ecaf6775746bb2a929fb554ad8, type: 3}
+      propertyPath: AvoidObstacles.CollisionFilter.m_Bits
+      value: 513
+      objectReference: {fileID: 0}
+    - target: {fileID: 7267718389023172757, guid: a1a802ecaf6775746bb2a929fb554ad8, type: 3}
+      propertyPath: CameraDistance
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7267718389023172757, guid: a1a802ecaf6775746bb2a929fb554ad8, type: 3}
+      propertyPath: CameraCollisionFilter.m_Bits
+      value: 513
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 2070925441746177913, guid: a1a802ecaf6775746bb2a929fb554ad8, type: 3}
+    - {fileID: 7267718389023172757, guid: a1a802ecaf6775746bb2a929fb554ad8, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

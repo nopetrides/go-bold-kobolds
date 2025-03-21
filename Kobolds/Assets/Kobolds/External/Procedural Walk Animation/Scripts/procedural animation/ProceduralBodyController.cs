@@ -7,7 +7,7 @@ namespace Lolopupka
 {
 public class ProceduralBodyController : MonoBehaviour
 {
-    [SerializeField] private proceduralAnimation proceduralAnimation;
+    [SerializeField] private ProceduralAnimation proceduralAnimation;
     [SerializeField] private Vector3 bodyOffset;
     [SerializeField] private float bodySpeed = 10f;
     [Tooltip("How much legs affect body position")]

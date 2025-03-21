@@ -1,4 +1,16 @@
 {
-	"name": "Kobolds.Runtime",
-	"references":[ "GUID:f583f61ab2e6d9f4ca76f8a51c5f9960" ]
+    "name": "Kobolds.Runtime",
+    "rootNamespace": "",
+    "references": [
+        "GUID:f583f61ab2e6d9f4ca76f8a51c5f9960"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }
