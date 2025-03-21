@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: AC_RagdollR
+  m_Controller: {fileID: 9100000, guid: d5146cd85f7166d40addccbbba923915, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: dd61c27491427f140953fb75d81cee38, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: eb13330873a8cea4d8014995d902c220, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: cceb72db2f0101b4b8dbadec91c6852b, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: bd90789c6c1347343b11547237df80f0, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 1b0c7d0798770b34ba23636b254f5c1b, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 8834bb7485c021140b122ffa4b39e72d, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: ae51e2306025ebd4bb73948b9b9b7602, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: f808bb338a45b8f48bd1750e6af5279e, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 698a2c4be7ce2314bb68d67f62e85bbc, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: cc2b8cbfe5ec5f3489691c1b1154e727, type: 2}

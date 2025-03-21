@@ -1,0 +1,262 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3c2f70cb176f0448a259b69bff66aa8, type: 3}
+  m_Name: RagdollAnimator2Preset
+  m_EditorClassIdentifier: 
+  Settings:
+    _Editor_SelectedChain: -1
+    _Editor_ChainCategory: 0
+    _EditorCategory: 1
+    _EditorMainCategory: 0
+    _EditorMotionCategory: 2
+    m_hemi: {fileID: 0}
+    m_cyli: {fileID: 0}
+    m_sphere: {fileID: 0}
+    m_box: {fileID: 0}
+    _EditorBoneScenePreviews: []
+    StoredReferenceTPose:
+      BonePoses:
+      - SourceBone: {fileID: 0}
+        localPosition: {x: -0, y: 0.00438059, z: 0}
+        rootSpacePosition: {x: -0.0000000012444122, y: 0.004380589, z: -0.0000000013969844}
+        localRotation: {x: 0.19588855, y: -0.0016307067, z: 0.021556262, w: 0.98038787}
+        rootSpaceRotation: {x: 0.19588858, y: -0.001630746, z: 0.02155626, w: 0.9803879}
+      - SourceBone: {fileID: 0}
+        localPosition: {x: -1.6880221e-11, y: 0.0007384618, z: 2.0363586e-10}
+        rootSpacePosition: {x: -0.000031685606, y: 0.005061691, z: 0.00028358545}
+        localRotation: {x: 0.11515619, y: -0.0021070067, z: 0.013648945, w: 0.9932514}
+        rootSpaceRotation: {x: 0.30748755, y: -0.0038767518, z: 0.0345671, w: 0.95091635}
+      - SourceBone: {fileID: 0}
+        localPosition: {x: 2.0954757e-11, y: 0.000724639, z: -1.0346411e-10}
+        rootSpacePosition: {x: -0.000081051556, y: 0.0056475713, z: 0.0007071524}
+        localRotation: {x: 0.064327545, y: -0.0023018399, z: 0.007055138, w: 0.99790126}
+        rootSpaceRotation: {x: 0.3680645, y: -0.006003229, z: 0.040744994, w: 0.92888784}
+      - SourceBone: {fileID: 0}
+        localPosition: {x: 4.6566128e-12, y: 0.0005073664, z: 5.1630195e-10}
+        rootSpacePosition: {x: -0.00012169879, y: 0.006015786, z: 0.0010538318}
+        localRotation: {x: 0.12556143, y: -0.0020177215, z: 0.0031063533, w: 0.99207896}
+        rootSpaceRotation: {x: 0.48184502, y: -0.0038571956, z: 0.04331883, w: 0.87517667}
+      - SourceBone: {fileID: 0}
+        localPosition: {x: 9.3132255e-12, y: 0.0007240422, z: 5.343463e-10}
+        rootSpacePosition: {x: -0.00017928939, y: 0.0064009014, z: 0.0016642474}
+        localRotation: {x: 0.079872444, y: -0.0021072668, z: -0.0024303978, w: 0.9967999}
+        rootSpaceRotation: {x: 0.55030626, y: -0.0010580545, z: 0.040345874, w: 0.83398706}
+      - SourceBone: {fileID: 0}
+        localPosition: {x: 4.6566126e-11, y: 0.000679141, z: 2.9976946e-10}
+        rootSpacePosition: {x: -0.00022578359, y: 0.0066664917, z: 0.0022875704}
+        localRotation: {x: -0.07836115, y: -0.0024596308, z: -0.008509479, w: 0.9968857}
+        rootSpaceRotation: {x: 0.48334843, y: -0.0015848059, z: 0.031686973, w: 0.87485296}
+      - SourceBone: {fileID: 0}
+        localPosition: {x: 2.3283063e-11, y: 0.0005073672, z: 5.1455573e-10}
+        rootSpacePosition: {x: -0.00012169879, y: 0.006015786, z: 0.0010538327}
+        localRotation: {x: 0.7635603, y: 0.631208, z: 0.12373153, w: -0.056944538}
+        rootSpaceRotation: {x: 0.6618412, y: 0.57223344, z: 0.3495216, w: -0.33518666}
+      - SourceBone: {fileID: 0}
+        localPosition: {x: 8.0093737e-10, y: 0.0012282816, z: 1.3969838e-10}
+        rootSpacePosition: {x: 0.0010964678, y: 0.0058679036, z: 0.0010002002}
+        localRotation: {x: 0.25057694, y: 0.8985928, z: 0.07713636, w: -0.351841}
+        rootSpaceRotation: {x: -0.5867905, y: -0.46600148, z: 0.3025062, w: -0.5890753}
+      - SourceBone: {fileID: 0}
+        localPosition: {x: 3.72529e-10, y: 0.0012282816, z: 2.4214386e-10}
+        rootSpacePosition: {x: 0.002205961, y: 0.006025533, z: 0.0015030471}
+        localRotation: {x: 0.10175169, y: -0.15465021, z: 0.4156593, w: 0.8904815}
+        rootSpaceRotation: {x: -0.7293808, y: -0.04917958, z: 0.16268525, w: -0.6626605}
+      - SourceBone: {fileID: 0}
+        localPosition: {x: -2.9802322e-10, y: 0.0010502415, z: 7.636845e-10}
+        rootSpacePosition: {x: 0.0025077488, y: 0.0059027337, z: 0.002501472}
+        localRotation: {x: 0.25847226, y: -0.14185104, z: 0.32468358, w: 0.89869404}
+        rootSpaceRotation: {x: -0.8196602, y: 0.32866925, z: 0.047224198, w: -0.46680176}
+      - SourceBone: {fileID: 0}
+        localPosition: {x: 2.3283063e-11, y: 0.0005073672, z: 5.1455573e-10}
+        rootSpacePosition: {x: -0.00012169879, y: 0.006015786, z: 0.0010538327}
+        localRotation: {x: 0.7635603, y: -0.631208, z: -0.12373153, w: -0.05694453}
+        rootSpaceRotation: {x: 0.71476394, y: -0.50932723, z: -0.34499437, w: -0.33268237}
+      - SourceBone: {fileID: 0}
+        localPosition: {x: 7.8231094e-10, y: 0.0012282815, z: -1.6763806e-10}
+        rootSpacePosition: {x: -0.0012979554, y: 0.0056966576, z: 0.0009013426}
+        localRotation: {x: -0.33691326, y: 0.88872963, z: 0.078692146, w: 0.30076015}
+        rootSpaceRotation: {x: 0.5935843, y: -0.3888631, z: 0.33369276, w: 0.6205582}
+      - SourceBone: {fileID: 0}
+        localPosition: {x: -4.4703483e-10, y: 0.0012282816, z: 1.0710209e-10}
+        rootSpacePosition: {x: -0.002373681, y: 0.005785847, z: 0.00148746}
+        localRotation: {x: 0.10095035, y: 0.15481646, z: -0.41282478, w: 0.8918613}
+        rootSpaceRotation: {x: 0.7009115, y: 0.027993454, z: 0.17257825, w: 0.6914885}
+      - SourceBone: {fileID: 0}
+        localPosition: {x: -7.8231094e-10, y: 0.0010502411, z: 3.0267983e-10}
+        rootSpacePosition: {x: -0.0025831312, y: 0.0057416093, z: 0.0025156527}
+        localRotation: {x: 0.2564655, y: 0.14203197, z: -0.32194296, w: 0.90022504}
+        rootSpaceRotation: {x: 0.77479726, y: 0.39332777, z: 0.025112022, w: 0.4943199}
+      - SourceBone: {fileID: 0}
+        localPosition: {x: -0.00087199616, y: 0.0042336625, z: -0.00007965923}
+        rootSpacePosition: {x: -0.0008719976, y: 0.0042336616, z: -0.00007966068}
+        localRotation: {x: 0.90898436, y: -0.02154332, z: 0.017453447, w: 0.4159071}
+        rootSpaceRotation: {x: 0.90898454, y: -0.02154332, z: 0.017453432, w: 0.41590714}
+      - SourceBone: {fileID: 0}
+        localPosition: {x: -9.778887e-11, y: 0.0017260688, z: 1.3504177e-10}
+        rootSpacePosition: {x: -0.0009646585, y: 0.0031063412, z: 0.001224133}
+        localRotation: {x: 0.32964996, y: 0.04315961, z: -0.024416992, w: 0.9428001}
+        rootSpaceRotation: {x: 0.99386716, y: 0.025587544, z: 0.052633073, w: 0.09382657}
+      - SourceBone: {fileID: 0}
+        localPosition: {x: -5.5879353e-11, y: 0.002062495, z: 9.313225e-11}
+        rootSpacePosition: {x: -0.0008801283, y: 0.0010828607, z: 0.0016143488}
+        localRotation: {x: -0.29621217, y: 0.01894423, z: -0.0021116405, w: 0.9549319}
+        rootSpaceRotation: {x: 0.9202318, y: 0.012719962, z: 0.07647023, w: 0.38361996}
+      - SourceBone: {fileID: 0}
+        localPosition: {x: 4.4819898e-11, y: 0.001387132, z: -1.9092113e-10}
+        rootSpacePosition: {x: -0.0009290391, y: 0.00010445155, z: 0.0025964146}
+        localRotation: {x: -0.041296177, y: 0.9226771, z: -0.38295928, w: 0.017430007}
+        rootSpaceRotation: {x: -0.07523099, y: 0.70343244, z: 0.70402414, w: 0.062237117}
+      - SourceBone: {fileID: 0}
+        localPosition: {x: -0.0000000012444121, y: 0.0000000012444121, z: -2.874676e-12}
+        rootSpacePosition: {x: -0.0000000012444124, y: -2.8748115e-12, z: -0.0000000012444122}
+        localRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071067}
+        rootSpaceRotation: {x: 0, y: 0, z: 0, w: 1.0000001}
+      - SourceBone: {fileID: 0}
+        localPosition: {x: -0, y: 0, z: 0}
+        rootSpacePosition: {x: 0, y: 0, z: 0}
+        localRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+        rootSpaceRotation: {x: -0.7071069, y: 0, z: 0, w: 0.70710677}
+      - SourceBone: {fileID: 0}
+        localPosition: {x: 0, y: 0, z: 0}
+        rootSpacePosition: {x: 0, y: 0, z: 0}
+        localRotation: {x: 0, y: 0, z: 0, w: 1}
+        rootSpaceRotation: {x: 0, y: 0, z: 0, w: 1.0000001}
+      - SourceBone: {fileID: 0}
+        localPosition: {x: 0, y: 0, z: 0}
+        rootSpacePosition: {x: 0, y: 0, z: 0}
+        localRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
+        rootSpaceRotation: {x: 0, y: 0, z: 0, w: 1.0000001}
+      - SourceBone: {fileID: 0}
+        localPosition: {x: 0.00087199616, y: 0.0042336625, z: -0.00007965923}
+        rootSpacePosition: {x: 0.0008719952, y: 0.0042336616, z: -0.00007966068}
+        localRotation: {x: 0.996509, y: 0.033250887, z: -0.0013678236, w: -0.076566115}
+        rootSpaceRotation: {x: 0.996509, y: 0.033250894, z: -0.0013678339, w: -0.076566145}
+      - SourceBone: {fileID: 0}
+        localPosition: {x: -9.30595e-11, y: 0.0017260704, z: 2.8929206e-10}
+        rootSpacePosition: {x: 0.0009860195, y: 0.0025316456, z: -0.00034321198}
+        localRotation: {x: 0.4098679, y: -0.042448077, z: 0.030018168, w: 0.91066206}
+        rootSpaceRotation: {x: 0.877041, y: 0.0030564053, z: -0.059472412, w: -0.47671044}
+      - SourceBone: {fileID: 0}
+        localPosition: {x: -3.5390257e-10, y: 0.002062498, z: 1.862645e-10}
+        rootSpacePosition: {x: 0.0008801286, y: 0.0014066031, z: -0.0020685997}
+        localRotation: {x: -0.31847844, y: -0.01811538, z: 0.000002843516, w: 0.947757}
+        rootSpaceRotation: {x: 0.9819665, y: 0.030470693, z: -0.071281284, w: -0.1724315}
+      - SourceBone: {fileID: 0}
+        localPosition: {x: 7.683411e-11, y: 0.001387132, z: -4.6566128e-12}
+        rootSpacePosition: {x: 0.0009290391, y: 0.00010453304, z: -0.0025443695}
+        localRotation: {x: 0.025706058, y: -0.5829265, z: 0.8104526, w: -0.0519857}
+        rootSpaceRotation: {x: -0.07233742, y: -0.69873875, z: -0.7092396, w: 0.059253752}
+      - SourceBone: {fileID: 0}
+        localPosition: {x: -0, y: 0.00438059, z: 0}
+        rootSpacePosition: {x: -0.0000000012444122, y: 0.004380589, z: -0.0000000013969844}
+        localRotation: {x: 0.8704122, y: -0.011427293, z: -0.22814189, w: -0.4361231}
+        rootSpaceRotation: {x: 0.87041223, y: -0.011427276, z: -0.22814192, w: -0.43612313}
+      - SourceBone: {fileID: 0}
+        localPosition: {x: -1.11758706e-10, y: 0.0015502678, z: -7.357448e-10}
+        rootSpacePosition: {x: -0.00033933742, y: 0.0034204577, z: -0.0011689023}
+        localRotation: {x: 0.17276491, y: -0.20541048, z: -0.013588217, w: 0.96321034}
+        rootSpaceRotation: {x: 0.71633583, y: 0.05098981, z: -0.39064008, w: -0.5759024}
+      - SourceBone: {fileID: 0}
+        localPosition: {x: -7.4505804e-11, y: 0.0025726387, z: 4.2840836e-10}
+        rootSpacePosition: {x: -0.0013089386, y: 0.0025676966, z: -0.0033940207}
+        localRotation: {x: 0.16765912, y: -0.2156788, z: -0.18573433, w: 0.9438622}
+        rootSpaceRotation: {x: 0.48584375, y: 0.23989105, z: -0.42479292, w: -0.7252305}
+      - SourceBone: {fileID: 0}
+        localPosition: {x: -1.4901161e-10, y: 0.0021711364, z: 7.4505804e-11}
+        rootSpacePosition: {x: -0.0021405846, y: 0.0029303061, z: -0.00536651}
+        localRotation: {x: 0.06286717, y: -0.10881908, z: -0.24195008, w: 0.9621155}
+        rootSpaceRotation: {x: 0.31757733, y: 0.40056628, z: -0.30118063, w: -0.8049731}
+      - SourceBone: {fileID: 0}
+        localPosition: {x: -0, y: 0.0021292055, z: 0}
+        rootSpacePosition: {x: -0.0026312892, y: 0.004243747, z: -0.006968884}
+        localRotation: {x: 0, y: -0, z: -0, w: 1}
+        rootSpaceRotation: {x: 0.31757733, y: 0.40056628, z: -0.30118063, w: -0.8049731}
+      - SourceBone: {fileID: 0}
+        localPosition: {x: -4.6566126e-11, y: 0.0008314005, z: 4.807953e-10}
+        rootSpacePosition: {x: -0.00027315252, y: 0.0071077505, z: 0.0029906174}
+        localRotation: {x: -0.018057784, y: -0.0045775063, z: -0.017795036, w: 0.9996681}
+        rootSpaceRotation: {x: 0.46756348, y: 0.002440134, z: 0.013867283, w: 0.88384753}
+      - SourceBone: {fileID: 0}
+        localPosition: {x: -2.3283063e-11, y: 0.0010649789, z: -2.0721927e-10}
+        rootSpacePosition: {x: -0.00029682837, y: 0.0077066775, z: 0.003870904}
+        localRotation: {x: 0.5816087, y: 0.000058534817, z: 0.00052220904, w: 0.8134685}
+        rootSpaceRotation: {x: 0.89440197, y: 0.009857854, z: 0.010350339, w: 0.44703585}
+      LastBaseTransform: {fileID: 0}
+    UseExtraFeatures: 1
+    ExtraFeatures: []
+    IsHumanoid: 0
+    dummyContainer: {fileID: 0}
+    skeletonFillExtraBonesList: []
+    MusclesPower: 1
+    SpringsValue: 1500
+    SpringsOnFall: 0
+    DampingValue: 40
+    DampingValueOnFall: 0
+    HardMatching: 0
+    HardMatchPositions: 0
+    HardMatchPositionsOnFall: 0
+    PositionHardMatchingMultiplier: 1
+    HardMatchingOnFalling: 0
+    MotionInfluence: 1
+    AnchorBoneSpring: 1
+    MakeAnchorKinematicOnMaxSpring: 0
+    UnaffectedMovement: 0
+    AutoUnstuck: 0
+    LockAnchorRotation: 1
+    AnchorJointLimits: 0
+    FallOnZeroAnchor: 1
+    BaseTransform: {fileID: 0}
+    Mecanim: {fileID: 0}
+    RagdollLogic: 0
+    RagdollSizeMultiplier: 1
+    RagdollThicknessMultiplier: 1
+    ReferenceMass: 50
+    RigidbodiesInterpolation: 1
+    RigidbodiesDetectionMode: 0
+    RigidbodyDragValue: 0
+    RigidbodyAngularDragValue: 0.2
+    JointContactDistance: 0
+    JointBounciness: 0
+    JointLimitSpring: 0
+    JointLimitDamper: 0
+    ConnectedMassMultiply: 0.5
+    MassMultiplyOnFalling: 1
+    CollidersPhysicMaterial: {fileID: 0}
+    PhysicMaterialOnFall: {fileID: 0}
+    MaxAngularVelocity: 50
+    MaxVelocity: 0
+    NoGravityOnStanding: 0
+    MaxDepenetrationVelocity: 0
+    ProjectionMode: 0
+    PreProcessing: 0
+    RagdollBlend: 1
+    animatingMode: 1
+    UseReconstruction: 0
+    UnitySolverIterations: 12
+    Calibrate: 1
+    AnimatePhysics: 0
+    ApplyPositions: 0
+    OptimizeOnZeroBlend: 0
+    HideDummyInSceneView: 0
+    IgnoreBoundedColliders: 1
+    RagdollDummyLayer: 0
+    UnscaledTime: 0
+    FadeInAnimation: 0
+    IgnoreSourceSkeletonColliders: 1
+    WaitForInit: 1
+    AnimationMatchLimits: 1
+    TargetParentForRagdollDummy: {fileID: 0}
+    BoundedCollidersIgnoreScaleup: 1.2
+    UnityVelocitySolverIterations: 0
+    DisableMecanimOnSleep: 1
+    chains: []
+    parentObject: {fileID: 0}
