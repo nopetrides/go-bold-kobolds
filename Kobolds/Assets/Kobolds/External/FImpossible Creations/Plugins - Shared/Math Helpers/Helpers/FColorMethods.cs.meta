@@ -13,8 +13,9 @@ MonoImporter:
   assetBundleVariant: 
 AssetOrigin:
   serializedVersion: 1
-  productId: 122233
-  packageName: Bones Stimulator
-  packageVersion: 2.0.0
-  assetPath: Assets/FImpossible Creations/Plugins - Shared/Math Helpers/Helpers/FColorMethods.cs
-  uploadId: 720864
+  productId: 128322
+  packageName: Spinal Animator
+  packageVersion: 2.0.2
+  assetPath: Assets/Kobolds/External/FImpossible Creations/Plugins - Shared/Math
+    Helpers/Helpers/FColorMethods.cs
+  uploadId: 739527

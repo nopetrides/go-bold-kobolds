@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: b9e422c6b7af5e6418d1787c6fb28504
+timeCreated: 1530181715
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121782
+  packageName: fBasic Assets
+  packageVersion: 1.2.6
+  assetPath: Assets/Kobolds/External/FImpossible Creations/Plugins - Shared/FBasic
+    Assets/Models/Finosaur/Materials/Mat.1.mat
+  uploadId: 697898

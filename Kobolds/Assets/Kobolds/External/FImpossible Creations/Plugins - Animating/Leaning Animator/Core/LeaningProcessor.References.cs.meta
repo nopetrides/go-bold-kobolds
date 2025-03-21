@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 9c5ab71e15929ba46b5aba9b1ba524ff
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 198472
+  packageName: Leaning Animator
+  packageVersion: 1.0.2.8
+  assetPath: Assets/Kobolds/External/FImpossible Creations/Plugins - Animating/Leaning
+    Animator/Core/LeaningProcessor.References.cs
+  uploadId: 711853

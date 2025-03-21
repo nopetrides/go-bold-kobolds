@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 309e1a4ed7c62294887df9414ec409b8
+timeCreated: 1547311690
+licenseType: Store
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121782
+  packageName: fBasic Assets
+  packageVersion: 1.2.6
+  assetPath: Assets/Kobolds/External/FImpossible Creations/Plugins - Shared/FBasic
+    Assets/Shaders/FPhantomRefractive.shader
+  uploadId: 697898

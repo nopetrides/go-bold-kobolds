@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 2db2c941bb8f85b46b8bec2bd4f67425
+timeCreated: 1529778418
+licenseType: Store
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121782
+  packageName: fBasic Assets
+  packageVersion: 1.2.6
+  assetPath: Assets/Kobolds/External/FImpossible Creations/Plugins - Shared/FBasic
+    Assets/Others/mrsmonster.txt
+  uploadId: 697898

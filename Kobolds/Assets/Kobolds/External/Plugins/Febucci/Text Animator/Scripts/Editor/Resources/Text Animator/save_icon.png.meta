@@ -110,6 +110,7 @@ AssetOrigin:
   serializedVersion: 1
   productId: 254677
   packageName: Text Animator for Unity
-  packageVersion: 2.2.1
-  assetPath: Assets/Plugins/Febucci/Text Animator/Scripts/Editor/Resources/Text Animator/save_icon.png
-  uploadId: 710156
+  packageVersion: 2.3.1
+  assetPath: Assets/Kobolds/External/Plugins/Febucci/Text Animator/Scripts/Editor/Resources/Text
+    Animator/save_icon.png
+  uploadId: 740466

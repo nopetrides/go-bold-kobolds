@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 6f578fbfd46dffa49af1a78dc3e282d6
+timeCreated: 1529265415
+licenseType: Store
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121782
+  packageName: fBasic Assets
+  packageVersion: 1.2.6
+  assetPath: Assets/Kobolds/External/FImpossible Creations/Plugins - Shared/FBasic
+    Assets/Models/Knob/MAT_FBasic_KnobMarker.mat
+  uploadId: 697898

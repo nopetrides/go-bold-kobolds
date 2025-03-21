@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 5d2fd048e894f5e4fa301b8d6fd81a55
+timeCreated: 1561238416
+licenseType: Store
+DefaultImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121782
+  packageName: fBasic Assets
+  packageVersion: 1.2.6
+  assetPath: Assets/Kobolds/External/FImpossible Creations/Plugins - Shared/FBasic
+    Assets/DEMO FBasic Assets/S_FBasic Demo Conversation.unity
+  uploadId: 697898

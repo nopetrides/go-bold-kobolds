@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: a6756793c5aae1842b6a370326d5836a
+timeCreated: 1540759585
+licenseType: Store
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121782
+  packageName: fBasic Assets
+  packageVersion: 1.2.6
+  assetPath: Assets/Kobolds/External/FImpossible Creations/Plugins - Shared/FBasic
+    Assets/Shared Materials/MAT_FBasic_Emmisive.mat
+  uploadId: 697898

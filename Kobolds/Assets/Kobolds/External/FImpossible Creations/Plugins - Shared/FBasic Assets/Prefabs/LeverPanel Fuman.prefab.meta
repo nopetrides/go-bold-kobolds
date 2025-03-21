@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: df9cfe9b689741f4db1c007fc0eb9c4e
+timeCreated: 1532107064
+licenseType: Store
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121782
+  packageName: fBasic Assets
+  packageVersion: 1.2.6
+  assetPath: Assets/Kobolds/External/FImpossible Creations/Plugins - Shared/FBasic
+    Assets/Prefabs/LeverPanel Fuman.prefab
+  uploadId: 697898

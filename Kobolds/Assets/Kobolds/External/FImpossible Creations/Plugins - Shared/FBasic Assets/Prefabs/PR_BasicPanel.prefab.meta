@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 1c10e183d98f8de41883caa7ae21f219
+timeCreated: 1529319976
+licenseType: Store
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121782
+  packageName: fBasic Assets
+  packageVersion: 1.2.6
+  assetPath: Assets/Kobolds/External/FImpossible Creations/Plugins - Shared/FBasic
+    Assets/Prefabs/PR_BasicPanel.prefab
+  uploadId: 697898

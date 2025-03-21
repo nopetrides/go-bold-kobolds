@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 6084c49a45a5c4c469fb8f29532d91b1
+timeCreated: 1529227806
+licenseType: Store
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 31900000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121782
+  packageName: fBasic Assets
+  packageVersion: 1.2.6
+  assetPath: Assets/Kobolds/External/FImpossible Creations/Plugins - Shared/FBasic
+    Assets/Models/Fheelek/AM_Fheelek_Mouth.mask
+  uploadId: 697898

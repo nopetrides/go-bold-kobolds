@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: c65ab540bb2562a448bb655e24c4dd3f
+timeCreated: 1549531965
+licenseType: Store
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121782
+  packageName: fBasic Assets
+  packageVersion: 1.2.6
+  assetPath: Assets/Kobolds/External/FImpossible Creations/Plugins - Shared/FBasic
+    Assets/DEMO FBasic Assets/Prefabs/PR_FBasics_Door.prefab
+  uploadId: 697898

@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 30e569e47a849ba41905ad2878d6b503
+timeCreated: 1536750198
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121782
+  packageName: fBasic Assets
+  packageVersion: 1.2.6
+  assetPath: Assets/Kobolds/External/FImpossible Creations/Plugins - Shared/FBasic
+    Assets/DEMO FBasic Assets/Prefabs/PR_FBasic_Shooting Shield.prefab
+  uploadId: 697898

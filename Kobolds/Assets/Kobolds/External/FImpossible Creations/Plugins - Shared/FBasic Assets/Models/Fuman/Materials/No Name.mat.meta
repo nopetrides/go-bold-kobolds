@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: f8ab0fbff3be50545ab7d3ba1f0d674b
+timeCreated: 1530181712
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121782
+  packageName: fBasic Assets
+  packageVersion: 1.2.6
+  assetPath: Assets/Kobolds/External/FImpossible Creations/Plugins - Shared/FBasic
+    Assets/Models/Fuman/Materials/No Name.mat
+  uploadId: 697898

@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 197cba080475a7e49ba1f739fe046525
+timeCreated: 1530369177
+licenseType: Store
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121782
+  packageName: fBasic Assets
+  packageVersion: 1.2.6
+  assetPath: Assets/Kobolds/External/FImpossible Creations/Plugins - Shared/FBasic
+    Assets/Models/Filipede/PR_Filipede.prefab
+  uploadId: 697898

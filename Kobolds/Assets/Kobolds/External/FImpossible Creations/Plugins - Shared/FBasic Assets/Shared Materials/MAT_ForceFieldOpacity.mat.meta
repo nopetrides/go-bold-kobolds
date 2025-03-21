@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 3291ad3c4bca54743b2437eb9a850795
+timeCreated: 1529488278
+licenseType: Store
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121782
+  packageName: fBasic Assets
+  packageVersion: 1.2.6
+  assetPath: Assets/Kobolds/External/FImpossible Creations/Plugins - Shared/FBasic
+    Assets/Shared Materials/MAT_ForceFieldOpacity.mat
+  uploadId: 697898

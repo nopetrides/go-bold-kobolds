@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 5855af6d3e7976f45a22fe6daa9b3979
+timeCreated: 1540483306
+licenseType: Store
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 9100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121782
+  packageName: fBasic Assets
+  packageVersion: 1.2.6
+  assetPath: Assets/Kobolds/External/FImpossible Creations/Plugins - Shared/FBasic
+    Assets/Models/Fiped/AC_Fiped.controller
+  uploadId: 697898

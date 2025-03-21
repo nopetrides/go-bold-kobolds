@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 4b9a8834262556044aa81ff5890e2b37
+timeCreated: 1528909860
+licenseType: Store
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121782
+  packageName: fBasic Assets
+  packageVersion: 1.2.6
+  assetPath: Assets/Kobolds/External/FImpossible Creations/Plugins - Shared/FBasic
+    Assets/Others/S_3DText Shader.shader
+  uploadId: 697898

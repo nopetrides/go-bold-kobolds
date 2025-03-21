@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 3121a497cb3ea6749840016098039c9f
+timeCreated: 1528575484
+licenseType: Store
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121782
+  packageName: fBasic Assets
+  packageVersion: 1.2.6
+  assetPath: Assets/Kobolds/External/FImpossible Creations/Plugins - Shared/FBasic
+    Assets/Models/Props/FLogo/FLogo V1.prefab
+  uploadId: 697898

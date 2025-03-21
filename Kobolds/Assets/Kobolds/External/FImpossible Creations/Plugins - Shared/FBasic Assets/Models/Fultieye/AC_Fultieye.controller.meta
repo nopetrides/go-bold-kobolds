@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: ec26737445e1d0c42a2a393fc90e2acf
+timeCreated: 1547551127
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 9100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121782
+  packageName: fBasic Assets
+  packageVersion: 1.2.6
+  assetPath: Assets/Kobolds/External/FImpossible Creations/Plugins - Shared/FBasic
+    Assets/Models/Fultieye/AC_Fultieye.controller
+  uploadId: 697898

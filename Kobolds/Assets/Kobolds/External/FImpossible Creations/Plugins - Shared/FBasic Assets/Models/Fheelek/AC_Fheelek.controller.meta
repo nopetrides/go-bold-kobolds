@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 64ee2a3a0e5fbd745bb58440bee4e8a5
+timeCreated: 1528579018
+licenseType: Store
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 9100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 121782
+  packageName: fBasic Assets
+  packageVersion: 1.2.6
+  assetPath: Assets/Kobolds/External/FImpossible Creations/Plugins - Shared/FBasic
+    Assets/Models/Fheelek/AC_Fheelek.controller
+  uploadId: 697898
