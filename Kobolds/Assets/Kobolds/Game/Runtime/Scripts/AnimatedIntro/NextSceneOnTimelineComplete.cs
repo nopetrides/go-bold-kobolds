@@ -16,6 +16,7 @@ public class NextSceneOnTimelineComplete : MonoBehaviour
     private void OnTimelineStop(PlayableDirector obj)
     {
         Debug.Log($"PlayableDirector Stopped");
-        SceneMgr.Instance.LoadScene(GameScenes.CharactersScene.ToString(), null);
+		if (Application.isPlaying)
+			SceneMgr.Instance?.LoadScene(GameScenes.CharactersScene.ToString(), null);
     }
 }

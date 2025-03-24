@@ -107,6 +107,10 @@ MonoBehaviour:
     m_Localized: "<shake>GEH RAUS UND HOL DIE <rainb>EIER</rainb> ZUR\xDCCK!!!</shake>"
     m_Metadata:
       m_Items: []
+  - m_Id: 4750923250114560
+    m_Localized: "Zur\xFCckkehren"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

@@ -2,7 +2,8 @@
     "name": "Kobolds.Runtime",
     "rootNamespace": "",
     "references": [
-        "GUID:f583f61ab2e6d9f4ca76f8a51c5f9960"
+        "GUID:f583f61ab2e6d9f4ca76f8a51c5f9960",
+        "GUID:7ab3663edede26740845931880bf22af"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

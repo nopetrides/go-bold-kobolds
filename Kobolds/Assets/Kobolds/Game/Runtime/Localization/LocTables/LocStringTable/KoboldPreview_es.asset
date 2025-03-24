@@ -108,6 +108,10 @@ MonoBehaviour:
     m_Localized: "<shake>\r\xA1SAL AH\xCD Y RECUPERA <rainb>LOS HUEVOS!</shake>"
     m_Metadata:
       m_Items: []
+  - m_Id: 4750923250114560
+    m_Localized: Devolver
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

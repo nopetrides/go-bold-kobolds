@@ -75,7 +75,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 9415804428288
-    m_Localized: "B\xEAn\xE7\xE3o"
+    m_Localized: "Benef\xEDcio"
     m_Metadata:
       m_Items: []
   - m_Id: 10331651678208
@@ -104,6 +104,10 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 3352328202461184
     m_Localized: "\r<shake>V\xC1 L\xC1 E PEGUEM DE VOLTA OS <rainb>OVOS</rainb>!!!</shake>"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4750923250114560
+    m_Localized: Retornar
     m_Metadata:
       m_Items: []
   references:

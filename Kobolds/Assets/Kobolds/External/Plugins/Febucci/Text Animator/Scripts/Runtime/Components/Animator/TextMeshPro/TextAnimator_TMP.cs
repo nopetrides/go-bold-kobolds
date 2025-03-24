@@ -1,4 +1,4 @@
-﻿using Febucci.UI.Core;
+using Febucci.UI.Core;
 using Febucci.UI.Core.Parsing;
 using TMPro;
 using UnityEngine;
@@ -15,7 +15,7 @@ namespace Febucci.UI
     public sealed class TextAnimator_TMP : TAnimCore
     {
         /// <summary>
-        /// The TextMeshPro text component linked to this Text Animator
+        /// The TextMeshPro text component linked to this TMPro.TMP_Text Animator
         /// </summary>
         public TMP_Text TMProComponent
         {

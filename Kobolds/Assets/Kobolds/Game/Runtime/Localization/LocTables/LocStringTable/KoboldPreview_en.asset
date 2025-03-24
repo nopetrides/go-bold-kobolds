@@ -23,7 +23,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 9415804428288
-    m_Localized: Blessing
+    m_Localized: Boon
     m_Metadata:
       m_Items: []
   - m_Id: 10079917940736
@@ -44,26 +44,26 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 12370028896256
-    m_Localized: <b><kr>Queen's General:</kr></b>\n Jack of all trades, master of
+    m_Localized: <b><kr>Queen's General:</kr></b>\nJack of all trades, master of
       none. These kobolds are the mainstay of the forces. With no supernatural gift,
       the average kobold must use wit and teamwork to overcome obstacles.
     m_Metadata:
       m_Items: []
   - m_Id: 12632269365248
-    m_Localized: <b><ky>Queen's Gifted:</ky></b>\n Blessed with a fragment of draconic
+    m_Localized: <b><ky>Queen's Gifted:</ky></b>\nBlessed with a fragment of draconic
       magic, these sorcerers wield the arcane against their foes. Their attunement
-      to magic makes them excentric and may disturb other kobolds.
+      to magic makes them eccentric and may disturb other kobolds.
     m_Metadata:
       m_Items: []
   - m_Id: 12875979399168
-    m_Localized: <b><kg>Queen's Grace:</kg></b>\n A rare few kobolds may be blessed
+    m_Localized: <b><kg>Queen's Grace:</kg></b>\nA rare few kobolds may be blessed
       with inheriting the wings of true dragons. Known as <i>"Urds"</i> They are
       held in high esteem as a sign of favor with the Dragon Lords, but the attention
       usually get's to their heads.
     m_Metadata:
       m_Items: []
   - m_Id: 12960939220992
-    m_Localized: '<b><kb>Queen''s Guard:</kb></b>\n The toughest kobolds are given
+    m_Localized: '<b><kb>Queen''s Guard:</kb></b>\nThe toughest kobolds are given
       reponsibilities of protecting the most important things to the tribe: the hatchery,
       and the treasurey. They''re still kobolds though, so they are pretty bad at
       the job.'
@@ -103,6 +103,10 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 3352328202461184
     m_Localized: <shake>GO OUT THERE AND GET BACK THE <rainb>EGGS</rainb>!!!</shake>
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4750923250114560
+    m_Localized: Return
     m_Metadata:
       m_Items: []
   references:

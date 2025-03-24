@@ -27,7 +27,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 9415804428288
-    m_Localized: "\u0395\u03C5\u03BB\u03BF\u03B3\u03AF\u03B1"
+    m_Localized: "\u0394\u03CE\u03C1\u03BF"
     m_Metadata:
       m_Items: []
   - m_Id: 10579325329408
@@ -149,6 +149,10 @@ MonoBehaviour:
     m_Localized: "<shake>\u0392\u0393\u0391\u03A4\u0395 \u0395\u039A\u0395\u0399
       \u0395\u039E\u03A9 \u039A\u0391\u0399 \u03A0\u0391\u03A4\u0397\u03A3\u03A4\u0395
       \u03A4\u0391 <rainb>\u0391\u03A5\u0393\u0391</rainb>!!!</shake>\n"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4750923250114560
+    m_Localized: "\u0391\u03C0\u03CC\u03B4\u03BF\u03C3\u03B7"
     m_Metadata:
       m_Items: []
   references:

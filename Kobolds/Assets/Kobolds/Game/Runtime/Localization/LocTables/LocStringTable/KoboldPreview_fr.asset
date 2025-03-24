@@ -23,7 +23,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 9415804428288
-    m_Localized: "B\xE9n\xE9diction"
+    m_Localized: "\rAubaine"
     m_Metadata:
       m_Items: []
   - m_Id: 10079917940736
@@ -107,6 +107,10 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 3352328202461184
     m_Localized: "<shake>SORTEZ ET R\xC9CUP\xC9REZ LES <rainb>\u0152UFS</rainb> !!!</shake>"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4750923250114560
+    m_Localized: Retour
     m_Metadata:
       m_Items: []
   references:

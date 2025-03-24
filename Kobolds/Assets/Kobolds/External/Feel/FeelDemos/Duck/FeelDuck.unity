@@ -6232,6 +6232,7 @@ GameObject:
   m_Component:
   - component: {fileID: 897481191}
   - component: {fileID: 897481198}
+  - component: {fileID: 897481199}
   m_Layer: 0
   m_Name: FeelDuckJumpStartFeedback
   m_TagString: Untagged
@@ -6383,7 +6384,7 @@ MonoBehaviour:
         Active: 1
         UniqueID: 586893456
         Label: Camera Shake
-        OriginalLabel: 
+        OriginalLabel: Camera Shake
         ChannelMode: 0
         Channel: 0
         MMChannelDefinition: {fileID: 0}
@@ -6465,7 +6466,7 @@ MonoBehaviour:
         Active: 1
         UniqueID: 1066979621
         Label: Animation
-        OriginalLabel: 
+        OriginalLabel: Animation Parameter
         ChannelMode: 0
         Channel: 0
         MMChannelDefinition: {fileID: 0}
@@ -6569,7 +6570,7 @@ MonoBehaviour:
         Active: 1
         UniqueID: -172670188
         Label: Chromatic Aberration
-        OriginalLabel: 
+        OriginalLabel: Chromatic Aberration
         ChannelMode: 0
         Channel: 0
         MMChannelDefinition: {fileID: 0}
@@ -6683,7 +6684,7 @@ MonoBehaviour:
         Active: 1
         UniqueID: -1021818495
         Label: Sound
-        OriginalLabel: 
+        OriginalLabel: Sound
         ChannelMode: 0
         Channel: 0
         MMChannelDefinition: {fileID: 0}
@@ -6808,7 +6809,7 @@ MonoBehaviour:
         Active: 1
         UniqueID: 1371965033
         Label: Sound
-        OriginalLabel: 
+        OriginalLabel: Sound
         ChannelMode: 0
         Channel: 0
         MMChannelDefinition: {fileID: 0}
@@ -6933,7 +6934,7 @@ MonoBehaviour:
         Active: 1
         UniqueID: -99718570
         Label: Haptic Preset
-        OriginalLabel: 
+        OriginalLabel: Haptic Preset
         ChannelMode: 0
         Channel: 0
         MMChannelDefinition: {fileID: 0}
@@ -7009,6 +7010,36 @@ MonoBehaviour:
           OnlyPlayIfAdvancedRequirementsMet: 0
           OnlyPlayIfAmplitudeModulationSupported: 0
           OnlyPlayIfFrequencyModulationSupported: 0
+--- !u!114 &897481199
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 897481190}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Events:
+    m_Signals:
+    - {fileID: 11400000, guid: d83a95e875590cd44ad355fafe5940b4, type: 2}
+    m_Events:
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 897481198}
+          m_TargetAssemblyTypeName: MoreMountains.Feedbacks.MMF_Player, MoreMountains.Tools
+          m_MethodName: PlayFeedbacks
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &1000273585
 GameObject:
   m_ObjectHideFlags: 0
@@ -21435,6 +21466,63 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &1959147397
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1959147399}
+  - component: {fileID: 1959147398}
+  m_Layer: 0
+  m_Name: Director
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!320 &1959147398
+PlayableDirector:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1959147397}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_PlayableAsset: {fileID: 11400000, guid: c695192d1688e73469ad197446acbb30, type: 2}
+  m_InitialState: 1
+  m_WrapMode: 2
+  m_DirectorUpdateMode: 1
+  m_InitialTime: 0
+  m_SceneBindings:
+  - key: {fileID: -6856085974235713838, guid: c695192d1688e73469ad197446acbb30, type: 2}
+    value: {fileID: 620087095}
+  - key: {fileID: 4632428887325494119, guid: c695192d1688e73469ad197446acbb30, type: 2}
+    value: {fileID: 897481199}
+  m_ExposedReferences:
+    m_References:
+    - d4477d499ef90f8428919412068cb86c: {fileID: 620087095}
+    - 06f479d7ce704014cbe6ada738bd9cab: {fileID: 620087095}
+    - c8300d240b410ab43bc2cae6dc52f679: {fileID: 620087095}
+    - 38e4f729d02ece1419d94f3da4a0ca64: {fileID: 620087095}
+--- !u!4 &1959147399
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1959147397}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1983435675
 GameObject:
   m_ObjectHideFlags: 0
@@ -27959,3 +28047,4 @@ SceneRoots:
   - {fileID: 620087097}
   - {fileID: 1212517703}
   - {fileID: 437110975}
+  - {fileID: 1959147399}

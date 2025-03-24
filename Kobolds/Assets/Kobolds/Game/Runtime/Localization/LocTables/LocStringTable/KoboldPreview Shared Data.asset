@@ -24,7 +24,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 9415804428288
-    m_Key: Blessing
+    m_Key: Boon
     m_Metadata:
       m_Items: []
   - m_Id: 10579325329408
@@ -89,6 +89,10 @@ MonoBehaviour:
       m_Items: []
   - m_Id: 3352328202461184
     m_Key: CommandIntro
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4750923250114560
+    m_Key: Return
     m_Metadata:
       m_Items: []
   m_Metadata:

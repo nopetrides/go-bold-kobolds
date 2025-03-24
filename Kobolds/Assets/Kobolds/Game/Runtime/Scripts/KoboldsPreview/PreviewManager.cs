@@ -1,8 +1,10 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine;
 using System.Collections.Generic;
 using DG.Tweening;
 using Febucci.UI;
+using Kobolds.Runtime;
+using Kobolds.UI;
+using P3T.Scripts.Managers;
 using UnityEngine.Localization;
 using UnityEngine.Serialization;
 
@@ -49,9 +51,9 @@ namespace P3T.Scripts.KoboldsPreview
 		[SerializeField] private List<LocalizedString> Descriptions = new();
 		
 		[Header("UI")]
-		[SerializeField] private Dropdown DropdownKobold;
-		[SerializeField] private Dropdown DropdownAnimation;
-		[SerializeField] private Dropdown DropdownShapeKey;
+		[SerializeField] private TMPro.TMP_Dropdown DropdownKobold;
+		[SerializeField] private TMPro.TMP_Dropdown DropdownAnimation;
+		[SerializeField] private TMPro.TMP_Dropdown DropdownShapeKey;
 		[SerializeField] private TypewriterByCharacter DescriptionText;
 
 		private int _koboldIndex;
@@ -70,7 +72,7 @@ namespace P3T.Scripts.KoboldsPreview
 				koboldsList.Add(n);
 
 				if (i == 0)
-					SlideInKobold(Kobolds[i], false);
+					SlideInKobold(Kobolds[i], true);
 				else
 					Kobolds[i].SetActive(false);
 			}
@@ -78,9 +80,14 @@ namespace P3T.Scripts.KoboldsPreview
 			DropdownKobold.AddOptions(koboldsList);
 			DropdownAnimation.AddOptions(AnimationList);
 			DropdownShapeKey.AddOptions(ShapeKeyList);
-
+			
+			_koboldIndex = DropdownKobold.value = 0;
+			// Run
+			DropdownAnimation.value = 4;
 			// Set to Eyes_Blink
 			DropdownShapeKey.value = 1;
+
+			ChangeAnimation();
 			ChangeShapeKey();
 		}
 
@@ -243,6 +250,11 @@ namespace P3T.Scripts.KoboldsPreview
 			{
 				animator.Play(DropdownShapeKey.options[DropdownShapeKey.value].text);
 			}
+		}
+
+		public void ButtonReturn()
+		{
+			SceneMgr.Instance.LoadScene(GameScenes.LanguageSelectScene.ToString(), typeof(LanguageSelectMenu));
 		}
 	}
 }
