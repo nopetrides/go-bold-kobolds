@@ -1,12 +1,9 @@
 {
-    "name": "Unity.StarterAssets.Editor",
+    "name": "Kobolds.External.ProTips.Editor",
     "rootNamespace": "",
     "references": [
-        "Unity.StarterAssets",
-        "Unity.Cinemachine",
-        "Kobolds.External.StarterAssets",
-        "UnityEditor.UI",
-        "UnityEngine.UI"
+        "GUID:9d9f6a0984b60e146b370c008a473f46",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f"
     ],
     "includePlatforms": [
         "Editor"

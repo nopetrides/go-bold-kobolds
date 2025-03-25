@@ -1,12 +1,8 @@
 {
-    "name": "Unity.StarterAssets.Editor",
+    "name": "Kobolds.External.FImpossible.Editor",
     "rootNamespace": "",
     "references": [
-        "Unity.StarterAssets",
-        "Unity.Cinemachine",
-        "Kobolds.External.StarterAssets",
-        "UnityEditor.UI",
-        "UnityEngine.UI"
+        "GUID:9d9f6a0984b60e146b370c008a473f46"
     ],
     "includePlatforms": [
         "Editor"
