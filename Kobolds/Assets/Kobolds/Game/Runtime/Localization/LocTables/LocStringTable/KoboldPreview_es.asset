@@ -93,7 +93,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 2978670103601152
-    m_Localized: Las shinies tambien...
+    m_Localized: Los tesoros tambien...
     m_Metadata:
       m_Items: []
   - m_Id: 2978825984909312
@@ -105,7 +105,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 3352328202461184
-    m_Localized: "<shake>\r\xA1SAL AH\xCD Y RECUPERA <rainb>LOS HUEVOS!</shake>"
+    m_Localized: "<shake>\xA1SALGAN Y RECUPEREN <rainb>LOS HUEVOS!</shake>"
     m_Metadata:
       m_Items: []
   - m_Id: 4750923250114560

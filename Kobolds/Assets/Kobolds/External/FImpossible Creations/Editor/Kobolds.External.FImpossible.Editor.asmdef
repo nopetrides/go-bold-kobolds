@@ -1,8 +1,8 @@
 {
-    "name": "Kobolds.External.FImpossible.Editor",
+    "name": "Kobolds.External.Fimpossible.Editor",
     "rootNamespace": "",
     "references": [
-        "GUID:9d9f6a0984b60e146b370c008a473f46"
+        "GUID:8518345498be10d4b815af4da24ab8c5"
     ],
     "includePlatforms": [
         "Editor"

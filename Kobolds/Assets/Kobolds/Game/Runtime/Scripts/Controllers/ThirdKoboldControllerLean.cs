@@ -1,6 +1,6 @@
-using System.Collections;
-using System.Security.Cryptography.X509Certificates;
+#if FIM
 using FIMSpace;
+#endif
 using UnityEngine;
 using UnityEngine.Serialization;
 #if ENABLE_INPUT_SYSTEM
@@ -131,9 +131,9 @@ namespace Kobolds.Runtime
 		[Tooltip("Blend between direct and smoothed movement when starting from a stop")]
 		[Range(0, 1f)]
 		[SerializeField] private float DirectBlendMax;
-
+#if FIM
 		[FormerlySerializedAs("LeaningAnimator")] [FormerlySerializedAs("_leaningAnimator")] [SerializeField] private LeaningAnimator LeaningAnim;
-
+#endif
 		
         private const float Threshold = 0.01f;
 
@@ -315,9 +315,11 @@ namespace Kobolds.Runtime
                 _animator.SetFloat(_animIDSpeed, _animationBlend);
                 _animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
             }
+#if FIM
 			LeaningAnim.User_DeliverIsAccelerating(_input.move != Vector2.zero);
 			LeaningAnim.User_DeliverIsGrounded(Grounded);
 			LeaningAnim.User_DeliverAccelerationSpeed(_speed);
+#endif
         }
 
         private void JumpAndGravity()
