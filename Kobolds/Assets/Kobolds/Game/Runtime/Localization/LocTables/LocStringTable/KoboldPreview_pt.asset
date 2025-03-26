@@ -34,7 +34,7 @@ MonoBehaviour:
   - m_Id: 12370028896256
     m_Localized: "\r<b><kr>General da Rainha:</kr></b>\\nFaze-tudo, mas n\xE3o \xE9
       mestre de nada. Esses kobolds s\xE3o o esteio das for\xE7as. Sem nenhum dom
-      sobrenatural, o kobold comum deve usar intelig\xEAncia e <kr>trabalho em equipe<kr>
+      sobrenatural, o kobold comum deve usar intelig\xEAncia e<kr> trabalho em equipe</kr>
       para superar obst\xE1culos."
     m_Metadata:
       m_Items: []

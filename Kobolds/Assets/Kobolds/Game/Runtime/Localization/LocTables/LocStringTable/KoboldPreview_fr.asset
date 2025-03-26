@@ -48,7 +48,7 @@ MonoBehaviour:
     m_Localized: "\r<b><kr>G\xE9n\xE9ral de la Reine :</kr></b>\\nTouche-\xE0-tout,
       ma\xEEtre de rien. Ces kobolds sont le pilier des forces arm\xE9es. D\xE9pourvus
       de don surnaturel, le kobold moyen doit faire preuve d'ing\xE9niosit\xE9 et
-      de <kr>travail d'\xE9quipe<kr> pour surmonter les obstacles."
+      de<kr> travail d'\xE9quipe</kr> pour surmonter les obstacles."
     m_Metadata:
       m_Items: []
   - m_Id: 12632269365248

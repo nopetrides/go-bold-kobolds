@@ -46,7 +46,7 @@ MonoBehaviour:
   - m_Id: 12370028896256
     m_Localized: "\r<b><kr>General de la Reina:</kr></b>\\n Aprendiz de todo, maestro
       de nada. Estos kobolds son el pilar de las fuerzas. Sin ning\xFAn don sobrenatural,
-      el kobold promedio debe usar su ingenio y <kr>trabajo en equipo</kr> para superar
+      el kobold promedio debe usar su ingenio y<kr> trabajo en equipo</kr> para superar
       los obst\xE1culos."
     m_Metadata:
       m_Items: []

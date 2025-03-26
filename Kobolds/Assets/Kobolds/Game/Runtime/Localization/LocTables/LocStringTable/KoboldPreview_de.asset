@@ -65,7 +65,7 @@ MonoBehaviour:
   - m_Id: 12370028896256
     m_Localized: "<b><kr>General der K\xF6nigin:</kr></b>\\nAllesk\xF6nner, Meister
       in nichts. Diese Kobolde sind die St\xFCtze der Streitkr\xE4fte. Ohne \xFCbernat\xFCrliche
-      Gabe muss der durchschnittliche Kobold Verstand und <kr>Teamwork<kr> einsetzen,
+      Gabe muss der durchschnittliche Kobold Verstand und<kr> Teamwork</kr> einsetzen,
       um Hindernisse zu \xFCberwinden."
     m_Metadata:
       m_Items: []

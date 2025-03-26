@@ -46,7 +46,7 @@ MonoBehaviour:
   - m_Id: 12370028896256
     m_Localized: <b><kr>Queen's General:</kr></b>\nJack of all trades, master of
       none. These kobolds are the mainstay of the forces. With no supernatural gift,
-      the average kobold must use wit and <kr>teamwork<kr> to overcome obstacles.
+      the average kobold must use wit and<kr> teamwork</kr> to overcome obstacles.
     m_Metadata:
       m_Items: []
   - m_Id: 12632269365248
