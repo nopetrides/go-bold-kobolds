@@ -32,27 +32,29 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 12370028896256
-    m_Localized: "\r<b><kr>General da Rainha:</kr></b>\\n Faz-tudo, mas n\xE3o \xE9
+    m_Localized: "\r<b><kr>General da Rainha:</kr></b>\\nFaze-tudo, mas n\xE3o \xE9
       mestre de nada. Esses kobolds s\xE3o o esteio das for\xE7as. Sem nenhum dom
-      sobrenatural, o kobold comum deve usar intelig\xEAncia e trabalho em equipe
+      sobrenatural, o kobold comum deve usar intelig\xEAncia e <kr>trabalho em equipe<kr>
       para superar obst\xE1culos."
     m_Metadata:
       m_Items: []
   - m_Id: 12632269365248
-    m_Localized: "\r<b><ky>Queen's Gifted:</ky></b>\\n Aben\xE7oados com um fragmento
-      de magia drac\xF4nica, esses feiticeiros usam o arcano contra seus inimigos.
-      Sua sintonia com a magia os torna exc\xEAntricos e podem perturbar outros kobolds."
+    m_Localized: "\r<b><ky>Dotados da Rainha:</ky></b>\\nAben\xE7oados com um fragmento
+      de magia drac\xF4nica, esses feiticeiros <ky>empunham o arcano</ky> contra
+      seus inimigos. Sua sintonia com a magia os torna exc\xEAntricos e podem perturbar
+      outros kobolds."
     m_Metadata:
       m_Items: []
   - m_Id: 12875979399168
-    m_Localized: "<b><kg> Gra\xE7a da Rainha:</kg></b>\\n Alguns raros kobolds podem
-      ser aben\xE7oados com a heran\xE7a das asas de verdadeiros drag\xF5es. Conhecidos
-      como <i>\"Urds\"</i> Eles s\xE3o tidos em alta estima como um sinal de favor
-      com os Lordes Drag\xF5es, mas a aten\xE7\xE3o geralmente vai para suas cabe\xE7as."
+    m_Localized: "<b><kg>Gra\xE7a da Rainha:</kg></b>\\nAlguns kobolds raros podem
+      ser aben\xE7oados com a heran\xE7a das <kg>asas</kg> de drag\xF5es verdadeiros.
+      Conhecidos como <i>\"Urds\"</i> Eles s\xE3o tidos em alta estima como um sinal
+      de favor com os Lordes Drag\xF5es, mas a aten\xE7\xE3o geralmente vai para
+      suas cabe\xE7as."
     m_Metadata:
       m_Items: []
   - m_Id: 12960939220992
-    m_Localized: "\r<b><kb>Guarda da Rainha:</kb></b>\\n Os kobolds mais dur\xF5es
+    m_Localized: "<b><kb>Guarda da Rainha:</kb></b>\\nOs kobolds <kb>mais dur\xF5es</kb>
       recebem responsabilidades de proteger as coisas mais importantes para a tribo:
       a incubadora e o tesouro. Eles ainda s\xE3o kobolds, ent\xE3o s\xE3o muito
       ruins no trabalho."

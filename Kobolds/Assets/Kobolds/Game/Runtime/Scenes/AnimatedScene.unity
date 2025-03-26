@@ -350,13 +350,193 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _editor_Title: ' Bones Stimulator'
   _editor_DrawSetup: 1
-  _editor_DrawTweaking: 0
+  _editor_DrawTweaking: 1
   _editor_DisplayedPreset: 0
   _editor_DrawGizmos: 1
   DrawGizmos: 1
   _editor_SelCategory: 0
   StimulatorAmount: 1
-  Bones: []
+  Bones:
+  - transform: {fileID: 11567297}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 2065522506}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 776001632}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 1895295475}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 1948978118}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 551463637}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 689893110}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 1081639943}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 1593930767}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
   CompensationTransform: {fileID: 0}
   AnimatePhysics: 0
   UnscaledDelta: 0
@@ -364,17 +544,17 @@ MonoBehaviour:
   FadeOutDistance: 0
   DistanceFrom: {fileID: 0}
   AutoHelperOffset: 1
-  HelperOffset: {x: 0, y: 0, z: 0}
-  GravityEffectForce: {x: 0, y: 0, z: 0}
+  HelperOffset: {x: 0.0032197677, y: -0.0015459491, z: 0.00000019429412}
+  GravityEffectForce: {x: 0, y: -0.1, z: 0}
   GravityHeavyness: 2
   UpdateRate: 0
-  MovementMuscles: 1
+  MovementMuscles: 0.1
   MusclesRapidity: 0.6
   Damping: 0.4
   Smoothing: 0.6
   MildRotation: 0
   MotionInfluence: 1
-  RotationSpaceMuscles: 0
+  RotationSpaceMuscles: 1
   UseEulerRotation: 0
   EnsureRotation: 0
   RotationsRapidity: 0.7
@@ -405,7 +585,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   MusclesSimulationSpeed: 1
-  VibrateAmount: 0
+  VibrateAmount: 0.1
   VibrateSpeed: 6
   VibrateRange: 2.5
   VibrateAxis: {x: 1, y: 1, z: 1}
@@ -486,7 +666,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  SqueezingAmount: 0
+  SqueezingAmount: 0.1
   SqueezingSpeed: 15
   SqueezingMultiply: 0.5
   SqueezingAxis: {x: 0.2, y: 0.15, z: 0.2}
@@ -553,6 +733,11 @@ MonoBehaviour:
     m_RotationOrder: 4
   DampenOnLimits: 0
   InfluenceAxes: {x: 1, y: 1, z: 1}
+--- !u!4 &11567297 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1261730250037343553, guid: 9ea2ffe28f9288b48bb542d9a2df0950, type: 3}
+  m_PrefabInstance: {fileID: 1725037586}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &17913515
 GameObject:
   m_ObjectHideFlags: 0
@@ -1018,6 +1203,11 @@ MonoBehaviour:
           m_RotationOrder: 4
         RemapIntensityZero: 0
         RemapIntensityOne: 0.5
+--- !u!4 &20990977 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3873823617564108063, guid: 570a3e596baf79a40ae04b7d39c8ca17, type: 3}
+  m_PrefabInstance: {fileID: 2025253325}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &22519229
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1038,7 +1228,87 @@ MonoBehaviour:
   DrawGizmos: 1
   _editor_SelCategory: 0
   StimulatorAmount: 1
-  Bones: []
+  Bones:
+  - transform: {fileID: 2025253359}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 632364118}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 685184724}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 361250567}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
   CompensationTransform: {fileID: 0}
   AnimatePhysics: 0
   UnscaledDelta: 0
@@ -1046,7 +1316,7 @@ MonoBehaviour:
   FadeOutDistance: 0
   DistanceFrom: {fileID: 0}
   AutoHelperOffset: 1
-  HelperOffset: {x: 0, y: 0, z: 0}
+  HelperOffset: {x: 0.0005220467, y: 0.0019349328, z: -0.0003898675}
   GravityEffectForce: {x: 0, y: -0.1, z: 0}
   GravityHeavyness: 2
   UpdateRate: 0
@@ -1087,7 +1357,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   MusclesSimulationSpeed: 1
-  VibrateAmount: 0
+  VibrateAmount: 0.1
   VibrateSpeed: 6
   VibrateRange: 2.5
   VibrateAxis: {x: 1, y: 1, z: 1}
@@ -2378,6 +2648,11 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: ccc09e430b65e6d41bb4a2f2ca329571, type: 3}
   m_PrefabInstance: {fileID: 56307834}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &68755275 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4205641029673594484, guid: 9ea2ffe28f9288b48bb542d9a2df0950, type: 3}
+  m_PrefabInstance: {fileID: 1725037586}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &77950555 stripped
 Transform:
@@ -18487,6 +18762,11 @@ MonoBehaviour:
   Ac: {fileID: 290498857}
   AnimationName: Jump_Loop
   AnimationLayer: -1
+--- !u!4 &296858486 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3677662491476482448, guid: 570a3e596baf79a40ae04b7d39c8ca17, type: 3}
+  m_PrefabInstance: {fileID: 2025253325}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &300551594
 GameObject:
   m_ObjectHideFlags: 0
@@ -19002,6 +19282,11 @@ Animator:
   m_CorrespondingSourceObject: {fileID: 4347784409977095371, guid: 9ea2ffe28f9288b48bb542d9a2df0950, type: 3}
   m_PrefabInstance: {fileID: 326329640}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &347358040 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 9044355563290958296, guid: 570a3e596baf79a40ae04b7d39c8ca17, type: 3}
+  m_PrefabInstance: {fileID: 2025253325}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &347535951
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19414,6 +19699,11 @@ Transform:
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1415351478168274454, guid: b4f8508a0feb98341bd8906c7e3d2f7e, type: 3}
   m_PrefabInstance: {fileID: 358455746}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &361250567 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4257859822253097032, guid: 570a3e596baf79a40ae04b7d39c8ca17, type: 3}
+  m_PrefabInstance: {fileID: 2025253325}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &366056994
 GameObject:
@@ -20691,6 +20981,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7950106367760161894, guid: b7e596aac20f0334684b0e07539f3e1e, type: 3}
   m_PrefabInstance: {fileID: 472808379}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &494869222 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8266041039193274142, guid: 9ea2ffe28f9288b48bb542d9a2df0950, type: 3}
+  m_PrefabInstance: {fileID: 1725037586}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &506751497
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21605,6 +21900,11 @@ Light:
   m_LightUnit: 1
   m_LuxAtDistance: 1
   m_EnableSpotReflector: 1
+--- !u!4 &535958548 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5402959938901848558, guid: 570a3e596baf79a40ae04b7d39c8ca17, type: 3}
+  m_PrefabInstance: {fileID: 2025253325}
+  m_PrefabAsset: {fileID: 0}
 --- !u!43 &542889916
 Mesh:
   m_ObjectHideFlags: 0
@@ -21835,6 +22135,11 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!4 &551463637 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8601938522591514635, guid: 9ea2ffe28f9288b48bb542d9a2df0950, type: 3}
+  m_PrefabInstance: {fileID: 1725037586}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &551924848
 GameObject:
   m_ObjectHideFlags: 0
@@ -22066,7 +22371,87 @@ MonoBehaviour:
   DrawGizmos: 1
   _editor_SelCategory: 0
   StimulatorAmount: 1
-  Bones: []
+  Bones:
+  - transform: {fileID: 2025253340}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 1085484148}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 811096799}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 2013336414}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
   CompensationTransform: {fileID: 0}
   AnimatePhysics: 0
   UnscaledDelta: 0
@@ -22074,7 +22459,7 @@ MonoBehaviour:
   FadeOutDistance: 0
   DistanceFrom: {fileID: 0}
   AutoHelperOffset: 1
-  HelperOffset: {x: 0, y: 0, z: 0}
+  HelperOffset: {x: 0.00047510877, y: 0.00041381083, z: 0.000051635743}
   GravityEffectForce: {x: 0, y: -0.1, z: 0}
   GravityHeavyness: 2
   UpdateRate: 0
@@ -22115,7 +22500,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   MusclesSimulationSpeed: 1
-  VibrateAmount: 0
+  VibrateAmount: 0.1
   VibrateSpeed: 6
   VibrateRange: 2.5
   VibrateAxis: {x: 1, y: 1, z: 1}
@@ -22365,7 +22750,87 @@ MonoBehaviour:
   DrawGizmos: 1
   _editor_SelCategory: 0
   StimulatorAmount: 1
-  Bones: []
+  Bones:
+  - transform: {fileID: 2025253346}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 535958548}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 1182496796}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 881285888}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
   CompensationTransform: {fileID: 0}
   AnimatePhysics: 0
   UnscaledDelta: 0
@@ -22373,7 +22838,7 @@ MonoBehaviour:
   FadeOutDistance: 0
   DistanceFrom: {fileID: 0}
   AutoHelperOffset: 1
-  HelperOffset: {x: 0, y: 0, z: 0}
+  HelperOffset: {x: 0.00048328403, y: 0.002638878, z: -0.0000022993331}
   GravityEffectForce: {x: 0, y: -0.1, z: 0}
   GravityHeavyness: 2
   UpdateRate: 0
@@ -22414,7 +22879,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   MusclesSimulationSpeed: 1
-  VibrateAmount: 0
+  VibrateAmount: 0.1
   VibrateSpeed: 6
   VibrateRange: 2.5
   VibrateAxis: {x: 1, y: 1, z: 1}
@@ -23316,7 +23781,87 @@ MonoBehaviour:
   DrawGizmos: 1
   _editor_SelCategory: 0
   StimulatorAmount: 1
-  Bones: []
+  Bones:
+  - transform: {fileID: 1725037601}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 852982683}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 1300708951}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 1676905360}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
   CompensationTransform: {fileID: 0}
   AnimatePhysics: 0
   UnscaledDelta: 0
@@ -23324,17 +23869,17 @@ MonoBehaviour:
   FadeOutDistance: 0
   DistanceFrom: {fileID: 0}
   AutoHelperOffset: 1
-  HelperOffset: {x: 0, y: 0, z: 0}
-  GravityEffectForce: {x: 0, y: 0, z: 0}
+  HelperOffset: {x: 0.00039213715, y: 0.00040705575, z: 0.00005994775}
+  GravityEffectForce: {x: 0, y: -0.1, z: 0}
   GravityHeavyness: 2
   UpdateRate: 0
-  MovementMuscles: 1
+  MovementMuscles: 0.1
   MusclesRapidity: 0.6
   Damping: 0.4
   Smoothing: 0.6
   MildRotation: 0
   MotionInfluence: 1
-  RotationSpaceMuscles: 0
+  RotationSpaceMuscles: 1
   UseEulerRotation: 0
   EnsureRotation: 0
   RotationsRapidity: 0.7
@@ -23365,7 +23910,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   MusclesSimulationSpeed: 1
-  VibrateAmount: 0
+  VibrateAmount: 0.1
   VibrateSpeed: 6
   VibrateRange: 2.5
   VibrateAxis: {x: 1, y: 1, z: 1}
@@ -23446,7 +23991,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  SqueezingAmount: 0
+  SqueezingAmount: 0.1
   SqueezingSpeed: 15
   SqueezingMultiply: 0.5
   SqueezingAxis: {x: 0.2, y: 0.15, z: 0.2}
@@ -25673,6 +26218,11 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 3219907207388902697, guid: ca58bf725cf38ea43964df9bbf53343f, type: 3}
   m_PrefabInstance: {fileID: 631717890}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &632364118 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6009450042674165049, guid: 570a3e596baf79a40ae04b7d39c8ca17, type: 3}
+  m_PrefabInstance: {fileID: 2025253325}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &635584605
 GameObject:
@@ -28631,6 +29181,16 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 7272228671237503440, guid: 470505818ddd57d44ace56daef726a94, type: 3}
   m_PrefabInstance: {fileID: 675985038}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &685184724 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6302726487450038559, guid: 570a3e596baf79a40ae04b7d39c8ca17, type: 3}
+  m_PrefabInstance: {fileID: 2025253325}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &689893110 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7568016342052553749, guid: 9ea2ffe28f9288b48bb542d9a2df0950, type: 3}
+  m_PrefabInstance: {fileID: 1725037586}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &690413724
 PrefabInstance:
@@ -32981,7 +33541,87 @@ MonoBehaviour:
   DrawGizmos: 1
   _editor_SelCategory: 0
   StimulatorAmount: 1
-  Bones: []
+  Bones:
+  - transform: {fileID: 1725037607}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 2031770164}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 1889072146}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 68755275}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
   CompensationTransform: {fileID: 0}
   AnimatePhysics: 0
   UnscaledDelta: 0
@@ -32989,17 +33629,17 @@ MonoBehaviour:
   FadeOutDistance: 0
   DistanceFrom: {fileID: 0}
   AutoHelperOffset: 1
-  HelperOffset: {x: 0, y: 0, z: 0}
-  GravityEffectForce: {x: 0, y: 0, z: 0}
+  HelperOffset: {x: 0.0004846773, y: 0.0029254237, z: -0.000000004234607}
+  GravityEffectForce: {x: 0, y: -0.1, z: 0}
   GravityHeavyness: 2
   UpdateRate: 0
-  MovementMuscles: 1
+  MovementMuscles: 0.1
   MusclesRapidity: 0.6
   Damping: 0.4
   Smoothing: 0.6
   MildRotation: 0
   MotionInfluence: 1
-  RotationSpaceMuscles: 0
+  RotationSpaceMuscles: 1
   UseEulerRotation: 0
   EnsureRotation: 0
   RotationsRapidity: 0.7
@@ -33030,7 +33670,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   MusclesSimulationSpeed: 1
-  VibrateAmount: 0
+  VibrateAmount: 0.1
   VibrateSpeed: 6
   VibrateRange: 2.5
   VibrateAxis: {x: 1, y: 1, z: 1}
@@ -33111,7 +33751,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  SqueezingAmount: 0
+  SqueezingAmount: 0.1
   SqueezingSpeed: 15
   SqueezingMultiply: 0.5
   SqueezingAxis: {x: 0.2, y: 0.15, z: 0.2}
@@ -33243,6 +33883,11 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 679769302769981441, guid: 2992f02d7994bcc4588824deb51f73c1, type: 3}
   m_PrefabInstance: {fileID: 743089293}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &750839319 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 638660969337979403, guid: 9ea2ffe28f9288b48bb542d9a2df0950, type: 3}
+  m_PrefabInstance: {fileID: 1725037586}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &759990298
 PrefabInstance:
@@ -39357,6 +40002,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 9010247602646058946, guid: 4755be8ff5daaef479024d70c88f291b, type: 3}
   m_PrefabInstance: {fileID: 772324016}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &776001632 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 569434028846074103, guid: 9ea2ffe28f9288b48bb542d9a2df0950, type: 3}
+  m_PrefabInstance: {fileID: 1725037586}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &787366190
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -41537,6 +42187,11 @@ Light:
   m_LightUnit: 1
   m_LuxAtDistance: 1
   m_EnableSpotReflector: 1
+--- !u!4 &811096799 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2209756725546240699, guid: 570a3e596baf79a40ae04b7d39c8ca17, type: 3}
+  m_PrefabInstance: {fileID: 2025253325}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &814583304
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -41632,7 +42287,187 @@ MonoBehaviour:
   DrawGizmos: 1
   _editor_SelCategory: 0
   StimulatorAmount: 1
-  Bones: []
+  Bones:
+  - transform: {fileID: 824901178}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 1501968397}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 1019983171}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 1676756601}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 835733435}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 494869222}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 1622665823}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 1255343133}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 1571698094}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
   CompensationTransform: {fileID: 0}
   AnimatePhysics: 0
   UnscaledDelta: 0
@@ -41640,17 +42475,17 @@ MonoBehaviour:
   FadeOutDistance: 0
   DistanceFrom: {fileID: 0}
   AutoHelperOffset: 1
-  HelperOffset: {x: 0, y: 0, z: 0}
-  GravityEffectForce: {x: 0, y: 0, z: 0}
+  HelperOffset: {x: -0.003219661, y: -0.0015458692, z: 0.00000012741357}
+  GravityEffectForce: {x: 0, y: -0.1, z: 0}
   GravityHeavyness: 2
   UpdateRate: 0
-  MovementMuscles: 1
+  MovementMuscles: 0.1
   MusclesRapidity: 0.6
   Damping: 0.4
   Smoothing: 0.6
   MildRotation: 0
   MotionInfluence: 1
-  RotationSpaceMuscles: 0
+  RotationSpaceMuscles: 1
   UseEulerRotation: 0
   EnsureRotation: 0
   RotationsRapidity: 0.7
@@ -41681,7 +42516,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   MusclesSimulationSpeed: 1
-  VibrateAmount: 0
+  VibrateAmount: 0.1
   VibrateSpeed: 6
   VibrateRange: 2.5
   VibrateAxis: {x: 1, y: 1, z: 1}
@@ -41762,7 +42597,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  SqueezingAmount: 0
+  SqueezingAmount: 0.1
   SqueezingSpeed: 15
   SqueezingMultiply: 0.5
   SqueezingAxis: {x: 0.2, y: 0.15, z: 0.2}
@@ -41829,6 +42664,11 @@ MonoBehaviour:
     m_RotationOrder: 4
   DampenOnLimits: 0
   InfluenceAxes: {x: 1, y: 1, z: 1}
+--- !u!4 &824901178 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2351849476602598962, guid: 9ea2ffe28f9288b48bb542d9a2df0950, type: 3}
+  m_PrefabInstance: {fileID: 1725037586}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &829247075
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -42146,6 +42986,11 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 1054177722791289376, guid: 1b0fd30de9d7af04c9dea240c57b861e, type: 3}
   m_PrefabInstance: {fileID: 835164129}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &835733435 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3393353813084000499, guid: 9ea2ffe28f9288b48bb542d9a2df0950, type: 3}
+  m_PrefabInstance: {fileID: 1725037586}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &841594832
 PrefabInstance:
@@ -42725,6 +43570,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 5bfb195eb927f8442aafcb55af9e12ee, type: 3}
   m_PrefabInstance: {fileID: 851854861}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &852982683 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8497765454674528017, guid: 9ea2ffe28f9288b48bb542d9a2df0950, type: 3}
+  m_PrefabInstance: {fileID: 1725037586}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &854780956
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -43013,6 +43863,11 @@ Transform:
   - {fileID: 1191702558}
   m_Father: {fileID: 1834659419}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &872764569 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5203587024840722118, guid: 9ea2ffe28f9288b48bb542d9a2df0950, type: 3}
+  m_PrefabInstance: {fileID: 1725037586}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &873228244
 GameObject:
   m_ObjectHideFlags: 0
@@ -43362,6 +44217,11 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!4 &881285888 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1201099858458156505, guid: 570a3e596baf79a40ae04b7d39c8ca17, type: 3}
+  m_PrefabInstance: {fileID: 2025253325}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &888340250
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -43621,6 +44481,11 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 7950106367760161894, guid: b7e596aac20f0334684b0e07539f3e1e, type: 3}
   m_PrefabInstance: {fileID: 909930721}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &914184140 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8933658518962522370, guid: 9ea2ffe28f9288b48bb542d9a2df0950, type: 3}
+  m_PrefabInstance: {fileID: 1725037586}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &936620700
 PrefabInstance:
@@ -50778,6 +51643,16 @@ Animator:
   m_CorrespondingSourceObject: {fileID: 2415344900435377999, guid: d68d5084f473b7c49ad60a52a789ed97, type: 3}
   m_PrefabInstance: {fileID: 982445998}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &1019983171 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1896577837350880742, guid: 9ea2ffe28f9288b48bb542d9a2df0950, type: 3}
+  m_PrefabInstance: {fileID: 1725037586}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1020221091 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5919705199749520800, guid: 570a3e596baf79a40ae04b7d39c8ca17, type: 3}
+  m_PrefabInstance: {fileID: 2025253325}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1021916389
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -50798,7 +51673,87 @@ MonoBehaviour:
   DrawGizmos: 1
   _editor_SelCategory: 0
   StimulatorAmount: 1
-  Bones: []
+  Bones:
+  - transform: {fileID: 2025253334}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 347358040}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 1357626759}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 1461872436}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
   CompensationTransform: {fileID: 0}
   AnimatePhysics: 0
   UnscaledDelta: 0
@@ -50806,11 +51761,11 @@ MonoBehaviour:
   FadeOutDistance: 0
   DistanceFrom: {fileID: 0}
   AutoHelperOffset: 1
-  HelperOffset: {x: 0, y: 0, z: 0}
-  GravityEffectForce: {x: 0, y: -0.1, z: 0}
+  HelperOffset: {x: -0.0004749371, y: 0.00041376808, z: 0.000051636318}
+  GravityEffectForce: {x: 0, y: -10, z: 0}
   GravityHeavyness: 2
   UpdateRate: 0
-  MovementMuscles: 0.1
+  MovementMuscles: 1
   MusclesRapidity: 0.6
   Damping: 0.4
   Smoothing: 0.6
@@ -50847,7 +51802,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   MusclesSimulationSpeed: 1
-  VibrateAmount: 0
+  VibrateAmount: 0.1
   VibrateSpeed: 6
   VibrateRange: 2.5
   VibrateAxis: {x: 1, y: 1, z: 1}
@@ -58671,6 +59626,11 @@ Light:
   m_LightUnit: 1
   m_LuxAtDistance: 1
   m_EnableSpotReflector: 1
+--- !u!4 &1081639943 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5664287049491800653, guid: 9ea2ffe28f9288b48bb542d9a2df0950, type: 3}
+  m_PrefabInstance: {fileID: 1725037586}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1083037324
 GameObject:
   m_ObjectHideFlags: 0
@@ -58736,6 +59696,16 @@ ReflectionProbe:
   m_UseOcclusionCulling: 1
   m_Importance: 1
   m_CustomBakedTexture: {fileID: 0}
+--- !u!4 &1085484148 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5767900100655316746, guid: 570a3e596baf79a40ae04b7d39c8ca17, type: 3}
+  m_PrefabInstance: {fileID: 2025253325}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1086330669 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7683884974502124260, guid: 9ea2ffe28f9288b48bb542d9a2df0950, type: 3}
+  m_PrefabInstance: {fileID: 1725037586}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1094945937
 GameObject:
   m_ObjectHideFlags: 0
@@ -59255,7 +60225,87 @@ MonoBehaviour:
   DrawGizmos: 1
   _editor_SelCategory: 0
   StimulatorAmount: 1
-  Bones: []
+  Bones:
+  - transform: {fileID: 1725037611}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 914184140}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 1745754733}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 77950555}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
   CompensationTransform: {fileID: 0}
   AnimatePhysics: 0
   UnscaledDelta: 0
@@ -59263,17 +60313,17 @@ MonoBehaviour:
   FadeOutDistance: 0
   DistanceFrom: {fileID: 0}
   AutoHelperOffset: 1
-  HelperOffset: {x: 0, y: 0, z: 0}
-  GravityEffectForce: {x: 0, y: 0, z: 0}
+  HelperOffset: {x: 0.0000000023469329, y: 0.0011538641, z: -0.00070108694}
+  GravityEffectForce: {x: 0, y: -0.1, z: 0}
   GravityHeavyness: 2
   UpdateRate: 0
-  MovementMuscles: 1
+  MovementMuscles: 0.1
   MusclesRapidity: 0.6
   Damping: 0.4
   Smoothing: 0.6
   MildRotation: 0
   MotionInfluence: 1
-  RotationSpaceMuscles: 0
+  RotationSpaceMuscles: 1
   UseEulerRotation: 0
   EnsureRotation: 0
   RotationsRapidity: 0.7
@@ -59304,7 +60354,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   MusclesSimulationSpeed: 1
-  VibrateAmount: 0
+  VibrateAmount: 0.1
   VibrateSpeed: 6
   VibrateRange: 2.5
   VibrateAxis: {x: 1, y: 1, z: 1}
@@ -59385,7 +60435,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  SqueezingAmount: 0
+  SqueezingAmount: 0.1
   SqueezingSpeed: 15
   SqueezingMultiply: 0.5
   SqueezingAxis: {x: 0.2, y: 0.15, z: 0.2}
@@ -74876,6 +75926,11 @@ MonoBehaviour:
   m_SelectedFaces: 
   m_SelectedEdges: []
   m_SelectedVertices: 
+--- !u!4 &1148137918 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 873405309655713996, guid: 570a3e596baf79a40ae04b7d39c8ca17, type: 3}
+  m_PrefabInstance: {fileID: 2025253325}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1148912979
 GameObject:
   m_ObjectHideFlags: 0
@@ -75631,6 +76686,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 2d5d8d7895ec14444a1acc1b740fd2a7, type: 3}
   m_PrefabInstance: {fileID: 1178565153}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &1182496796 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 380819315012168482, guid: 570a3e596baf79a40ae04b7d39c8ca17, type: 3}
+  m_PrefabInstance: {fileID: 2025253325}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1186234618 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1272488337090926433, guid: 06f636cc9fdbc7d4aa858a5575873871, type: 3}
@@ -75730,7 +76790,87 @@ MonoBehaviour:
   DrawGizmos: 1
   _editor_SelCategory: 0
   StimulatorAmount: 1
-  Bones: []
+  Bones:
+  - transform: {fileID: 1725037617}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 1754959581}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 872764569}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 750839319}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
   CompensationTransform: {fileID: 0}
   AnimatePhysics: 0
   UnscaledDelta: 0
@@ -75738,17 +76878,17 @@ MonoBehaviour:
   FadeOutDistance: 0
   DistanceFrom: {fileID: 0}
   AutoHelperOffset: 1
-  HelperOffset: {x: 0, y: 0, z: 0}
-  GravityEffectForce: {x: 0, y: 0, z: 0}
+  HelperOffset: {x: 0.00049966, y: 0.0015806973, z: -0.0003852075}
+  GravityEffectForce: {x: 0, y: -0.1, z: 0}
   GravityHeavyness: 2
   UpdateRate: 0
-  MovementMuscles: 1
+  MovementMuscles: 0.1
   MusclesRapidity: 0.6
   Damping: 0.4
   Smoothing: 0.6
   MildRotation: 0
   MotionInfluence: 1
-  RotationSpaceMuscles: 0
+  RotationSpaceMuscles: 1
   UseEulerRotation: 0
   EnsureRotation: 0
   RotationsRapidity: 0.7
@@ -75779,7 +76919,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   MusclesSimulationSpeed: 1
-  VibrateAmount: 0
+  VibrateAmount: 0.1
   VibrateSpeed: 6
   VibrateRange: 2.5
   VibrateAxis: {x: 1, y: 1, z: 1}
@@ -75860,7 +77000,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  SqueezingAmount: 0
+  SqueezingAmount: 0.1
   SqueezingSpeed: 15
   SqueezingMultiply: 0.5
   SqueezingAxis: {x: 0.2, y: 0.15, z: 0.2}
@@ -95873,6 +97013,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1255063407}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &1255343133 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 10743460422112962, guid: 9ea2ffe28f9288b48bb542d9a2df0950, type: 3}
+  m_PrefabInstance: {fileID: 1725037586}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1265750219
 GameObject:
   m_ObjectHideFlags: 0
@@ -96278,6 +97423,11 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 5992807665290849765, guid: b236219772623334297e0540b4983177, type: 3}
   m_PrefabInstance: {fileID: 1277212078}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1288184953 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2919274460355480542, guid: 570a3e596baf79a40ae04b7d39c8ca17, type: 3}
+  m_PrefabInstance: {fileID: 2025253325}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1288330096
 GameObject:
@@ -101726,6 +102876,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: ccc09e430b65e6d41bb4a2f2ca329571, type: 3}
   m_PrefabInstance: {fileID: 1294930401}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &1300708951 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3742854240238334231, guid: 9ea2ffe28f9288b48bb542d9a2df0950, type: 3}
+  m_PrefabInstance: {fileID: 1725037586}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1308895742
 GameObject:
   m_ObjectHideFlags: 0
@@ -102683,6 +103838,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1330876612}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &1339479169 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2951521609009066533, guid: 570a3e596baf79a40ae04b7d39c8ca17, type: 3}
+  m_PrefabInstance: {fileID: 2025253325}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1340554045
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -103805,6 +104965,11 @@ Transform:
   - {fileID: 1376716184}
   m_Father: {fileID: 869913622}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &1357626759 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6454344149249114223, guid: 570a3e596baf79a40ae04b7d39c8ca17, type: 3}
+  m_PrefabInstance: {fileID: 2025253325}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1359524964
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -105048,6 +106213,11 @@ Transform:
   - {fileID: 981589577}
   m_Father: {fileID: 869913622}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &1461872436 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2372606104097068588, guid: 570a3e596baf79a40ae04b7d39c8ca17, type: 3}
+  m_PrefabInstance: {fileID: 2025253325}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1464790254
 GameObject:
   m_ObjectHideFlags: 0
@@ -107155,6 +108325,11 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 5992807665290849765, guid: b236219772623334297e0540b4983177, type: 3}
   m_PrefabInstance: {fileID: 1498950756}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1501968397 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7627517605539007655, guid: 9ea2ffe28f9288b48bb542d9a2df0950, type: 3}
+  m_PrefabInstance: {fileID: 1725037586}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1513254204
 PrefabInstance:
@@ -109733,6 +110908,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 2d5d8d7895ec14444a1acc1b740fd2a7, type: 3}
   m_PrefabInstance: {fileID: 1563173035}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &1569572853 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1148699348552682955, guid: 9ea2ffe28f9288b48bb542d9a2df0950, type: 3}
+  m_PrefabInstance: {fileID: 1725037586}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1571505524
 GameObject:
   m_ObjectHideFlags: 0
@@ -109835,6 +111015,11 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!4 &1571698094 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1921617322687078191, guid: 9ea2ffe28f9288b48bb542d9a2df0950, type: 3}
+  m_PrefabInstance: {fileID: 1725037586}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1581908431
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -111097,6 +112282,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1465564912001641672, guid: 06f636cc9fdbc7d4aa858a5575873871, type: 3}
   m_PrefabInstance: {fileID: 1581908431}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &1589164342 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8234904825416086086, guid: 9ea2ffe28f9288b48bb542d9a2df0950, type: 3}
+  m_PrefabInstance: {fileID: 1725037586}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1591086747
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -111218,6 +112408,11 @@ Transform:
   - {fileID: 1708234670}
   m_Father: {fileID: 1131591576}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &1593930767 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8503879094566314020, guid: 9ea2ffe28f9288b48bb542d9a2df0950, type: 3}
+  m_PrefabInstance: {fileID: 1725037586}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1603047724
 GameObject:
   m_ObjectHideFlags: 0
@@ -112965,6 +114160,11 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
+--- !u!4 &1622665823 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8103033521529919156, guid: 9ea2ffe28f9288b48bb542d9a2df0950, type: 3}
+  m_PrefabInstance: {fileID: 1725037586}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1624032574
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -113868,6 +115068,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7950106367760161894, guid: b7e596aac20f0334684b0e07539f3e1e, type: 3}
   m_PrefabInstance: {fileID: 1648714094}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &1650997195 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3145394957955327153, guid: 9ea2ffe28f9288b48bb542d9a2df0950, type: 3}
+  m_PrefabInstance: {fileID: 1725037586}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1658924231
 GameObject:
   m_ObjectHideFlags: 0
@@ -114173,6 +115378,16 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &1676756601 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6388202155565592160, guid: 9ea2ffe28f9288b48bb542d9a2df0950, type: 3}
+  m_PrefabInstance: {fileID: 1725037586}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1676905360 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 905174564391437068, guid: 9ea2ffe28f9288b48bb542d9a2df0950, type: 3}
+  m_PrefabInstance: {fileID: 1725037586}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1681136756
 GameObject:
   m_ObjectHideFlags: 0
@@ -114329,7 +115544,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 139.75
+  m_fontSize: 150
   m_fontSizeBase: 64
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -116677,9 +117892,19 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3294023410220033531, guid: 9ea2ffe28f9288b48bb542d9a2df0950, type: 3}
   m_PrefabInstance: {fileID: 1725037586}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &1725037601 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2218144099098485024, guid: 9ea2ffe28f9288b48bb542d9a2df0950, type: 3}
+  m_PrefabInstance: {fileID: 1725037586}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1725037606 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7581238404744513291, guid: 9ea2ffe28f9288b48bb542d9a2df0950, type: 3}
+  m_PrefabInstance: {fileID: 1725037586}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1725037607 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3440887335584614500, guid: 9ea2ffe28f9288b48bb542d9a2df0950, type: 3}
   m_PrefabInstance: {fileID: 1725037586}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1725037610 stripped
@@ -116687,9 +117912,19 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5171361542651137206, guid: 9ea2ffe28f9288b48bb542d9a2df0950, type: 3}
   m_PrefabInstance: {fileID: 1725037586}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &1725037611 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4057888470382944311, guid: 9ea2ffe28f9288b48bb542d9a2df0950, type: 3}
+  m_PrefabInstance: {fileID: 1725037586}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1725037616 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5611417155808339433, guid: 9ea2ffe28f9288b48bb542d9a2df0950, type: 3}
+  m_PrefabInstance: {fileID: 1725037586}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1725037617 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4289287393186257239, guid: 9ea2ffe28f9288b48bb542d9a2df0950, type: 3}
   m_PrefabInstance: {fileID: 1725037586}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1725037622 stripped
@@ -116722,7 +117957,87 @@ MonoBehaviour:
   DrawGizmos: 1
   _editor_SelCategory: 0
   StimulatorAmount: 1
-  Bones: []
+  Bones:
+  - transform: {fileID: 1725037626}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 1589164342}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 1650997195}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 2086083917}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
   CompensationTransform: {fileID: 0}
   AnimatePhysics: 0
   UnscaledDelta: 0
@@ -116730,17 +118045,17 @@ MonoBehaviour:
   FadeOutDistance: 0
   DistanceFrom: {fileID: 0}
   AutoHelperOffset: 1
-  HelperOffset: {x: 0, y: 0, z: 0}
-  GravityEffectForce: {x: 0, y: 0, z: 0}
+  HelperOffset: {x: -0.0004995063, y: 0.0015806021, z: -0.0003852888}
+  GravityEffectForce: {x: 0, y: -0.1, z: 0}
   GravityHeavyness: 2
   UpdateRate: 0
-  MovementMuscles: 1
+  MovementMuscles: 0.1
   MusclesRapidity: 0.6
   Damping: 0.4
   Smoothing: 0.6
   MildRotation: 0
   MotionInfluence: 1
-  RotationSpaceMuscles: 0
+  RotationSpaceMuscles: 1
   UseEulerRotation: 0
   EnsureRotation: 0
   RotationsRapidity: 0.7
@@ -116771,7 +118086,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   MusclesSimulationSpeed: 1
-  VibrateAmount: 0
+  VibrateAmount: 0.1
   VibrateSpeed: 6
   VibrateRange: 2.5
   VibrateAxis: {x: 1, y: 1, z: 1}
@@ -116852,7 +118167,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  SqueezingAmount: 0
+  SqueezingAmount: 0.1
   SqueezingSpeed: 15
   SqueezingMultiply: 0.5
   SqueezingAxis: {x: 0.2, y: 0.15, z: 0.2}
@@ -116941,6 +118256,11 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!4 &1725037626 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6720796848735906511, guid: 9ea2ffe28f9288b48bb542d9a2df0950, type: 3}
+  m_PrefabInstance: {fileID: 1725037586}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1726931952
 GameObject:
   m_ObjectHideFlags: 0
@@ -117366,7 +118686,87 @@ MonoBehaviour:
   DrawGizmos: 1
   _editor_SelCategory: 0
   StimulatorAmount: 1
-  Bones: []
+  Bones:
+  - transform: {fileID: 1742498483}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 1933695656}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 1086330669}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 1569572853}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
   CompensationTransform: {fileID: 0}
   AnimatePhysics: 0
   UnscaledDelta: 0
@@ -117374,17 +118774,17 @@ MonoBehaviour:
   FadeOutDistance: 0
   DistanceFrom: {fileID: 0}
   AutoHelperOffset: 1
-  HelperOffset: {x: 0, y: 0, z: 0}
-  GravityEffectForce: {x: 0, y: 0, z: 0}
+  HelperOffset: {x: -0.00039211032, y: 0.0004070208, z: 0.00005995127}
+  GravityEffectForce: {x: 0, y: -0.1, z: 0}
   GravityHeavyness: 2
   UpdateRate: 0
-  MovementMuscles: 1
+  MovementMuscles: 0.1
   MusclesRapidity: 0.6
   Damping: 0.4
   Smoothing: 0.6
   MildRotation: 0
   MotionInfluence: 1
-  RotationSpaceMuscles: 0
+  RotationSpaceMuscles: 1
   UseEulerRotation: 0
   EnsureRotation: 0
   RotationsRapidity: 0.7
@@ -117415,7 +118815,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   MusclesSimulationSpeed: 1
-  VibrateAmount: 0
+  VibrateAmount: 0.1
   VibrateSpeed: 6
   VibrateRange: 2.5
   VibrateAxis: {x: 1, y: 1, z: 1}
@@ -117496,7 +118896,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  SqueezingAmount: 0
+  SqueezingAmount: 0.1
   SqueezingSpeed: 15
   SqueezingMultiply: 0.5
   SqueezingAxis: {x: 0.2, y: 0.15, z: 0.2}
@@ -117563,6 +118963,16 @@ MonoBehaviour:
     m_RotationOrder: 4
   DampenOnLimits: 0
   InfluenceAxes: {x: 1, y: 1, z: 1}
+--- !u!4 &1742498483 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8545356815510123408, guid: 9ea2ffe28f9288b48bb542d9a2df0950, type: 3}
+  m_PrefabInstance: {fileID: 1725037586}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1745754733 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2106875314862259492, guid: 9ea2ffe28f9288b48bb542d9a2df0950, type: 3}
+  m_PrefabInstance: {fileID: 1725037586}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1747007922
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -117652,6 +119062,11 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 19e6f1cc426a1ba4eb66408fc83d8dba, type: 3}
   m_PrefabInstance: {fileID: 1747007922}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1754959581 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2858125366136434313, guid: 9ea2ffe28f9288b48bb542d9a2df0950, type: 3}
+  m_PrefabInstance: {fileID: 1725037586}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1759208441
 PrefabInstance:
@@ -119385,6 +120800,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1123504306847037425, guid: 9e9ba182ccadecc48b252f634ea7d5bc, type: 3}
   m_PrefabInstance: {fileID: 1882647472}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &1889072146 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4911552875099997654, guid: 9ea2ffe28f9288b48bb542d9a2df0950, type: 3}
+  m_PrefabInstance: {fileID: 1725037586}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1894660481
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -119466,6 +120886,11 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 2406963907949439526, guid: 9a18ef8ddc5690f4289039bb714dd8a4, type: 3}
   m_PrefabInstance: {fileID: 1894660481}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1895295475 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3541314248005208642, guid: 9ea2ffe28f9288b48bb542d9a2df0950, type: 3}
+  m_PrefabInstance: {fileID: 1725037586}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1900201682
 PrefabInstance:
@@ -120572,6 +121997,11 @@ Transform:
 Animator:
   m_CorrespondingSourceObject: {fileID: 8332738027453796090, guid: 6b02ae539af33524a89d58452dcd1fb9, type: 3}
   m_PrefabInstance: {fileID: 1900201682}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1933695656 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6056834740362591518, guid: 9ea2ffe28f9288b48bb542d9a2df0950, type: 3}
+  m_PrefabInstance: {fileID: 1725037586}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1935163616
 PrefabInstance:
@@ -125633,6 +127063,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7627236231912590223, guid: 56eeecc00ae9a8f4aa20795bb94e541a, type: 3}
   m_PrefabInstance: {fileID: 1947399676}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &1948978118 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8092823449635865318, guid: 9ea2ffe28f9288b48bb542d9a2df0950, type: 3}
+  m_PrefabInstance: {fileID: 1725037586}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1955842603
 GameObject:
   m_ObjectHideFlags: 0
@@ -125802,7 +127237,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 53.6
+  m_fontSize: 107.25
   m_fontSizeBase: 64
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -134927,6 +136362,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8167336368761317992, guid: 778b6d8bce7f62f4a825e98f34dd30b0, type: 3}
   m_PrefabInstance: {fileID: 2008508240}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &2013336414 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3877058774253144532, guid: 570a3e596baf79a40ae04b7d39c8ca17, type: 3}
+  m_PrefabInstance: {fileID: 2025253325}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2015802549
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -135987,9 +137427,19 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5187691792126311624, guid: 570a3e596baf79a40ae04b7d39c8ca17, type: 3}
   m_PrefabInstance: {fileID: 2025253325}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &2025253334 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 148666304632960617, guid: 570a3e596baf79a40ae04b7d39c8ca17, type: 3}
+  m_PrefabInstance: {fileID: 2025253325}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2025253339 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8431696946548075378, guid: 570a3e596baf79a40ae04b7d39c8ca17, type: 3}
+  m_PrefabInstance: {fileID: 2025253325}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &2025253340 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2394602266557175841, guid: 570a3e596baf79a40ae04b7d39c8ca17, type: 3}
   m_PrefabInstance: {fileID: 2025253325}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &2025253345 stripped
@@ -135997,9 +137447,19 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8177179889463350658, guid: 570a3e596baf79a40ae04b7d39c8ca17, type: 3}
   m_PrefabInstance: {fileID: 2025253325}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &2025253346 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8543527775435651134, guid: 570a3e596baf79a40ae04b7d39c8ca17, type: 3}
+  m_PrefabInstance: {fileID: 2025253325}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2025253358 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5562727162438962382, guid: 570a3e596baf79a40ae04b7d39c8ca17, type: 3}
+  m_PrefabInstance: {fileID: 2025253325}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &2025253359 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7389346494676572649, guid: 570a3e596baf79a40ae04b7d39c8ca17, type: 3}
   m_PrefabInstance: {fileID: 2025253325}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &2025253364 stripped
@@ -136026,13 +137486,93 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _editor_Title: ' Bones Stimulator'
   _editor_DrawSetup: 1
-  _editor_DrawTweaking: 0
+  _editor_DrawTweaking: 1
   _editor_DisplayedPreset: 0
   _editor_DrawGizmos: 1
   DrawGizmos: 1
   _editor_SelCategory: 0
   StimulatorAmount: 1
-  Bones: []
+  Bones:
+  - transform: {fileID: 2025253368}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 1020221091}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 296858486}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 20990977}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
   CompensationTransform: {fileID: 0}
   AnimatePhysics: 0
   UnscaledDelta: 0
@@ -136040,7 +137580,7 @@ MonoBehaviour:
   FadeOutDistance: 0
   DistanceFrom: {fileID: 0}
   AutoHelperOffset: 1
-  HelperOffset: {x: 0, y: 0, z: 0}
+  HelperOffset: {x: -0.00052205735, y: 0.0019349752, z: -0.0003898678}
   GravityEffectForce: {x: 0, y: -0.1, z: 0}
   GravityHeavyness: 2
   UpdateRate: 0
@@ -136081,7 +137621,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   MusclesSimulationSpeed: 1
-  VibrateAmount: 0
+  VibrateAmount: 0.1
   VibrateSpeed: 6
   VibrateRange: 2.5
   VibrateAxis: {x: 1, y: 1, z: 1}
@@ -136229,6 +137769,11 @@ MonoBehaviour:
     m_RotationOrder: 4
   DampenOnLimits: 0
   InfluenceAxes: {x: 1, y: 1, z: 1}
+--- !u!4 &2025253368 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5200024633849750628, guid: 570a3e596baf79a40ae04b7d39c8ca17, type: 3}
+  m_PrefabInstance: {fileID: 2025253325}
+  m_PrefabAsset: {fileID: 0}
 --- !u!95 &2025253369
 Animator:
   serializedVersion: 7
@@ -136348,6 +137893,11 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!4 &2031770164 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8704447881010807007, guid: 9ea2ffe28f9288b48bb542d9a2df0950, type: 3}
+  m_PrefabInstance: {fileID: 1725037586}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2051780354
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -136561,6 +138111,11 @@ Light:
   m_LightUnit: 1
   m_LuxAtDistance: 1
   m_EnableSpotReflector: 1
+--- !u!4 &2065522506 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7611960840184907855, guid: 9ea2ffe28f9288b48bb542d9a2df0950, type: 3}
+  m_PrefabInstance: {fileID: 1725037586}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2071352003
 GameObject:
   m_ObjectHideFlags: 0
@@ -137515,6 +139070,11 @@ Animator:
   m_CorrespondingSourceObject: {fileID: 4155155762245359151, guid: e17d94b2e14573a45ad81584e0b05404, type: 3}
   m_PrefabInstance: {fileID: 2077096088}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &2086083917 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4302490667069636268, guid: 9ea2ffe28f9288b48bb542d9a2df0950, type: 3}
+  m_PrefabInstance: {fileID: 1725037586}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2092920525
 GameObject:
   m_ObjectHideFlags: 0
@@ -137793,9 +139353,89 @@ MonoBehaviour:
   _editor_DisplayedPreset: 0
   _editor_DrawGizmos: 1
   DrawGizmos: 1
-  _editor_SelCategory: 0
+  _editor_SelCategory: 1
   StimulatorAmount: 1
-  Bones: []
+  Bones:
+  - transform: {fileID: 2118083270}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 1288184953}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 1148137918}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
+  - transform: {fileID: 1339479169}
+    Evaluation: 0
+    initLocalPos: {x: 0, y: 0, z: 0}
+    initLocalRot: {x: 0, y: 0, z: 0, w: 0}
+    initLocalScale: {x: 0, y: 0, z: 0}
+    srcAnimatorLocPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorPosition: {x: 0, y: 0, z: 0}
+    srcAnimatorLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    srcAnimatorRotation: {x: 0, y: 0, z: 0, w: 0}
+    EnableCollisions: 1
+    CollisionRadius: 0.1
+    CollisionHelperVector: {x: 0, y: 0, z: 0}
+    lastFinalLocPosition: {x: 0, y: 0, z: 0}
+    lastFinalLocRotation: {x: 0, y: 0, z: 0, w: 0}
+    MomentDampen: 0
+    PosMul: 1
+    RotMul: 1
+    ScaleMul: 1
+    randomFloats: []
+    randomInts: 
   CompensationTransform: {fileID: 0}
   AnimatePhysics: 0
   UnscaledDelta: 0
@@ -137803,7 +139443,7 @@ MonoBehaviour:
   FadeOutDistance: 0
   DistanceFrom: {fileID: 0}
   AutoHelperOffset: 1
-  HelperOffset: {x: 0, y: 0, z: 0}
+  HelperOffset: {x: -0.000000036102726, y: 0.0011679928, z: -0.00066118414}
   GravityEffectForce: {x: 0, y: -0.1, z: 0}
   GravityHeavyness: 2
   UpdateRate: 0
@@ -137844,7 +139484,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   MusclesSimulationSpeed: 1
-  VibrateAmount: 0
+  VibrateAmount: 0.1
   VibrateSpeed: 6
   VibrateRange: 2.5
   VibrateAxis: {x: 1, y: 1, z: 1}
@@ -137992,6 +139632,11 @@ MonoBehaviour:
     m_RotationOrder: 4
   DampenOnLimits: 0
   InfluenceAxes: {x: 1, y: 1, z: 1}
+--- !u!4 &2118083270 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4980098599324920105, guid: 570a3e596baf79a40ae04b7d39c8ca17, type: 3}
+  m_PrefabInstance: {fileID: 2025253325}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2121340013
 GameObject:
   m_ObjectHideFlags: 0
@@ -139035,7 +140680,6 @@ MonoBehaviour:
       - 1
       - 0
       - 1
-      - 0
       customObjectList: []
       customEventsList: []
       variables: []
@@ -139327,7 +140971,7 @@ MonoBehaviour:
     RagdollLogic: 0
     RagdollSizeMultiplier: 0.1
     RagdollThicknessMultiplier: 1
-    ReferenceMass: 0.1
+    ReferenceMass: 1
     RigidbodiesInterpolation: 1
     RigidbodiesDetectionMode: 0
     RigidbodyDragValue: 0
@@ -139336,7 +140980,7 @@ MonoBehaviour:
     JointBounciness: 0
     JointLimitSpring: 0
     JointLimitDamper: 0
-    ConnectedMassMultiply: 0.1
+    ConnectedMassMultiply: 0.5
     MassMultiplyOnFalling: 1
     CollidersPhysicMaterial: {fileID: 0}
     PhysicMaterialOnFall: {fileID: 0}
@@ -139370,71 +141014,6 @@ MonoBehaviour:
     - ChainName: Core
       ChainType: 2
       BoneSetups:
-      - SourceBone: {fileID: 7426036190132521527}
-        PhysicalDummyBone: {fileID: 0}
-        BoundedIgnoreScale: 1
-        BoneID: 22
-        colliders:
-        - ColliderType: 2
-          ColliderCenter: {x: 0, y: 0, z: 0}
-          ColliderSizeMultiply: 1
-          CapsuleDirection: 1
-          ColliderRadius: 0.1
-          ColliderLength: 0.3
-          ColliderBoxSize: {x: 8, y: 1, z: 8}
-          ColliderMesh: {fileID: 0}
-          OtherReference: {fileID: 0}
-          RotationCorrection: {x: 0, y: 0, z: 0}
-          ColliderExtraTransform: {fileID: 0}
-        MassMultiplier: 0.26
-        ForceMultiplier: 1
-        MusclesBoost: 0
-        MainAxis: 0
-        TargetMainAxis: {x: 1, y: 0, z: 0}
-        InverseMainAxis: 0
-        MainAxisLowLimit: -35
-        MainAxisHighLimit: 35
-        SecondaryAxis: 1
-        TargetSecondaryAxis: {x: 0, y: 1, z: 0}
-        InverseSecondaryAxis: 0
-        SecondaryAxisAngleLimit: 20
-        ThirdAxisAngleLimit: 20
-        OverrideMaterial: {fileID: 0}
-        UseIndividualParameters: 0
-        OverrideInterpolation: 1
-        OverrideDetectionMode: 0
-        OverrideDragValue: 0
-        OverrideAngularDrag: 0.2
-        OverrideSpringPower: 0
-        OverrideSpringDamp: 0
-        HardMatchingMultiply: 1
-        HardMatchOverride: 0
-        ConnectionMassOverride: 0
-        DisableCollisionEvents: 0
-        ForceLimitsAllTheTime: 0
-        ForceKinematicOnStanding: 0
-        AllowConfigurablePosition: 0
-        LinearSpringLimit: 10000
-        LinearSpringDamping: 5
-        BoneBlendMultiplier: 1
-        LocalRight: {x: 1, y: 0, z: 0}
-        LocalUp: {x: 0, y: 1, z: 0}
-        LocalForward: {x: 0, y: 0, z: 1}
-        ToBase: {x: 0, y: 0, z: 0}
-        _EditorCollFoldout: 0
-        _EditorCollPosSliders: 0
-        _EditorBoxCollSliders: 0
-        _EditorMeshCollSliders: 0
-        _EditorRadiusSliders: 1
-        _EditorMaxSliderValue: 0.5
-        _EditorMainAxisPreview: 1
-        _EditorSecondAxisPreview: 0
-        _EditorThirdPreview: 0
-        StoredReferencePose:
-          LocalSpacePosition: {x: 0, y: 0, z: 0}
-          LocalSpaceRotation: {x: 0, y: 0, z: 0, w: 0}
-          RootSpacePosition: {x: 0, y: 0, z: 0}
-          RootSpaceRotation: {x: 0, y: 0, z: 0, w: 0}
       - SourceBone: {fileID: 6825326037227317052}
         PhysicalDummyBone: {fileID: 0}
         BoundedIgnoreScale: 1
@@ -140363,9 +141942,9 @@ MonoBehaviour:
       AlternativeTensorsOnFall: 0
       HardMatchMultiply: 1
     parentObject: {fileID: 8969700657674909293}
-    _Editor_SelectedChain: 1
-    _Editor_ChainCategory: 1
-    _EditorCategory: 2
+    _Editor_SelectedChain: 0
+    _Editor_ChainCategory: 0
+    _EditorCategory: 0
     _EditorMainCategory: 0
     _EditorMotionCategory: 2
     m_hemi: {fileID: -2508796484986968503, guid: 44d994eaad14fdf49a2dd378b4d62094, type: 3}

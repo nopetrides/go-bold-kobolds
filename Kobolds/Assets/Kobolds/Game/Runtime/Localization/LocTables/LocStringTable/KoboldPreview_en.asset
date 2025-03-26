@@ -46,20 +46,20 @@ MonoBehaviour:
   - m_Id: 12370028896256
     m_Localized: <b><kr>Queen's General:</kr></b>\nJack of all trades, master of
       none. These kobolds are the mainstay of the forces. With no supernatural gift,
-      the average kobold must use wit and teamwork to overcome obstacles.
+      the average kobold must use wit and <kr>teamwork<kr> to overcome obstacles.
     m_Metadata:
       m_Items: []
   - m_Id: 12632269365248
     m_Localized: <b><ky>Queen's Gifted:</ky></b>\nBlessed with a fragment of draconic
-      magic, these sorcerers wield the arcane against their foes. Their attunement
-      to magic makes them eccentric and may disturb other kobolds.
+      magic, these sorcerers <ky>wield the arcane</ky> against their foes. Their
+      attunement to magic makes them eccentric and may disturb other kobolds.
     m_Metadata:
       m_Items: []
   - m_Id: 12875979399168
     m_Localized: <b><kg>Queen's Grace:</kg></b>\nA rare few kobolds may be blessed
-      with inheriting the wings of true dragons. Known as <i>"Urds"</i> They are
-      held in high esteem as a sign of favor with the Dragon Lords, but the attention
-      usually get's to their heads.
+      with inheriting the <kg>wings</kg> of true dragons. Known as <i>"Urds"</i>
+      They are held in high esteem as a sign of favor with the Dragon Lords, but
+      the attention usually get's to their heads.
     m_Metadata:
       m_Items: []
   - m_Id: 12960939220992

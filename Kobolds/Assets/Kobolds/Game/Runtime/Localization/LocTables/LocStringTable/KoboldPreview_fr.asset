@@ -45,32 +45,32 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 12370028896256
-    m_Localized: "<b><kr>G\xE9n\xE9ral de la Reine :</kr></b>\\n touche-\xE0-tout,
-      mais ma\xEEtre de rien. Ces kobolds sont le pilier des forces arm\xE9es. Sans
-      don surnaturel, le kobold moyen doit faire preuve d'intelligence et de travail
-      d'\xE9quipe pour surmonter les obstacles."
+    m_Localized: "\r<b><kr>G\xE9n\xE9ral de la Reine :</kr></b>\\nTouche-\xE0-tout,
+      ma\xEEtre de rien. Ces kobolds sont le pilier des forces arm\xE9es. D\xE9pourvus
+      de don surnaturel, le kobold moyen doit faire preuve d'ing\xE9niosit\xE9 et
+      de <kr>travail d'\xE9quipe<kr> pour surmonter les obstacles."
     m_Metadata:
       m_Items: []
   - m_Id: 12632269365248
-    m_Localized: "\r<b><ky>Dou\xE9 de la reine :</ky></b>\\n dot\xE9s d'un fragment
-      de magie draconique, ces sorciers utilisent les arcanes contre leurs ennemis.
-      Leur aptitude \xE0 la magie les rend excentriques et peuvent perturber les
-      autres kobolds."
+    m_Localized: "\r<b><ky>Dou\xE9s de la Reine</ky></b>\\nB\xE9nis d'un fragment
+      de magie draconique, ces sorciers <ky>manient l'arcane</ky> contre leurs ennemis.
+      Leur aptitude \xE0 la magie les rend excentriques et peut perturber les autres
+      kobolds."
     m_Metadata:
       m_Items: []
   - m_Id: 12875979399168
-    m_Localized: "<b><kg>Gr\xE2ce de la Reinev: </kg></b>\\n Certains kobolds ont
-      la chance d'h\xE9riter des ailes de v\xE9ritables dragons. Connus sous le nom
-      d'<i>\"Urds\"</i>, ils sont tenus en haute estime en signe de faveur aupr\xE8s
-      des Seigneurs Dragons, mais l'attention se porte g\xE9n\xE9ralement sur leur
-      t\xEAte."
+    m_Localized: "\r<b><kg>Gr\xE2ce de la Reine :</kg></b>\\nQuelques rares kobolds
+      peuvent avoir la chance d'h\xE9riter des <kg>ailes</kg> de v\xE9ritables dragons.
+      Connus sous le nom d'<i>\xAB Urds \xBB</i>, ils sont tenus en haute estime
+      par les Seigneurs Dragons, signe de faveur, mais l'attention se porte g\xE9n\xE9ralement
+      sur leur t\xEAte."
     m_Metadata:
       m_Items: []
   - m_Id: 12960939220992
-    m_Localized: "\r<b><kb>Garde de la reine :</kb></b>\\n les kobolds les plus coriaces
+    m_Localized: "\r<b><kb>Garde de la Reine :</kb></b>\\nLes kobolds les plus coriaces
       sont charg\xE9s de prot\xE9ger les \xE9l\xE9ments les plus importants de la
-      tribu : l'\xE9closerie et le tr\xE9sor. Mais ils restent des kobolds, ils sont
-      donc assez mauvais dans ce travail."
+      tribu : l'\xE9closerie et le tr\xE9sor. Ce sont n\xE9anmoins des kobolds, et
+      ils sont donc plut\xF4t mauvais dans ce domaine."
     m_Metadata:
       m_Items: []
   - m_Id: 47410725101568
