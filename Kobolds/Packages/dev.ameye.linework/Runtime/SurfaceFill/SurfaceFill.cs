@@ -537,7 +537,8 @@ namespace Linework.SurfaceFill
             settings.OnSettingsChanged += Create;
 
             shaders = new ShaderResources().Load();
-            surfaceFillPass ??= new SurfaceFillPass();
+			if (shaders == null) return;
+			surfaceFillPass ??= new SurfaceFillPass();
         }
 
         /// <summary>
@@ -604,7 +605,9 @@ namespace Linework.SurfaceFill
         }
 
         private bool CreateMaterials()
-        {
+		{
+			if (shaders == null) return false;
+			
             if (maskMaterial == null)
             {
                 maskMaterial = CoreUtils.CreateEngineMaterial(shaders.mask);

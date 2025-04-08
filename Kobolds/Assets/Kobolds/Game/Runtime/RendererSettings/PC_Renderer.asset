@@ -1,22 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-4520141588434998872
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f513a53c9ad43a3860c8a56ea7dd26b, type: 3}
-  m_Name: SurfaceFill
-  m_EditorClassIdentifier: 
-  m_Active: 1
-  settings: {fileID: 11400000, guid: 08311ab6804f14c80b40fb08b149a6a7, type: 2}
-  shaders:
-    mask: {fileID: 4800000, guid: 7db39fa69b214149be63e199c01483e7, type: 3}
-    fill: {fileID: -6465566751694194690, guid: 37e37d4fece9f421f8a99286f525bf80, type: 3}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44,10 +27,8 @@ MonoBehaviour:
   m_RendererFeatures:
   - {fileID: 7833122117494664109}
   - {fileID: 2876020511255199464}
-  - {fileID: 717345061836551536}
   - {fileID: 7692127495399795137}
-  - {fileID: -4520141588434998872}
-  m_RendererFeatureMap: ad6b866f10d7b46ce87e1acc6aade92770f525788885f409c1e951d233edbf6aa8a9dc8e2c3b45c1
+  m_RendererFeatureMap: ad6b866f10d7b46ce87e1acc6aade927c1e951d233edbf6a
   m_UseNativeRenderPass: 1
   xrSystemData: {fileID: 0}
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
@@ -73,25 +54,6 @@ MonoBehaviour:
   m_DepthTextureFormat: 0
   m_AccurateGbufferNormals: 0
   m_IntermediateTextureMode: 0
---- !u!114 &717345061836551536
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 521933c422ef94aa58e7d435b6f8921a, type: 3}
-  m_Name: WideOutline
-  m_EditorClassIdentifier: 
-  m_Active: 1
-  settings: {fileID: 11400000, guid: 0a18db230c77a9c46989671a249b1022, type: 2}
-  shaders:
-    mask: {fileID: 4800000, guid: 1ed7bc804a124d559675facf61722b63, type: 3}
-    silhouette: {fileID: 4800000, guid: 2a1be836d8f24bbb91714e9a51f8fec1, type: 3}
-    silhouetteInstanced: {fileID: 4800000, guid: 85d004b6af6cd48209d21826b2f0a5a3, type: 3}
-    outline: {fileID: 4800000, guid: 90865e175cad4ccd80a2e1965c38f3e9, type: 3}
 --- !u!114 &2876020511255199464
 MonoBehaviour:
   m_ObjectHideFlags: 0
