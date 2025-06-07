@@ -8,91 +8,84 @@ using UnityEngine.UI;
 
 namespace Lofelt.NiceVibrations
 {
-    [Serializable]
-    public class HapticClipsDemoItem
-    {
-        public string Name;
-        public HapticClip HapticClip;
-        public Sprite AssociatedSprite;
-        public AudioSource AssociatedSound;
+	[Serializable]
+	public class HapticClipsDemoItem
+	{
+		public string Name;
+		public HapticClip HapticClip;
+		public Sprite AssociatedSprite;
+		public AudioSource AssociatedSound;
+	}
 
-    }
+	public class HapticClipsDemoManager : DemoManager
+	{
+		[Header("Image")]
+		public Image IconImage;
 
-    public class HapticClipsDemoManager : DemoManager
-    {
-        [Header("Image")]
-        public Image IconImage;
-        public Animator IconImageAnimator;
-        public List<HapticClipsDemoItem> DemoItems;
-        protected WaitForSeconds _iconChangeDelay;
-        protected int _idleAnimationParameter;
+		public Animator IconImageAnimator;
+		public List<HapticClipsDemoItem> DemoItems;
+		protected WaitForSeconds _iconChangeDelay;
+		protected int _idleAnimationParameter;
 
-        protected virtual void Awake()
-        {
-            _iconChangeDelay = new WaitForSeconds(0.02f);
-            _idleAnimationParameter = Animator.StringToHash("Idle");
-            IconImageAnimator.SetBool(_idleAnimationParameter, true);
-        }
+		protected virtual void Awake()
+		{
+			_iconChangeDelay = new WaitForSeconds(0.02f);
+			_idleAnimationParameter = Animator.StringToHash("Idle");
+			IconImageAnimator.SetBool(_idleAnimationParameter, true);
+		}
 
-        // Haptic Clip -----------------------------------------------------------------------------
+		private void OnEnable()
+		{
+			HapticController.PlaybackStopped += OnHapticsStopped;
+			StartCoroutine(BackToIdle());
+		}
 
-        public virtual void PlayHapticClip(int index)
-        {
-            Logo.Shaking = true;
+		private void OnDisable()
+		{
+			HapticController.PlaybackStopped -= OnHapticsStopped;
+			if (HapticController.IsPlaying()) HapticController.Stop();
+		}
 
-            HapticController.fallbackPreset = HapticPatterns.PresetType.LightImpact;
-            HapticController.Play(DemoItems[index].HapticClip);
-            DemoItems[index].AssociatedSound.Play();
-            StopAllCoroutines();
-            StartCoroutine(ChangeIcon(DemoItems[index].AssociatedSprite));
-        }
+		private void OnApplicationFocus(bool hasFocus)
+		{
+			if (hasFocus) StartCoroutine(BackToIdle());
+		}
 
-        // ICON ------------------------------------------------------------------------------------
+		// Haptic Clip -----------------------------------------------------------------------------
 
-        protected virtual IEnumerator ChangeIcon(Sprite newSprite)
-        {
-            IconImageAnimator.SetBool(_idleAnimationParameter, false);
-            yield return _iconChangeDelay;
-            IconImage.sprite = newSprite;
-        }
+		public virtual void PlayHapticClip(int index)
+		{
+			Logo.Shaking = true;
 
-        // CALLBACKS -------------------------------------------------------------------------------
+			HapticController.fallbackPreset = HapticPatterns.PresetType.LightImpact;
+			HapticController.Play(DemoItems[index].HapticClip);
+			DemoItems[index].AssociatedSound.Play();
+			StopAllCoroutines();
+			StartCoroutine(ChangeIcon(DemoItems[index].AssociatedSprite));
+		}
 
-        protected virtual IEnumerator BackToIdle()
-        {
-            Logo.Shaking = false;
-            IconImageAnimator.SetBool(_idleAnimationParameter, true);
-            yield return _iconChangeDelay;
-            IconImage.sprite = DemoItems[0].AssociatedSprite;
-        }
+		// ICON ------------------------------------------------------------------------------------
 
-        void OnHapticsStopped()
-        {
-            StartCoroutine(BackToIdle());
-        }
+		protected virtual IEnumerator ChangeIcon(Sprite newSprite)
+		{
+			IconImageAnimator.SetBool(_idleAnimationParameter, false);
+			yield return _iconChangeDelay;
+			IconImage.sprite = newSprite;
+		}
 
-        void OnDisable()
-        {
-            HapticController.PlaybackStopped -= OnHapticsStopped;
-            if (HapticController.IsPlaying())
-            {
-                HapticController.Stop();
-            }
-        }
+		// CALLBACKS -------------------------------------------------------------------------------
 
-        void OnEnable()
-        {
-            HapticController.PlaybackStopped += OnHapticsStopped;
-            StartCoroutine(BackToIdle());
-        }
+		protected virtual IEnumerator BackToIdle()
+		{
+			Logo.Shaking = false;
+			IconImageAnimator.SetBool(_idleAnimationParameter, true);
+			yield return _iconChangeDelay;
+			IconImage.sprite = DemoItems[0].AssociatedSprite;
+		}
 
-        void OnApplicationFocus(bool hasFocus)
-        {
-            if (hasFocus)
-            {
-                StartCoroutine(BackToIdle());
-            }
-        }
-
-    }
+		private void OnHapticsStopped()
+		{
+			StartCoroutine(BackToIdle());
+		}
+	}
 }

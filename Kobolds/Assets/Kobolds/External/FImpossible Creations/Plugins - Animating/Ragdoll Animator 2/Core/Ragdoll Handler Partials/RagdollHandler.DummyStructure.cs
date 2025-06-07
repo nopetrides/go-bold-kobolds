@@ -240,6 +240,7 @@ namespace FIMSpace.FProceduralAnimation
         public RagdollChainBone DummyStructure_FindConnectionBone( RagdollBonesChain childChain )
         {
             if( childChain.ChainType == ERagdollChainType.Core ) return null;
+            if( childChain.BoneSetups.Count == 0 ) return null;
             if( childChain.BoneSetups[0].SourceBone == null ) return null;
 
             Transform startBone = childChain.BoneSetups[0].SourceBone;

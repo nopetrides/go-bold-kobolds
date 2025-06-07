@@ -5,13 +5,15 @@ using UnityEditor;
 
 namespace MoreMountains.Tools
 {
-	public class MMReadOnlyWhenPlayingAttribute : PropertyAttribute { }
+	public class MMReadOnlyWhenPlayingAttribute : PropertyAttribute
+	{
+	}
 
 
-	#if UNITY_EDITOR
+#if UNITY_EDITOR
 	[CustomPropertyDrawer(typeof(MMReadOnlyWhenPlayingAttribute))]
 	public class ReadOnlyWhenPlayingAttributeDrawer : PropertyDrawer
-	{        
+	{
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
 		{
 			GUI.enabled = !Application.isPlaying;
@@ -24,5 +26,5 @@ namespace MoreMountains.Tools
 			return EditorGUI.GetPropertyHeight(property, label, true);
 		}
 	}
-	#endif
+#endif
 }

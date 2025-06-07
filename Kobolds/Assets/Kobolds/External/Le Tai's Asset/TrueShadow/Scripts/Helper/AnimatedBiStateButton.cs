@@ -4,138 +4,127 @@ using UnityEngine.EventSystems;
 
 namespace LeTai.TrueShadow
 {
-public class AnimatedBiStateButton : MonoBehaviour,
-                                     IPointerDownHandler, IPointerUpHandler,
-                                     IPointerEnterHandler, IPointerExitHandler
-{
-    public enum State
-    {
-        Up,
-        AnimateDown,
-        Down,
-        AnimateUp,
-    }
+	public class AnimatedBiStateButton : MonoBehaviour,
+		IPointerDownHandler, IPointerUpHandler,
+		IPointerEnterHandler, IPointerExitHandler
+	{
+		public enum State
+		{
+			Up,
+			AnimateDown,
+			Down,
+			AnimateUp
+		}
 
-    public float          animationDuration  = .1f;
-    public AnimationCurve animationCurve     = AnimationCurve.EaseInOut(0, 0, 1, 1);
-    public bool           useEnterExitEvents = true;
+		public float animationDuration = .1f;
+		public AnimationCurve animationCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+		public bool useEnterExitEvents = true;
 
-    public event Action willPress;
-    public event Action willRelease;
+		/// <summary>
+		///     0 = fully up
+		///     1 = fully down
+		/// </summary>
+		protected float pressAmount;
 
-    protected State state = State.Up;
+		protected State state = State.Up;
 
-    /// <summary>
-    /// 0 = fully up
-    /// 1 = fully down
-    /// </summary>
-    protected float pressAmount = 0;
+		protected bool IsAnimating => state == State.AnimateDown || state == State.AnimateUp;
 
-    protected bool IsAnimating => state == State.AnimateDown || state == State.AnimateUp;
+		private void Update()
+		{
+			PollPointerUp();
+			DoAnimation();
+		}
 
-    void Update()
-    {
-        PollPointerUp();
-        DoAnimation();
-    }
+		public void OnPointerDown(PointerEventData eventData)
+		{
+			Press();
+		}
 
-    void DoAnimation()
-    {
-        if (!IsAnimating) return;
+		public void OnPointerEnter(PointerEventData eventData)
+		{
+			if (useEnterExitEvents && Input.GetMouseButton(0)) Press();
+		}
 
-        if (state == State.AnimateDown)
-        {
-            pressAmount += Time.deltaTime / animationDuration;
-        }
-        else if (state == State.AnimateUp)
-        {
-            pressAmount -= Time.deltaTime / animationDuration;
-        }
+		public void OnPointerExit(PointerEventData eventData)
+		{
+			if (useEnterExitEvents) Release();
+		}
 
-        pressAmount = Mathf.Clamp01(pressAmount);
-        var animationProgress                           = pressAmount;
-        if (state == State.AnimateUp) animationProgress = 1 - animationProgress;
-        animationProgress = animationCurve.Evaluate(animationProgress);
-        if (state == State.AnimateUp) animationProgress = 1 - animationProgress;
+		public void OnPointerUp(PointerEventData eventData)
+		{
+			Release();
+		}
 
-        Animate(animationProgress);
+		public event Action willPress;
+		public event Action willRelease;
 
-        if (state == State.AnimateDown && pressAmount == 1)
-        {
-            state = State.Down;
-        }
+		private void DoAnimation()
+		{
+			if (!IsAnimating) return;
 
-        if (state == State.AnimateUp && pressAmount == 0)
-        {
-            state = State.Up;
-        }
-    }
+			if (state == State.AnimateDown)
+				pressAmount += Time.deltaTime / animationDuration;
+			else if (state == State.AnimateUp) pressAmount -= Time.deltaTime / animationDuration;
 
-    protected void Press()
-    {
-        if (state != State.Down && state != State.AnimateDown)
-        {
-            OnWillPress();
-            state = State.AnimateDown;
-        }
-    }
+			pressAmount = Mathf.Clamp01(pressAmount);
+			var animationProgress = pressAmount;
+			if (state == State.AnimateUp) animationProgress = 1 - animationProgress;
+			animationProgress = animationCurve.Evaluate(animationProgress);
+			if (state == State.AnimateUp) animationProgress = 1 - animationProgress;
 
-    protected void Release()
-    {
-        if (state != State.Up && state != State.AnimateUp)
-        {
-            OnWillRelease();
-            state = State.AnimateUp;
-        }
-    }
+			Animate(animationProgress);
 
-    /// <summary>
-    /// Pointer Up event does not fire on an object if it was not the one receive the Pointer Down event.
-    /// </summary>
-    void PollPointerUp()
-    {
-        if (useEnterExitEvents
-         && (state == State.Down || state == State.AnimateDown)
-         && !Input.GetMouseButton(0))
-        {
-            Release();
-        }
-    }
+			if (state == State.AnimateDown && pressAmount == 1) state = State.Down;
 
-    /// <summary>
-    /// NOP if not overrided
-    /// </summary>
-    /// <param name="visualPressAmount"><see cref="pressAmount"/> conformed to <see cref="animationCurve"/></param>
-    protected virtual void Animate(float visualPressAmount) { }
+			if (state == State.AnimateUp && pressAmount == 0) state = State.Up;
+		}
 
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        Press();
-    }
+		protected void Press()
+		{
+			if (state != State.Down && state != State.AnimateDown)
+			{
+				OnWillPress();
+				state = State.AnimateDown;
+			}
+		}
 
-    public void OnPointerUp(PointerEventData eventData)
-    {
-        Release();
-    }
+		protected void Release()
+		{
+			if (state != State.Up && state != State.AnimateUp)
+			{
+				OnWillRelease();
+				state = State.AnimateUp;
+			}
+		}
 
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        if (useEnterExitEvents && Input.GetMouseButton(0)) Press();
-    }
+		/// <summary>
+		///     Pointer Up event does not fire on an object if it was not the one receive the Pointer Down event.
+		/// </summary>
+		private void PollPointerUp()
+		{
+			if (useEnterExitEvents
+				&& (state == State.Down || state == State.AnimateDown)
+				&& !Input.GetMouseButton(0))
+				Release();
+		}
 
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        if (useEnterExitEvents) Release();
-    }
+		/// <summary>
+		///     NOP if not overrided
+		/// </summary>
+		/// <param name="visualPressAmount"><see cref="pressAmount" /> conformed to <see cref="animationCurve" /></param>
+		protected virtual void Animate(float visualPressAmount)
+		{
+		}
 
-    protected virtual void OnWillPress()
-    {
-        willPress?.Invoke();
-    }
+		protected virtual void OnWillPress()
+		{
+			willPress?.Invoke();
+		}
 
-    protected virtual void OnWillRelease()
-    {
-        willRelease?.Invoke();
-    }
-}
+		protected virtual void OnWillRelease()
+		{
+			willRelease?.Invoke();
+		}
+	}
 }

@@ -4,12 +4,12 @@ Shader "Hidden/Outlines/Wide Outline/Silhouette"
     {
         _OutlineColor ("_OutlineColor", Color) = (1, 1, 1, 1)
         _Information ("_Information", Vector) = (1, 1, 1, 1)
-        
+
         [Toggle(ALPHA_CUTOUT)] _AlphaCutout ("_AlphaCutout", Float) = 0
         _AlphaCutoutTexture ("_AlphaCutoutTexture", 2D) = "white" {}
         _AlphaCutoutThreshold ("_AlphaCutoutThreshold", Float) = 0.5
         _AlphaCutoutUVTransform ("_AlphaCutoutUVTransform", Vector) = (1, 1, 0, 0)
-        
+
         [Enum(UnityEngine.Rendering.CullMode)] _Cull ("Cull", Float) = 0.0
         [Enum(UnityEngine.Rendering.CompareFunction)] _ZTest ("ZTest", Float) = 0.0
         _ZWrite("ZWrite", Float) = 0
@@ -22,28 +22,28 @@ Shader "Hidden/Outlines/Wide Outline/Silhouette"
             "RenderType" = "Opaque"
             "RenderPipeline" = "UniversalPipeline"
         }
-        
+
         Cull [_Cull]
         ZWrite [_ZWrite] // ! Required
         ZTest [_ZTest]
-        
+
         Blend Off
-        
+
         Pass // 0: SILHOUETTE
         {
             Name "SILHOUETTE"
 
             HLSLPROGRAM
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
-            
+
             #pragma vertex vert
             #pragma fragment frag
-            
+
             #pragma multi_compile _ DOTS_INSTANCING_ON
             #if UNITY_PLATFORM_ANDROID || UNITY_PLATFORM_WEBGL || UNITY_PLATFORM_UWP
                 #pragma target 3.5 DOTS_INSTANCING_ON
             #else
-                #pragma target 4.5 DOTS_INSTANCING_ON
+            #pragma target 4.5 DOTS_INSTANCING_ON
             #endif
 
             #pragma multi_compile_local _ ALPHA_CUTOUT
@@ -51,18 +51,18 @@ Shader "Hidden/Outlines/Wide Outline/Silhouette"
 
             TEXTURE2D(_AlphaCutoutTexture);
             SAMPLER(sampler_AlphaCutoutTexture);
-            
+
             CBUFFER_START(UnityPerMaterial)
                 half4 _OutlineColor;
                 half _AlphaCutoutThreshold;
                 float4 _AlphaCutoutUVTransform;
                 half4 _Information;
             CBUFFER_END
-            
+
             struct Attributes
             {
                 float4 positionOS : POSITION;
-                
+
                 #if defined(ALPHA_CUTOUT)
                 float2 texcoord     : TEXCOORD0;
                 #endif
@@ -73,7 +73,7 @@ Shader "Hidden/Outlines/Wide Outline/Silhouette"
             struct Varyings
             {
                 float4 positionHCS : SV_POSITION;
-                
+
                 #if defined(ALPHA_CUTOUT)
                 float2 uv           : TEXCOORD0;
                 #endif
@@ -93,7 +93,7 @@ Shader "Hidden/Outlines/Wide Outline/Silhouette"
                 #if defined(ALPHA_CUTOUT)
                 OUT.uv = IN.texcoord * _AlphaCutoutUVTransform.xy + _AlphaCutoutUVTransform.zw;
                 #endif
-                
+
                 return OUT;
             }
 

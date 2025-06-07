@@ -152,13 +152,21 @@ namespace FIMSpace.FProceduralAnimation
                 {
                     ChangeAnchorKinematicState(false);
                 }
+
+                if (afterForcing)
+                {
+                    afterForcing = false;
+                    anchor.GameRigidbody.collisionDetectionMode = anchor.UseIndividualParameters ? anchor.OverrideDetectionMode : RigidbodiesDetectionMode;
+                }
             }
             else
             {
                 if (animatingModeChanged || afterForcing)
                 {
                     afterForcing = false;
-                    ChangeAnchorKinematicState(false);
+
+                    if (_playmodeAnchorBone.GameRigidbody.isKinematic == false) anchor.GameRigidbody.collisionDetectionMode = anchor.UseIndividualParameters ? anchor.OverrideDetectionMode : RigidbodiesDetectionMode;
+                    else ChangeAnchorKinematicState(false);
                 }
             }
 
@@ -178,8 +186,8 @@ namespace FIMSpace.FProceduralAnimation
         {
             if (_playmodeAnchorBone.GameRigidbody.isKinematic == isKinematic) return;
 
-            if (isKinematic) _playmodeAnchorBone.GameRigidbody.collisionDetectionMode = CollisionDetectionMode.Discrete;
             _playmodeAnchorBone.GameRigidbody.isKinematic = isKinematic;
+            _playmodeAnchorBone.GameRigidbody.collisionDetectionMode = _playmodeAnchorBone.UseIndividualParameters ? _playmodeAnchorBone.OverrideDetectionMode : RigidbodiesDetectionMode;
 
             // Check detached chains change parenting
             if (isKinematic)

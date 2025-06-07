@@ -8,15 +8,15 @@ public class LocaleDropdown : MonoBehaviour
 {
 	[SerializeField] private TMP_Dropdown LanguageSelect;
 
-	IEnumerator Start()
+	private IEnumerator Start()
 	{
 		// Wait for the localization system to initialize
 		yield return LocalizationSettings.InitializationOperation;
 
 		// Generate list of available Locales
 		var options = new List<TMP_Dropdown.OptionData>();
-		int selected = 0;
-		for (int i = 0; i < LocalizationSettings.AvailableLocales.Locales.Count; ++i)
+		var selected = 0;
+		for (var i = 0; i < LocalizationSettings.AvailableLocales.Locales.Count; ++i)
 		{
 			var locale = LocalizationSettings.AvailableLocales.Locales[i];
 			if (LocalizationSettings.SelectedLocale == locale)
@@ -30,7 +30,7 @@ public class LocaleDropdown : MonoBehaviour
 		LanguageSelect.onValueChanged.AddListener(LocaleSelected);
 	}
 
-	static void LocaleSelected(int index)
+	private static void LocaleSelected(int index)
 	{
 		LocalizationSettings.SelectedLocale = LocalizationSettings.AvailableLocales.Locales[index];
 	}

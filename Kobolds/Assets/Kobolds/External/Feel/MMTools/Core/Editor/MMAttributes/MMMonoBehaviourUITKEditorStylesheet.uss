@@ -46,7 +46,7 @@
 .mm-toolbar {
     margin-top: 5px;
     border-width: 0px;
-    
+
 }
 
 .mm-toolbar ToolbarButton {
@@ -60,20 +60,17 @@
     -unity-text-align: middle-center;
 }
 
-.mm-fixed-width-floatfield FloatInput TextElement
-{
+.mm-fixed-width-floatfield FloatInput TextElement {
     width: 50px;
 }
 
-.mm-fixed-width-floatfield Label
-{
+.mm-fixed-width-floatfield Label {
     min-width: 50px;
 }
 
-    /* Spring */
+/* Spring */
 
-.mm-spring-debug-track-background
-{
+.mm-spring-debug-track-background {
     margin-top: 5px;
     background-color: rgba(0, 0, 0, 0.5);
     height: 20px;
@@ -82,16 +79,14 @@
     justify-content: flex-start;
 }
 
-.mm-spring-debug-track-foreground
-{
+.mm-spring-debug-track-foreground {
     background-color: rgba(255, 196, 0, 1);
     height: 20px;
     width: 10px;
-    margin-top: -20px;    
+    margin-top: -20px;
 }
 
-.mm-spring-debug-track-foreground-container-left
-{
+.mm-spring-debug-track-foreground-container-left {
     background-color: green;
     height: 20px;
     width: 50%;
@@ -101,8 +96,7 @@
     justify-content: flex-end;
 }
 
-.mm-spring-debug-track-foreground-container-right
-{
+.mm-spring-debug-track-foreground-container-right {
     background-color: blue;
     height: 20px;
     width: 50%;

@@ -9,8 +9,8 @@
     #include "UnityCG.cginc"
 
     sampler2D _MainTex;
-    half4     _MainTex_TexelSize;
-    half4     _MainTex_ST;
+    half4 _MainTex_TexelSize;
+    half4 _MainTex_ST;
 
     uniform half _Radius;
 
@@ -92,8 +92,8 @@
             #pragma fragment fragDither
 
             sampler2D _BlueNoise;
-            half4     _BlueNoise_TexelSize;
-            half2     _TargetSize;
+            half4 _BlueNoise_TexelSize;
+            half2 _TargetSize;
 
             float IGN(float2 pos)
             {

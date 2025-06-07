@@ -5789,7 +5789,7 @@ MonoBehaviour:
   - 0
   - 0.33
   - 0.66
-  timigsOffset: 0.16
+  timingsOffset: 0.16
   velocityClamp: 4
   layerMask:
     serializedVersion: 2

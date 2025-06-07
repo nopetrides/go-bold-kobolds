@@ -1,35 +1,56 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 using UnityEngine.Scripting.APIUpdating;
+using UnityEngine.Serialization;
 
 namespace MoreMountains.Feedbacks
 {
 	/// <summary>
-	/// This feedback will instantiate the associated object (usually a VFX, but not necessarily), optionnally creating an object pool of them for performance
+	///     This feedback will instantiate the associated object (usually a VFX, but not necessarily), optionnally creating an
+	///     object pool of them for performance
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback allows you to instantiate the object specified in its inspector, at the feedback's position (plus an optional offset). You can also optionally (and automatically) create an object pool at initialization to save on performance. In that case you'll need to specify a pool size (usually the maximum amount of these instantiated objects you plan on having in your scene at each given time).")]
+	[FeedbackHelp(
+		"This feedback allows you to instantiate the object specified in its inspector, at the feedback's position (plus an optional offset). You can also optionally (and automatically) create an object pool at initialization to save on performance. In that case you'll need to specify a pool size (usually the maximum amount of these instantiated objects you plan on having in your scene at each given time).")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
 	[FeedbackPath("GameObject/Instantiate Object")]
 	public class MMF_InstantiateObject : MMF_Feedback
 	{
-		/// a static bool used to disable all feedbacks of this type at once
-		public static bool FeedbackTypeAuthorized = true;
 		/// the different ways to position the instantiated object :
 		/// - FeedbackPosition : object will be instantiated at the position of the feedback, plus an optional offset
 		/// - Transform : the object will be instantiated at the specified Transform's position, plus an optional offset
 		/// - WorldPosition : the object will be instantiated at the specified world position vector, plus an optional offset
 		/// - Script : the position passed in parameters when calling the feedback
-		public enum PositionModes { FeedbackPosition, Transform, WorldPosition, Script }
+		public enum PositionModes
+		{
+			FeedbackPosition,
+			Transform,
+			WorldPosition,
+			Script
+		}
 
-		/// sets the inspector color for this feedback
-		#if UNITY_EDITOR
-		public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.GameObjectColor; } }
-		public override bool EvaluateRequiresSetup() { return (GameObjectToInstantiate == null); }
-		public override string RequiredTargetText { get { return GameObjectToInstantiate != null ? GameObjectToInstantiate.name : "";  } }
-		public override string RequiresSetupText { get { return "This feedback requires that a GameObjectToInstantiate be set to be able to work properly. You can set one below."; } }
-		#endif
+		/// a static bool used to disable all feedbacks of this type at once
+		public static bool FeedbackTypeAuthorized = true;
+
+		protected GameObject _newGameObject;
+
+		protected MMMiniObjectPooler _objectPooler;
+		protected bool _poolCreatedOrFound;
+		protected Vector3 _randomizedPosition = Vector3.zero;
+
+		/// the chosen way to position the object
+		[Tooltip("the chosen way to position the object")]
+		public bool AlsoApplyRotation = false;
+
+		/// the chosen way to position the object
+		[Tooltip("the chosen way to position the object")]
+		public bool AlsoApplyScale = false;
+
+		[MMFInspectorGroup("Object Pool", true, 40)]
+		/// whether or not we should create automatically an object pool for this object
+		[Tooltip("whether or not we should create automatically an object pool for this object")]
+		[FormerlySerializedAs("VfxCreateObjectPool")]
+		public bool CreateObjectPool;
 
 		[MMFInspectorGroup("Instantiate Object", true, 37, true)]
 		/// the object to instantiate
@@ -37,75 +58,66 @@ namespace MoreMountains.Feedbacks
 		[FormerlySerializedAs("VfxToInstantiate")]
 		public GameObject GameObjectToInstantiate;
 
-		[MMFInspectorGroup("Position", true, 39)]
-		/// the chosen way to position the object 
-		[Tooltip("the chosen way to position the object")]
-		public PositionModes PositionMode = PositionModes.FeedbackPosition;
-		/// the chosen way to position the object 
-		[Tooltip("the chosen way to position the object")]
-		public bool AlsoApplyRotation = false;
-		/// the chosen way to position the object 
-		[Tooltip("the chosen way to position the object")]
-		public bool AlsoApplyScale = false;
-		/// the transform at which to instantiate the object
-		[Tooltip("the transform at which to instantiate the object")]
-		[MMFEnumCondition("PositionMode", (int)PositionModes.Transform)]
-		public Transform TargetTransform;
-		/// the transform at which to instantiate the object
-		[Tooltip("the transform at which to instantiate the object")]
-		[MMFEnumCondition("PositionMode", (int)PositionModes.WorldPosition)]
-		public Vector3 TargetPosition;
-		/// the position offset at which to instantiate the object
-		[Tooltip("the position offset at which to instantiate the object")]
-		[FormerlySerializedAs("VfxPositionOffset")]
-		public Vector3 PositionOffset;
+		/// whether or not to create a new pool even if one already exists for that same prefab
+		[Tooltip("whether or not to create a new pool even if one already exists for that same prefab")]
+		[MMFCondition("CreateObjectPool", true)]
+		public bool MutualizePools = false;
 
-		/// if this is true, instantiation position will be randomized between RandomizeMin and RandomizeMax 
-		[Tooltip("if this is true, instantiation position will be randomized between RandomizeMin and RandomizeMax")]
-		public bool RandomizePosition = false;
-		/// the minimum value we'll randomize our position with
-		[Tooltip("the minimum value we'll randomize our position with")]
-		[MMFCondition("RandomizePosition", true)]
-		public Vector3 RandomizedPositionMin = Vector3.zero; 
-		/// the maximum value we'll randomize our position with
-		[Tooltip("the maximum value we'll randomize our position with")]
-		[MMFCondition("RandomizePosition", true)]
-		public Vector3 RandomizedPositionMax = Vector3.one;
+		/// the initial and planned size of this object pool
+		[Tooltip("the initial and planned size of this object pool")]
+		[MMFCondition("CreateObjectPool", true)]
+		[FormerlySerializedAs("VfxObjectPoolSize")]
+		public int ObjectPoolSize = 5;
 
 		[MMFInspectorGroup("Parent", true, 47)]
 		/// if specified, the instantiated object will be parented to this transform 
 		[Tooltip("if specified, the instantiated object will be parented to this transform ")]
 		public Transform ParentTransform;
 
-		[MMFInspectorGroup("Object Pool", true, 40)]
-		/// whether or not we should create automatically an object pool for this object
-		[Tooltip("whether or not we should create automatically an object pool for this object")]
-		[FormerlySerializedAs("VfxCreateObjectPool")]
-		public bool CreateObjectPool;
-		/// the initial and planned size of this object pool
-		[Tooltip("the initial and planned size of this object pool")]
-		[MMFCondition("CreateObjectPool", true)]
-		[FormerlySerializedAs("VfxObjectPoolSize")]
-		public int ObjectPoolSize = 5;
-		/// whether or not to create a new pool even if one already exists for that same prefab
-		[Tooltip("whether or not to create a new pool even if one already exists for that same prefab")]
-		[MMFCondition("CreateObjectPool", true)] 
-		public bool MutualizePools = false;
 		/// the transform the pool of objects will be parented to
 		[Tooltip("the transform the pool of objects will be parented to")]
-		[MMFCondition("CreateObjectPool", true)] 
+		[MMFCondition("CreateObjectPool", true)]
 		public Transform PoolParentTransform;
 
-		/// the game object instantiated by this feedback	
+		[MMFInspectorGroup("Position", true, 39)]
+		/// the chosen way to position the object 
+		[Tooltip("the chosen way to position the object")]
+		public PositionModes PositionMode = PositionModes.FeedbackPosition;
+
+		/// the position offset at which to instantiate the object
+		[Tooltip("the position offset at which to instantiate the object")]
+		[FormerlySerializedAs("VfxPositionOffset")]
+		public Vector3 PositionOffset;
+
+		/// the maximum value we'll randomize our position with
+		[Tooltip("the maximum value we'll randomize our position with")]
+		[MMFCondition("RandomizePosition", true)]
+		public Vector3 RandomizedPositionMax = Vector3.one;
+
+		/// the minimum value we'll randomize our position with
+		[Tooltip("the minimum value we'll randomize our position with")]
+		[MMFCondition("RandomizePosition", true)]
+		public Vector3 RandomizedPositionMin = Vector3.zero;
+
+		/// if this is true, instantiation position will be randomized between RandomizeMin and RandomizeMax
+		[Tooltip("if this is true, instantiation position will be randomized between RandomizeMin and RandomizeMax")]
+		public bool RandomizePosition = false;
+
+		/// the transform at which to instantiate the object
+		[Tooltip("the transform at which to instantiate the object")]
+		[MMFEnumCondition("PositionMode", (int) PositionModes.WorldPosition)]
+		public Vector3 TargetPosition;
+
+		/// the transform at which to instantiate the object
+		[Tooltip("the transform at which to instantiate the object")]
+		[MMFEnumCondition("PositionMode", (int) PositionModes.Transform)]
+		public Transform TargetTransform;
+
+		/// the game object instantiated by this feedback
 		public GameObject InstantiatedGameObject => _newGameObject;
 
-		protected MMMiniObjectPooler _objectPooler; 
-		protected GameObject _newGameObject;
-		protected bool _poolCreatedOrFound = false;
-		protected Vector3 _randomizedPosition = Vector3.zero;
-
 		/// <summary>
-		/// On init we create an object pool if needed
+		///     On init we create an object pool if needed
 		/// </summary>
 		/// <param name="owner"></param>
 		protected override void CustomInitialization(MMF_Player owner)
@@ -120,37 +132,29 @@ namespace MoreMountains.Feedbacks
 					owner.ProxyDestroy(_objectPooler.gameObject);
 				}
 
-				GameObject objectPoolGo = new GameObject();
-				objectPoolGo.name = Owner.name+"_ObjectPooler";
+				var objectPoolGo = new GameObject();
+				objectPoolGo.name = Owner.name + "_ObjectPooler";
 				_objectPooler = objectPoolGo.AddComponent<MMMiniObjectPooler>();
 				_objectPooler.GameObjectToPool = GameObjectToInstantiate;
 				_objectPooler.PoolSize = ObjectPoolSize;
-				if (PoolParentTransform != null)
-				{
-					_objectPooler.transform.SetParent(PoolParentTransform);
-				}
+				if (PoolParentTransform != null) _objectPooler.transform.SetParent(PoolParentTransform);
 				_objectPooler.MutualizeWaitingPools = MutualizePools;
 				_objectPooler.FillObjectPool();
-				if ((Owner != null) && (objectPoolGo.transform.parent == null))
-				{
-					SceneManager.MoveGameObjectToScene(objectPoolGo, Owner.gameObject.scene);    
-				}
+				if (Owner != null && objectPoolGo.transform.parent == null)
+					SceneManager.MoveGameObjectToScene(objectPoolGo, Owner.gameObject.scene);
 				_poolCreatedOrFound = true;
 			}
 		}
 
 		/// <summary>
-		/// On Play we instantiate the specified object, either from the object pool or from scratch
+		///     On Play we instantiate the specified object, either from the object pool or from scratch
 		/// </summary>
 		/// <param name="position"></param>
 		/// <param name="feedbacksIntensity"></param>
 		protected override void CustomPlayFeedback(Vector3 position, float feedbacksIntensity = 1.0f)
 		{
-			if (!Active || !FeedbackTypeAuthorized || (GameObjectToInstantiate == null))
-			{
-				return;
-			}
-            
+			if (!Active || !FeedbackTypeAuthorized || GameObjectToInstantiate == null) return;
+
 			if (_objectPooler != null)
 			{
 				_newGameObject = _objectPooler.GetPooledGameObject();
@@ -162,11 +166,11 @@ namespace MoreMountains.Feedbacks
 			}
 			else
 			{
-				_newGameObject = GameObject.Instantiate(GameObjectToInstantiate) as GameObject;
+				_newGameObject = GameObject.Instantiate(GameObjectToInstantiate);
 				if (_newGameObject != null)
 				{
 					SceneManager.MoveGameObjectToScene(_newGameObject, Owner.gameObject.scene);
-					PositionObject(position);    
+					PositionObject(position);
 				}
 			}
 		}
@@ -174,22 +178,13 @@ namespace MoreMountains.Feedbacks
 		protected virtual void PositionObject(Vector3 position)
 		{
 			_newGameObject.transform.position = GetPosition(position);
-			if (AlsoApplyRotation)
-			{
-				_newGameObject.transform.rotation = GetRotation();    
-			}
-			if (AlsoApplyScale)
-			{
-				_newGameObject.transform.localScale = GetScale();    
-			}
-			if (ParentTransform != null)
-			{
-				_newGameObject.transform.SetParent(ParentTransform);
-			}
+			if (AlsoApplyRotation) _newGameObject.transform.rotation = GetRotation();
+			if (AlsoApplyScale) _newGameObject.transform.localScale = GetScale();
+			if (ParentTransform != null) _newGameObject.transform.SetParent(ParentTransform);
 		}
 
 		/// <summary>
-		/// Gets the desired position of that particle system
+		///     Gets the desired position of that particle system
 		/// </summary>
 		/// <param name="position"></param>
 		/// <returns></returns>
@@ -197,11 +192,11 @@ namespace MoreMountains.Feedbacks
 		{
 			if (RandomizePosition)
 			{
-				_randomizedPosition.x = UnityEngine.Random.Range(RandomizedPositionMin.x, RandomizedPositionMax.x);
-				_randomizedPosition.y = UnityEngine.Random.Range(RandomizedPositionMin.y, RandomizedPositionMax.y);
-				_randomizedPosition.z = UnityEngine.Random.Range(RandomizedPositionMin.z, RandomizedPositionMax.z);
+				_randomizedPosition.x = Random.Range(RandomizedPositionMin.x, RandomizedPositionMax.x);
+				_randomizedPosition.y = Random.Range(RandomizedPositionMin.y, RandomizedPositionMax.y);
+				_randomizedPosition.z = Random.Range(RandomizedPositionMin.z, RandomizedPositionMax.z);
 			}
-	        
+
 			switch (PositionMode)
 			{
 				case PositionModes.FeedbackPosition:
@@ -217,9 +212,9 @@ namespace MoreMountains.Feedbacks
 			}
 		}
 
-        
+
 		/// <summary>
-		/// Gets the desired rotation of that particle system
+		///     Gets the desired rotation of that particle system
 		/// </summary>
 		/// <param name="target"></param>
 		/// <returns></returns>
@@ -241,7 +236,7 @@ namespace MoreMountains.Feedbacks
 		}
 
 		/// <summary>
-		/// Gets the desired scale of that particle system
+		///     Gets the desired scale of that particle system
 		/// </summary>
 		/// <param name="target"></param>
 		/// <returns></returns>
@@ -261,5 +256,24 @@ namespace MoreMountains.Feedbacks
 					return Owner.transform.localScale;
 			}
 		}
+
+		/// sets the inspector color for this feedback
+#if UNITY_EDITOR
+		public override Color FeedbackColor
+		{
+			get { return MMFeedbacksInspectorColors.GameObjectColor; }
+		}
+
+		public override bool EvaluateRequiresSetup()
+		{
+			return GameObjectToInstantiate == null;
+		}
+
+		public override string RequiredTargetText =>
+			GameObjectToInstantiate != null ? GameObjectToInstantiate.name : "";
+
+		public override string RequiresSetupText =>
+			"This feedback requires that a GameObjectToInstantiate be set to be able to work properly. You can set one below.";
+#endif
 	}
 }

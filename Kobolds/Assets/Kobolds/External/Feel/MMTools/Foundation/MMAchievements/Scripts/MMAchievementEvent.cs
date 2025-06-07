@@ -1,11 +1,7 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-
-namespace MoreMountains.Tools
+﻿namespace MoreMountains.Tools
 {
 	/// <summary>
-	/// An event type used to broadcast the fact that an achievement has been unlocked
+	///     An event type used to broadcast the fact that an achievement has been unlocked
 	/// </summary>
 	public struct MMAchievementUnlockedEvent
 	{
@@ -13,7 +9,7 @@ namespace MoreMountains.Tools
 		public MMAchievement Achievement;
 
 		/// <summary>
-		/// Constructor
+		///     Constructor
 		/// </summary>
 		/// <param name="newAchievement">New achievement.</param>
 		public MMAchievementUnlockedEvent(MMAchievement newAchievement)
@@ -21,21 +17,22 @@ namespace MoreMountains.Tools
 			Achievement = newAchievement;
 		}
 
-		static MMAchievementUnlockedEvent e;
+		private static MMAchievementUnlockedEvent e;
+
 		public static void Trigger(MMAchievement newAchievement)
 		{
 			e.Achievement = newAchievement;
 			MMEventManager.TriggerEvent(e);
 		}
 	}
-	
+
 	public struct MMAchievementChangedEvent
 	{
 		/// the achievement that has been unlocked
 		public MMAchievement Achievement;
 
 		/// <summary>
-		/// Constructor
+		///     Constructor
 		/// </summary>
 		/// <param name="newAchievement">New achievement.</param>
 		public MMAchievementChangedEvent(MMAchievement newAchievement)
@@ -43,7 +40,8 @@ namespace MoreMountains.Tools
 			Achievement = newAchievement;
 		}
 
-		static MMAchievementChangedEvent e;
+		private static MMAchievementChangedEvent e;
+
 		public static void Trigger(MMAchievement newAchievement)
 		{
 			e.Achievement = newAchievement;

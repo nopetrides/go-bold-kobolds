@@ -1,56 +1,47 @@
 ﻿#if UNITY_EDITOR
 
-using UnityEngine;
 using UnityEditor;
-using System;
+using UnityEngine;
 
 namespace FIMSpace.FEditor
 {
-    [CustomPropertyDrawer(typeof(FPD_HideOnBoolAttribute))]
-    public class FPropDrawers_HideOnBool : PropertyDrawer
-    {
-        FPD_HideOnBoolAttribute Attribute { get { return ((FPD_HideOnBoolAttribute)base.attribute); } }
+	[CustomPropertyDrawer(typeof(FPD_HideOnBoolAttribute))]
+	public class FPropDrawers_HideOnBool : PropertyDrawer
+	{
+		private FPD_HideOnBoolAttribute Attribute => (FPD_HideOnBoolAttribute) attribute;
 
-        public override void OnGUI(Rect rect, SerializedProperty property, GUIContent content)
-        {
-            bool enabled = IsEnabled(property);
+		public override void OnGUI(Rect rect, SerializedProperty property, GUIContent content)
+		{
+			var enabled = IsEnabled(property);
 
-            bool wasEnabled = GUI.enabled;
-            GUI.enabled = enabled;
+			var wasEnabled = GUI.enabled;
+			GUI.enabled = enabled;
 
-            if (!Attribute.HideInInspector || enabled)
-            {
-                EditorGUI.PropertyField(rect, property, content, true);
-            }
+			if (!Attribute.HideInInspector || enabled) EditorGUI.PropertyField(rect, property, content, true);
 
-            GUI.enabled = wasEnabled;
-        }
+			GUI.enabled = wasEnabled;
+		}
 
-        private bool IsEnabled(SerializedProperty property)
-        {
-            bool enabled;
-            SerializedProperty boolProp = property.serializedObject.FindProperty(Attribute.BoolVarName);
+		private bool IsEnabled(SerializedProperty property)
+		{
+			bool enabled;
+			var boolProp = property.serializedObject.FindProperty(Attribute.BoolVarName);
 
-            if (boolProp == null) enabled = true;
-            else enabled = boolProp.boolValue;
+			if (boolProp == null) enabled = true;
+			else enabled = boolProp.boolValue;
 
-            return enabled;
-        }
+			return enabled;
+		}
 
-        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
-        {
-            bool enabled = IsEnabled(property);
+		public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+		{
+			var enabled = IsEnabled(property);
 
-            if (!Attribute.HideInInspector || enabled)
-            {
-                return EditorGUI.GetPropertyHeight(property, label);
-            }
-            else
-            {
-                return -EditorGUIUtility.standardVerticalSpacing;
-            }
-        }
-    }
+			if (!Attribute.HideInInspector || enabled) return EditorGUI.GetPropertyHeight(property, label);
+
+			return -EditorGUIUtility.standardVerticalSpacing;
+		}
+	}
 }
 
 

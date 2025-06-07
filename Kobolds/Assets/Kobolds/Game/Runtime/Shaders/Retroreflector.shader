@@ -53,7 +53,10 @@ Shader "Custom/Lit Retroreflective"
         // that can match multiple render pipelines. If a RenderPipeline tag is not set it will match
         // any render pipeline. In case you want your subshader to only run in LWRP set the tag to
         // "UniversalRenderPipeline"
-        Tags{"RenderType" = "Opaque" "RenderPipeline" = "UniversalRenderPipeline" "IgnoreProjector" = "True"}
+        Tags
+        {
+            "RenderType" = "Opaque" "RenderPipeline" = "UniversalRenderPipeline" "IgnoreProjector" = "True"
+        }
         LOD 320
 
         // ------------------------------------------------------------------
@@ -65,7 +68,10 @@ Shader "Custom/Lit Retroreflective"
             // "Lightmode" tag must be "UniversalForward" or not be defined in order for
             // to render objects.
             Name "StandardLit"
-            Tags{"LightMode" = "UniversalForward"}
+            Tags
+            {
+                "LightMode" = "UniversalForward"
+            }
 
             Blend[_SrcBlend][_DstBlend]
             ZWrite[_ZWrite]
@@ -151,30 +157,30 @@ Shader "Custom/Lit Retroreflective"
 
             struct Attributes
             {
-                float4 positionOS   : POSITION;
-                float3 normalOS     : NORMAL;
-                float4 tangentOS    : TANGENT;
-                float2 uv           : TEXCOORD0;
-                float2 uvLM         : TEXCOORD1;
+                float4 positionOS : POSITION;
+                float3 normalOS : NORMAL;
+                float4 tangentOS : TANGENT;
+                float2 uv : TEXCOORD0;
+                float2 uvLM : TEXCOORD1;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
             struct Varyings
             {
-                float2 uv                       : TEXCOORD0;
-                float2 uvLM                     : TEXCOORD1;
-                float4 positionWSAndFogFactor   : TEXCOORD2; // xyz: positionWS, w: vertex fog factor
-                half3  normalWS                 : TEXCOORD3;
+                float2 uv : TEXCOORD0;
+                float2 uvLM : TEXCOORD1;
+                float4 positionWSAndFogFactor : TEXCOORD2; // xyz: positionWS, w: vertex fog factor
+                half3 normalWS : TEXCOORD3;
 
-#if _NORMALMAP
+                #if _NORMALMAP
                 half3 tangentWS                 : TEXCOORD4;
                 half3 bitangentWS               : TEXCOORD5;
-#endif
+                #endif
 
-#ifdef _MAIN_LIGHT_SHADOWS
+                #ifdef _MAIN_LIGHT_SHADOWS
                 float4 shadowCoord              : TEXCOORD6; // compute shadow coord per-vertex for the main light
-#endif
-                float4 positionCS               : SV_POSITION;
+                #endif
+                float4 positionCS : SV_POSITION;
             };
 
             Varyings LitPassVertex(Attributes input)
@@ -205,41 +211,45 @@ Shader "Custom/Lit Retroreflective"
                 // tangentWS and bitangentWS will not be referenced and
                 // GetVertexNormalInputs is only converting normal
                 // from object to world space
-#ifdef _NORMALMAP
+                #ifdef _NORMALMAP
                 output.tangentWS = vertexNormalInput.tangentWS;
                 output.bitangentWS = vertexNormalInput.bitangentWS;
-#endif
+                #endif
 
-#ifdef _MAIN_LIGHT_SHADOWS
+                #ifdef _MAIN_LIGHT_SHADOWS
                 // shadow coord for the main light is computed in vertex.
                 // If cascades are enabled, LWRP will resolve shadows in screen space
                 // and this coord will be the uv coord of the screen space shadow texture.
                 // Otherwise LWRP will resolve shadows in light space (no depth pre-pass and shadow collect pass)
                 // In this case shadowCoord will be the position in light space.
                 output.shadowCoord = GetShadowCoord(vertexInput);
-#endif
+                #endif
                 // We just use the homogeneous clip position from the vertex input
                 output.positionCS = vertexInput.positionCS;
                 return output;
             }
 
-            half3 RetroreflectiveLighting(BRDFData brdfData, Light light, half3 normalWS, half3 viewDirectionWS, half3 reflectedViewWS)
+            half3 RetroreflectiveLighting(BRDFData brdfData, Light light, half3 normalWS, half3 viewDirectionWS,
+                                          half3 reflectedViewWS)
             {
                 half NdotL = saturate(dot(normalWS, light.direction));
                 float3 radiance = light.color * (light.distanceAttenuation * light.shadowAttenuation * NdotL);
                 half3 forward = DirectBDRF(brdfData, normalWS, light.direction, viewDirectionWS, false);
-                half3 retro   = DirectBDRF(brdfData, normalWS, light.direction, reflectedViewWS, false);
+                half3 retro = DirectBDRF(brdfData, normalWS, light.direction, reflectedViewWS, false);
                 return (forward + retro) * .5 * radiance;
             }
 
-            half3 RetroreflectiveGI(BRDFData brdfData, half3 bakedGI, half occlusion, half3 normalWS, half3 viewDirectionWS, half3 reflectedViewWS)
+            half3 RetroreflectiveGI(BRDFData brdfData, half3 bakedGI, half occlusion, half3 normalWS,
+          half3 viewDirectionWS, half3 reflectedViewWS)
             {
                 half NdotV = saturate(dot(normalWS, viewDirectionWS));
                 half fresnelTerm = Pow4(1.0 - saturate(NdotV));
                 half3 indirectDiffuse = bakedGI * occlusion;
 
-                half3 indirectSpecular = GlossyEnvironmentReflection(reflectedViewWS, brdfData.perceptualRoughness, occlusion);
-                half3 retroSpecular    = GlossyEnvironmentReflection(viewDirectionWS, brdfData.perceptualRoughness, occlusion);
+                half3 indirectSpecular = GlossyEnvironmentReflection(reflectedViewWS, brdfData.perceptualRoughness,
+                                     occlusion);
+                half3 retroSpecular = GlossyEnvironmentReflection(viewDirectionWS, brdfData.perceptualRoughness,
+                      occlusion);
                 indirectSpecular = (indirectSpecular + retroSpecular) * .5f;
 
                 return EnvironmentBRDF(brdfData, indirectDiffuse, indirectSpecular, fresnelTerm);
@@ -253,22 +263,22 @@ Shader "Custom/Lit Retroreflective"
                 SurfaceData surfaceData;
                 InitializeStandardLitSurfaceData(input.uv, surfaceData);
 
-#if _NORMALMAP
+                #if _NORMALMAP
                 half3 normalWS = TransformTangentToWorld(surfaceData.normalTS,
                     half3x3(input.tangentWS, input.bitangentWS, input.normalWS));
-#else
+                #else
                 half3 normalWS = input.normalWS;
-#endif
+                #endif
                 normalWS = normalize(normalWS);
 
-#ifdef LIGHTMAP_ON
+                #ifdef LIGHTMAP_ON
                 // Normal is required in case Directional lightmaps are baked
                 half3 bakedGI = SampleLightmap(input.uvLM, normalWS);
-#else
+                #else
                 // Samples SH fully per-pixel. SampleSHVertex and SampleSHPixel functions
                 // are also defined in case you want to sample some terms per-vertex.
                 half3 bakedGI = SampleSH(normalWS);
-#endif
+                #endif
 
                 float3 positionWS = input.positionWSAndFogFactor.xyz;
                 half3 viewDirectionWS = SafeNormalize(GetCameraPositionWS() - positionWS);
@@ -277,32 +287,34 @@ Shader "Custom/Lit Retroreflective"
                 // It's easy to plugin your own shading fuction. You just need replace LightingPhysicallyBased function
                 // below with your own.
                 BRDFData brdfData;
-                InitializeBRDFData(surfaceData.albedo, surfaceData.metallic, surfaceData.specular, surfaceData.smoothness, surfaceData.alpha, brdfData);
+                InitializeBRDFData(surfaceData.albedo, surfaceData.metallic, surfaceData.specular,
+                               surfaceData.smoothness, surfaceData.alpha, brdfData);
 
                 // Light struct is provide by LWRP to abstract light shader variables.
                 // It contains light direction, color, distanceAttenuation and shadowAttenuation.
                 // LWRP take different shading approaches depending on light and platform.
                 // You should never reference light shader variables in your shader, instead use the GetLight
                 // funcitons to fill this Light struct.
-#ifdef _MAIN_LIGHT_SHADOWS
+                #ifdef _MAIN_LIGHT_SHADOWS
                 // Main light is the brightest directional light.
                 // It is shaded outside the light loop and it has a specific set of variables and shading path
                 // so we can be as fast as possible in the case when there's only a single directional light
                 // You can pass optionally a shadowCoord (computed per-vertex). If so, shadowAttenuation will be
                 // computed.
                 Light mainLight = GetMainLight(input.shadowCoord);
-#else
+                #else
                 Light mainLight = GetMainLight();
-#endif
+                #endif
 
                 // Mix diffuse GI with environment reflections.
                 half3 reflectedViewWS = reflect(-viewDirectionWS, normalWS);
-                half3 color = RetroreflectiveGI(brdfData, bakedGI, surfaceData.occlusion, normalWS, viewDirectionWS, reflectedViewWS);
+                half3 color = RetroreflectiveGI(brdfData, bakedGI, surfaceData.occlusion, normalWS, viewDirectionWS,
+                                                        reflectedViewWS);
 
                 color += RetroreflectiveLighting(brdfData, mainLight, normalWS, viewDirectionWS, reflectedViewWS);
 
                 // Additional lights loop
-#ifdef _ADDITIONAL_LIGHTS
+                #ifdef _ADDITIONAL_LIGHTS
 
                 // Returns the amount of lights affecting the object being renderer.
                 // These lights are culled per-object in the forward renderer
@@ -317,7 +329,7 @@ Shader "Custom/Lit Retroreflective"
                     // Same functions used to shade the main light.
                     color += RetroreflectiveLighting(brdfData, light, normalWS, viewDirectionWS, reflectedViewWS);
                 }
-#endif
+                #endif
                 // Emission
                 color += surfaceData.emission;
 

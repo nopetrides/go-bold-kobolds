@@ -173,12 +173,12 @@ namespace FIMSpace.FProceduralAnimation
 
         private List<Action> UpdateActions = new List<Action>();
 
-        internal void AddToUpdateLoop( Action action )
+        public void AddToUpdateLoop( Action action )
         {
             if( UpdateActions.Contains( action ) == false ) UpdateActions.Add( action );
         }
 
-        internal void RemoveFromUpdateLoop( Action action )
+        public void RemoveFromUpdateLoop( Action action )
         {
             if( UpdateActions.Contains( action ) ) UpdateActions.Remove( action );
         }
@@ -195,12 +195,12 @@ namespace FIMSpace.FProceduralAnimation
 
         private List<Action> PreLateUpdateActions = new List<Action>();
 
-        internal void AddToPreLateUpdateLoop( Action action )
+        public void AddToPreLateUpdateLoop( Action action )
         {
             if( PreLateUpdateActions.Contains( action ) == false ) PreLateUpdateActions.Add( action );
         }
 
-        internal void RemoveFromPreLateUpdateLoop( Action action )
+        public void RemoveFromPreLateUpdateLoop( Action action )
         {
             if( PreLateUpdateActions.Contains( action ) ) PreLateUpdateActions.Remove( action );
         }
@@ -217,12 +217,12 @@ namespace FIMSpace.FProceduralAnimation
 
         private List<Action> LateUpdateActions = new List<Action>();
 
-        internal void AddToLateUpdateLoop( Action action )
+        public void AddToLateUpdateLoop( Action action )
         {
             if( LateUpdateActions.Contains( action ) == false ) LateUpdateActions.Add( action );
         }
 
-        internal void RemoveFromLateUpdateLoop( Action action )
+        public void RemoveFromLateUpdateLoop( Action action )
         {
             if( LateUpdateActions.Contains( action ) ) LateUpdateActions.Remove( action );
         }
@@ -239,12 +239,12 @@ namespace FIMSpace.FProceduralAnimation
 
         private List<Action> PostLateUpdateActions = new List<Action>();
 
-        internal void AddToPostLateUpdateLoop( Action action )
+        public void AddToPostLateUpdateLoop( Action action )
         {
             if( PostLateUpdateActions.Contains( action ) == false ) PostLateUpdateActions.Add( action );
         }
 
-        internal void RemoveFromPostLateUpdateLoop( Action action )
+        public void RemoveFromPostLateUpdateLoop( Action action )
         {
             if( PostLateUpdateActions.Contains( action ) ) PostLateUpdateActions.Remove( action );
         }
@@ -261,12 +261,12 @@ namespace FIMSpace.FProceduralAnimation
 
         private List<Action> FixedUpdateActions = new List<Action>();
 
-        internal void AddToFixedUpdateLoop( Action action )
+        public void AddToFixedUpdateLoop( Action action )
         {
             if( FixedUpdateActions.Contains( action ) == false ) FixedUpdateActions.Add( action );
         }
 
-        internal void RemoveFromFixedUpdateLoop( Action action )
+        public void RemoveFromFixedUpdateLoop( Action action )
         {
             if( FixedUpdateActions.Contains( action ) ) FixedUpdateActions.Remove( action );
         }
@@ -283,12 +283,12 @@ namespace FIMSpace.FProceduralAnimation
 
         private List<Action<RA2BoneCollisionHandler, Collision>> OnCollisionEnterActions = new List<Action<RA2BoneCollisionHandler, Collision>>();
 
-        internal void AddToDummyBoneCollisionEnterActions( Action<RA2BoneCollisionHandler, Collision> action )
+        public void AddToDummyBoneCollisionEnterActions( Action<RA2BoneCollisionHandler, Collision> action )
         {
             if( OnCollisionEnterActions.Contains( action ) == false ) OnCollisionEnterActions.Add( action );
         }
 
-        internal void RemoveFromDummyBoneCollisionEnterActions( Action<RA2BoneCollisionHandler, Collision> action )
+        public void RemoveFromDummyBoneCollisionEnterActions( Action<RA2BoneCollisionHandler, Collision> action )
         {
             if( OnCollisionEnterActions.Contains( action ) ) OnCollisionEnterActions.Remove( action );
         }
@@ -299,12 +299,12 @@ namespace FIMSpace.FProceduralAnimation
 
         private List<Action<RA2BoneTriggerCollisionHandler, Collider>> OnTriggerEnterActions = new List<Action<RA2BoneTriggerCollisionHandler, Collider>>();
 
-        internal void AddToTriggerEnterActions( Action<RA2BoneTriggerCollisionHandler, Collider> action )
+        public void AddToTriggerEnterActions( Action<RA2BoneTriggerCollisionHandler, Collider> action )
         {
             if( OnTriggerEnterActions.Contains( action ) == false ) OnTriggerEnterActions.Add( action );
         }
 
-        internal void RemoveFromDummyBoneCollisionEnterActions( Action<RA2BoneTriggerCollisionHandler, Collider> action )
+        public void RemoveFromDummyBoneCollisionEnterActions( Action<RA2BoneTriggerCollisionHandler, Collider> action )
         {
             if( OnTriggerEnterActions.Contains( action ) ) OnTriggerEnterActions.Remove( action );
         }

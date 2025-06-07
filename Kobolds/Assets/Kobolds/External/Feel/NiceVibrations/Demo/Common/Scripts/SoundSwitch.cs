@@ -1,34 +1,32 @@
 // Copyright (c) Meta Platforms, Inc. and affiliates. 
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Lofelt.NiceVibrations
 {
-    public class SoundSwitch : MonoBehaviour
-    {
-        public V2DemoManager DemoManager;
+	public class SoundSwitch : MonoBehaviour
+	{
+		public V2DemoManager DemoManager;
 
-        protected MMSwitch _switch;
+		protected MMSwitch _switch;
 
-        protected virtual void Awake()
-        {
-            _switch = this.gameObject.GetComponent<MMSwitch>();
-        }
+		protected virtual void Awake()
+		{
+			_switch = gameObject.GetComponent<MMSwitch>();
+		}
 
-        protected virtual void OnEnable()
-        {
-            if (DemoManager.SoundActive)
-            {
-                _switch.CurrentSwitchState = MMSwitch.SwitchStates.On;
-                _switch.InitializeState();
-            }
-            else
-            {
-                _switch.CurrentSwitchState = MMSwitch.SwitchStates.Off;
-                _switch.InitializeState();
-            }
-        }
-    }
+		protected virtual void OnEnable()
+		{
+			if (DemoManager.SoundActive)
+			{
+				_switch.CurrentSwitchState = MMSwitch.SwitchStates.On;
+				_switch.InitializeState();
+			}
+			else
+			{
+				_switch.CurrentSwitchState = MMSwitch.SwitchStates.Off;
+				_switch.InitializeState();
+			}
+		}
+	}
 }

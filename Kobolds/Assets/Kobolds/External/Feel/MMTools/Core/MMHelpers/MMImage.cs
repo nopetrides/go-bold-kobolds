@@ -1,37 +1,28 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using UnityEngine;
 
 namespace MoreMountains.Tools
-{	
+{
 	/// <summary>
-	/// Image helpers
+	///     Image helpers
 	/// </summary>
-
-	public class MMImage  
+	public class MMImage
 	{
 		/// <summary>
-		/// Coroutine used to make the character's sprite flicker (when hurt for example).
+		///     Coroutine used to make the character's sprite flicker (when hurt for example).
 		/// </summary>
-		public static IEnumerator Flicker(Renderer renderer, Color initialColor, Color flickerColor, float flickerSpeed, float flickerDuration)
+		public static IEnumerator Flicker(
+			Renderer renderer, Color initialColor, Color flickerColor, float flickerSpeed, float flickerDuration)
 		{
-			if (renderer==null)
-			{
-				yield break;
-			}
+			if (renderer == null) yield break;
 
-			if (!renderer.material.HasProperty("_Color"))
-			{
-				yield break;
-			}
+			if (!renderer.material.HasProperty("_Color")) yield break;
 
-			if (initialColor == flickerColor)
-			{
-				yield break;
-			}
+			if (initialColor == flickerColor) yield break;
 
-			float flickerStop = Time.time + flickerDuration;
+			var flickerStop = Time.time + flickerDuration;
 
-			while (Time.time<flickerStop)
+			while (Time.time < flickerStop)
 			{
 				renderer.material.color = flickerColor;
 				yield return MMCoroutine.WaitFor(flickerSpeed);
@@ -39,7 +30,7 @@ namespace MoreMountains.Tools
 				yield return MMCoroutine.WaitFor(flickerSpeed);
 			}
 
-			renderer.material.color = initialColor;        
+			renderer.material.color = initialColor;
 		}
 	}
 }

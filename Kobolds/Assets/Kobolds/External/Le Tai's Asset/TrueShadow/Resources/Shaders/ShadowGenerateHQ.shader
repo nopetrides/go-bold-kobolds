@@ -10,8 +10,8 @@
     #pragma multi_compile_local_fragment MAX_TAPS_64 MAX_TAPS_32 MAX_TAPS_8
 
     sampler2D _MainTex;
-    float4    _MainTex_TexelSize;
-    float4    _MainTex_ST;
+    float4 _MainTex_TexelSize;
+    float4 _MainTex_ST;
 
     #define MAX_TAPS 64
 
@@ -25,11 +25,11 @@
 
     float _Weights[MAX_TAPS];
     float _Offsets[MAX_TAPS];
-    int   _Extent;
+    int _Extent;
 
     sampler2D _BlueNoise;
-    half4     _BlueNoise_TexelSize;
-    half2     _TargetSize;
+    half4 _BlueNoise_TexelSize;
+    half2 _TargetSize;
 
     struct v2f
     {
@@ -52,12 +52,12 @@
         int middle = ceil(_Extent / 2.);
         for (int i = 0; i <= _Extent; ++i)
         {
-            int   j = abs(middle - i);
+            int j = abs(middle - i);
             float sign = i < middle ? -1 : 1;
 
             float texelSize = axis == 0 ? _MainTex_TexelSize.x : _MainTex_TexelSize.y;
 
-            float  offset = sign * _Offsets[j] * texelSize;
+            float offset = sign * _Offsets[j] * texelSize;
             float2 sampleUv = centerUv;
             if (axis == 0)
                 sampleUv.x += offset;
@@ -68,7 +68,7 @@
         }
 
         half2 noiseUv = (centerUv - .5) * _TargetSize;
-        half  noise = tex2D(_BlueNoise, noiseUv * _BlueNoise_TexelSize.xy).r;
+        half noise = tex2D(_BlueNoise, noiseUv * _BlueNoise_TexelSize.xy).r;
         noise -= .5;
         noise *= 1. / 255.;
 

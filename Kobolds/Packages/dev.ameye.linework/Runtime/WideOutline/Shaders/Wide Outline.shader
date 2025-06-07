@@ -45,7 +45,7 @@ Shader "Hidden/Outlines/Wide Outline/Outline"
 
             #if UNITY_VERSION < 202300
             CBUFFER_START(UnityPerMaterial)
-            float4 _BlitTexture_TexelSize;
+                float4 _BlitTexture_TexelSize;
             CBUFFER_END
             #endif
 
@@ -75,7 +75,7 @@ Shader "Hidden/Outlines/Wide Outline/Outline"
 
             #if UNITY_VERSION < 202300
             CBUFFER_START(UnityPerMaterial)
-            float4 _BlitTexture_TexelSize;
+                float4 _BlitTexture_TexelSize;
             CBUFFER_END
             #endif
 
@@ -88,16 +88,20 @@ Shader "Hidden/Outlines/Wide Outline/Outline"
                 half3x3 values;
 
                 UNITY_UNROLL
-                for (int u = 0; u < 3; u++) {
+                for (int u = 0; u < 3; u++)
+                {
                     UNITY_UNROLL
-                    for (int v = 0; v < 3; v++) {
-                        uint2 sampleUV = clamp(uvInt + int2(u - 1, v - 1), int2(0, 0), (int2)_BlitTexture_TexelSize.zw - 1);
+                    for (int v = 0; v < 3; v++)
+                    {
+                        uint2 sampleUV = clamp(uvInt + int2(u - 1, v - 1), int2(0, 0),
+                            (int2)_BlitTexture_TexelSize.zw - 1);
                         float4 sample = _BlitTexture.Load(int3(sampleUV, 0));
                         values[u][v] = step(0.01, max(sample.r, max(sample.g, max(sample.b, sample.a))));
                     }
                 }
 
-                float2 screen_space_position = IN.positionCS.xy * abs(_BlitTexture_TexelSize.xy) * FLOOD_ENCODE_SCALE - FLOOD_ENCODE_OFFSET;
+                float2 screen_space_position = IN.positionCS.xy * abs(_BlitTexture_TexelSize.xy) * FLOOD_ENCODE_SCALE -
+                    FLOOD_ENCODE_OFFSET;
 
                 // inside mask
                 if (values._m11 > 0.99)
@@ -124,7 +128,7 @@ Shader "Hidden/Outlines/Wide Outline/Outline"
 
             #if UNITY_VERSION < 202300
             CBUFFER_START(UnityPerMaterial)
-            float4 _BlitTexture_TexelSize;
+                float4 _BlitTexture_TexelSize;
             CBUFFER_END
             #endif
 
@@ -141,7 +145,8 @@ Shader "Hidden/Outlines/Wide Outline/Outline"
 
                 // jump samples
                 UNITY_UNROLL
-                for (int u = -1; u <= 1; u++) {
+                for (int u = -1; u <= 1; u++)
+                {
                     // calculate offset sample position
                     int2 offset_uv = uvInt + _AxisWidth * u;
 
@@ -149,7 +154,8 @@ Shader "Hidden/Outlines/Wide Outline/Outline"
                     offset_uv = clamp(offset_uv, int2(0, 0), (int2)_BlitTexture_TexelSize.zw - 1);
 
                     // decode position from buffer
-                    float2 offset_position = (_BlitTexture.Load(int3(offset_uv, 0)).rg + FLOOD_ENCODE_OFFSET) * _BlitTexture_TexelSize.zw / FLOOD_ENCODE_SCALE;
+                    float2 offset_position = (_BlitTexture.Load(int3(offset_uv, 0)).rg + FLOOD_ENCODE_OFFSET) *
+                        _BlitTexture_TexelSize.zw / FLOOD_ENCODE_SCALE;
 
                     // the offset from current position
                     float2 disp = IN.positionCS.xy - offset_position;
@@ -159,14 +165,17 @@ Shader "Hidden/Outlines/Wide Outline/Outline"
 
                     // if offset position isn't a null position or is closer than the best
                     // set as the new best and store the position
-                    if (offset_position.x != -1.0 && distance < best_distance) {
+                    if (offset_position.x != -1.0 && distance < best_distance)
+                    {
                         best_distance = distance;
                         best_position = offset_position;
                     }
                 }
 
                 // if not valid best distance output null position, otherwise output encoded position
-                return isinf(best_distance) ? FLOOD_NULL_POS : best_position * _BlitTexture_TexelSize.xy * FLOOD_ENCODE_SCALE - FLOOD_ENCODE_OFFSET;
+                return isinf(best_distance)
+                    ? FLOOD_NULL_POS
+                    : best_position * _BlitTexture_TexelSize.xy * FLOOD_ENCODE_SCALE - FLOOD_ENCODE_OFFSET;
             }
             ENDHLSL
         }
@@ -201,7 +210,7 @@ Shader "Hidden/Outlines/Wide Outline/Outline"
 
             #if UNITY_VERSION < 202300
             CBUFFER_START(UnityPerMaterial)
-            float4 _BlitTexture_TexelSize;
+                float4 _BlitTexture_TexelSize;
             CBUFFER_END
             #endif
 
@@ -217,7 +226,7 @@ Shader "Hidden/Outlines/Wide Outline/Outline"
             TEXTURE2D(_InformationBuffer);
             SAMPLER(sampler_InformationBuffer);
             float4 _InformationBuffer_TexelSize;
-            
+
             float SampleInformationBuffer(float2 uv)
             {
                 return SAMPLE_TEXTURE2D(_InformationBuffer, sampler_InformationBuffer, uv).r;
@@ -252,7 +261,8 @@ Shader "Hidden/Outlines/Wide Outline/Outline"
                 float2 encodedPos = _BlitTexture.Load(int3(uvInt, 0)).rg;
 
                 // early out if null position
-                if (encodedPos.y == -1) {
+                if (encodedPos.y == -1)
+                {
                     return half4(0, 0, 0, 0);
                 }
 
@@ -278,7 +288,7 @@ Shader "Hidden/Outlines/Wide Outline/Outline"
                 #if defined(INFORMATION_BUFFER)
                 width = SampleInformationBuffer(nearestPos / _ScreenParams.xy) * 100.0f;
                 #endif
-                
+
                 half outline = saturate(width - dist + 1.0) - saturate((_OutlineGap * width) - dist + 1.0);
 
                 #if defined(CUSTOM_DEPTH)
@@ -303,8 +313,8 @@ Shader "Hidden/Outlines/Wide Outline/Outline"
                 #endif
                 color.a *= outline;
                 return color;
-                
-                 #endif
+
+                #endif
             }
             ENDHLSL
         }

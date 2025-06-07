@@ -21,7 +21,7 @@
     color: rgba(32, 32, 32, 1);
 }
 
-.mm-script-driven-pause-label{ /* script-driven pause label */
+.mm-script-driven-pause-label { /* script-driven pause label */
     background-color: rgba(42, 167, 208, 1);
     -unity-font-style: bold;
     color: rgba(32, 32, 32, 1);
@@ -31,7 +31,7 @@
     transition-duration: 0.5s;
 }
 
-.mm-script-driven-pause-label-blink{ /* script-driven pause label blink */
+.mm-script-driven-pause-label-blink { /* script-driven pause label blink */
     background-color: rgba(117, 221, 255, 1);
 }
 
@@ -51,7 +51,7 @@
 
 .mm-add-feedback-search-field { /* add feedback search field */
     width: 45%;
-    transition: width 0.1s ease-in-out; 
+    transition: width 0.1s ease-in-out;
 }
 
 .mm-add-feedback-search-field-placeholder {
@@ -78,5 +78,5 @@
 }
 
 .mm-search-results-row Button:focus {
-    background-color: rgba(83,191,255,0.3);
+    background-color: rgba(83, 191, 255, 0.3);
 }

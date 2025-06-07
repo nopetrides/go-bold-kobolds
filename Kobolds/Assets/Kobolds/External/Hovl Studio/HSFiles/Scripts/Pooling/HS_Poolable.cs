@@ -1,78 +1,71 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace CGT.Pooling
 {
-    public class HS_Poolable : MonoBehaviour
-    {
-        [TextArea(3, 6)]
-        [SerializeField] protected string notes = string.Empty;
+	public class HS_Poolable : MonoBehaviour
+	{
+		[TextArea(3, 6)]
+		[SerializeField] protected string notes = string.Empty;
 
-        [SerializeField] protected HS_Poolable prefab;
+		[SerializeField] protected HS_Poolable prefab;
 
-        [Tooltip("What will make this rejoin the pool")]
-        [SerializeField] protected HS_PoolRejoinMode rejoinMode = HS_PoolRejoinMode.Manual;
-        [Tooltip("Only applies if Rejoin Mode is Auto. In which case, the delay applies automatically.")]
-        [SerializeField] protected float delayBeforeAutoRejoin = 1f;
+		[Tooltip("What will make this rejoin the pool")]
+		[SerializeField] protected HS_PoolRejoinMode rejoinMode = HS_PoolRejoinMode.Manual;
 
-        public virtual HS_Poolable Prefab
-        {
-            get { return prefab; }
-            set { prefab = value; }
-            // ^Why this accessor? For some reason, the prefab ref gets messed up by something in Unity.
-            // Makes it refer to an instance instead of the original asset in the project
-        }
+		[Tooltip("Only applies if Rejoin Mode is Auto. In which case, the delay applies automatically.")]
+		[SerializeField] protected float delayBeforeAutoRejoin = 1f;
 
-        protected virtual void OnEnable()
-        {
-            if (rejoinMode == HS_PoolRejoinMode.Auto)
-            {
-                RejoinPoolAfter(delayBeforeAutoRejoin);
-            }
-        }
+		public virtual HS_Poolable Prefab
+		{
+			get => prefab;
+			set => prefab = value;
+			// ^Why this accessor? For some reason, the prefab ref gets messed up by something in Unity.
+			// Makes it refer to an instance instead of the original asset in the project
+		}
 
-        public virtual void RejoinPoolAfter(float howLongToWait)
-        {
-            if (RejoiningPool)
-            {
-                //Debug.Log($"{this.name} already in the process of rejoining the pool.");
-                return;
-            }
+		public virtual bool RejoiningPool { get; protected set; }
 
-            RejoiningPool = true;
-            Invoke(nameof(RejoinPool), howLongToWait);
-        }
+		public virtual int ID { get; protected set; } = -1;
 
-        public virtual bool RejoiningPool { get; protected set; }
+		protected virtual void OnEnable()
+		{
+			if (rejoinMode == HS_PoolRejoinMode.Auto) RejoinPoolAfter(delayBeforeAutoRejoin);
+		}
 
-        public virtual void RejoinPool()
-        {
-            RejoiningPool = false;
+		public virtual void RejoinPoolAfter(float howLongToWait)
+		{
+			if (RejoiningPool)
+				//Debug.Log($"{this.name} already in the process of rejoining the pool.");
+				return;
 
-            bool rejoinCompatibleWithDeactivation = rejoinMode == HS_PoolRejoinMode.Manual ||
-                rejoinMode == HS_PoolRejoinMode.Auto;
+			RejoiningPool = true;
+			Invoke(nameof(RejoinPool), howLongToWait);
+		}
 
-            this.gameObject.SetActive(false);
+		public virtual void RejoinPool()
+		{
+			RejoiningPool = false;
 
-            ReadyToRejoinPool(this);
-            AnyReadyToRejoinPool(this);
-            RejoiningPool = false;
-        }
+			var rejoinCompatibleWithDeactivation = rejoinMode == HS_PoolRejoinMode.Manual ||
+													rejoinMode == HS_PoolRejoinMode.Auto;
 
-        public event UnityAction<HS_Poolable> ReadyToRejoinPool = delegate { };
-        public static event UnityAction<HS_Poolable> AnyReadyToRejoinPool = delegate { };
+			gameObject.SetActive(false);
 
-        public virtual void Init(int id)
-        {
-            if (ID >= 0)
-                return;
+			ReadyToRejoinPool(this);
+			AnyReadyToRejoinPool(this);
+			RejoiningPool = false;
+		}
 
-            ID = id;
-        }
+		public event UnityAction<HS_Poolable> ReadyToRejoinPool = delegate { };
+		public static event UnityAction<HS_Poolable> AnyReadyToRejoinPool = delegate { };
 
-        public virtual int ID { get; protected set; } = -1;
+		public virtual void Init(int id)
+		{
+			if (ID >= 0)
+				return;
 
-    }
+			ID = id;
+		}
+	}
 }

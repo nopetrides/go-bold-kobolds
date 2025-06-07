@@ -1,6 +1,6 @@
-using UnityEngine;
 #if MM_UGUI2
 using TMPro;
+using UnityEngine;
 
 namespace MoreMountains.Feedbacks
 {
@@ -10,7 +10,7 @@ namespace MoreMountains.Feedbacks
 		public override float TargetFloat
 		{
 			get => Target.fontSize;
-			set => Target.fontSize = (int)value;
+			set => Target.fontSize = (int) value;
 		}
 	}
 }

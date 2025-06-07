@@ -1,5 +1,4 @@
 using System;
-using MoreMountains.Tools;
 using UnityEngine;
 
 namespace MoreMountains.Feedbacks
@@ -7,7 +6,7 @@ namespace MoreMountains.Feedbacks
 	[Serializable]
 	public class MMSpringVector4 : MMSpringDefinition<Vector4>
 	{
-		public bool SeparateAxis = false;
+		public bool SeparateAxis;
 		public MMSpringFloat UnifiedSpring;
 		public MMSpringFloat SpringX;
 		public MMSpringFloat SpringY;
@@ -17,7 +16,7 @@ namespace MoreMountains.Feedbacks
 		protected Vector4 _returnCurrentValue;
 		protected Vector4 _returnTargetValue;
 		protected Vector4 _returnVelocity;
-		
+
 		public MMSpringVector4()
 		{
 			SpringX = new MMSpringFloat();
@@ -26,6 +25,63 @@ namespace MoreMountains.Feedbacks
 			SpringW = new MMSpringFloat();
 			UnifiedSpring = new MMSpringFloat();
 			UnifiedSpring.UnifiedSpring = true;
+		}
+
+		public override Vector4 CurrentValue
+		{
+			get
+			{
+				_returnCurrentValue.x = SpringX.CurrentValue;
+				_returnCurrentValue.y = SpringY.CurrentValue;
+				_returnCurrentValue.z = SpringZ.CurrentValue;
+				_returnCurrentValue.w = SpringW.CurrentValue;
+				return _returnCurrentValue;
+			}
+			set
+			{
+				SpringX.CurrentValue = value.x;
+				SpringY.CurrentValue = value.y;
+				SpringZ.CurrentValue = value.z;
+				SpringW.CurrentValue = value.w;
+			}
+		}
+
+		public override Vector4 TargetValue
+		{
+			get
+			{
+				_returnTargetValue.x = SpringX.TargetValue;
+				_returnTargetValue.y = SpringY.TargetValue;
+				_returnTargetValue.z = SpringZ.TargetValue;
+				_returnTargetValue.w = SpringW.TargetValue;
+				return _returnTargetValue;
+			}
+			set
+			{
+				SpringX.TargetValue = value.x;
+				SpringY.TargetValue = value.y;
+				SpringZ.TargetValue = value.z;
+				SpringW.TargetValue = value.w;
+			}
+		}
+
+		public override Vector4 Velocity
+		{
+			get
+			{
+				_returnVelocity.x = SpringX.Velocity;
+				_returnVelocity.y = SpringY.Velocity;
+				_returnVelocity.z = SpringZ.Velocity;
+				_returnVelocity.w = SpringW.Velocity;
+				return _returnVelocity;
+			}
+			set
+			{
+				SpringX.Velocity = value.x;
+				SpringY.Velocity = value.y;
+				SpringZ.Velocity = value.z;
+				SpringW.Velocity = value.w;
+			}
 		}
 
 		public virtual void SetDamping(Vector4 newDamping)
@@ -45,64 +101,7 @@ namespace MoreMountains.Feedbacks
 			SpringZ.Frequency = newFrequency.z;
 			SpringW.Frequency = newFrequency.w;
 		}
-		
-		public override Vector4 CurrentValue
-		{
-			get
-			{
-				_returnCurrentValue.x = SpringX.CurrentValue;
-				_returnCurrentValue.y = SpringY.CurrentValue;
-				_returnCurrentValue.z = SpringZ.CurrentValue;
-				_returnCurrentValue.w = SpringW.CurrentValue;
-				return _returnCurrentValue;
-			} 
-			set
-			{
-				SpringX.CurrentValue = value.x;
-				SpringY.CurrentValue = value.y;
-				SpringZ.CurrentValue = value.z;
-				SpringW.CurrentValue = value.w;
-			}
-		}
 
-		public override Vector4 TargetValue
-		{
-			get
-			{
-				_returnTargetValue.x = SpringX.TargetValue;
-				_returnTargetValue.y = SpringY.TargetValue;
-				_returnTargetValue.z = SpringZ.TargetValue;
-				_returnTargetValue.w = SpringW.TargetValue;
-				return _returnTargetValue;
-			} 
-			set
-			{
-				SpringX.TargetValue = value.x;
-				SpringY.TargetValue = value.y;
-				SpringZ.TargetValue = value.z;
-				SpringW.TargetValue = value.w;
-			}
-		}
-
-		public override Vector4 Velocity
-		{
-			get
-			{
-				_returnVelocity.x = SpringX.Velocity;
-				_returnVelocity.y = SpringY.Velocity;
-				_returnVelocity.z = SpringZ.Velocity;
-				_returnVelocity.w = SpringW.Velocity;
-				return _returnVelocity;
-			} 
-			set
-			{
-				SpringX.Velocity = value.x;
-				SpringY.Velocity = value.y;
-				SpringZ.Velocity = value.z;
-				SpringW.Velocity = value.w;
-			}
-		}
-		
 		public override void UpdateSpringValue(float deltaTime)
 		{
 			if (!SeparateAxis)
@@ -116,12 +115,13 @@ namespace MoreMountains.Feedbacks
 				SpringW.Damping = UnifiedSpring.Damping;
 				SpringW.Frequency = UnifiedSpring.Frequency;
 			}
+
 			SpringX.UpdateSpringValue(deltaTime);
 			SpringY.UpdateSpringValue(deltaTime);
 			SpringZ.UpdateSpringValue(deltaTime);
 			SpringW.UpdateSpringValue(deltaTime);
 		}
-		
+
 		public override void MoveToInstant(Vector4 newValue)
 		{
 			SpringX.MoveToInstant(newValue.x);
@@ -161,7 +161,7 @@ namespace MoreMountains.Feedbacks
 			SpringZ.SetCurrentValueAsInitialValue();
 			SpringW.SetCurrentValueAsInitialValue();
 		}
-		
+
 		public override void MoveTo(Vector4 newValue)
 		{
 			SpringX.MoveTo(newValue.x);
@@ -169,7 +169,7 @@ namespace MoreMountains.Feedbacks
 			SpringZ.MoveTo(newValue.z);
 			SpringW.MoveTo(newValue.w);
 		}
-		
+
 		public override void MoveToAdditive(Vector4 newValue)
 		{
 			SpringX.MoveToAdditive(newValue.x);
@@ -177,7 +177,7 @@ namespace MoreMountains.Feedbacks
 			SpringZ.MoveToAdditive(newValue.z);
 			SpringW.MoveToAdditive(newValue.w);
 		}
-		
+
 		public override void MoveToSubtractive(Vector4 newValue)
 		{
 			SpringX.MoveToSubtractive(newValue.x);
@@ -209,7 +209,7 @@ namespace MoreMountains.Feedbacks
 			SpringZ.BumpRandom(min.z, max.z);
 			SpringW.BumpRandom(min.w, max.w);
 		}
-		
+
 		public override void Finish()
 		{
 			SpringX.Finish();

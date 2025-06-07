@@ -20,7 +20,7 @@ namespace MoreMountains.Tools
 
 		public MMBackgroundColorAttribute(MMBackgroundAttributeColor color = MMBackgroundAttributeColor.Yellow)
 		{
-			this.Color = color;
+			Color = color;
 		}
 	}
 }

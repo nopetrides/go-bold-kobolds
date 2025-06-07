@@ -1,5 +1,4 @@
-﻿using System;
-using MoreMountains.Tools;
+﻿using MoreMountains.Tools;
 using UnityEngine;
 
 namespace MoreMountains.Feedbacks
@@ -9,155 +8,107 @@ namespace MoreMountains.Feedbacks
 		[MMInspectorGroup("Shaker Settings", true, 3)]
 		/// whether to listen on a channel defined by an int or by a MMChannel scriptable object. Ints are simple to setup but can get messy and make it harder to remember what int corresponds to what.
 		/// MMChannel scriptable objects require you to create them in advance, but come with a readable name and are more scalable
-		[Tooltip("whether to listen on a channel defined by an int or by a MMChannel scriptable object. Ints are simple to setup but can get messy and make it harder to remember what int corresponds to what. " +
-		         "MMChannel scriptable objects require you to create them in advance, but come with a readable name and are more scalable")]
+		[Tooltip(
+			"whether to listen on a channel defined by an int or by a MMChannel scriptable object. Ints are simple to setup but can get messy and make it harder to remember what int corresponds to what. " +
+			"MMChannel scriptable objects require you to create them in advance, but come with a readable name and are more scalable")]
 		public MMChannelModes ChannelMode = MMChannelModes.Int;
+
 		/// the channel to listen to - has to match the one on the feedback
 		[Tooltip("the channel to listen to - has to match the one on the feedback")]
-		[MMEnumCondition("ChannelMode", (int)MMChannelModes.Int)]
-		public int Channel = 0;
+		[MMEnumCondition("ChannelMode", (int) MMChannelModes.Int)]
+		public int Channel;
+
 		/// the MMChannel definition asset to use to listen for events. The feedbacks targeting this shaker will have to reference that same MMChannel definition to receive events - to create a MMChannel,
 		/// right click anywhere in your project (usually in a Data folder) and go MoreMountains > MMChannel, then name it with some unique name
-		[Tooltip("the MMChannel definition asset to use to listen for events. The feedbacks targeting this shaker will have to reference that same MMChannel definition to receive events - to create a MMChannel, " +
-		         "right click anywhere in your project (usually in a Data folder) and go MoreMountains > MMChannel, then name it with some unique name")]
-		[MMEnumCondition("ChannelMode", (int)MMChannelModes.MMChannel)]
-		public MMChannel MMChannelDefinition = null;
+		[Tooltip(
+			"the MMChannel definition asset to use to listen for events. The feedbacks targeting this shaker will have to reference that same MMChannel definition to receive events - to create a MMChannel, " +
+			"right click anywhere in your project (usually in a Data folder) and go MoreMountains > MMChannel, then name it with some unique name")]
+		[MMEnumCondition("ChannelMode", (int) MMChannelModes.MMChannel)]
+		public MMChannel MMChannelDefinition;
+
 		/// the duration of the shake, in seconds
 		[Tooltip("the duration of the shake, in seconds")]
 		public float ShakeDuration = 0.2f;
+
 		/// if this is true this shaker will play on awake
 		[Tooltip("if this is true this shaker will play on awake")]
-		public bool PlayOnAwake = false;
+		public bool PlayOnAwake;
+
 		/// if this is true, the shaker will shake permanently as long as its game object is active
 		[Tooltip("if this is true, the shaker will shake permanently as long as its game object is active")]
-		public bool PermanentShake = false;
+		public bool PermanentShake;
+
 		/// if this is true, a new shake can happen while shaking
 		[Tooltip("if this is true, a new shake can happen while shaking")]
 		public bool Interruptible = true;
+
 		/// if this is true, this shaker will always reset target values, regardless of how it was called
 		[Tooltip("if this is true, this shaker will always reset target values, regardless of how it was called")]
-		public bool AlwaysResetTargetValuesAfterShake = false;
+		public bool AlwaysResetTargetValuesAfterShake;
+
 		/// if this is true, this shaker will ignore any value passed in an event that triggered it, and will instead use the values set on its inspector
-		[Tooltip("if this is true, this shaker will ignore any value passed in an event that triggered it, and will instead use the values set on its inspector")]
-		public bool OnlyUseShakerValues = false;
+		[Tooltip(
+			"if this is true, this shaker will ignore any value passed in an event that triggered it, and will instead use the values set on its inspector")]
+		public bool OnlyUseShakerValues;
+
 		/// a cooldown, in seconds, after a shake, during which no other shake can start
 		[Tooltip("a cooldown, in seconds, after a shake, during which no other shake can start")]
-		public float CooldownBetweenShakes = 0f;
+		public float CooldownBetweenShakes;
+
 		/// whether or not this shaker is shaking right now
 		[Tooltip("whether or not this shaker is shaking right now")]
 		[MMFReadOnly]
-		public bool Shaking = false;
-        
-		[HideInInspector] 
-		public bool ForwardDirection = true;
-
-		[HideInInspector] 
-		public TimescaleModes TimescaleMode = TimescaleModes.Scaled;
-
-		public virtual float GetTime() { return (TimescaleMode == TimescaleModes.Scaled) ? Time.time : Time.unscaledTime; }
-		public virtual float GetDeltaTime() { return (TimescaleMode == TimescaleModes.Scaled) ? Time.deltaTime : Time.unscaledDeltaTime; }
-		public virtual MMChannelData ChannelData => new MMChannelData(ChannelMode, Channel, MMChannelDefinition);
-        
-		public virtual bool ListeningToEvents => _listeningToEvents;
+		public bool Shaking;
 
 		[HideInInspector]
-		internal bool _listeningToEvents = false;
-		protected float _shakeStartedTimestamp = -Single.MaxValue;
-		protected float _shakeStartedTimestampUnscaled = -Single.MaxValue;
+		public bool ForwardDirection = true;
+
+		[HideInInspector]
+		public TimescaleModes TimescaleMode = TimescaleModes.Scaled;
+
+		protected float _journey;
+
+		internal bool _listeningToEvents;
+
 		protected float _remappedTimeSinceStart;
 		protected bool _resetShakerValuesAfterShake;
 		protected bool _resetTargetValuesAfterShake;
-		protected float _journey;
-        
+		protected float _shakeStartedTimestamp = -float.MaxValue;
+		protected float _shakeStartedTimestampUnscaled = -float.MaxValue;
+		public virtual MMChannelData ChannelData => new(ChannelMode, Channel, MMChannelDefinition);
+
+		public virtual bool ListeningToEvents => _listeningToEvents;
+
 		/// <summary>
-		/// On Awake we grab our volume and profile
+		///     Returns true if this shaker is currently in cooldown, false otherwise
+		/// </summary>
+		public virtual bool InCooldown
+		{
+			get
+			{
+				var startedTimeStamp = TimescaleMode == TimescaleModes.Scaled ?
+					_shakeStartedTimestamp :
+					_shakeStartedTimestampUnscaled;
+
+				var test = GetTime() - startedTimeStamp;
+				return GetTime() - startedTimeStamp < CooldownBetweenShakes;
+			}
+		}
+
+		/// <summary>
+		///     On Awake we grab our volume and profile
 		/// </summary>
 		protected virtual void Awake()
 		{
 			Initialization();
 			// in case someone else trigger StartListening before Awake
-			if (!_listeningToEvents)
-			{
-				StartListening();
-			}
+			if (!_listeningToEvents) StartListening();
 			Shaking = PlayOnAwake;
-			this.enabled = PlayOnAwake;
+			enabled = PlayOnAwake;
 		}
 
 		/// <summary>
-		/// Override this method to initialize your shaker
-		/// </summary>
-		protected virtual void Initialization()
-		{
-		}
-
-		/// <summary>
-		/// Call this externally if you need to force a new initialization
-		/// </summary>
-		public virtual void ForceInitialization()
-		{
-			Initialization();
-		}
-
-		/// <summary>
-		/// Starts shaking the values
-		/// </summary>
-		public virtual void StartShaking()
-		{
-			_journey = ForwardDirection ? 0f : ShakeDuration;
-
-			if (InCooldown)
-			{
-				return;
-			}
-            
-			if (Shaking)
-			{
-				return;
-			}
-			else
-			{
-				this.enabled = true;
-				SetShakeStartedTimestamp();
-				Shaking = true;
-				GrabInitialValues();
-				ShakeStarts();
-			}
-		}
-
-		/// <summary>
-		/// Logs the start timestamp for this shaker
-		/// </summary>
-		protected virtual void SetShakeStartedTimestamp()
-		{
-			if (TimescaleMode == TimescaleModes.Scaled)
-			{
-				_shakeStartedTimestamp = GetTime();	
-			}
-			else
-			{
-				_shakeStartedTimestampUnscaled = GetTime();
-			}
-		}
-
-		/// <summary>
-		/// Describes what happens when a shake starts
-		/// </summary>
-		protected virtual void ShakeStarts()
-		{
-
-		}
-
-		/// <summary>
-		/// A method designed to collect initial values
-		/// </summary>
-		protected virtual void GrabInitialValues()
-		{
-
-		}
-
-		/// <summary>
-		/// On Update, we shake our values if needed, or reset if our shake has ended
+		///     On Update, we shake our values if needed, or reset if our shake has ended
 		/// </summary>
 		protected virtual void Update()
 		{
@@ -167,7 +118,7 @@ namespace MoreMountains.Feedbacks
 				_journey += ForwardDirection ? GetDeltaTime() : -GetDeltaTime();
 			}
 
-			if (Shaking && !PermanentShake && ((_journey < 0) || (_journey > ShakeDuration)))
+			if (Shaking && !PermanentShake && (_journey < 0 || _journey > ShakeDuration))
 			{
 				Shaking = false;
 				ShakeComplete();
@@ -175,28 +126,117 @@ namespace MoreMountains.Feedbacks
 
 			if (PermanentShake)
 			{
-				if (_journey < 0)
-				{
-					_journey = ShakeDuration;
-				}
+				if (_journey < 0) _journey = ShakeDuration;
 
-				if (_journey > ShakeDuration)
-				{
-					_journey = 0;
-				}
+				if (_journey > ShakeDuration) _journey = 0;
 			}
 		}
 
 		/// <summary>
-		/// Override this method to implement shake over time
+		///     On enable we start shaking if needed
 		/// </summary>
-		protected virtual void Shake()
+		protected virtual void OnEnable()
 		{
-
+			StartShaking();
 		}
 
 		/// <summary>
-		/// A method used to "shake" a flot over time along a curve
+		///     On disable we complete our shake if it was in progress
+		/// </summary>
+		protected virtual void OnDisable()
+		{
+			if (Shaking) ShakeComplete();
+		}
+
+		/// <summary>
+		///     On destroy we stop listening for events
+		/// </summary>
+		protected virtual void OnDestroy()
+		{
+			StopListening();
+		}
+
+		public virtual float GetTime()
+		{
+			return TimescaleMode == TimescaleModes.Scaled ? Time.time : Time.unscaledTime;
+		}
+
+		public virtual float GetDeltaTime()
+		{
+			return TimescaleMode == TimescaleModes.Scaled ? Time.deltaTime : Time.unscaledDeltaTime;
+		}
+
+		/// <summary>
+		///     Override this method to initialize your shaker
+		/// </summary>
+		protected virtual void Initialization()
+		{
+		}
+
+		/// <summary>
+		///     Call this externally if you need to force a new initialization
+		/// </summary>
+		public virtual void ForceInitialization()
+		{
+			Initialization();
+		}
+
+		/// <summary>
+		///     Starts shaking the values
+		/// </summary>
+		public virtual void StartShaking()
+		{
+			_journey = ForwardDirection ? 0f : ShakeDuration;
+
+			if (InCooldown) return;
+
+			if (Shaking)
+			{
+			}
+			else
+			{
+				enabled = true;
+				SetShakeStartedTimestamp();
+				Shaking = true;
+				GrabInitialValues();
+				ShakeStarts();
+			}
+		}
+
+		/// <summary>
+		///     Logs the start timestamp for this shaker
+		/// </summary>
+		protected virtual void SetShakeStartedTimestamp()
+		{
+			if (TimescaleMode == TimescaleModes.Scaled)
+				_shakeStartedTimestamp = GetTime();
+			else
+				_shakeStartedTimestampUnscaled = GetTime();
+		}
+
+		/// <summary>
+		///     Describes what happens when a shake starts
+		/// </summary>
+		protected virtual void ShakeStarts()
+		{
+		}
+
+		/// <summary>
+		///     A method designed to collect initial values
+		/// </summary>
+		protected virtual void GrabInitialValues()
+		{
+		}
+
+		/// <summary>
+		///     Override this method to implement shake over time
+		/// </summary>
+		protected virtual void Shake()
+		{
+		}
+
+		/// <summary>
+		///     A method used to "shake" a flot over time along a curve
 		/// </summary>
 		/// <param name="curve"></param>
 		/// <param name="remapMin"></param>
@@ -204,112 +244,72 @@ namespace MoreMountains.Feedbacks
 		/// <param name="relativeIntensity"></param>
 		/// <param name="initialValue"></param>
 		/// <returns></returns>
-		protected virtual float ShakeFloat(AnimationCurve curve, float remapMin, float remapMax, bool relativeIntensity, float initialValue)
+		protected virtual float ShakeFloat(
+			AnimationCurve curve, float remapMin, float remapMax, bool relativeIntensity, float initialValue)
 		{
-			float newValue = 0f;
-            
-			float remappedTime = MMFeedbacksHelpers.Remap(_journey, 0f, ShakeDuration, 0f, 1f);
-            
-			float curveValue = curve.Evaluate(remappedTime);
+			var newValue = 0f;
+
+			var remappedTime = MMFeedbacksHelpers.Remap(_journey, 0f, ShakeDuration, 0f, 1f);
+
+			var curveValue = curve.Evaluate(remappedTime);
 			newValue = MMFeedbacksHelpers.Remap(curveValue, 0f, 1f, remapMin, remapMax);
-			if (relativeIntensity)
-			{
-				newValue += initialValue;
-			}
+			if (relativeIntensity) newValue += initialValue;
 			return newValue;
 		}
 
 		protected virtual Color ShakeGradient(Gradient gradient)
 		{
-			float remappedTime = MMFeedbacksHelpers.Remap(_journey, 0f, ShakeDuration, 0f, 1f);
+			var remappedTime = MMFeedbacksHelpers.Remap(_journey, 0f, ShakeDuration, 0f, 1f);
 			return gradient.Evaluate(remappedTime);
 		}
 
 		/// <summary>
-		/// Resets the values on the target
+		///     Resets the values on the target
 		/// </summary>
 		protected virtual void ResetTargetValues()
 		{
-
 		}
 
 		/// <summary>
-		/// Resets the values on the shaker
+		///     Resets the values on the shaker
 		/// </summary>
 		protected virtual void ResetShakerValues()
 		{
-
 		}
 
 		/// <summary>
-		/// Describes what happens when the shake is complete
+		///     Describes what happens when the shake is complete
 		/// </summary>
 		protected virtual void ShakeComplete()
 		{
 			_journey = ForwardDirection ? ShakeDuration : 0f;
 			Shake();
-			
-			if (_resetTargetValuesAfterShake || AlwaysResetTargetValuesAfterShake)
-			{
-				ResetTargetValues();
-			}   
-			if (_resetShakerValuesAfterShake)
-			{
-				ResetShakerValues();
-			}            
-			this.enabled = false;
+
+			if (_resetTargetValuesAfterShake || AlwaysResetTargetValuesAfterShake) ResetTargetValues();
+			if (_resetShakerValuesAfterShake) ResetShakerValues();
+			enabled = false;
 		}
 
 		/// <summary>
-		/// On enable we start shaking if needed
-		/// </summary>
-		protected virtual void OnEnable()
-		{
-			StartShaking();
-		}
-             
-		/// <summary>
-		/// On destroy we stop listening for events
-		/// </summary>
-		protected virtual void OnDestroy()
-		{
-			StopListening();
-		}
-
-		/// <summary>
-		/// On disable we complete our shake if it was in progress
-		/// </summary>
-		protected virtual void OnDisable()
-		{
-			if (Shaking)
-			{
-				ShakeComplete();
-			}
-		}
-
-		/// <summary>
-		/// Starts this shaker
+		///     Starts this shaker
 		/// </summary>
 		public virtual void Play()
 		{
-			if (InCooldown)
-			{
-				return;
-			}
-			this.enabled = true;
+			if (InCooldown) return;
+			enabled = true;
 		}
 
 		/// <summary>
-		/// Stops this shaker
+		///     Stops this shaker
 		/// </summary>
 		public virtual void Stop()
 		{
 			Shaking = false;
 			ShakeComplete();
 		}
-        
+
 		/// <summary>
-		/// Starts listening for events
+		///     Starts listening for events
 		/// </summary>
 		public virtual void StartListening()
 		{
@@ -317,7 +317,7 @@ namespace MoreMountains.Feedbacks
 		}
 
 		/// <summary>
-		/// Stops listening for events
+		///     Stops listening for events
 		/// </summary>
 		public virtual void StopListening()
 		{
@@ -325,70 +325,38 @@ namespace MoreMountains.Feedbacks
 		}
 
 		/// <summary>
-		/// Returns true if this shaker should listen to events, false otherwise
+		///     Returns true if this shaker should listen to events, false otherwise
 		/// </summary>
 		/// <param name="channel"></param>
 		/// <returns></returns>
-		protected virtual bool CheckEventAllowed(MMChannelData channelData, bool useRange = false, float range = 0f, Vector3 eventOriginPosition = default(Vector3))
+		protected virtual bool CheckEventAllowed(
+			MMChannelData channelData, bool useRange = false, float range = 0f, Vector3 eventOriginPosition = default)
 		{
-			if (!MMChannel.Match(channelData, ChannelMode, Channel, MMChannelDefinition))
-			{
-				return false;
-			}
-			if (!this.gameObject.activeInHierarchy)
-			{
-				return false;
-			}
-			else
-			{
-				if (useRange)
-				{
-					if (Vector3.Distance(this.transform.position, eventOriginPosition) > range)
-					{
-						return false;
-					}
-				}
+			if (!MMChannel.Match(channelData, ChannelMode, Channel, MMChannelDefinition)) return false;
+			if (!gameObject.activeInHierarchy) return false;
 
-				return true;
-			}
+			if (useRange)
+				if (Vector3.Distance(transform.position, eventOriginPosition) > range)
+					return false;
+
+			return true;
 		}
-		
-		/// <summary>
-		/// Returns true if this shaker is currently in cooldown, false otherwise
-		/// </summary>
-		public virtual bool InCooldown
+
+		public virtual float ComputeRangeIntensity(
+			bool useRange, float rangeDistance, bool useRangeFalloff, AnimationCurve rangeFalloff,
+			Vector2 remapRangeFalloff, Vector3 rangePosition)
 		{
-			get
-			{
-				float startedTimeStamp = TimescaleMode == TimescaleModes.Scaled ? _shakeStartedTimestamp : _shakeStartedTimestampUnscaled;
+			if (!useRange) return 1f;
 
-				float test = GetTime() - startedTimeStamp;
-				return (GetTime() - startedTimeStamp < CooldownBetweenShakes);	
-			}
-		}
-		
-		public virtual float ComputeRangeIntensity(bool useRange, float rangeDistance, bool useRangeFalloff, AnimationCurve rangeFalloff, Vector2 remapRangeFalloff, Vector3 rangePosition)
-		{
-			if (!useRange)
-			{
-				return 1f;
-			}
+			var distanceToCenter = Vector3.Distance(rangePosition, transform.position);
 
-			float distanceToCenter = Vector3.Distance(rangePosition, this.transform.position);
+			if (distanceToCenter > rangeDistance) return 0f;
 
-			if (distanceToCenter > rangeDistance)
-			{
-				return 0f;
-			}
+			if (!useRangeFalloff) return 1f;
 
-			if (!useRangeFalloff)
-			{
-				return 1f;
-			}
-
-			float normalizedDistance = MMMaths.Remap(distanceToCenter, 0f, rangeDistance, 0f, 1f);
-			float curveValue = rangeFalloff.Evaluate(normalizedDistance);
-			float newIntensity = MMMaths.Remap(curveValue, 0f, 1f, remapRangeFalloff.x, remapRangeFalloff.y);
+			var normalizedDistance = MMMaths.Remap(distanceToCenter, 0f, rangeDistance, 0f, 1f);
+			var curveValue = rangeFalloff.Evaluate(normalizedDistance);
+			var newIntensity = MMMaths.Remap(curveValue, 0f, 1f, remapRangeFalloff.x, remapRangeFalloff.y);
 			return newIntensity;
 		}
 	}

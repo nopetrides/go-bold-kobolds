@@ -1,69 +1,73 @@
+using System;
 using UnityEditor;
 
 namespace Febucci.UI.Core
 {
-    /// <summary>
-    /// Base class that can be used to create drawers used by multiple
-    /// custom editors, both components and scriptable objects
-    /// </summary>
-    [System.Serializable]
-    abstract class SharedDrawer
-    {
-        protected SerializedProperty baseProperty;
-        protected SerializedObject baseObject;
-        bool initialized;
+	/// <summary>
+	///     Base class that can be used to create drawers used by multiple
+	///     custom editors, both components and scriptable objects
+	/// </summary>
+	[Serializable]
+	internal abstract class SharedDrawer
+	{
+		protected SerializedObject baseObject;
+		protected SerializedProperty baseProperty;
+		private bool initialized;
 
-        protected virtual void OnEnabled(SerializedObject baseObject) { }
+		protected virtual void OnEnabled(SerializedObject baseObject)
+		{
+		}
 
-        public void OnInspectorGUI(SerializedProperty baseProperty)
-        {
-            if(baseProperty == null) return;
-            if(baseProperty.objectReferenceValue == null) return;
-            
-            if (baseProperty != this.baseProperty)
-                initialized = false;
-            
-            if(!initialized)
-            {
-                this.baseProperty = baseProperty;
-                //hacky unity way to reach the actual serialized object
-                this.baseObject = new SerializedObject(baseProperty.objectReferenceValue);
-                OnEnabled(baseObject);
-                initialized = true;
-            }
+		public void OnInspectorGUI(SerializedProperty baseProperty)
+		{
+			if (baseProperty == null) return;
+			if (baseProperty.objectReferenceValue == null) return;
 
-            baseObject.Update();
-            _OnInspectorGUI();
+			if (baseProperty != this.baseProperty)
+				initialized = false;
 
-            ApplyChanges();
-        }
+			if (!initialized)
+			{
+				this.baseProperty = baseProperty;
+				//hacky unity way to reach the actual serialized object
+				baseObject = new SerializedObject(baseProperty.objectReferenceValue);
+				OnEnabled(baseObject);
+				initialized = true;
+			}
 
-        public void OnInspectorGUI(SerializedObject baseObject)
-        {
-            if (baseObject == null) return;
-            if (this.baseObject != baseObject)
-                initialized = false;
-            
-            if (!initialized)
-            {
-                this.baseObject = baseObject;
-                OnEnabled(baseObject);
-                initialized = true;
-            }
+			baseObject.Update();
+			_OnInspectorGUI();
 
-            baseObject.Update();
-            _OnInspectorGUI();
+			ApplyChanges();
+		}
 
-            ApplyChanges();
-        }
+		public void OnInspectorGUI(SerializedObject baseObject)
+		{
+			if (baseObject == null) return;
+			if (this.baseObject != baseObject)
+				initialized = false;
 
-        protected virtual void _OnInspectorGUI() { }
+			if (!initialized)
+			{
+				this.baseObject = baseObject;
+				OnEnabled(baseObject);
+				initialized = true;
+			}
 
-        protected void ApplyChanges()
-        {
-            if (baseObject.hasModifiedProperties)
-                baseObject.ApplyModifiedProperties();
-        }
-    }
+			baseObject.Update();
+			_OnInspectorGUI();
 
+			ApplyChanges();
+		}
+
+		protected virtual void _OnInspectorGUI()
+		{
+		}
+
+		protected void ApplyChanges()
+		{
+			if (baseObject.hasModifiedProperties)
+				baseObject.ApplyModifiedProperties();
+		}
+	}
 }

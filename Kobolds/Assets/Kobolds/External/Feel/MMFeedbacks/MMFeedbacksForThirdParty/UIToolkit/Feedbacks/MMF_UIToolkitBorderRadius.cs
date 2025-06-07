@@ -1,14 +1,11 @@
-﻿using System.Collections;
-using MoreMountains.Feedbacks;
-using MoreMountains.Tools;
+﻿using MoreMountains.Feedbacks;
 using UnityEngine;
-using UnityEngine.UIElements;
 using UnityEngine.Scripting.APIUpdating;
 
 namespace MoreMountains.FeedbacksForThirdParty
 {
 	/// <summary>
-	/// This feedback will let you change the border radius of an element on a target UI Document
+	///     This feedback will let you change the border radius of an element on a target UI Document
 	/// </summary>
 	[AddComponentMenu("")]
 	[FeedbackHelp("This feedback will let you change the border radius of an element on a target UI Document")]
@@ -19,19 +16,22 @@ namespace MoreMountains.FeedbacksForThirdParty
 		/// whether to modify the bottom left border radius or not
 		[Tooltip("whether to modify the bottom left border radius or not")]
 		public bool BottomLeft = true;
+
 		/// whether to modify the bottom right border radius or not
 		[Tooltip("whether to modify the bottom right border radius or not")]
 		public bool BottomRight = true;
+
 		/// whether to modify the top left border radius or not
 		[Tooltip("whether to modify the top left border radius or not")]
 		public bool TopLeft = true;
+
 		/// whether to modify the top right border radius or not
 		[Tooltip("whether to modify the top right border radius or not")]
 		public bool TopRight = true;
-		
+
 		protected override void SetValue(float newValue)
 		{
-			foreach (VisualElement element in _visualElements)
+			foreach (var element in _visualElements)
 			{
 				if (BottomLeft) element.style.borderBottomLeftRadius = newValue;
 				if (BottomRight) element.style.borderBottomRightRadius = newValue;

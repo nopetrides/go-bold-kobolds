@@ -1,28 +1,27 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Lolopupka
 {
-public class MouseWorld : MonoBehaviour
-{
-    public static MouseWorld instance;
+	public class MouseWorld : MonoBehaviour
+	{
+		public static MouseWorld instance;
 
-    [SerializeField] private LayerMask mousePlaneLayerMask;
-    private void Awake() 
-    {
-        instance = this;
-    }
-    private void Update() 
-    {
-        
-    }
+		[SerializeField] private LayerMask mousePlaneLayerMask;
 
-    public static Vector3 GetPosition()
-    {
-        Ray ray = Camera.main.ScreenPointToRay(InputManager.Instance.GetMouseScreenPostion());
-        Physics.Raycast(ray, out RaycastHit raycastHit, float.MaxValue, instance.mousePlaneLayerMask);
-        return raycastHit.point;
-    }
-}
+		private void Awake()
+		{
+			instance = this;
+		}
+
+		private void Update()
+		{
+		}
+
+		public static Vector3 GetPosition()
+		{
+			var ray = Camera.main.ScreenPointToRay(InputManager.Instance.GetMouseScreenPostion());
+			Physics.Raycast(ray, out var raycastHit, float.MaxValue, instance.mousePlaneLayerMask);
+			return raycastHit.point;
+		}
+	}
 }

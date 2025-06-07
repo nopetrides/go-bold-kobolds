@@ -1,4 +1,3 @@
-using MoreMountains.Tools;
 using UnityEngine;
 
 namespace MoreMountains.Feedbacks
@@ -9,7 +8,7 @@ namespace MoreMountains.Feedbacks
 		public override float TargetFloat
 		{
 			get => Target.range;
-			set => Target.range = value; 
+			set => Target.range = value;
 		}
 	}
 }

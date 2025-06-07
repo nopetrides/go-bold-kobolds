@@ -4,7 +4,7 @@ using UnityEngine.Events;
 namespace MoreMountains.Tools
 {
 	[AddComponentMenu("More Mountains/Tools/Activation/MM Trigger And Collision")]
-	public class MMTriggerAndCollision : MonoBehaviour 
+	public class MMTriggerAndCollision : MonoBehaviour
 	{
 		public LayerMask CollisionLayerMask;
 		public UnityEvent OnCollisionEnterEvent;
@@ -26,114 +26,78 @@ namespace MoreMountains.Tools
 		public UnityEvent OnTrigger2DExitEvent;
 		public UnityEvent OnTrigger2DStayEvent;
 
-		// Collision 2D ------------------------------------------------------------------------------------
-
-		protected virtual void OnCollisionEnter2D (Collision2D collision)
+		protected virtual void Reset()
 		{
-			if (Collision2DLayerMask.MMContains (collision.gameObject))
-			{
-				OnCollision2DEnterEvent.Invoke();
-			}
-		}
-
-		protected virtual void OnCollisionExit2D (Collision2D collision)
-		{
-			if (Collision2DLayerMask.MMContains (collision.gameObject))
-			{
-				OnCollision2DExitEvent.Invoke();
-			}
-		}
-
-		protected virtual void OnCollisionStay2D (Collision2D collision)
-		{
-			if (Collision2DLayerMask.MMContains (collision.gameObject))
-			{
-				OnCollision2DStayEvent.Invoke();
-			}
-		}
-
-		// Trigger 2D ------------------------------------------------------------------------------------
-
-		protected virtual void OnTriggerEnter2D (Collider2D collider)
-		{
-			if (Trigger2DLayerMask.MMContains (collider.gameObject))
-			{
-				OnTrigger2DEnterEvent.Invoke();
-			}
-		}
-
-		protected virtual void OnTriggerExit2D (Collider2D collider)
-		{
-			if (Trigger2DLayerMask.MMContains (collider.gameObject))
-			{
-				OnTrigger2DExitEvent.Invoke();
-			}
-		}
-
-		protected virtual void OnTriggerStay2D (Collider2D collider)
-		{
-			if (Trigger2DLayerMask.MMContains (collider.gameObject))
-			{
-				OnTrigger2DStayEvent.Invoke();
-			}
+			Collision2DLayerMask = LayerMask.NameToLayer("Everything");
+			CollisionLayerMask = LayerMask.NameToLayer("Everything");
 		}
 
 		// Collision ------------------------------------------------------------------------------------
 
 		protected virtual void OnCollisionEnter(Collision c)
 		{
-			if (0 != (CollisionLayerMask.value & 1 << c.transform.gameObject.layer))
-			{
-				OnCollisionEnterEvent.Invoke();
-			}
+			if (0 != (CollisionLayerMask.value & (1 << c.transform.gameObject.layer))) OnCollisionEnterEvent.Invoke();
+		}
+
+		// Collision 2D ------------------------------------------------------------------------------------
+
+		protected virtual void OnCollisionEnter2D(Collision2D collision)
+		{
+			if (Collision2DLayerMask.MMContains(collision.gameObject)) OnCollision2DEnterEvent.Invoke();
 		}
 
 		protected virtual void OnCollisionExit(Collision c)
 		{
-			if (0 != (CollisionLayerMask.value & 1 << c.transform.gameObject.layer))
-			{
-				OnCollisionExitEvent.Invoke();
-			}
+			if (0 != (CollisionLayerMask.value & (1 << c.transform.gameObject.layer))) OnCollisionExitEvent.Invoke();
+		}
+
+		protected virtual void OnCollisionExit2D(Collision2D collision)
+		{
+			if (Collision2DLayerMask.MMContains(collision.gameObject)) OnCollision2DExitEvent.Invoke();
 		}
 
 		protected virtual void OnCollisionStay(Collision c)
 		{
-			if (0 != (CollisionLayerMask.value & 1 << c.transform.gameObject.layer))
-			{
-				OnCollisionStayEvent.Invoke();
-			}
+			if (0 != (CollisionLayerMask.value & (1 << c.transform.gameObject.layer))) OnCollisionStayEvent.Invoke();
+		}
+
+		protected virtual void OnCollisionStay2D(Collision2D collision)
+		{
+			if (Collision2DLayerMask.MMContains(collision.gameObject)) OnCollision2DStayEvent.Invoke();
 		}
 
 		// Trigger  ------------------------------------------------------------------------------------
 
-		protected virtual void OnTriggerEnter (Collider collider)
+		protected virtual void OnTriggerEnter(Collider collider)
 		{
-			if (TriggerLayerMask.MMContains (collider.gameObject))
-			{
-				OnTriggerEnterEvent.Invoke();
-			}
+			if (TriggerLayerMask.MMContains(collider.gameObject)) OnTriggerEnterEvent.Invoke();
 		}
 
-		protected virtual void OnTriggerExit (Collider collider)
+		// Trigger 2D ------------------------------------------------------------------------------------
+
+		protected virtual void OnTriggerEnter2D(Collider2D collider)
 		{
-			if (TriggerLayerMask.MMContains (collider.gameObject))
-			{
-				OnTriggerExitEvent.Invoke();
-			}
+			if (Trigger2DLayerMask.MMContains(collider.gameObject)) OnTrigger2DEnterEvent.Invoke();
 		}
 
-		protected virtual void OnTriggerStay (Collider collider)
+		protected virtual void OnTriggerExit(Collider collider)
 		{
-			if (TriggerLayerMask.MMContains (collider.gameObject))
-			{
-				OnTriggerStayEvent.Invoke();
-			}
+			if (TriggerLayerMask.MMContains(collider.gameObject)) OnTriggerExitEvent.Invoke();
 		}
 
-		protected virtual void Reset()
+		protected virtual void OnTriggerExit2D(Collider2D collider)
 		{
-			Collision2DLayerMask = LayerMask.NameToLayer("Everything");
-			CollisionLayerMask = LayerMask.NameToLayer("Everything");
+			if (Trigger2DLayerMask.MMContains(collider.gameObject)) OnTrigger2DExitEvent.Invoke();
+		}
+
+		protected virtual void OnTriggerStay(Collider collider)
+		{
+			if (TriggerLayerMask.MMContains(collider.gameObject)) OnTriggerStayEvent.Invoke();
+		}
+
+		protected virtual void OnTriggerStay2D(Collider2D collider)
+		{
+			if (Trigger2DLayerMask.MMContains(collider.gameObject)) OnTrigger2DStayEvent.Invoke();
 		}
 	}
 }

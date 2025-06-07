@@ -1,119 +1,119 @@
+using System;
 using System.Collections.Generic;
+using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Febucci.UI.Core
 {
-    /// <summary>
-    /// Caches information about tag providers, so that
-    /// it's easier to access them
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    [System.Serializable]
-    public class Database<T> : UnityEngine.ScriptableObject where T : UnityEngine.ScriptableObject, ITagProvider
-    {
-        bool built;
+	/// <summary>
+	///     Caches information about tag providers, so that
+	///     it's easier to access them
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	[Serializable]
+	public class Database<T> : ScriptableObject where T : ScriptableObject, ITagProvider
+	{
+		[SerializeField] private List<T> data = new();
+		private bool built;
 
-        void OnEnable()
-        {
-            //Prevents database from not refreshing on
-            //different domain reload settings
-            built = false;
-        }
+		private Dictionary<string, T> dictionary;
+		public List<T> Data => data;
 
-        [UnityEngine.SerializeField] System.Collections.Generic.List<T> data = new List<T>(); 
-        public System.Collections.Generic.List<T> Data => data;
+		public T this[string key]
+		{
+			get
+			{
+				BuildOnce();
+				return dictionary[key];
+			}
+		}
 
-        public void Add(T element)
-        {
-            if(data == null) data = new System.Collections.Generic.List<T>();
-            data.Add(element);
+		private void OnEnable()
+		{
+			//Prevents database from not refreshing on
+			//different domain reload settings
+			built = false;
+		}
 
-            // at runtime adds directly on database as well, without needing to rebuild
-            if (built && UnityEngine.Application.isPlaying)
-            {
-                string tag = element.TagID;
-                if (dictionary.ContainsKey(tag))
-                    UnityEngine.Debug.LogError($"Text Animator: Tag {tag} is already present in the database. Skipping...");
-                else
-                    dictionary.Add(tag, element);
-            }
-            else
-            {
-                built = false;
-            }
-        }
+		public void Add(T element)
+		{
+			if (data == null) data = new List<T>();
+			data.Add(element);
 
-        Dictionary<string, T> dictionary;
+			// at runtime adds directly on database as well, without needing to rebuild
+			if (built && Application.isPlaying)
+			{
+				var tag = element.TagID;
+				if (dictionary.ContainsKey(tag))
+					Debug.LogError($"Text Animator: Tag {tag} is already present in the database. Skipping...");
+				else
+					dictionary.Add(tag, element);
+			}
+			else
+			{
+				built = false;
+			}
+		}
 
-        public void ForceBuildRefresh()
-        {
-            built = false;
-            BuildOnce();
-        }
+		public void ForceBuildRefresh()
+		{
+			built = false;
+			BuildOnce();
+		}
 
-        public void BuildOnce()
-        {
-            if(built) return;
-            built = true;
+		public void BuildOnce()
+		{
+			if (built) return;
+			built = true;
 
-            if(dictionary == null)
-                dictionary = new Dictionary<string, T>();
-            else
-                dictionary.Clear();
+			if (dictionary == null)
+				dictionary = new Dictionary<string, T>();
+			else
+				dictionary.Clear();
 
-            string tagId;
-            foreach (var source in data)
-            {
-                if(!source)
-                    continue;
-                
-                tagId = source.TagID;
+			string tagId;
+			foreach (var source in data)
+			{
+				if (!source)
+					continue;
 
-                if (string.IsNullOrEmpty(tagId))
-                {
-                    UnityEngine.Debug.LogError($"Text Animator: Tag is null or empty. Skipping...");
-                    continue;
-                }
-                
-                if (dictionary.ContainsKey(tagId))
-                {
-                    UnityEngine.Debug.LogError($"Text Animator: Tag {tagId} is already present in the database. Skipping...");
-                    continue;
-                }
+				tagId = source.TagID;
 
-                dictionary.Add(tagId, source);
-            }
-            
-            OnBuildOnce();
-        }
+				if (string.IsNullOrEmpty(tagId))
+				{
+					Debug.LogError("Text Animator: Tag is null or empty. Skipping...");
+					continue;
+				}
 
-        protected virtual void OnBuildOnce() { }
+				if (dictionary.ContainsKey(tagId))
+				{
+					Debug.LogError($"Text Animator: Tag {tagId} is already present in the database. Skipping...");
+					continue;
+				}
 
-        public bool ContainsKey(string key)
-        {
-            BuildOnce();
-            return dictionary.ContainsKey(key);
-        }
+				dictionary.Add(tagId, source);
+			}
 
-        public T this[string key]
-        {
-            get
-            {
-                BuildOnce();
-                return dictionary[key];
-            }
-        }
+			OnBuildOnce();
+		}
 
-        public void DestroyImmediate(bool databaseOnly = false)
-        {
-            if (!databaseOnly)
-            {
-                foreach (var element in data)
-                {
-                    UnityEngine.Object.DestroyImmediate(element);
-                }
-            }
+		protected virtual void OnBuildOnce()
+		{
+		}
 
-            UnityEngine.Object.DestroyImmediate(this);
-        }
-    }
+		public bool ContainsKey(string key)
+		{
+			BuildOnce();
+			return dictionary.ContainsKey(key);
+		}
+
+		public void DestroyImmediate(bool databaseOnly = false)
+		{
+			if (!databaseOnly)
+				foreach (var element in data)
+					Object.DestroyImmediate(element);
+
+			Object.DestroyImmediate(this);
+		}
+	}
 }

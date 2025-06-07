@@ -1,99 +1,133 @@
-using System;
+using MoreMountains.Feedbacks;
 using UnityEngine;
+using UnityEngine.Scripting.APIUpdating;
 #if MM_VISUALEFFECTGRAPH
 using UnityEngine.VFX;
 #endif
-using MoreMountains.Feedbacks;
-using MoreMountains.Tools;
-using UnityEngine.Scripting.APIUpdating;
 
 namespace MoreMountains.FeedbacksForThirdParty
 {
 	/// <summary>
-	/// This feedback will let you set a property on a target VisualEffect
+	///     This feedback will let you set a property on a target VisualEffect
 	/// </summary>
 	[AddComponentMenu("")]
 	[FeedbackHelp("This feedback will let you set a property on a target VisualEffect")]
-	#if MM_VISUALEFFECTGRAPH
+#if MM_VISUALEFFECTGRAPH
 	[FeedbackPath("Particles/VisualEffectSetProperty")]
-	#endif
+#endif
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.VisualEffectGraph")]
-	public class MMF_VisualEffectSetProperty : MMF_Feedback 
+	public class MMF_VisualEffectSetProperty : MMF_Feedback
 	{
 		/// a static bool used to disable all feedbacks of this type at once
 		public static bool FeedbackTypeAuthorized = true;
+
 		/// sets the inspector color for this feedback
-		#if UNITY_EDITOR
-		public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.ParticlesColor; } }
-		#endif
+#if UNITY_EDITOR
+		public override Color FeedbackColor
+		{
+			get { return MMFeedbacksInspectorColors.ParticlesColor; }
+		}
+#endif
 
 		/// the duration of this feedback is the duration of the shake
-		public override float FeedbackDuration { get { return ApplyTimeMultiplier(DeclaredDuration); } set { DeclaredDuration = value;  } }
+		public override float FeedbackDuration
+		{
+			get => ApplyTimeMultiplier(DeclaredDuration);
+			set => DeclaredDuration = value;
+		}
+
 		public override bool HasChannel => true;
 		public override bool HasRandomness => true;
-		
+
 		[MMFInspectorGroup("Visual Effect Property", true, 41)]
 		/// the duration for the player to consider. This won't impact your visual effect, but is a way to communicate to the MMF Player the duration of this feedback. Usually you'll want it to match your actual particle system, and setting it can be useful to have this feedback work with holding pauses.
-		[Tooltip("the duration for the player to consider. This won't impact your visual effect, but is a way to communicate to the MMF Player the duration of this feedback. Usually you'll want it to match your actual particle system, and setting it can be useful to have this feedback work with holding pauses.")]
-		public float DeclaredDuration = 0f;
-		
-		#if MM_VISUALEFFECTGRAPH
-		
-		public enum PropertyTypes { AnimationCurve, Bool, Float, Gradient, Int, Mesh, Texture, UInt, Vector2, Vector3, Vector4, }
-		
+		[Tooltip(
+			"the duration for the player to consider. This won't impact your visual effect, but is a way to communicate to the MMF Player the duration of this feedback. Usually you'll want it to match your actual particle system, and setting it can be useful to have this feedback work with holding pauses.")]
+		public float DeclaredDuration;
+
+#if MM_VISUALEFFECTGRAPH
+
+		public enum PropertyTypes
+		{
+			AnimationCurve,
+			Bool,
+			Float,
+			Gradient,
+			Int,
+			Mesh,
+			Texture,
+			UInt,
+			Vector2,
+			Vector3,
+			Vector4
+		}
+
 		/// the visual effect on which to set a property
 		[Tooltip("the visual effect on which to set a property")]
 		public VisualEffect TargetVisualEffect;
+
 		/// the ID of the property to set, as exposed by the Visual Effect Graph
-		[Tooltip("the ID of the property to set, as exposed by the Visual Effect Graph")] 
+		[Tooltip("the ID of the property to set, as exposed by the Visual Effect Graph")]
 		public string PropertyID;
+
 		/// the type of the property to set
 		[Tooltip("the type of the property to set")]
 		public PropertyTypes PropertyType = PropertyTypes.Float;
+
 		/// if the property is an animation curve, the new animation curve to set
 		[Tooltip("if the property is an animation curve, the new animation curve to set")]
-		[MMFEnumCondition("PropertyType", (int)PropertyTypes.AnimationCurve)]
-		public AnimationCurve NewAnimationCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+		[MMFEnumCondition("PropertyType", (int) PropertyTypes.AnimationCurve)]
+		public AnimationCurve NewAnimationCurve = new(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+
 		/// if the property is a bool, the new bool to set
 		[Tooltip("if the property is a bool, the new bool to set")]
-		[MMFEnumCondition("PropertyType", (int)PropertyTypes.Bool)]
+		[MMFEnumCondition("PropertyType", (int) PropertyTypes.Bool)]
 		public bool NewBool = true;
+
 		/// if the property is a float, the new float to set
 		[Tooltip("if the property is a float, the new float to set")]
-		[MMFEnumCondition("PropertyType", (int)PropertyTypes.Float)]
+		[MMFEnumCondition("PropertyType", (int) PropertyTypes.Float)]
 		public float NewFloat = 1f;
+
 		/// if the property is a gradient, the new gradient to set
-		[Tooltip("if the property is a gradient, the new gradient to set")] 
-		[MMFEnumCondition("PropertyType", (int)PropertyTypes.Gradient)]
+		[Tooltip("if the property is a gradient, the new gradient to set")]
+		[MMFEnumCondition("PropertyType", (int) PropertyTypes.Gradient)]
 		[GradientUsage(true)]
-		public Gradient NewGradient = new Gradient();
+		public Gradient NewGradient = new();
+
 		/// if the property is an int, the new int to set
 		[Tooltip("if the property is an int, the new int to set")]
-		[MMFEnumCondition("PropertyType", (int)PropertyTypes.Int)]
+		[MMFEnumCondition("PropertyType", (int) PropertyTypes.Int)]
 		public int NewInt;
+
 		/// if the property is a mesh, the new mesh to set
 		[Tooltip("if the property is a mesh, the new mesh to set")]
-		[MMFEnumCondition("PropertyType", (int)PropertyTypes.Mesh)]
+		[MMFEnumCondition("PropertyType", (int) PropertyTypes.Mesh)]
 		public Mesh NewMesh;
+
 		/// if the property is a texture, the new texture to set
 		[Tooltip("if the property is a texture, the new texture to set")]
-		[MMFEnumCondition("PropertyType", (int)PropertyTypes.Texture)]
+		[MMFEnumCondition("PropertyType", (int) PropertyTypes.Texture)]
 		public Texture NewTexture;
+
 		/// if the property is an unsigned int, the new unsigned int to set
 		[Tooltip("if the property is an unsigned int, the new unsigned int to set")]
-		[MMFEnumCondition("PropertyType", (int)PropertyTypes.UInt)]
+		[MMFEnumCondition("PropertyType", (int) PropertyTypes.UInt)]
 		public uint NewUInt;
+
 		/// if the property is a vector2, the new vector2 to set
 		[Tooltip("if the property is a vector2, the new vector2 to set")]
-		[MMFEnumCondition("PropertyType", (int)PropertyTypes.Vector2)]
+		[MMFEnumCondition("PropertyType", (int) PropertyTypes.Vector2)]
 		public Vector2 NewVector2;
+
 		/// if the property is a vector3, the new vector3 to set
 		[Tooltip("if the property is a vector3, the new vector3 to set")]
-		[MMFEnumCondition("PropertyType", (int)PropertyTypes.Vector3)]
+		[MMFEnumCondition("PropertyType", (int) PropertyTypes.Vector3)]
 		public Vector3 NewVector3;
+
 		/// if the property is a vector4, the new vector4 to set
 		[Tooltip("if the property is a vector4, the new vector4 to set")]
-		[MMFEnumCondition("PropertyType", (int)PropertyTypes.Vector4)]
+		[MMFEnumCondition("PropertyType", (int) PropertyTypes.Vector4)]
 		public Vector4 NewVector4;
 
 		protected int _propertyID;
@@ -109,9 +143,9 @@ namespace MoreMountains.FeedbacksForThirdParty
 		protected Vector2 _initialVector2;
 		protected Vector3 _initialVector3;
 		protected Vector4 _initialVector4;
-		
+
 		/// <summary>
-		/// On init we cache our property ID
+		///     On init we cache our property ID
 		/// </summary>
 		/// <param name="owner"></param>
 		protected override void CustomInitialization(MMF_Player owner)
@@ -123,15 +157,12 @@ namespace MoreMountains.FeedbacksForThirdParty
 		}
 
 		/// <summary>
-		/// Grabs and stores the initial value of the target property
+		///     Grabs and stores the initial value of the target property
 		/// </summary>
 		protected virtual void GetInitialValue()
 		{
-			if (TargetVisualEffect == null)
-			{
-				return;
-			}
-			
+			if (TargetVisualEffect == null) return;
+
 			switch (PropertyType)
 			{
 				case PropertyTypes.AnimationCurve:
@@ -171,16 +202,13 @@ namespace MoreMountains.FeedbacksForThirdParty
 		}
 
 		/// <summary>
-		/// Sets the target property on the target VisualEffect to the specified new value
+		///     Sets the target property on the target VisualEffect to the specified new value
 		/// </summary>
 		/// <param name="position"></param>
 		/// <param name="attenuation"></param>
 		protected override void CustomPlayFeedback(Vector3 position, float attenuation = 1.0f)
 		{
-			if (!Active || !FeedbackTypeAuthorized || (TargetVisualEffect == null))
-			{
-				return;
-			}
+			if (!Active || !FeedbackTypeAuthorized || TargetVisualEffect == null) return;
 
 			switch (PropertyType)
 			{
@@ -219,18 +247,15 @@ namespace MoreMountains.FeedbacksForThirdParty
 					break;
 			}
 		}
-		
-		
+
+
 		/// <summary>
-		/// On restore, we put our object back at its initial position
+		///     On restore, we put our object back at its initial position
 		/// </summary>
 		protected override void CustomRestoreInitialValues()
 		{
-			if (!Active || !FeedbackTypeAuthorized)
-			{
-				return;
-			}
-			
+			if (!Active || !FeedbackTypeAuthorized) return;
+
 			switch (PropertyType)
 			{
 				case PropertyTypes.AnimationCurve:
@@ -268,9 +293,9 @@ namespace MoreMountains.FeedbacksForThirdParty
 					break;
 			}
 		}
-		
-		#else
+
+#else
 		protected override void CustomPlayFeedback(Vector3 position, float attenuation = 1.0f) { }
-		#endif
+#endif
 	}
 }

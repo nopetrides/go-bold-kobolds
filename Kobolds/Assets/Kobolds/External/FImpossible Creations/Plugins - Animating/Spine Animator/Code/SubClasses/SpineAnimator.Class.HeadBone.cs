@@ -3,110 +3,115 @@ using UnityEngine;
 
 namespace FIMSpace.FSpine
 {
-    public partial class FSpineAnimator
-    {
-        public class HeadBone
-        {
-            public Transform baseTransform;
-            public Transform transform;
-
-            /// <summary> Variable for refreshing bone position when working with unsynced model </summary>
-            public Vector3 InitialLocalPosition { get; private set; }
-            /// <summary> Variable for refreshing bone rotation when working with unsynced model </summary>
-            public Quaternion InitialLocalRotation { get; private set; }
+	public partial class FSpineAnimator
+	{
+		public class HeadBone
+		{
+			public Transform baseTransform;
+			public Transform transform;
 
 
-            public HeadBone(Transform t)
-            {
-                transform = t;
-            }
+			public HeadBone(Transform t)
+			{
+				transform = t;
+			}
+
+			/// <summary> Variable for refreshing bone position when working with unsynced model </summary>
+			public Vector3 InitialLocalPosition { get; private set; }
+
+			/// <summary> Variable for refreshing bone rotation when working with unsynced model </summary>
+			public Quaternion InitialLocalRotation { get; private set; }
 
 
-            public void PrepareBone(Transform baseTransform, List<SpineBone> bones, int index, bool flatten)
-            {
-                // Prepare local offsets in baseTransform transform space
-                TakePoseSnapshot(baseTransform, bones, index, flatten);
+			public void PrepareBone(Transform baseTransform, List<SpineBone> bones, int index, bool flatten)
+			{
+				// Prepare local offsets in baseTransform transform space
+				TakePoseSnapshot(baseTransform, bones, index, flatten);
 
-                InitialLocalPosition = transform.localPosition;
-                InitialLocalRotation = transform.localRotation;
-            }
-
-
-            internal Quaternion GetLocalRotationDiff()
-            {
-                return (transform.rotation) * Quaternion.Inverse(snapshotPoseLocalRotation);
-            }
+				InitialLocalPosition = transform.localPosition;
+				InitialLocalRotation = transform.localRotation;
+			}
 
 
-            #region Pose Snapshot
+			internal Quaternion GetLocalRotationDiff()
+			{
+				return transform.rotation * Quaternion.Inverse(snapshotPoseLocalRotation);
+			}
 
 
-            private Vector3 snapshotPoseBaseTrSpacePosition;
+#region Pose Snapshot
 
-            /// <summary> Snapshot of position in base transform space to transpone it during gameplay to world space </summary>
-            public Vector3 SnapshotPosition;
+			private Vector3 snapshotPoseBaseTrSpacePosition;
 
-            private Quaternion snapshotPoseBaseTrSpaceRotationF;
-            private Quaternion snapshotPoseBaseTrSpaceRotationB;
-            public Quaternion snapshotPoseLocalRotation;
+			/// <summary> Snapshot of position in base transform space to transpone it during gameplay to world space </summary>
+			public Vector3 SnapshotPosition;
 
-            /// <summary> Snapshot of rotation in base transform space to transpone it during gameplay to world space </summary>
-            public Quaternion SnapshotRotation;
+			private Quaternion snapshotPoseBaseTrSpaceRotationF;
+			private Quaternion snapshotPoseBaseTrSpaceRotationB;
+			public Quaternion snapshotPoseLocalRotation;
 
-            public void SetCoordsForFrameForward()
-            {
-                //BoneLength = boneLengthF;
-                SnapshotPosition = baseTransform.TransformPoint(snapshotPoseBaseTrSpacePosition);
-                SnapshotRotation = baseTransform.rotation * snapshotPoseBaseTrSpaceRotationF;
-            }
+			/// <summary> Snapshot of rotation in base transform space to transpone it during gameplay to world space </summary>
+			public Quaternion SnapshotRotation;
 
-            public void SetCoordsForFrameBackward()
-            {
-                SnapshotPosition = baseTransform.TransformPoint(snapshotPoseBaseTrSpacePosition);
-                SnapshotRotation = baseTransform.rotation * snapshotPoseBaseTrSpaceRotationB;
-            }
+			public void SetCoordsForFrameForward()
+			{
+				//BoneLength = boneLengthF;
+				SnapshotPosition = baseTransform.TransformPoint(snapshotPoseBaseTrSpacePosition);
+				SnapshotRotation = baseTransform.rotation * snapshotPoseBaseTrSpaceRotationF;
+			}
 
-            /// <summary>
-            /// Taking reference pose snapshot
-            /// </summary>
-            public void TakePoseSnapshot(Transform targetSpace, List<SpineBone> bones, int index, bool flatten)
-            {
-                baseTransform = targetSpace;
-                snapshotPoseBaseTrSpacePosition = targetSpace.InverseTransformPoint(transform.position);
-                if( flatten ) snapshotPoseBaseTrSpacePosition.y = 0f;
+			public void SetCoordsForFrameBackward()
+			{
+				SnapshotPosition = baseTransform.TransformPoint(snapshotPoseBaseTrSpacePosition);
+				SnapshotRotation = baseTransform.rotation * snapshotPoseBaseTrSpaceRotationB;
+			}
 
-                // Target direction position for different conditions
-                Vector3 targetPosF;
-                Vector3 targetPosB;
+			/// <summary>
+			///     Taking reference pose snapshot
+			/// </summary>
+			public void TakePoseSnapshot(Transform targetSpace, List<SpineBone> bones, int index, bool flatten)
+			{
+				baseTransform = targetSpace;
+				snapshotPoseBaseTrSpacePosition = targetSpace.InverseTransformPoint(transform.position);
+				if (flatten) snapshotPoseBaseTrSpacePosition.y = 0f;
 
-                if (index == bones.Count - 1)
-                {
-                    Vector3 backDir = targetSpace.InverseTransformPoint(transform.position) - targetSpace.InverseTransformPoint(bones[index - 1].transform.position);
-                    targetPosF = snapshotPoseBaseTrSpacePosition + backDir;
-                    targetPosB = targetSpace.InverseTransformPoint(bones[index - 1].transform.position);
-                }
-                else if (index == 0)
-                {
-                    targetPosF = targetSpace.InverseTransformPoint(bones[index + 1].transform.position);
+				// Target direction position for different conditions
+				Vector3 targetPosF;
+				Vector3 targetPosB;
 
-                    Vector3 backDir = targetSpace.InverseTransformPoint(transform.position) - targetSpace.InverseTransformPoint(bones[index + 1].transform.position);
-                    targetPosB = snapshotPoseBaseTrSpacePosition + backDir;
-                }
-                else
-                {
-                    targetPosF = targetSpace.InverseTransformPoint(bones[index + 1].transform.position);
-                    targetPosB = targetSpace.InverseTransformPoint(bones[index - 1].transform.position);
-                }
+				if (index == bones.Count - 1)
+				{
+					var backDir = targetSpace.InverseTransformPoint(transform.position) -
+								targetSpace.InverseTransformPoint(bones[index - 1].transform.position);
+					targetPosF = snapshotPoseBaseTrSpacePosition + backDir;
+					targetPosB = targetSpace.InverseTransformPoint(bones[index - 1].transform.position);
+				}
+				else if (index == 0)
+				{
+					targetPosF = targetSpace.InverseTransformPoint(bones[index + 1].transform.position);
 
-                snapshotPoseBaseTrSpaceRotationF = Quaternion.Inverse(targetSpace.rotation) * Quaternion.LookRotation(targetPosF - snapshotPoseBaseTrSpacePosition);// Quaternion.Inverse(targetSpace.rotation) * transform.rotation;
-                snapshotPoseBaseTrSpaceRotationB = Quaternion.Inverse(targetSpace.rotation) * Quaternion.LookRotation(targetPosB - snapshotPoseBaseTrSpacePosition);// Quaternion.Inverse(targetSpace.rotation) * transform.rotation;
-                snapshotPoseLocalRotation = Quaternion.Inverse(targetSpace.rotation) * transform.rotation;
-            }
+					var backDir = targetSpace.InverseTransformPoint(transform.position) -
+								targetSpace.InverseTransformPoint(bones[index + 1].transform.position);
+					targetPosB = snapshotPoseBaseTrSpacePosition + backDir;
+				}
+				else
+				{
+					targetPosF = targetSpace.InverseTransformPoint(bones[index + 1].transform.position);
+					targetPosB = targetSpace.InverseTransformPoint(bones[index - 1].transform.position);
+				}
 
+				snapshotPoseBaseTrSpaceRotationF = Quaternion.Inverse(targetSpace.rotation) *
+													Quaternion.LookRotation(
+														targetPosF -
+														snapshotPoseBaseTrSpacePosition); // Quaternion.Inverse(targetSpace.rotation) * transform.rotation;
+				snapshotPoseBaseTrSpaceRotationB = Quaternion.Inverse(targetSpace.rotation) *
+													Quaternion.LookRotation(
+														targetPosB -
+														snapshotPoseBaseTrSpacePosition); // Quaternion.Inverse(targetSpace.rotation) * transform.rotation;
+				snapshotPoseLocalRotation = Quaternion.Inverse(targetSpace.rotation) * transform.rotation;
+			}
 
-            #endregion
-
-
-        }
-    }
+#endregion
+		}
+	}
 }

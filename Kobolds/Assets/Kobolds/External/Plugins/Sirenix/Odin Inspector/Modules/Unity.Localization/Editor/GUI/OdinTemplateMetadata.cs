@@ -4,11 +4,6 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Localization.Metadata;
-
 namespace Sirenix.OdinInspector.Modules.Localization.Editor
 {
 #if false

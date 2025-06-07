@@ -1,5 +1,4 @@
 using System;
-using MoreMountains.Tools;
 using UnityEngine;
 
 namespace MoreMountains.Feedbacks
@@ -7,7 +6,7 @@ namespace MoreMountains.Feedbacks
 	[Serializable]
 	public class MMSpringVector3 : MMSpringDefinition<Vector3>
 	{
-		public bool SeparateAxis = false;
+		public bool SeparateAxis;
 		public MMSpringFloat UnifiedSpring;
 		public MMSpringFloat SpringX;
 		public MMSpringFloat SpringY;
@@ -16,7 +15,7 @@ namespace MoreMountains.Feedbacks
 		protected Vector3 _returnCurrentValue;
 		protected Vector3 _returnTargetValue;
 		protected Vector3 _returnVelocity;
-		
+
 		public MMSpringVector3()
 		{
 			SpringX = new MMSpringFloat();
@@ -24,6 +23,57 @@ namespace MoreMountains.Feedbacks
 			SpringZ = new MMSpringFloat();
 			UnifiedSpring = new MMSpringFloat();
 			UnifiedSpring.UnifiedSpring = true;
+		}
+
+		public override Vector3 CurrentValue
+		{
+			get
+			{
+				_returnCurrentValue.x = SpringX.CurrentValue;
+				_returnCurrentValue.y = SpringY.CurrentValue;
+				_returnCurrentValue.z = SpringZ.CurrentValue;
+				return _returnCurrentValue;
+			}
+			set
+			{
+				SpringX.CurrentValue = value.x;
+				SpringY.CurrentValue = value.y;
+				SpringZ.CurrentValue = value.z;
+			}
+		}
+
+		public override Vector3 TargetValue
+		{
+			get
+			{
+				_returnTargetValue.x = SpringX.TargetValue;
+				_returnTargetValue.y = SpringY.TargetValue;
+				_returnTargetValue.z = SpringZ.TargetValue;
+				return _returnTargetValue;
+			}
+			set
+			{
+				SpringX.TargetValue = value.x;
+				SpringY.TargetValue = value.y;
+				SpringZ.TargetValue = value.z;
+			}
+		}
+
+		public override Vector3 Velocity
+		{
+			get
+			{
+				_returnVelocity.x = SpringX.Velocity;
+				_returnVelocity.y = SpringY.Velocity;
+				_returnVelocity.z = SpringZ.Velocity;
+				return _returnVelocity;
+			}
+			set
+			{
+				SpringX.Velocity = value.x;
+				SpringY.Velocity = value.y;
+				SpringZ.Velocity = value.z;
+			}
 		}
 
 		public virtual void SetDamping(Vector3 newDamping)
@@ -41,58 +91,7 @@ namespace MoreMountains.Feedbacks
 			SpringY.Frequency = newFrequency.y;
 			SpringZ.Frequency = newFrequency.z;
 		}
-		
-		public override Vector3 CurrentValue
-		{
-			get
-			{
-				_returnCurrentValue.x = SpringX.CurrentValue;
-				_returnCurrentValue.y = SpringY.CurrentValue;
-				_returnCurrentValue.z = SpringZ.CurrentValue;
-				return _returnCurrentValue;
-			} 
-			set
-			{
-				SpringX.CurrentValue = value.x;
-				SpringY.CurrentValue = value.y;
-				SpringZ.CurrentValue = value.z;
-			}
-		}
 
-		public override Vector3 TargetValue
-		{
-			get
-			{
-				_returnTargetValue.x = SpringX.TargetValue;
-				_returnTargetValue.y = SpringY.TargetValue;
-				_returnTargetValue.z = SpringZ.TargetValue;
-				return _returnTargetValue;
-			} 
-			set
-			{
-				SpringX.TargetValue = value.x;
-				SpringY.TargetValue = value.y;
-				SpringZ.TargetValue = value.z;
-			}
-		}
-
-		public override Vector3 Velocity
-		{
-			get
-			{
-				_returnVelocity.x = SpringX.Velocity;
-				_returnVelocity.y = SpringY.Velocity;
-				_returnVelocity.z = SpringZ.Velocity;
-				return _returnVelocity;
-			} 
-			set
-			{
-				SpringX.Velocity = value.x;
-				SpringY.Velocity = value.y;
-				SpringZ.Velocity = value.z;
-			}
-		}
-		
 		public override void UpdateSpringValue(float deltaTime)
 		{
 			if (!SeparateAxis)
@@ -104,11 +103,12 @@ namespace MoreMountains.Feedbacks
 				SpringZ.Damping = UnifiedSpring.Damping;
 				SpringZ.Frequency = UnifiedSpring.Frequency;
 			}
+
 			SpringX.UpdateSpringValue(deltaTime);
 			SpringY.UpdateSpringValue(deltaTime);
 			SpringZ.UpdateSpringValue(deltaTime);
 		}
-		
+
 		public override void MoveToInstant(Vector3 newValue)
 		{
 			SpringX.MoveToInstant(newValue.x);
@@ -143,21 +143,21 @@ namespace MoreMountains.Feedbacks
 			SpringY.SetCurrentValueAsInitialValue();
 			SpringZ.SetCurrentValueAsInitialValue();
 		}
-		
+
 		public override void MoveTo(Vector3 newValue)
 		{
 			SpringX.MoveTo(newValue.x);
 			SpringY.MoveTo(newValue.y);
 			SpringZ.MoveTo(newValue.z);
 		}
-		
+
 		public override void MoveToAdditive(Vector3 newValue)
 		{
 			SpringX.MoveToAdditive(newValue.x);
 			SpringY.MoveToAdditive(newValue.y);
 			SpringZ.MoveToAdditive(newValue.z);
 		}
-		
+
 		public override void MoveToSubtractive(Vector3 newValue)
 		{
 			SpringX.MoveToSubtractive(newValue.x);
@@ -185,7 +185,7 @@ namespace MoreMountains.Feedbacks
 			SpringY.BumpRandom(min.y, max.y);
 			SpringZ.BumpRandom(min.z, max.z);
 		}
-		
+
 		public override void Finish()
 		{
 			SpringX.Finish();

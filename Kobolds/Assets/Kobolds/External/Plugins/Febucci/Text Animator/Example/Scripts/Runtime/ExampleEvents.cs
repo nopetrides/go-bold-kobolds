@@ -5,164 +5,146 @@ using UnityEngine;
 
 namespace Febucci.UI.Examples
 {
-    [AddComponentMenu(""), DisallowMultipleComponent]
-    class ExampleEvents : MonoBehaviour
-    {
-        // ---- PART OF THE SCRIPT THAT YOU'RE PROBABLY INTERESTED IT ----
-        
-        void Start()
-        {
-            //Subscribe to the event
-            typewriter.onMessage.AddListener(OnMessage);
-            
-            
-            dialogueIndex = 0;
-            CurrentLineShown = false;
-            typewriter.ShowText(dialoguesLines[dialogueIndex]);
-        }
+	[AddComponentMenu("")] [DisallowMultipleComponent]
+	internal class ExampleEvents : MonoBehaviour
+	{
+		// ---- OTHER PART OF THE SCRIPT ----
+		// This makes the script run faking a dialogue system
+		[SerializeField] private TypewriterCore typewriter;
+		[SerializeField] [TextArea(1, 5)] private string[] dialoguesLines;
+		[SerializeField] private Sprite[] faces;
+		[SerializeField] private SpriteRenderer faceRenderer;
+		[SerializeField] private GameObject continueText;
+		[SerializeField] private Transform[] crates;
+		private Vector3[] cratesInitialScale;
+		private bool currentLineShown;
 
-        void OnDestroy()
-        {
-            if(typewriter) typewriter.onMessage.RemoveListener(OnMessage);
-        }
+		private int dialogueIndex;
+		private int dialogueLength;
 
-        bool TryGetInt(string parameter, out int result)
-        {
-            
-            if (FormatUtils.TryGetFloat(parameter, 0, out float resultFloat))
-            {
-                result = (int)resultFloat;
-                return true;
-            }
+		private bool CurrentLineShown
+		{
+			get => currentLineShown;
+			set
+			{
+				currentLineShown = value;
+				continueText.SetActive(value);
+			}
+		}
 
-            result = -1;
-            return false;
-        }
-        void OnMessage(EventMarker eventData)
-        {
-            switch (eventData.name)
-            {
-                case "face":
-                    if (eventData.parameters.Length <= 0)
-                    {
-                        Debug.LogWarning($"You need to specify a sprite index! Dialogue: {dialogueIndex}");
-                        return;
-                    }
+		private void Awake()
+		{
+			cratesInitialScale = new Vector3[crates.Length];
+			for (var i = 0; i < crates.Length; i++) cratesInitialScale[i] = crates[i].localScale;
 
-                    if (TryGetInt(eventData.parameters[0], out int spriteIndex))
-                    {
-                        if (spriteIndex >= 0 && spriteIndex < faces.Length)
-                        {
-                            faceRenderer.sprite = faces[spriteIndex];
-                        }
-                        else
-                        {
-                            Debug.Log($"Sprite index was out of range. Dialogue: {dialogueIndex}");
-                        }
-                    }
-                    break;
-                
-                case "crate":
-                    if (eventData.parameters.Length <= 0)
-                    {
-                        Debug.LogWarning($"You need to specify a crate index! Dialogue: {dialogueIndex}");
-                        return;
-                    }
+			dialogueLength = dialoguesLines.Length;
+			typewriter.onTextShowed.AddListener(() => CurrentLineShown = true);
+		}
+		// ---- PART OF THE SCRIPT THAT YOU'RE PROBABLY INTERESTED IT ----
 
-                    if (TryGetInt(eventData.parameters[0], out int crateIndex))
-                    {
-                        if (crateIndex >= 0 && crateIndex < crates.Length)
-                        {
-                            StartCoroutine(AnimateCrate(crateIndex));
-                        }
-                        else
-                        {
-                            Debug.Log($"Sprite index was out of range. Dialogue: {dialogueIndex}");
-                        }
-                    }
-                    break;
-            }
-        }
+		private void Start()
+		{
+			//Subscribe to the event
+			typewriter.onMessage.AddListener(OnMessage);
 
-        // ---- OTHER PART OF THE SCRIPT ----
-        // This makes the script run faking a dialogue system
-        [SerializeField] TypewriterCore typewriter;
-        [SerializeField, TextArea(1, 5)] string[] dialoguesLines;
-        [SerializeField] Sprite[] faces;
-        [SerializeField] SpriteRenderer faceRenderer;
-        [SerializeField] GameObject continueText;
-        [SerializeField] Transform[] crates;
-        Vector3[] cratesInitialScale;
 
-        int dialogueIndex = 0;
-        int dialogueLength;
-        bool currentLineShown;
+			dialogueIndex = 0;
+			CurrentLineShown = false;
+			typewriter.ShowText(dialoguesLines[dialogueIndex]);
+		}
 
-        bool CurrentLineShown
-        {
-            get => currentLineShown;
-            set
-            {
-                currentLineShown = value;
-                continueText.SetActive(value);
-            }
-        }
+		private void Update()
+		{
+			if (Input.anyKeyDown && CurrentLineShown) ContinueSequence();
+		}
 
-        void Awake()
-        {
-            cratesInitialScale = new Vector3[crates.Length];
-            for (int i = 0; i < crates.Length; i++)
-            {
-                cratesInitialScale[i] = crates[i].localScale;
-            }
-            
-            dialogueLength = dialoguesLines.Length;
-            typewriter.onTextShowed.AddListener(() => CurrentLineShown = true);
-        }
+		private void OnDestroy()
+		{
+			if (typewriter) typewriter.onMessage.RemoveListener(OnMessage);
+		}
 
-        void ContinueSequence()
-        {
-            CurrentLineShown = false;
-            dialogueIndex++;
-            if(dialogueIndex<dialogueLength)
-            {
-                typewriter.ShowText(dialoguesLines[dialogueIndex]);
-            }
-            else
-            {
-                typewriter.StartDisappearingText();
-            }
-        }
+		private bool TryGetInt(string parameter, out int result)
+		{
+			if (FormatUtils.TryGetFloat(parameter, 0, out var resultFloat))
+			{
+				result = (int) resultFloat;
+				return true;
+			}
 
-        void Update()
-        {
-            if (Input.anyKeyDown && CurrentLineShown)
-            {
-                ContinueSequence();
-            }
-        }
-        
-        IEnumerator AnimateCrate(int crateIndex)
-        {
-            Transform crate = crates[crateIndex];
-            Vector3 initialScale = cratesInitialScale[crateIndex];
-            Vector3 targetScale = new Vector3(initialScale.x * 1.2f, initialScale.y * .6f, initialScale.z);
-            float t = 0;
-            const float duration = .4f;
-            
-            while (t<=duration)
-            {
-                t += Time.unscaledDeltaTime;
-                float pct = t / duration;
-                if (pct < .5f) pct = pct / .5f;
-                else pct = 1 - (pct - .5f) / .5f;
-                
-                crate.localScale = Vector3.LerpUnclamped(initialScale, targetScale, pct);
-                yield return null;
-            }
+			result = -1;
+			return false;
+		}
 
-            crate.localScale = initialScale;
-        }
-    }
+		private void OnMessage(EventMarker eventData)
+		{
+			switch (eventData.name)
+			{
+				case "face":
+					if (eventData.parameters.Length <= 0)
+					{
+						Debug.LogWarning($"You need to specify a sprite index! Dialogue: {dialogueIndex}");
+						return;
+					}
 
+					if (TryGetInt(eventData.parameters[0], out var spriteIndex))
+					{
+						if (spriteIndex >= 0 && spriteIndex < faces.Length)
+							faceRenderer.sprite = faces[spriteIndex];
+						else
+							Debug.Log($"Sprite index was out of range. Dialogue: {dialogueIndex}");
+					}
+
+					break;
+
+				case "crate":
+					if (eventData.parameters.Length <= 0)
+					{
+						Debug.LogWarning($"You need to specify a crate index! Dialogue: {dialogueIndex}");
+						return;
+					}
+
+					if (TryGetInt(eventData.parameters[0], out var crateIndex))
+					{
+						if (crateIndex >= 0 && crateIndex < crates.Length)
+							StartCoroutine(AnimateCrate(crateIndex));
+						else
+							Debug.Log($"Sprite index was out of range. Dialogue: {dialogueIndex}");
+					}
+
+					break;
+			}
+		}
+
+		private void ContinueSequence()
+		{
+			CurrentLineShown = false;
+			dialogueIndex++;
+			if (dialogueIndex < dialogueLength)
+				typewriter.ShowText(dialoguesLines[dialogueIndex]);
+			else
+				typewriter.StartDisappearingText();
+		}
+
+		private IEnumerator AnimateCrate(int crateIndex)
+		{
+			var crate = crates[crateIndex];
+			var initialScale = cratesInitialScale[crateIndex];
+			var targetScale = new Vector3(initialScale.x * 1.2f, initialScale.y * .6f, initialScale.z);
+			float t = 0;
+			const float duration = .4f;
+
+			while (t <= duration)
+			{
+				t += Time.unscaledDeltaTime;
+				var pct = t / duration;
+				if (pct < .5f) pct = pct / .5f;
+				else pct = 1 - (pct - .5f) / .5f;
+
+				crate.localScale = Vector3.LerpUnclamped(initialScale, targetScale, pct);
+				yield return null;
+			}
+
+			crate.localScale = initialScale;
+		}
+	}
 }

@@ -2,13 +2,13 @@ using UnityEngine;
 
 namespace Linework.Common.Attributes
 {
-    public class RenderingLayerMaskAttribute : PropertyAttribute
-    {
-        public bool ShowLabel { get; }
+	public class RenderingLayerMaskAttribute : PropertyAttribute
+	{
+		public RenderingLayerMaskAttribute(bool showLabel = true)
+		{
+			ShowLabel = showLabel;
+		}
 
-        public RenderingLayerMaskAttribute(bool showLabel = true)
-        {
-            ShowLabel = showLabel;
-        }
-    }
+		public bool ShowLabel { get; }
+	}
 }

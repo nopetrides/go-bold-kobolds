@@ -1,267 +1,252 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace TheraBytes.BetterUi.Editor
 {
-    [CustomPropertyDrawer(typeof(Transitions))]
-    public class TransitionsDrawer : PropertyDrawer
-    {
-        const float LineHeight = 20;
-        const float SmallSpacing = 2;
+	[CustomPropertyDrawer(typeof(Transitions))]
+	public class TransitionsDrawer : PropertyDrawer
+	{
+		private const float LineHeight = 20;
+		private const float SmallSpacing = 2;
 
-        const float BigSpacing = 5;
-        Transitions info;
+		private const float BigSpacing = 5;
+		private Transitions info;
 
-        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
-        {
-            var cur = property.GetValue<Transitions>();
-            int lineCount = 1;
-            int defaultCount = 1 + cur.StateNames.Count;
-            float extraHeight = 2 * BigSpacing;
-            switch (cur.Mode)
-            {
-                case Transitions.TransitionMode.SpriteSwap:
-                case Transitions.TransitionMode.Animation:
-                case Transitions.TransitionMode.ObjectActiveness:
-                case Transitions.TransitionMode.LocationAnimationTransition:
-                    lineCount += defaultCount;
-                    break;
+		public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+		{
+			var cur = property.GetValue<Transitions>();
+			var lineCount = 1;
+			var defaultCount = 1 + cur.StateNames.Count;
+			var extraHeight = 2 * BigSpacing;
+			switch (cur.Mode)
+			{
+				case Transitions.TransitionMode.SpriteSwap:
+				case Transitions.TransitionMode.Animation:
+				case Transitions.TransitionMode.ObjectActiveness:
+				case Transitions.TransitionMode.LocationAnimationTransition:
+					lineCount += defaultCount;
+					break;
 
-                case Transitions.TransitionMode.Alpha:
-                case Transitions.TransitionMode.Color32Tint:
-                    lineCount += defaultCount + 1;
-                    extraHeight += BigSpacing;
-                    break;
+				case Transitions.TransitionMode.Alpha:
+				case Transitions.TransitionMode.Color32Tint:
+					lineCount += defaultCount + 1;
+					extraHeight += BigSpacing;
+					break;
 
-                case Transitions.TransitionMode.MaterialProperty:
-                    lineCount += defaultCount + 2;
-                    extraHeight += 2 * BigSpacing;
-                    break;
+				case Transitions.TransitionMode.MaterialProperty:
+					lineCount += defaultCount + 2;
+					extraHeight += 2 * BigSpacing;
+					break;
 
-                case Transitions.TransitionMode.ColorTint:
-                    lineCount += defaultCount + 3;
-                    extraHeight += BigSpacing;
-                    break;
+				case Transitions.TransitionMode.ColorTint:
+					lineCount += defaultCount + 3;
+					extraHeight += BigSpacing;
+					break;
 
-                case Transitions.TransitionMode.CustomCallback:
-                    for(int i = 0; i < cur.StateNames.Count; i++)
-                    {
-                        extraHeight += GetCustomCallbackHeight(cur, i);
-                    }
-                    break;
-                case Transitions.TransitionMode.None:
-                default:
-                    break;
-            }
+				case Transitions.TransitionMode.CustomCallback:
+					for (var i = 0; i < cur.StateNames.Count; i++) extraHeight += GetCustomCallbackHeight(cur, i);
+					break;
+				case Transitions.TransitionMode.None:
+				default:
+					break;
+			}
 
-            return lineCount * LineHeight + extraHeight;
-        }
+			return lineCount * LineHeight + extraHeight;
+		}
 
-        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
-        {
-            info = property.GetValue<Transitions>();
-            
-            DrawGui(position, info, property);
-        }
+		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+		{
+			info = property.GetValue<Transitions>();
 
-        [Obsolete(EditorGuiUtils.ObsoleteMessage)]
-        public static void DrawGui(Transitions sel, SerializedProperty property)
-        {
-            EditorGuiUtils.DrawOldMethodCallWarning();
-        }
+			DrawGui(position, info, property);
+		}
 
-        public static void DrawGui(Rect position, Transitions sel, SerializedProperty property)
-        {
-            var rect = new Rect(position.x, position.y + BigSpacing, position.width, EditorGUIUtility.singleLineHeight);
-            var mode = (Transitions.TransitionMode)EditorGUI.EnumPopup(rect, "Mode", sel.Mode);
-            rect.y += rect.height + SmallSpacing;
+		[Obsolete(EditorGuiUtils.ObsoleteMessage)]
+		public static void DrawGui(Transitions sel, SerializedProperty property)
+		{
+			EditorGuiUtils.DrawOldMethodCallWarning();
+		}
 
-            if (mode != sel.Mode)
-            {
-                sel.SetMode(mode);
-            }
+		public static void DrawGui(Rect position, Transitions sel, SerializedProperty property)
+		{
+			var rect = new Rect(position.x, position.y + BigSpacing, position.width, EditorGUIUtility.singleLineHeight);
+			var mode = (Transitions.TransitionMode) EditorGUI.EnumPopup(rect, "Mode", sel.Mode);
+			rect.y += rect.height + SmallSpacing;
 
-            if (sel.Mode == Transitions.TransitionMode.None)
-                return;
+			if (mode != sel.Mode) sel.SetMode(mode);
 
-            SerializedProperty transitionProp = null;
-            List<string> postProps = new List<string>();
-            
+			if (sel.Mode == Transitions.TransitionMode.None)
+				return;
 
-            switch (mode)
-            {
-                case Transitions.TransitionMode.ColorTint:
-                    
-                    transitionProp = property.FindPropertyRelative("colorTransitions");
-                    postProps.Add("affectedColor");
-                    postProps.Add("colorMultiplier");
-                    postProps.Add("fadeDuration");
-                    break;
+			SerializedProperty transitionProp = null;
+			var postProps = new List<string>();
 
-                case Transitions.TransitionMode.Color32Tint:
 
-                    transitionProp = property.FindPropertyRelative("color32Transitions");
-                    postProps.Add("fadeDuration");
-                    break;
+			switch (mode)
+			{
+				case Transitions.TransitionMode.ColorTint:
 
-                case Transitions.TransitionMode.SpriteSwap:
+					transitionProp = property.FindPropertyRelative("colorTransitions");
+					postProps.Add("affectedColor");
+					postProps.Add("colorMultiplier");
+					postProps.Add("fadeDuration");
+					break;
 
-                    transitionProp = property.FindPropertyRelative("spriteSwapTransitions");
-                    break;
+				case Transitions.TransitionMode.Color32Tint:
 
-                case Transitions.TransitionMode.Animation:
+					transitionProp = property.FindPropertyRelative("color32Transitions");
+					postProps.Add("fadeDuration");
+					break;
 
-                    transitionProp = property.FindPropertyRelative("animationTransitions");
-                    break;
+				case Transitions.TransitionMode.SpriteSwap:
 
-                case Transitions.TransitionMode.ObjectActiveness:
+					transitionProp = property.FindPropertyRelative("spriteSwapTransitions");
+					break;
 
-                    transitionProp = property.FindPropertyRelative("activenessTransitions");
-                    break;
+				case Transitions.TransitionMode.Animation:
 
-                case Transitions.TransitionMode.Alpha:
+					transitionProp = property.FindPropertyRelative("animationTransitions");
+					break;
 
-                    transitionProp = property.FindPropertyRelative("alphaTransitions");
-                    postProps.Add("fadeDuration");
-                    break;
+				case Transitions.TransitionMode.ObjectActiveness:
 
-                case Transitions.TransitionMode.MaterialProperty:
+					transitionProp = property.FindPropertyRelative("activenessTransitions");
+					break;
 
-                    transitionProp = property.FindPropertyRelative("materialPropertyTransitions");
-                    postProps.Add("fadeDuration");
-                    break;
+				case Transitions.TransitionMode.Alpha:
 
-                case Transitions.TransitionMode.LocationAnimationTransition:
+					transitionProp = property.FindPropertyRelative("alphaTransitions");
+					postProps.Add("fadeDuration");
+					break;
 
-                    transitionProp = property.FindPropertyRelative("locationAnimationTransitions");
-                    break;
+				case Transitions.TransitionMode.MaterialProperty:
 
-                case Transitions.TransitionMode.CustomCallback:
+					transitionProp = property.FindPropertyRelative("materialPropertyTransitions");
+					postProps.Add("fadeDuration");
+					break;
 
-                    transitionProp = property.FindPropertyRelative("customTransitions");
-                    break;
-            }
+				case Transitions.TransitionMode.LocationAnimationTransition:
 
-            var targetProp = transitionProp.FindPropertyRelative("target");
-            if (targetProp != null)
-            {
-                EditorGUI.PropertyField(rect, targetProp);
-                rect.y += rect.height + SmallSpacing;
-            }
+					transitionProp = property.FindPropertyRelative("locationAnimationTransitions");
+					break;
 
-            rect.y += BigSpacing;
+				case Transitions.TransitionMode.CustomCallback:
 
-            if (targetProp == null || sel.TransitionStates.Target != null)
-            {
-                if(mode == Transitions.TransitionMode.MaterialProperty)
-                {
-                    DrawMaterialPropertySelector(rect, sel, transitionProp);
-                    rect.y += rect.height + BigSpacing;
-                }
+					transitionProp = property.FindPropertyRelative("customTransitions");
+					break;
+			}
 
-                EditorGUI.indentLevel += 1;
+			var targetProp = transitionProp.FindPropertyRelative("target");
+			if (targetProp != null)
+			{
+				EditorGUI.PropertyField(rect, targetProp);
+				rect.y += rect.height + SmallSpacing;
+			}
 
-                var statesProp = transitionProp.FindPropertyRelative("states");
-                for (int i = 0; i < statesProp.arraySize; i++)
-                {
-                    var p = statesProp.GetArrayElementAtIndex(i);
-                    var pName = p.FindPropertyRelative("Name");
-                    var pVal = p.FindPropertyRelative("StateObject");
+			rect.y += BigSpacing;
 
-                    if (mode == Transitions.TransitionMode.LocationAnimationTransition)
-                    {
-                        // special drawer for location transitions
-                        var options = (sel.TransitionStates.Target as LocationAnimations).Animations.Select(o => o.Name).ToList();
-                        options.Insert(0, "[ None ]");
-                        int prevIdx = options.IndexOf(pVal.stringValue);
-                        int newIdx = EditorGUI.Popup(rect, pName.stringValue, prevIdx, options.ToArray());
-                        rect.y += rect.height + SmallSpacing;
+			if (targetProp == null || sel.TransitionStates.Target != null)
+			{
+				if (mode == Transitions.TransitionMode.MaterialProperty)
+				{
+					DrawMaterialPropertySelector(rect, sel, transitionProp);
+					rect.y += rect.height + BigSpacing;
+				}
 
-                        if (prevIdx != newIdx)
-                        {
-                            pVal.stringValue = (newIdx > 0) ? options[newIdx] : "";
-                            pVal.serializedObject.ApplyModifiedProperties();
-                        }
-                    }
-                    else if(mode == Transitions.TransitionMode.CustomCallback)
-                    {
-                        rect.height = GetCustomCallbackHeight(sel, i);
-                        EditorGUI.PropertyField(rect, pVal, new GUIContent(pName.stringValue));
-                        rect.y += rect.height + SmallSpacing;
-                    }
-                    else
-                    {
-                        EditorGUI.PropertyField(rect, pVal, new GUIContent(pName.stringValue));
-                        rect.y += rect.height + SmallSpacing;
-                    }
-                }
+				EditorGUI.indentLevel += 1;
 
-                EditorGUI.indentLevel -= 1;
+				var statesProp = transitionProp.FindPropertyRelative("states");
+				for (var i = 0; i < statesProp.arraySize; i++)
+				{
+					var p = statesProp.GetArrayElementAtIndex(i);
+					var pName = p.FindPropertyRelative("Name");
+					var pVal = p.FindPropertyRelative("StateObject");
 
-                if (postProps.Count > 0)
-                {
-                    rect.y += BigSpacing;
+					if (mode == Transitions.TransitionMode.LocationAnimationTransition)
+					{
+						// special drawer for location transitions
+						var options = (sel.TransitionStates.Target as LocationAnimations).Animations.Select(o => o.Name)
+							.ToList();
+						options.Insert(0, "[ None ]");
+						var prevIdx = options.IndexOf(pVal.stringValue);
+						var newIdx = EditorGUI.Popup(rect, pName.stringValue, prevIdx, options.ToArray());
+						rect.y += rect.height + SmallSpacing;
 
-                    foreach (string pName in postProps)
-                    {
-                        var p = transitionProp.FindPropertyRelative(pName);
-                        EditorGUI.PropertyField(rect, p);
-                        rect.y += rect.height + SmallSpacing;
-                    }
+						if (prevIdx != newIdx)
+						{
+							pVal.stringValue = newIdx > 0 ? options[newIdx] : "";
+							pVal.serializedObject.ApplyModifiedProperties();
+						}
+					}
+					else if (mode == Transitions.TransitionMode.CustomCallback)
+					{
+						rect.height = GetCustomCallbackHeight(sel, i);
+						EditorGUI.PropertyField(rect, pVal, new GUIContent(pName.stringValue));
+						rect.y += rect.height + SmallSpacing;
+					}
+					else
+					{
+						EditorGUI.PropertyField(rect, pVal, new GUIContent(pName.stringValue));
+						rect.y += rect.height + SmallSpacing;
+					}
+				}
+
+				EditorGUI.indentLevel -= 1;
+
+				if (postProps.Count > 0)
+				{
+					rect.y += BigSpacing;
+
+					foreach (var pName in postProps)
+					{
+						var p = transitionProp.FindPropertyRelative(pName);
+						EditorGUI.PropertyField(rect, p);
+						rect.y += rect.height + SmallSpacing;
+					}
 
 #if UNITY_2019_1_OR_NEWER
-                    if (!sel.StateNames.Contains("Selected") && sel.StateNames.Contains("Pressed"))
-                    {
-                        if (GUI.Button(rect, "Upgrade"))
-                        {
-                            sel.ComplementStateNames(Transitions.SelectionStateNames);
-                        }
+					if (!sel.StateNames.Contains("Selected") && sel.StateNames.Contains("Pressed"))
+					{
+						if (GUI.Button(rect, "Upgrade")) sel.ComplementStateNames(Transitions.SelectionStateNames);
 
-                        rect.y += rect.height + SmallSpacing;
-                    }
+						rect.y += rect.height + SmallSpacing;
+					}
 #endif
-                }
-            }
-            
-        }
+				}
+			}
+		}
 
-        private static float GetCustomCallbackHeight(Transitions sel, int i)
-        {
-            var custom = sel.TransitionStates as CustomTransitions;
-            var state = custom.GetStates().ToList()[i];
-            int cnt = state.StateObject.GetPersistentEventCount();
+		private static float GetCustomCallbackHeight(Transitions sel, int i)
+		{
+			var custom = sel.TransitionStates as CustomTransitions;
+			var state = custom.GetStates().ToList()[i];
+			var cnt = state.StateObject.GetPersistentEventCount();
 
-            if(cnt == 0)
-            {
-                return 5.75f * EditorGUIUtility.singleLineHeight;
-            }
+			if (cnt == 0) return 5.75f * EditorGUIUtility.singleLineHeight;
 
-            return (3 + 2.75f * cnt) * EditorGUIUtility.singleLineHeight;
-        }
+			return (3 + 2.75f * cnt) * EditorGUIUtility.singleLineHeight;
+		}
 
-        private static void DrawMaterialPropertySelector(Rect rect, Transitions sel, SerializedProperty transitionProp)
-        {
-            var matPropTrans = (sel.TransitionStates as MaterialPropertyTransition);
-            if (matPropTrans == null)
-                return;
+		private static void DrawMaterialPropertySelector(Rect rect, Transitions sel, SerializedProperty transitionProp)
+		{
+			var matPropTrans = sel.TransitionStates as MaterialPropertyTransition;
+			if (matPropTrans == null)
+				return;
 
-            var img = (matPropTrans.Target as BetterImage);
-            if (img == null)
-                return;
+			var img = matPropTrans.Target as BetterImage;
+			if (img == null)
+				return;
 
-            var options = img.MaterialProperties.FloatProperties.Select(o => o.Name).ToArray();
+			var options = img.MaterialProperties.FloatProperties.Select(o => o.Name).ToArray();
 
-            var sp = transitionProp.FindPropertyRelative("propertyIndex");
-            int cur = sp.intValue;
-            int matPropIndex = EditorGUI.Popup(rect, "Affected Property", cur, options);
+			var sp = transitionProp.FindPropertyRelative("propertyIndex");
+			var cur = sp.intValue;
+			var matPropIndex = EditorGUI.Popup(rect, "Affected Property", cur, options);
 
-            sp.intValue = matPropIndex;
-            
-        }
-    }
+			sp.intValue = matPropIndex;
+		}
+	}
 }

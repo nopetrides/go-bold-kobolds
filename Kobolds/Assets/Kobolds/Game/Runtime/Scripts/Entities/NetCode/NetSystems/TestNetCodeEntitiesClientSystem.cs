@@ -7,15 +7,14 @@ using UnityEngine;
 namespace Kobolds.NetSystems
 {
 	/// <summary>
-	/// System that runs only on the client
+	///     System that runs only on the client
 	/// </summary>
 	[WorldSystemFilter(WorldSystemFilterFlags.ClientSimulation)]
-	partial struct TestNetCodeEntitiesClientSystem : ISystem
+	internal partial struct TestNetCodeEntitiesClientSystem : ISystem
 	{
 		[BurstCompile]
 		public void OnCreate(ref SystemState state)
 		{
-
 		}
 
 		[BurstCompile]
@@ -31,13 +30,15 @@ namespace Kobolds.NetSystems
 			{
 				// Send Rpc
 				var rpcEntity = state.EntityManager.CreateEntity();
-				state.EntityManager.AddComponentData(rpcEntity, 
-					new SimpleRpc 
+				state.EntityManager.AddComponentData(
+					rpcEntity,
+					new SimpleRpc
 					{
 						Value = 69
 					});
-				
-				state.EntityManager.AddComponentData(rpcEntity, 
+
+				state.EntityManager.AddComponentData(
+					rpcEntity,
 					new SendRpcCommandRequest()); // Clients can only send RPCs to server
 				Debug.Log("<color=cyan>[TestNetCodeEntitiesClientSystem] Sending Rpc");
 
@@ -53,7 +54,6 @@ namespace Kobolds.NetSystems
 		[BurstCompile]
 		public void OnDestroy(ref SystemState state)
 		{
-
 		}
 	}
 }

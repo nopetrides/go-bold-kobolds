@@ -15,7 +15,6 @@ AssetOrigin:
   serializedVersion: 1
   productId: 285638
   packageName: Ragdoll Animator 2
-  packageVersion: 1.0.3.3
-  assetPath: Assets/Kobolds/External/FImpossible Creations/Shared Tools/Editor/Property
-    Drawers/FPD_PropertiesFoldoutDrawer.cs
-  uploadId: 737666
+  packageVersion: 1.0.3.7
+  assetPath: Assets/Kobolds/External/FImpossible Creations/Editor/Property Drawers/FPD_PropertiesFoldoutDrawer.cs
+  uploadId: 755629

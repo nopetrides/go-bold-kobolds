@@ -9,7 +9,7 @@ namespace Kobolds.NetComponents.Authoring
 		{
 			public override void Bake(NetCodePlayerInputAuthoring authoring)
 			{
-				Entity entity = GetEntity(TransformUsageFlags.Dynamic);
+				var entity = GetEntity(TransformUsageFlags.Dynamic);
 				AddComponent(entity, new NetCodePlayerInputComponent());
 			}
 		}

@@ -10,12 +10,12 @@
 #pragma warning disable
 #endif
 
-using System.Collections.Generic;
-using UnityEditor.AddressableAssets;
-using Sirenix.OdinInspector.Editor.Validation;
-using UnityEditor.AddressableAssets.Settings;
 using System.Collections;
+using System.Collections.Generic;
+using Sirenix.OdinInspector.Editor.Validation;
 using Sirenix.OdinInspector.Modules.Addressables.Editor;
+using UnityEditor.AddressableAssets;
+using UnityEditor.AddressableAssets.Settings;
 
 [assembly: RegisterValidator(typeof(MissingAddressableGroupReferenceValidator))]
 
@@ -35,23 +35,20 @@ namespace Sirenix.OdinInspector.Modules.Addressables.Editor
 			{
 				var group = addressableAssetSettings.groups[i];
 
-				if (group == null)
-				{
-					missingGroupIndices.Add(i);
-				}
+				if (group == null) missingGroupIndices.Add(i);
 			}
 
 			if (missingGroupIndices.Count > 0)
-			{
-				result.Add(ValidatorSeverity.Error, "Addressable groups contains missing references").WithFix("Delete missing reference", () =>
-				{
-					for (var i = missingGroupIndices.Count - 1; i >= 0; i--)
+				result.Add(ValidatorSeverity.Error, "Addressable groups contains missing references").WithFix(
+					"Delete missing reference", () =>
 					{
-						addressableAssetSettings.groups.RemoveAt(missingGroupIndices[i]);
-						addressableAssetSettings.SetDirty(AddressableAssetSettings.ModificationEvent.GroupRemoved, null, true, true);
-					}
-				});
-			}
+						for (var i = missingGroupIndices.Count - 1; i >= 0; i--)
+						{
+							addressableAssetSettings.groups.RemoveAt(missingGroupIndices[i]);
+							addressableAssetSettings.SetDirty(
+								AddressableAssetSettings.ModificationEvent.GroupRemoved, null, true, true);
+						}
+					});
 		}
 	}
 }

@@ -1,5 +1,4 @@
 ﻿using FIMSpace.FEditor;
-using System.Collections.Generic;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -7,92 +6,107 @@ using UnityEditor;
 
 namespace FIMSpace.FSpine
 {
-    [DefaultExecutionOrder(-12)]
-    [AddComponentMenu("FImpossible Creations/Spinal Animator Utilities/Spinal Animator IK Controlled Bone Fixer")]
-    public class SpineAnimator_FixIKControlledBones : MonoBehaviour
-    {
-        public Transform SkeletonParentBone;
-        [Tooltip("If bones are twisting with this option off you should turn it on (calibrating bone if it's animation don't use keyframes)")]
-        public bool Calibrate = true;
+	[DefaultExecutionOrder(-12)]
+	[AddComponentMenu("FImpossible Creations/Spinal Animator Utilities/Spinal Animator IK Controlled Bone Fixer")]
+	public class SpineAnimator_FixIKControlledBones : MonoBehaviour
+	{
+		public Transform SkeletonParentBone;
 
-        Quaternion initLocalRot;
-        Vector3 initLocalPos;
+		[Tooltip(
+			"If bones are twisting with this option off you should turn it on (calibrating bone if it's animation don't use keyframes)")]
+		public bool Calibrate = true;
 
-        private void Start()
-        {
-            initLocalPos = transform.localPosition;
-            initLocalRot = transform.localRotation;
-        }
+		private Vector3 initLocalPos;
 
-        Quaternion localRotation;
-        Vector3 localPosition;
+		private Quaternion initLocalRot;
+		private Vector3 localPosition;
 
-        public void Calibration()
-        {
-            if (!Calibrate) return;
-            transform.localPosition = initLocalPos;
-            transform.localRotation = initLocalRot;
-        }
+		private Quaternion localRotation;
 
-        public void UpdateOnAnimator()
-        {
-            if (!enabled) return;
-            localRotation = FEngineering.QToLocal(SkeletonParentBone.rotation, transform.rotation);
-            localPosition = SkeletonParentBone.InverseTransformPoint(transform.position);
-        }
-
-        public void UpdateAfterProcedural()
-        {
-            if (!enabled) return;
-            transform.rotation = FEngineering.QToWorld(SkeletonParentBone.rotation, localRotation);
-            transform.position = SkeletonParentBone.TransformPoint(localPosition);
-        }
+		private void Start()
+		{
+			initLocalPos = transform.localPosition;
+			initLocalRot = transform.localRotation;
+		}
 
 #if UNITY_EDITOR
-        private void OnDrawGizmosSelected()
-        {
-            Handles.color = new Color(0.1f, 1f, 0.2f, 0.5f);
-            if (SkeletonParentBone)
-            FGUI_Handles.DrawBoneHandle(SkeletonParentBone.position, transform.position);
-        }
+		private void OnDrawGizmosSelected()
+		{
+			Handles.color = new Color(0.1f, 1f, 0.2f, 0.5f);
+			if (SkeletonParentBone)
+				FGUI_Handles.DrawBoneHandle(SkeletonParentBone.position, transform.position);
+		}
 #endif
 
-    }
+		public void Calibration()
+		{
+			if (!Calibrate) return;
+			transform.localPosition = initLocalPos;
+			transform.localRotation = initLocalRot;
+		}
+
+		public void UpdateOnAnimator()
+		{
+			if (!enabled) return;
+			localRotation = SkeletonParentBone.rotation.QToLocal(transform.rotation);
+			localPosition = SkeletonParentBone.InverseTransformPoint(transform.position);
+		}
+
+		public void UpdateAfterProcedural()
+		{
+			if (!enabled) return;
+			transform.rotation = SkeletonParentBone.rotation.QToWorld(localRotation);
+			transform.position = SkeletonParentBone.TransformPoint(localPosition);
+		}
+	}
 
 
 #if UNITY_EDITOR
-    /// <summary>
-    /// FM: Editor class component to enchance controll over component from inspector window
-    /// </summary>
-    [UnityEditor.CanEditMultipleObjects]
-    [UnityEditor.CustomEditor(typeof(SpineAnimator_FixIKControlledBones))]
-    public class SpineAnimator_FixIKControlledBonesEditor : UnityEditor.Editor
-    {
-        public SpineAnimator_FixIKControlledBones Get { get { if (_get == null) _get = (SpineAnimator_FixIKControlledBones)target; return _get; } }
-        private SpineAnimator_FixIKControlledBones _get;
+	/// <summary>
+	///     FM: Editor class component to enchance controll over component from inspector window
+	/// </summary>
+	[CanEditMultipleObjects]
+	[CustomEditor(typeof(SpineAnimator_FixIKControlledBones))]
+	public class SpineAnimator_FixIKControlledBonesEditor : Editor
+	{
+		private SpineAnimator_FixIKControlledBones _get;
+
+		public SpineAnimator_FixIKControlledBones Get
+		{
+			get
+			{
+				if (_get == null) _get = (SpineAnimator_FixIKControlledBones) target;
+				return _get;
+			}
+		}
 
 
+		public override void OnInspectorGUI()
+		{
+			GUILayout.Space(6f);
+			EditorGUILayout.HelpBox(
+				"1: Add it to bone which position was controlled by IK Controls in Animation Software",
+				MessageType.Info);
+			EditorGUILayout.HelpBox(
+				"2: Define which bone is itended to be parent of this one (like if it is paw then  LowerLeg bone / Wrist Bone  should be parent)",
+				MessageType.Info);
+			EditorGUILayout.HelpBox(
+				"3: Add this object to the list under 'Adjust' tab inside SpineAnimator inspector window, find 'Bones Fixers' field",
+				MessageType.Info);
 
-        public override void OnInspectorGUI()
-        {
-            GUILayout.Space(6f);
-            UnityEditor.EditorGUILayout.HelpBox("1: Add it to bone which position was controlled by IK Controls in Animation Software", UnityEditor.MessageType.Info);
-            UnityEditor.EditorGUILayout.HelpBox("2: Define which bone is itended to be parent of this one (like if it is paw then  LowerLeg bone / Wrist Bone  should be parent)", UnityEditor.MessageType.Info);
-            UnityEditor.EditorGUILayout.HelpBox("3: Add this object to the list under 'Adjust' tab inside SpineAnimator inspector window, find 'Bones Fixers' field", UnityEditor.MessageType.Info);
+			serializedObject.Update();
 
-            serializedObject.Update();
+			GUILayout.Space(4f);
+			DrawPropertiesExcluding(serializedObject, "m_Script");
 
-            GUILayout.Space(4f);
-            DrawPropertiesExcluding(serializedObject, "m_Script");
+			serializedObject.ApplyModifiedProperties();
 
-            serializedObject.ApplyModifiedProperties();
-
-            GUILayout.Space(2f);
-            UnityEditor.EditorGUILayout.HelpBox("(This component can also be used to fix skeletons hierarchy in cases where spine bones are going from model middle to head and tail bones going from middle to tail end - spine created out of two bone chains going in different directions)", UnityEditor.MessageType.None);
-            GUILayout.Space(2f);
-        }
-    }
+			GUILayout.Space(2f);
+			EditorGUILayout.HelpBox(
+				"(This component can also be used to fix skeletons hierarchy in cases where spine bones are going from model middle to head and tail bones going from middle to tail end - spine created out of two bone chains going in different directions)",
+				MessageType.None);
+			GUILayout.Space(2f);
+		}
+	}
 #endif
-
-
 }

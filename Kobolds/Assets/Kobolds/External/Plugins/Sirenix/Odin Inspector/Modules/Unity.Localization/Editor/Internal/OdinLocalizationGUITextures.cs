@@ -7,21 +7,25 @@
 using System;
 using Sirenix.Utilities.Editor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Sirenix.OdinInspector.Modules.Localization.Editor.Internal
 {
 	public static class OdinLocalizationGUITextures
 	{
 		private const float FADE_STRENGTH = 0.4f;
-		
+
+		private static Texture2D leftToRightFade;
+		private static Texture2D topToBottomFade;
+		private static Texture2D bottomToTopFade;
+		private static Texture2D roundBlur6;
+		private static Texture2D roundBlur20;
+
 		public static Texture2D LeftToRightFade
 		{
 			get
 			{
-				if (leftToRightFade != null)
-				{
-					return leftToRightFade;
-				}
+				if (leftToRightFade != null) return leftToRightFade;
 
 				leftToRightFade = new Texture2D(32, 32)
 				{
@@ -35,15 +39,13 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor.Internal
 				for (var x = 0; x < 32; x++)
 				{
 					for (var y = 0; y < 32; y++)
-					{
 						pixels[index++] = Color.Lerp(Color.white, Color.clear, Mathf.Pow(y / 31.0f, FADE_STRENGTH));
-					}
 				}
 
 				leftToRightFade.SetPixels(pixels);
 
 				leftToRightFade.Apply();
-					
+
 				CleanupUtility.DestroyObjectOnAssemblyReload(leftToRightFade);
 
 				return leftToRightFade;
@@ -54,10 +56,7 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor.Internal
 		{
 			get
 			{
-				if (topToBottomFade != null)
-				{
-					return topToBottomFade;
-				}
+				if (topToBottomFade != null) return topToBottomFade;
 
 				topToBottomFade = new Texture2D(32, 32)
 				{
@@ -71,9 +70,8 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor.Internal
 				for (var x = 0; x < 32; x++)
 				{
 					for (var y = 0; y < 32; y++)
-					{
-						pixels[index++] = Color.Lerp(Color.white, Color.clear, Mathf.Pow(1.0f - x / 31.0f, FADE_STRENGTH));
-					}
+						pixels[index++] = Color.Lerp(
+							Color.white, Color.clear, Mathf.Pow(1.0f - x / 31.0f, FADE_STRENGTH));
 				}
 
 				topToBottomFade.SetPixels(pixels);
@@ -90,10 +88,7 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor.Internal
 		{
 			get
 			{
-				if (bottomToTopFade != null)
-				{
-					return bottomToTopFade;
-				}
+				if (bottomToTopFade != null) return bottomToTopFade;
 
 				bottomToTopFade = new Texture2D(32, 32)
 				{
@@ -107,9 +102,7 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor.Internal
 				for (var x = 0; x < 32; x++)
 				{
 					for (var y = 0; y < 32; y++)
-					{
 						pixels[index++] = Color.Lerp(Color.white, Color.clear, Mathf.Pow(x / 31.0f, FADE_STRENGTH));
-					}
 				}
 
 				bottomToTopFade.SetPixels(pixels);
@@ -142,7 +135,7 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor.Internal
 						"On/p8ugiJQTWMN96+c9idGw0BnAhLsoJ9THAKiElZf5wyMoRmKnBrho8iyksCe8UQr+kqPuhLUD1jqlq1QBPrk+pGtsap27aJQRq1ZQgRFSqxulDgB5l41IL3EnMOKCfOsZ2N4yp4/TT9hOof/Fsd8NZdXxcocSM" +
 						"nfyEQAhckcB/Z2rwteNGzXsAAAAASUVORK5CYII=";
 
-					byte[] bytes = Convert.FromBase64String(BASE64);
+					var bytes = Convert.FromBase64String(BASE64);
 
 					roundBlur6 = TextureUtilities.LoadImage(102, 102, bytes);
 
@@ -270,7 +263,7 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor.Internal
 						"ky5BPWT5sb7qQtSZflc/3+Xvuofh3H/yJchNdx/x52LkG/rg3bv6iP6B7G+5BN2n6z7233YxunfQvas/WvubL0H3YfcOxe92Sfb2072Dv077uQTHPvmzh+roJXp2vWO7+8n+eQM/b+DnDfy8gZ838PMGft7Azxv4" +
 						"eQM/b+DnDfyFb+D/AdGPZ94O5ww1AAAAAElFTkSuQmCC";
 
-					byte[] bytes = Convert.FromBase64String(BASE64);
+					var bytes = Convert.FromBase64String(BASE64);
 
 					roundBlur20 = TextureUtilities.LoadImage(193, 193, bytes);
 
@@ -282,29 +275,14 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor.Internal
 				return roundBlur20;
 			}
 		}
-		
-		private static Texture2D leftToRightFade;
-		private static Texture2D topToBottomFade;
-		private static Texture2D bottomToTopFade;
-		private static Texture2D roundBlur6;
-		private static Texture2D roundBlur20;
-		
+
 		public static void Clear()
 		{
-			if (leftToRightFade != null)
-			{
-				UnityEngine.Object.Destroy(leftToRightFade);
-			}
+			if (leftToRightFade != null) Object.Destroy(leftToRightFade);
 
-			if (topToBottomFade != null)
-			{
-				UnityEngine.Object.Destroy(topToBottomFade);
-			}
+			if (topToBottomFade != null) Object.Destroy(topToBottomFade);
 
-			if (bottomToTopFade != null)
-			{
-				UnityEngine.Object.Destroy(bottomToTopFade);
-			}
+			if (bottomToTopFade != null) Object.Destroy(bottomToTopFade);
 		}
 	}
 }

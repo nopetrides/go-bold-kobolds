@@ -1,22 +1,22 @@
 {
-    "name": "Unity.StarterAssets.Editor",
-    "rootNamespace": "",
-    "references": [
-        "Unity.StarterAssets",
-        "Unity.Cinemachine",
-        "Kobolds.External.StarterAssets",
-        "UnityEditor.UI",
-        "UnityEngine.UI"
-    ],
-    "includePlatforms": [
-        "Editor"
-    ],
-    "excludePlatforms": [],
-    "allowUnsafeCode": false,
-    "overrideReferences": false,
-    "precompiledReferences": [],
-    "autoReferenced": true,
-    "defineConstraints": [],
-    "versionDefines": [],
-    "noEngineReferences": false
+  "name": "Unity.StarterAssets.Editor",
+  "rootNamespace": "",
+  "references": [
+    "Unity.StarterAssets",
+    "Unity.Cinemachine",
+    "Kobolds.External.StarterAssets",
+    "UnityEditor.UI",
+    "UnityEngine.UI"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
 }

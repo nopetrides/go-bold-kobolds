@@ -1,21 +1,23 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class HS_Rotator : MonoBehaviour
 {
-	public float x = 0f;
-	public float y = 0f;
-	public float z = 0f;
-	void OnEnable()
-    {
+	public float x;
+	public float y;
+	public float z;
+
+	private void OnEnable()
+	{
 		InvokeRepeating("Rotate", 0f, 0.0167f);
 	}
-	void OnDisable()
-    {
+
+	private void OnDisable()
+	{
 		CancelInvoke();
 	}
-	void Rotate()
-    {
-		this.transform.localEulerAngles += new Vector3(x,y,z);
+
+	private void Rotate()
+	{
+		transform.localEulerAngles += new Vector3(x, y, z);
 	}
 }

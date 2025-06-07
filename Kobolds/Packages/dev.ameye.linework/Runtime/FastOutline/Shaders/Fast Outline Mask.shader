@@ -24,7 +24,7 @@ Shader "Hidden/Outlines/Fast Outline/Mask"
             #if UNITY_PLATFORM_ANDROID || UNITY_PLATFORM_WEBGL || UNITY_PLATFORM_UWP
                 #pragma target 3.5 DOTS_INSTANCING_ON
             #else
-                #pragma target 4.5 DOTS_INSTANCING_ON
+            #pragma target 4.5 DOTS_INSTANCING_ON
             #endif
 
             struct Attributes

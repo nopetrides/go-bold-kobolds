@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 
 namespace MoreMountains.Feedbacks
@@ -9,74 +7,29 @@ namespace MoreMountains.Feedbacks
 	[CustomEditor(typeof(MMWiggle), true)]
 	public class MMWiggleEditor : Editor
 	{
-		public struct WiggleEditorProperties
-		{
-			public SerializedProperty WigglePermitted;
-
-			public SerializedProperty WiggleType;
-			public SerializedProperty UseUnscaledTime;
-			public SerializedProperty TimeMultiplier;
-			public SerializedProperty RelativeAmplitude;
-			public SerializedProperty UniformValues;
-			public SerializedProperty ForceVectorLength;
-			public SerializedProperty ForcedVectorLength;
-			public SerializedProperty StartWigglingAutomatically;
-
-			public SerializedProperty SmoothPingPong;
-			public SerializedProperty UseSpeedCurve;
-			public SerializedProperty SpeedCurve;
-
-			public SerializedProperty FrequencyMin;
-			public SerializedProperty FrequencyMax;
-
-			public SerializedProperty AmplitudeMin;
-			public SerializedProperty AmplitudeMax;
-			public SerializedProperty PauseMin;
-			public SerializedProperty PauseMax;
-
-			public SerializedProperty NoiseFrequencyMin;
-			public SerializedProperty NoiseFrequencyMax;
-			public SerializedProperty NoiseShiftMin;
-			public SerializedProperty NoiseShiftMax;
-
-			public SerializedProperty LimitedTime;
-			public SerializedProperty LimitedTimeTotal;
-			public SerializedProperty LimitedTimeLeft;
-			public SerializedProperty LimitedTimeFalloff;
-			public SerializedProperty LimitedTimeResetValue;
-
-			public SerializedProperty Curve;
-			public SerializedProperty RemapCurveZeroMin;
-			public SerializedProperty RemapCurveZeroMax;
-			public SerializedProperty RemapCurveOneMin;
-			public SerializedProperty RemapCurveOneMax;
-			public SerializedProperty RelativeCurveAmplitude;
-			public SerializedProperty CurvePingPong;
-		}
-
-		protected SerializedProperty _updateMode;
-
-		protected SerializedProperty _positionActive;
-		protected SerializedProperty _rotationActive;
-		protected SerializedProperty _scaleActive;
-
-		protected SerializedProperty _positionProperties;
-		protected SerializedProperty _rotationProperties;
-		protected SerializedProperty _scaleProperties;
-
-		protected WiggleEditorProperties _positionEditorProperties;
-		protected WiggleEditorProperties _rotationEditorProperties;
-		protected WiggleEditorProperties _scaleEditorProperties;
+		public bool StartWigglingAutomatically = true;
 
 		protected SerializedProperty _debugWiggleDuration;
 
 		protected MMWiggle _mmWiggle;
 
-		public bool StartWigglingAutomatically = true;
+		protected SerializedProperty _positionActive;
+
+		protected WiggleEditorProperties _positionEditorProperties;
+
+		protected SerializedProperty _positionProperties;
+		protected SerializedProperty _rotationActive;
+		protected WiggleEditorProperties _rotationEditorProperties;
+		protected SerializedProperty _rotationProperties;
+		protected SerializedProperty _scaleActive;
+		protected WiggleEditorProperties _scaleEditorProperties;
+		protected SerializedProperty _scaleProperties;
+
+		protected SerializedProperty _updateMode;
 
 		protected virtual void OnEnable()
 		{
-			_mmWiggle = (MMWiggle)target;
+			_mmWiggle = (MMWiggle) target;
 
 			_updateMode = serializedObject.FindProperty("UpdateMode");
 
@@ -95,7 +48,8 @@ namespace MoreMountains.Feedbacks
 			InitializeProperties(_scaleProperties, ref _scaleEditorProperties);
 		}
 
-		protected virtual void InitializeProperties(SerializedProperty targetProperty, ref WiggleEditorProperties editorProperties)
+		protected virtual void InitializeProperties(
+			SerializedProperty targetProperty, ref WiggleEditorProperties editorProperties)
 		{
 			editorProperties.WigglePermitted = targetProperty.FindPropertyRelative("WigglePermitted");
 			editorProperties.WiggleType = targetProperty.FindPropertyRelative("WiggleType");
@@ -105,7 +59,8 @@ namespace MoreMountains.Feedbacks
 			editorProperties.UniformValues = targetProperty.FindPropertyRelative("UniformValues");
 			editorProperties.ForceVectorLength = targetProperty.FindPropertyRelative("ForceVectorLength");
 			editorProperties.ForcedVectorLength = targetProperty.FindPropertyRelative("ForcedVectorLength");
-			editorProperties.StartWigglingAutomatically = targetProperty.FindPropertyRelative("StartWigglingAutomatically");
+			editorProperties.StartWigglingAutomatically =
+				targetProperty.FindPropertyRelative("StartWigglingAutomatically");
 			editorProperties.SmoothPingPong = targetProperty.FindPropertyRelative("SmoothPingPong");
 			editorProperties.UseSpeedCurve = targetProperty.FindPropertyRelative("UseSpeedCurve");
 			editorProperties.SpeedCurve = targetProperty.FindPropertyRelative("SpeedCurve");
@@ -136,14 +91,16 @@ namespace MoreMountains.Feedbacks
 		public override void OnInspectorGUI()
 		{
 			serializedObject.Update();
-			Undo.RecordObject(target, "Modified MMWiggle");            
+			Undo.RecordObject(target, "Modified MMWiggle");
 
 			EditorGUILayout.Space();
 			EditorGUILayout.PropertyField(_updateMode);
 			EditorGUILayout.Space();
 			MMFeedbackStyling.DrawSplitter();
-			DrawValueEditor("Position", _positionActive, _positionEditorProperties, _mmWiggle.PositionWiggleProperties.WiggleType);
-			DrawValueEditor("Rotation", _rotationActive, _rotationEditorProperties, _mmWiggle.RotationWiggleProperties.WiggleType);
+			DrawValueEditor(
+				"Position", _positionActive, _positionEditorProperties, _mmWiggle.PositionWiggleProperties.WiggleType);
+			DrawValueEditor(
+				"Rotation", _rotationActive, _rotationEditorProperties, _mmWiggle.RotationWiggleProperties.WiggleType);
 			DrawValueEditor("Scale", _scaleActive, _scaleEditorProperties, _mmWiggle.ScaleWiggleProperties.WiggleType);
 			EditorGUILayout.Space();
 
@@ -152,17 +109,11 @@ namespace MoreMountains.Feedbacks
 			EditorGUILayout.BeginHorizontal();
 			{
 				if (GUILayout.Button("Wiggle Position", EditorStyles.miniButtonLeft))
-				{
 					_mmWiggle.WigglePosition(_debugWiggleDuration.floatValue);
-				}
 				if (GUILayout.Button("Wiggle Rotation", EditorStyles.miniButtonMid))
-				{
 					_mmWiggle.WiggleRotation(_debugWiggleDuration.floatValue);
-				}
 				if (GUILayout.Button("Wiggle Scale", EditorStyles.miniButtonRight))
-				{
 					_mmWiggle.WiggleScale(_debugWiggleDuration.floatValue);
-				}
 			}
 			EditorGUILayout.EndHorizontal();
 			EditorGUILayout.Space();
@@ -170,13 +121,15 @@ namespace MoreMountains.Feedbacks
 			serializedObject.ApplyModifiedProperties();
 		}
 
-		protected virtual void DrawValueEditor(string title, SerializedProperty propertyActive, WiggleEditorProperties editorProperties, WiggleTypes wiggleType)
+		protected virtual void DrawValueEditor(
+			string title, SerializedProperty propertyActive, WiggleEditorProperties editorProperties,
+			WiggleTypes wiggleType)
 		{
-			bool propertyIsExpanded = propertyActive.isExpanded;
-			bool propertyIsActive = propertyActive.boolValue;
+			var propertyIsExpanded = propertyActive.isExpanded;
+			var propertyIsActive = propertyActive.boolValue;
 
 
-			Rect headerRect = MMFeedbackStyling.DrawSimpleHeader(
+			var headerRect = MMFeedbackStyling.DrawSimpleHeader(
 				ref propertyIsExpanded,
 				ref propertyIsActive,
 				title);
@@ -193,17 +146,13 @@ namespace MoreMountains.Feedbacks
 				EditorGUILayout.PropertyField(editorProperties.UseUnscaledTime);
 				EditorGUILayout.PropertyField(editorProperties.TimeMultiplier);
 
-				if ((wiggleType == WiggleTypes.PingPong) || (wiggleType == WiggleTypes.Random))
+				if (wiggleType == WiggleTypes.PingPong || wiggleType == WiggleTypes.Random)
 				{
 					if (wiggleType == WiggleTypes.PingPong)
-					{
 						EditorGUILayout.PropertyField(editorProperties.SmoothPingPong);
-					}
 					EditorGUILayout.PropertyField(editorProperties.UseSpeedCurve);
 					if (editorProperties.UseSpeedCurve.boolValue)
-					{
 						EditorGUILayout.PropertyField(editorProperties.SpeedCurve);
-					}
 					EditorGUILayout.PropertyField(editorProperties.AmplitudeMin);
 					EditorGUILayout.PropertyField(editorProperties.AmplitudeMax);
 					EditorGUILayout.PropertyField(editorProperties.RelativeAmplitude);
@@ -258,7 +207,53 @@ namespace MoreMountains.Feedbacks
 				EditorGUI.EndDisabledGroup();
 				EditorGUILayout.Space();
 			}
+
 			MMFeedbackStyling.DrawSplitter();
+		}
+
+		public struct WiggleEditorProperties
+		{
+			public SerializedProperty WigglePermitted;
+
+			public SerializedProperty WiggleType;
+			public SerializedProperty UseUnscaledTime;
+			public SerializedProperty TimeMultiplier;
+			public SerializedProperty RelativeAmplitude;
+			public SerializedProperty UniformValues;
+			public SerializedProperty ForceVectorLength;
+			public SerializedProperty ForcedVectorLength;
+			public SerializedProperty StartWigglingAutomatically;
+
+			public SerializedProperty SmoothPingPong;
+			public SerializedProperty UseSpeedCurve;
+			public SerializedProperty SpeedCurve;
+
+			public SerializedProperty FrequencyMin;
+			public SerializedProperty FrequencyMax;
+
+			public SerializedProperty AmplitudeMin;
+			public SerializedProperty AmplitudeMax;
+			public SerializedProperty PauseMin;
+			public SerializedProperty PauseMax;
+
+			public SerializedProperty NoiseFrequencyMin;
+			public SerializedProperty NoiseFrequencyMax;
+			public SerializedProperty NoiseShiftMin;
+			public SerializedProperty NoiseShiftMax;
+
+			public SerializedProperty LimitedTime;
+			public SerializedProperty LimitedTimeTotal;
+			public SerializedProperty LimitedTimeLeft;
+			public SerializedProperty LimitedTimeFalloff;
+			public SerializedProperty LimitedTimeResetValue;
+
+			public SerializedProperty Curve;
+			public SerializedProperty RemapCurveZeroMin;
+			public SerializedProperty RemapCurveZeroMax;
+			public SerializedProperty RemapCurveOneMin;
+			public SerializedProperty RemapCurveOneMax;
+			public SerializedProperty RelativeCurveAmplitude;
+			public SerializedProperty CurvePingPong;
 		}
 	}
 }

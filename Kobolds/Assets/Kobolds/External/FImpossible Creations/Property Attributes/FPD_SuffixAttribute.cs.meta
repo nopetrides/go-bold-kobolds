@@ -15,7 +15,6 @@ AssetOrigin:
   serializedVersion: 1
   productId: 285638
   packageName: Ragdoll Animator 2
-  packageVersion: 1.0.3.3
-  assetPath: Assets/Kobolds/External/FImpossible Creations/Shared Tools/Editor Tools/Property
-    Attributes/FPD_SuffixAttribute.cs
-  uploadId: 737666
+  packageVersion: 1.0.3.7
+  assetPath: Assets/Kobolds/External/FImpossible Creations/Property Attributes/FPD_SuffixAttribute.cs
+  uploadId: 755629

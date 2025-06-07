@@ -7,46 +7,46 @@ using Object = UnityEngine.Object;
 
 namespace LeTai
 {
-public static class Utility
-{
-    public static void LogList<T>(IEnumerable<T> list, Func<T, object> getData)
-    {
-        StringBuilder sb = new StringBuilder();
+	public static class Utility
+	{
+		public static void LogList<T>(IEnumerable<T> list, Func<T, object> getData)
+		{
+			var sb = new StringBuilder();
 
-        int i = 0;
-        foreach (T el in list)
-        {
-            sb.Append(i + ":    ");
-            sb.Append(getData(el).ToString());
-            sb.Append("\n");
-            i++;
-        }
+			var i = 0;
+			foreach (var el in list)
+			{
+				sb.Append(i + ":    ");
+				sb.Append(getData(el).ToString());
+				sb.Append("\n");
+				i++;
+			}
 
-        Debug.Log(sb.ToString());
-    }
+			Debug.Log(sb.ToString());
+		}
 
-    public static int SimplePingPong(int t, int max)
-    {
-        if (t > max)
-            return 2 * max - t;
-        return t;
-    }
+		public static int SimplePingPong(int t, int max)
+		{
+			if (t > max)
+				return 2 * max - t;
+			return t;
+		}
 
-    public static void SafeDestroy(Object obj)
-    {
-        if (obj != null)
-        {
-            if (Application.isPlaying)
-            {
-                if (obj is GameObject go)
-                {
-                    go.transform.parent = null;
-                }
+		public static void SafeDestroy(Object obj)
+		{
+			if (obj != null)
+			{
+				if (Application.isPlaying)
+				{
+					if (obj is GameObject go) go.transform.parent = null;
 
-                Object.Destroy(obj);
-            }
-            else Object.DestroyImmediate(obj);
-        }
-    }
-}
+					Object.Destroy(obj);
+				}
+				else
+				{
+					Object.DestroyImmediate(obj);
+				}
+			}
+		}
+	}
 }

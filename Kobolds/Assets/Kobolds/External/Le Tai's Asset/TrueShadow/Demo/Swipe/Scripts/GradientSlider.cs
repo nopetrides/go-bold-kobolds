@@ -3,24 +3,24 @@ using UnityEngine.UI;
 
 namespace LeTai.TrueShadow.Demo
 {
-[RequireComponent(typeof(Image))]
-public class GradientSlider : MonoBehaviour
-{
-    public Gradient gradient;
+	[RequireComponent(typeof(Image))]
+	public class GradientSlider : MonoBehaviour
+	{
+		public Gradient gradient;
 
-    Image image;
+		private Image image;
 
-    void Start()
-    {
-        image = GetComponent<Image>();
-    }
+		private void Start()
+		{
+			image = GetComponent<Image>();
+		}
 
-    public void Set(float value)
-    {
-        if (!image) return;
+		public void Set(float value)
+		{
+			if (!image) return;
 
-        image.fillAmount = value;
-        image.color      = gradient.Evaluate(value);
-    }
-}
+			image.fillAmount = value;
+			image.color = gradient.Evaluate(value);
+		}
+	}
 }

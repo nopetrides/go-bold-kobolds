@@ -8,7 +8,7 @@ using UnityEngine;
 namespace MoreMountains.Tools
 {
 	/// <summary>
-	/// 3D Implementation of the CinemachineZone abstract class
+	///     3D Implementation of the CinemachineZone abstract class
 	/// </summary>
 	[RequireComponent(typeof(Collider))]
 	public class MMCinemachineZone3D : MMCinemachineZone
@@ -18,14 +18,14 @@ namespace MoreMountains.Tools
 		protected Rigidbody _confinerRigidbody;
 		protected BoxCollider _boxCollider;
 		protected SphereCollider _sphereCollider;
-		#if MM_CINEMACHINE
+#if MM_CINEMACHINE
 		protected CinemachineConfiner _cinemachineConfiner;
-		#elif MM_CINEMACHINE3
+#elif MM_CINEMACHINE3
 		protected CinemachineConfiner3D _cinemachineConfiner;
-		#endif
-        
+#endif
+
 		/// <summary>
-		/// Gets and sets up the colliders
+		///     Gets and sets up the colliders
 		/// </summary>
 		protected override void InitializeCollider()
 		{
@@ -36,7 +36,7 @@ namespace MoreMountains.Tools
 		}
 
 		/// <summary>
-		/// Creates and sets up the camera's confiner
+		///     Creates and sets up the camera's confiner
 		/// </summary>
 		protected override void SetupConfiner()
 		{
@@ -45,16 +45,16 @@ namespace MoreMountains.Tools
 			_confinerRigidbody.useGravity = false;
 			_confinerRigidbody.gameObject.isStatic = true;
 			_confinerRigidbody.isKinematic = true;
-            
+
 			// we copy the collider and set it up
 
 			CopyCollider();
 			_confinerGameObject.transform.localPosition = Vector3.zero;
-            
-            
+
+
 			// we set the composite collider as the virtual camera's confiner
-			
-			#if MM_CINEMACHINE
+
+#if MM_CINEMACHINE
 			_cinemachineConfiner = VirtualCamera.gameObject.MMGetComponentAroundOrAdd<CinemachineConfiner>();
 			_cinemachineConfiner.m_ConfineMode = CinemachineConfiner.Mode.Confine3D;
 			_cinemachineConfiner.m_ConfineScreenEdges = true;
@@ -66,27 +66,21 @@ namespace MoreMountains.Tools
 			{
 				_cinemachineConfiner.m_BoundingVolume = _sphereCollider;
 			}
-			#elif MM_CINEMACHINE3
+#elif MM_CINEMACHINE3
 			_cinemachineConfiner = VirtualCamera.gameObject.MMGetComponentAroundOrAdd<CinemachineConfiner3D>();
-			if (_boxCollider != null)
-			{
-				_cinemachineConfiner.BoundingVolume = _boxCollider;
-			}
-			if (_sphereCollider != null)
-			{
-				_cinemachineConfiner.BoundingVolume = _sphereCollider;
-			}
-			#endif
+			if (_boxCollider != null) _cinemachineConfiner.BoundingVolume = _boxCollider;
+			if (_sphereCollider != null) _cinemachineConfiner.BoundingVolume = _sphereCollider;
+#endif
 		}
 
 		/// <summary>
-		/// Copies the initial collider to the composite
+		///     Copies the initial collider to the composite
 		/// </summary>
 		protected virtual void CopyCollider()
 		{
 			if (_boxCollider != null)
 			{
-				BoxCollider boxCollider = _confinerGameObject.AddComponent<BoxCollider>();
+				var boxCollider = _confinerGameObject.AddComponent<BoxCollider>();
 				boxCollider.size = _boxCollider.size;
 				boxCollider.center = _boxCollider.center;
 				boxCollider.isTrigger = true;
@@ -94,7 +88,7 @@ namespace MoreMountains.Tools
 
 			if (_sphereCollider != null)
 			{
-				SphereCollider sphereCollider = _confinerGameObject.AddComponent<SphereCollider>();
+				var sphereCollider = _confinerGameObject.AddComponent<SphereCollider>();
 				sphereCollider.isTrigger = true;
 				sphereCollider.center = _sphereCollider.center;
 				sphereCollider.radius = _sphereCollider.radius;
@@ -102,60 +96,44 @@ namespace MoreMountains.Tools
 		}
 
 		/// <summary>
-		/// On enter, enables the camera and triggers the enter event
+		///     On enter, enables the camera and triggers the enter event
 		/// </summary>
 		/// <param name="collider"></param>
 		protected virtual void OnTriggerEnter(Collider collider)
 		{
-			if (!TestCollidingGameObject(collider.gameObject))
-			{
-				return;
-			}
-			if (TriggerMask.MMContains (collider.gameObject))
-			{
-				EnterZone();
-			}
+			if (!TestCollidingGameObject(collider.gameObject)) return;
+			if (TriggerMask.MMContains(collider.gameObject)) EnterZone();
 		}
 
 		/// <summary>
-		/// On exit, disables the camera and invokes the exit event
+		///     On exit, disables the camera and invokes the exit event
 		/// </summary>
 		/// <param name="collider"></param>
 		protected virtual void OnTriggerExit(Collider collider)
 		{
-			if (!TestCollidingGameObject(collider.gameObject))
-			{
-				return;
-			}
-			if (TriggerMask.MMContains (collider.gameObject))
-			{
-				ExitZone();
-			}
+			if (!TestCollidingGameObject(collider.gameObject)) return;
+			if (TriggerMask.MMContains(collider.gameObject)) ExitZone();
 		}
-        
-		#if UNITY_EDITOR
+
+#if UNITY_EDITOR
 		/// <summary>
-		/// Draws gizmos to show the shape of the zone
+		///     Draws gizmos to show the shape of the zone
 		/// </summary>
 		protected virtual void OnDrawGizmos()
 		{
-			if (!DrawGizmos)
-			{
-				return;
-			}
-            
+			if (!DrawGizmos) return;
+
 			Gizmos.color = GizmosColor;
 
-			if ((_boxCollider != null) && _boxCollider.enabled)
+			if (_boxCollider != null && _boxCollider.enabled)
 			{
-				_gizmoSize =  _boxCollider.bounds.size ;
+				_gizmoSize = _boxCollider.bounds.size;
 				Gizmos.DrawCube(_boxCollider.bounds.center, _gizmoSize);
 			}
+
 			if (_sphereCollider != null && _sphereCollider.enabled)
-			{
-				Gizmos.DrawSphere(this.transform.position + _sphereCollider.center, _sphereCollider.radius);                
-			}
+				Gizmos.DrawSphere(transform.position + _sphereCollider.center, _sphereCollider.radius);
 		}
-		#endif
-	}    
+#endif
+	}
 }

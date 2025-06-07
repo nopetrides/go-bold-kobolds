@@ -1,248 +1,248 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using UnityEditor;
 using UnityEngine;
 
 namespace TheraBytes.BetterUi.Editor
 {
-    public delegate void ScreenConfigConnectionCallback(string configName, SerializedProperty property);
+	public delegate void ScreenConfigConnectionCallback(string configName, SerializedProperty property);
 
-    public static class ScreenConfigConnectionHelper
-    {
-        static HashSet<int> foldoutHashes = new HashSet<int>();
+	public static class ScreenConfigConnectionHelper
+	{
+		private static readonly HashSet<int> foldoutHashes = new();
 
-        public static void DrawSizerGui(string title, SerializedProperty collection, ref SerializedProperty fallback)
-        {
-            int indent = EditorGUI.indentLevel;
-            EditorGUI.indentLevel = 0;
-            DrawGui(title, collection, ref fallback, null, (name, o) =>
-            {
-                var obj = o.GetValue<ScreenDependentSize>();
-                obj.DynamicInitialization();
-            });
+		public static void DrawSizerGui(string title, SerializedProperty collection, ref SerializedProperty fallback)
+		{
+			var indent = EditorGUI.indentLevel;
+			EditorGUI.indentLevel = 0;
+			DrawGui(
+				title, collection, ref fallback, null, (name, o) =>
+				{
+					var obj = o.GetValue<ScreenDependentSize>();
+					obj.DynamicInitialization();
+				});
 
-            EditorGUI.indentLevel = indent;
-        }
-
-
-        public static void DrawGui(string title, SerializedProperty collection, ref SerializedProperty fallback,
-            ScreenConfigConnectionCallback drawContent = null, 
-            ScreenConfigConnectionCallback newElementInitCallback = null,
-            ScreenConfigConnectionCallback elementDeleteCallback = null)
-        {
-            int baseHash = title.GetHashCode();
-
-            GUILayout.Space(2);
-
-            Rect bgRect = EditorGUILayout.BeginVertical("box");
-            
-            EditorGUILayout.LabelField(title, EditorStyles.boldLabel);
-
-            var configs = collection.GetValue<ISizeConfigCollection>();
-            if (configs.IsDirty)
-            {
-                configs.Sort();
-                return;
-            }
-
-            string currentConfig = configs.GetCurrentConfigName();
-            string currentScreen = ResolutionMonitor.CurrentScreenConfiguration?.Name;
-            SerializedProperty items = collection.FindPropertyRelative("items");
+			EditorGUI.indentLevel = indent;
+		}
 
 
-            // LIST
-            bool configFound = currentConfig != null;
-            HashSet<string> names = new HashSet<string>();
+		public static void DrawGui(
+			string title, SerializedProperty collection, ref SerializedProperty fallback,
+			ScreenConfigConnectionCallback drawContent = null,
+			ScreenConfigConnectionCallback newElementInitCallback = null,
+			ScreenConfigConnectionCallback elementDeleteCallback = null)
+		{
+			var baseHash = title.GetHashCode();
 
-            for (int i = 0; i < items.arraySize; i++)
-            {
-                SerializedProperty item = items.GetArrayElementAtIndex(i);
-                var nameProp = item.FindPropertyRelative("screenConfigName");
-                string name = "?";
+			GUILayout.Space(2);
 
-                if (nameProp != null)
-                {
-                    name = nameProp.stringValue;
-                    names.Add(name);
-                }
-                else
-                {
-                    Debug.LogError("no serialized property named 'screenConfigName' found.");
-                }
+			var bgRect = EditorGUILayout.BeginVertical("box");
 
-                bool foldout = false;
+			EditorGUILayout.LabelField(title, EditorStyles.boldLabel);
 
-                // DELETE
-                DrawItemHeader(name, baseHash, false, currentConfig, out foldout, () =>
-                {
-                    if (elementDeleteCallback != null)
-                        elementDeleteCallback(name, item);
+			var configs = collection.GetValue<ISizeConfigCollection>();
+			if (configs.IsDirty)
+			{
+				configs.Sort();
+				return;
+			}
 
-                    items.DeleteArrayElementAtIndex(i);
-                    i--;
-                    foldout = false;
-                });
+			var currentConfig = configs.GetCurrentConfigName();
+			var currentScreen = ResolutionMonitor.CurrentScreenConfiguration?.Name;
+			var items = collection.FindPropertyRelative("items");
 
-                if (foldout)
-                {
-                    if (drawContent != null)
-                        drawContent(name, item);
-                    else
-                        EditorGUILayout.PropertyField(item);
-                }
-            }
 
-            // FALLBACK
-            bool fallbackFoldout;
-            string fallbackName = string.Format("{0} (Fallback)", ResolutionMonitor.Instance.FallbackName);
-            DrawItemHeader(fallbackName, baseHash, !configFound, currentConfig ?? fallbackName, out fallbackFoldout);
-            if (fallbackFoldout)
-            {
-                if (drawContent != null)
-                    drawContent(fallbackName, fallback);
-                else
-                    EditorGUILayout.PropertyField(fallback);
-            }
+			// LIST
+			var configFound = currentConfig != null;
+			var names = new HashSet<string>();
 
-            // ADD NEW
-            string[] options = ResolutionMonitor.Instance.OptimizedScreens
-                .Where(o => !(names.Contains(o.Name)))
-                .Select(o => o.Name)
-                .ToArray();
+			for (var i = 0; i < items.arraySize; i++)
+			{
+				var item = items.GetArrayElementAtIndex(i);
+				var nameProp = item.FindPropertyRelative("screenConfigName");
+				var name = "?";
 
-            if (options.Length > 0)
-            {
+				if (nameProp != null)
+				{
+					name = nameProp.stringValue;
+					names.Add(name);
+				}
+				else
+				{
+					Debug.LogError("no serialized property named 'screenConfigName' found.");
+				}
 
-                EditorGUILayout.BeginHorizontal();
-                GUILayout.FlexibleSpace();
+				var foldout = false;
 
-                // Quick Action: Add current config
-                if (currentConfig != currentScreen)
-                {
-                    GUIStyle style = "minibutton";
-                    var content = EditorGUIUtility.IconContent("OL Plus");
-                    content.text = $" {currentScreen}";
+				// DELETE
+				DrawItemHeader(
+					name, baseHash, false, currentConfig, out foldout, () =>
+					{
+						if (elementDeleteCallback != null)
+							elementDeleteCallback(name, item);
 
-                    var size = style.CalcSize(content);
-                    Rect rect = new Rect(bgRect.xMax - size.x - 20, bgRect.y + 3, size.x, 16);
+						items.DeleteArrayElementAtIndex(i);
+						i--;
+						foldout = false;
+					});
 
-                    if (GUI.Button(rect, content, "minibutton"))
-                    {
-                        AddSizerToList(currentScreen, ref fallback, items, newElementInitCallback);
-                        configs.MarkDirty();
-                    }
-                }
+				if (foldout)
+				{
+					if (drawContent != null)
+						drawContent(name, item);
+					else
+						EditorGUILayout.PropertyField(item);
+				}
+			}
 
-                //int idx = EditorGUILayout.Popup(-1, options, "OL Plus", GUILayout.Width(20));
-                Rect r = new Rect(bgRect.x + bgRect.width - 20, bgRect.y + 3, 20, 20);
-                int idx = EditorGUI.Popup(r, -1, options, "OL Plus");
+			// FALLBACK
+			bool fallbackFoldout;
+			var fallbackName = string.Format("{0} (Fallback)", ResolutionMonitor.Instance.FallbackName);
+			DrawItemHeader(fallbackName, baseHash, !configFound, currentConfig ?? fallbackName, out fallbackFoldout);
+			if (fallbackFoldout)
+			{
+				if (drawContent != null)
+					drawContent(fallbackName, fallback);
+				else
+					EditorGUILayout.PropertyField(fallback);
+			}
 
-                if (idx != -1)
-                {
-                    string name = options[idx];
-                    idx = -1;
+			// ADD NEW
+			var options = ResolutionMonitor.Instance.OptimizedScreens
+				.Where(o => !names.Contains(o.Name))
+				.Select(o => o.Name)
+				.ToArray();
 
-                    AddSizerToList(name, ref fallback, items, newElementInitCallback);
-                    configs.MarkDirty();
-                }
+			if (options.Length > 0)
+			{
+				EditorGUILayout.BeginHorizontal();
+				GUILayout.FlexibleSpace();
 
-                EditorGUILayout.EndHorizontal();
-            }
+				// Quick Action: Add current config
+				if (currentConfig != currentScreen)
+				{
+					GUIStyle style = "minibutton";
+					var content = EditorGUIUtility.IconContent("OL Plus");
+					content.text = $" {currentScreen}";
 
-            fallback.serializedObject.ApplyModifiedProperties();
+					var size = style.CalcSize(content);
+					var rect = new Rect(bgRect.xMax - size.x - 20, bgRect.y + 3, size.x, 16);
 
-            // immediately handle the ordering of the configs and update the serialized object
-            // otherwise this would happen one frame delayed and an error would popup in the console.
-            if(configs.IsDirty)
-            {
-                configs.Sort();
-                fallback.serializedObject.Update();
-            }
+					if (GUI.Button(rect, content, "minibutton"))
+					{
+						AddSizerToList(currentScreen, ref fallback, items, newElementInitCallback);
+						configs.MarkDirty();
+					}
+				}
 
-            EditorGUILayout.EndVertical();
-        }
+				//int idx = EditorGUILayout.Popup(-1, options, "OL Plus", GUILayout.Width(20));
+				var r = new Rect(bgRect.x + bgRect.width - 20, bgRect.y + 3, 20, 20);
+				var idx = EditorGUI.Popup(r, -1, options, "OL Plus");
 
-        public static void AddSizerToList(string configName, ref SerializedProperty fallback, SerializedProperty items, 
-            ScreenConfigConnectionCallback callback = null)
-        {
-            string fallbackPath = fallback.propertyPath;
-            items.arraySize += 1;
-            var newElement = items.GetArrayElementAtIndex(items.arraySize - 1);
+				if (idx != -1)
+				{
+					var name = options[idx];
+					idx = -1;
 
-            SerializedPropertyUtil.Copy(fallback, newElement);
+					AddSizerToList(name, ref fallback, items, newElementInitCallback);
+					configs.MarkDirty();
+				}
 
-            // after the copy action the property pointer points somewhere.
-            // so, point to the right prop again.
-            newElement = items.GetArrayElementAtIndex(items.arraySize - 1);
-            fallback = fallback.serializedObject.FindProperty(fallbackPath);
+				EditorGUILayout.EndHorizontal();
+			}
 
-            if (callback != null)
-            {
-                callback(configName, newElement);
-            }
+			fallback.serializedObject.ApplyModifiedProperties();
 
-            var prop = newElement.FindPropertyRelative("screenConfigName");
-            if (prop != null)
-                prop.stringValue = configName;
-            else
-                Debug.LogError("no serialized property named 'screenConfigName' found.");
-        }
+			// immediately handle the ordering of the configs and update the serialized object
+			// otherwise this would happen one frame delayed and an error would popup in the console.
+			if (configs.IsDirty)
+			{
+				configs.Sort();
+				fallback.serializedObject.Update();
+			}
 
-        private static void DrawItemHeader(string configName, int baseHash, bool setCurrent, string currentConfigName, out bool foldout, Action deleteCallback = null)
-        {
-            int hash = GetHash(baseHash, configName);
-            bool isCurrentConfig = configName == currentConfigName;
-            bool isSimulatedConfig = (ResolutionMonitor.SimulatedScreenConfig != null) && (configName == ResolutionMonitor.SimulatedScreenConfig.Name);
-            bool exists = ResolutionMonitor.Instance.FallbackName + " (Fallback)" == configName
-                || ResolutionMonitor.Instance.OptimizedScreens.Any(o => o.Name == configName);
+			EditorGUILayout.EndVertical();
+		}
 
-            foldout = foldoutHashes.Contains(hash) || isCurrentConfig;
+		public static void AddSizerToList(
+			string configName, ref SerializedProperty fallback, SerializedProperty items,
+			ScreenConfigConnectionCallback callback = null)
+		{
+			var fallbackPath = fallback.propertyPath;
+			items.arraySize += 1;
+			var newElement = items.GetArrayElementAtIndex(items.arraySize - 1);
 
-            EditorGUILayout.BeginHorizontal();
+			SerializedPropertyUtil.Copy(fallback, newElement);
 
-            string title = string.Format("{0} {1}{2} {3}{4}",
-                (foldout) ? "▼" : "►",
-                (isCurrentConfig) ? "♦" : "◊",
-                (isSimulatedConfig) ? " ⃰" : " ",
-                configName,
-                (exists) ? "" : " (‼ not found ‼)");
+			// after the copy action the property pointer points somewhere.
+			// so, point to the right prop again.
+			newElement = items.GetArrayElementAtIndex(items.arraySize - 1);
+			fallback = fallback.serializedObject.FindProperty(fallbackPath);
 
-            if (GUILayout.Button(title, "TextField", GUILayout.ExpandWidth(true)))//(foldout) ? "MiniPopup" : "MiniPullDown"))
-            {
-                if (!(isCurrentConfig) && !(foldoutHashes.Remove(hash)))
-                {
-                    foldoutHashes.Add(hash);
-                    foldout = true;
-                }
-            }
+			if (callback != null) callback(configName, newElement);
 
-           GUILayout.Space(-6);
+			var prop = newElement.FindPropertyRelative("screenConfigName");
+			if (prop != null)
+				prop.stringValue = configName;
+			else
+				Debug.LogError("no serialized property named 'screenConfigName' found.");
+		}
 
-            if (deleteCallback != null)
-            {
-                if (GUILayout.Button("X", "SearchCancelButton", GUILayout.Width(20)))//"MiniButton", GUILayout.Width(20))))
-                {
-                    if (EditorUtility.DisplayDialog("Delete?",
-                    string.Format("Do you really want to delete the configuration '{0}'?", configName),
-                    "Delete", "Cancel"))
-                    {
-                        deleteCallback();
-                    }
-                }
-            }
-            else
-            {
-                GUILayout.Box("", "SearchCancelButtonEmpty", GUILayout.Width(20));
-            }
+		private static void DrawItemHeader(
+			string configName, int baseHash, bool setCurrent, string currentConfigName, out bool foldout,
+			Action deleteCallback = null)
+		{
+			var hash = GetHash(baseHash, configName);
+			var isCurrentConfig = configName == currentConfigName;
+			var isSimulatedConfig = ResolutionMonitor.SimulatedScreenConfig != null &&
+									configName == ResolutionMonitor.SimulatedScreenConfig.Name;
+			var exists = ResolutionMonitor.Instance.FallbackName + " (Fallback)" == configName
+						|| ResolutionMonitor.Instance.OptimizedScreens.Any(o => o.Name == configName);
 
-            EditorGUILayout.EndHorizontal();
-        }
+			foldout = foldoutHashes.Contains(hash) || isCurrentConfig;
 
-        private static int GetHash(int baseHash, string configName)
-        {
-            return baseHash ^ configName.GetHashCode();
-        }
-    }
+			EditorGUILayout.BeginHorizontal();
+
+			var title = string.Format(
+				"{0} {1}{2} {3}{4}",
+				foldout ? "▼" : "►",
+				isCurrentConfig ? "♦" : "◊",
+				isSimulatedConfig ? " ⃰" : " ",
+				configName,
+				exists ? "" : " (‼ not found ‼)");
+
+			if (GUILayout.Button(
+					title, "TextField", GUILayout.ExpandWidth(true))) //(foldout) ? "MiniPopup" : "MiniPullDown"))
+				if (!isCurrentConfig && !foldoutHashes.Remove(hash))
+				{
+					foldoutHashes.Add(hash);
+					foldout = true;
+				}
+
+			GUILayout.Space(-6);
+
+			if (deleteCallback != null)
+			{
+				if (GUILayout.Button(
+						"X", "SearchCancelButton", GUILayout.Width(20))) //"MiniButton", GUILayout.Width(20))))
+					if (EditorUtility.DisplayDialog(
+							"Delete?",
+							string.Format("Do you really want to delete the configuration '{0}'?", configName),
+							"Delete", "Cancel"))
+						deleteCallback();
+			}
+			else
+			{
+				GUILayout.Box("", "SearchCancelButtonEmpty", GUILayout.Width(20));
+			}
+
+			EditorGUILayout.EndHorizontal();
+		}
+
+		private static int GetHash(int baseHash, string configName)
+		{
+			return baseHash ^ configName.GetHashCode();
+		}
+	}
 }

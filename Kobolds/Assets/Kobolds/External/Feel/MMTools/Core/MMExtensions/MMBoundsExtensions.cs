@@ -1,15 +1,14 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 namespace MoreMountains.Tools
-{	
+{
 	/// <summary>
-	/// Bounds helpers
+	///     Bounds helpers
 	/// </summary>
-	public class MMBoundsExtensions : MonoBehaviour 
+	public class MMBoundsExtensions : MonoBehaviour
 	{
 		/// <summary>
-		/// Returns a random point within the bounds set as parameter
+		///     Returns a random point within the bounds set as parameter
 		/// </summary>
 		/// <param name="bounds"></param>
 		/// <returns></returns>
@@ -23,7 +22,7 @@ namespace MoreMountains.Tools
 		}
 
 		/// <summary>
-		/// Gets collider bounds for an object (from Collider2D)
+		///     Gets collider bounds for an object (from Collider2D)
 		/// </summary>
 		/// <param name="theObject"></param>
 		/// <returns></returns>
@@ -32,41 +31,35 @@ namespace MoreMountains.Tools
 			Bounds returnBounds;
 
 			// if the object has a collider at root level, we base our calculations on that
-			if (theObject.GetComponent<Collider>()!=null)
+			if (theObject.GetComponent<Collider>() != null)
 			{
 				returnBounds = theObject.GetComponent<Collider>().bounds;
 				return returnBounds;
 			}
 
 			// if the object has a collider2D at root level, we base our calculations on that
-			if (theObject.GetComponent<Collider2D>()!=null) 
+			if (theObject.GetComponent<Collider2D>() != null)
 			{
 				returnBounds = theObject.GetComponent<Collider2D>().bounds;
 				return returnBounds;
 			}
 
 			// if the object contains at least one Collider we'll add all its children's Colliders bounds
-			if (theObject.GetComponentInChildren<Collider>()!=null)
+			if (theObject.GetComponentInChildren<Collider>() != null)
 			{
-				Bounds totalBounds = theObject.GetComponentInChildren<Collider>().bounds;
-				Collider[] colliders = theObject.GetComponentsInChildren<Collider>();
-				foreach (Collider col in colliders) 
-				{
-					totalBounds.Encapsulate(col.bounds);
-				}
+				var totalBounds = theObject.GetComponentInChildren<Collider>().bounds;
+				var colliders = theObject.GetComponentsInChildren<Collider>();
+				foreach (var col in colliders) totalBounds.Encapsulate(col.bounds);
 				returnBounds = totalBounds;
 				return returnBounds;
 			}
 
 			// if the object contains at least one Collider2D we'll add all its children's Collider2Ds bounds
-			if (theObject.GetComponentInChildren<Collider2D>()!=null)
+			if (theObject.GetComponentInChildren<Collider2D>() != null)
 			{
-				Bounds totalBounds = theObject.GetComponentInChildren<Collider2D>().bounds;
-				Collider2D[] colliders = theObject.GetComponentsInChildren<Collider2D>();
-				foreach (Collider2D col in colliders) 
-				{
-					totalBounds.Encapsulate(col.bounds);
-				}
+				var totalBounds = theObject.GetComponentInChildren<Collider2D>().bounds;
+				var colliders = theObject.GetComponentsInChildren<Collider2D>();
+				foreach (var col in colliders) totalBounds.Encapsulate(col.bounds);
 				returnBounds = totalBounds;
 				return returnBounds;
 			}
@@ -76,7 +69,7 @@ namespace MoreMountains.Tools
 		}
 
 		/// <summary>
-		/// Gets bounds of a renderer
+		///     Gets bounds of a renderer
 		/// </summary>
 		/// <param name="theObject"></param>
 		/// <returns></returns>
@@ -85,21 +78,18 @@ namespace MoreMountains.Tools
 			Bounds returnBounds;
 
 			// if the object has a renderer at root level, we base our calculations on that
-			if (theObject.GetComponent<Renderer>()!=null)
+			if (theObject.GetComponent<Renderer>() != null)
 			{
 				returnBounds = theObject.GetComponent<Renderer>().bounds;
 				return returnBounds;
 			}
 
 			// if the object contains at least one renderer we'll add all its children's renderer bounds
-			if (theObject.GetComponentInChildren<Renderer>()!=null)
+			if (theObject.GetComponentInChildren<Renderer>() != null)
 			{
-				Bounds totalBounds = theObject.GetComponentInChildren<Renderer>().bounds;
-				Renderer[] renderers = theObject.GetComponentsInChildren<Renderer>();
-				foreach (Renderer renderer in renderers) 
-				{
-					totalBounds.Encapsulate(renderer.bounds);
-				}
+				var totalBounds = theObject.GetComponentInChildren<Renderer>().bounds;
+				var renderers = theObject.GetComponentsInChildren<Renderer>();
+				foreach (var renderer in renderers) totalBounds.Encapsulate(renderer.bounds);
 				returnBounds = totalBounds;
 				return returnBounds;
 			}

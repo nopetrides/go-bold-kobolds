@@ -116,10 +116,10 @@ Shader "MoreMountains/MMSkybox"
                 #ifdef _SCREENSPACE
                 float staticSwitch13 = ase_screenPosNorm.y;
                 #else
-					float staticSwitch13 = i.ase_texcoord1.xyz.y;
+                float staticSwitch13 = i.ase_texcoord1.xyz.y;
                 #endif
                 float4 lerpResult3 = lerp(_BottomColor, _TopColor,
-                                          pow(saturate((staticSwitch13 * _Saturation)), _Intensity));
+                                                     pow(saturate((staticSwitch13 * _Saturation)), _Intensity));
                 finalColor = lerpResult3;
                 return finalColor;
             }

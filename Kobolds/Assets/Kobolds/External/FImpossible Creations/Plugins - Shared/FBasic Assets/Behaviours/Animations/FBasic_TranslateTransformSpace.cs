@@ -2,25 +2,26 @@
 
 namespace FIMSpace.Basics
 {
-    /// <summary>
-    /// Basic script to move object in object's transform orientation direction
-    /// </summary>
-    public class FBasic_TranslateTransformSpace : MonoBehaviour
-    {
-        public Vector3 TranslationAxis = new Vector3(0f, 0f, 1f);
+	/// <summary>
+	///     Basic script to move object in object's transform orientation direction
+	/// </summary>
+	public class FBasic_TranslateTransformSpace : MonoBehaviour
+	{
+		public Vector3 TranslationAxis = new(0f, 0f, 1f);
 
-        /// <summary> Multiplies deltaTime </summary>
-        public float TranslationSpeed = 10f;
+		/// <summary> Multiplies deltaTime </summary>
+		public float TranslationSpeed = 10f;
 
-        /// <summary> If animator should go on for example during game pause (useful for UI) </summary>
-        public bool UnscaledDeltaTime = false;
+		/// <summary> If animator should go on for example during game pause (useful for UI) </summary>
+		public bool UnscaledDeltaTime;
 
-        protected virtual void Update()
-        {
-            float delta;
-            if (UnscaledDeltaTime) delta = Time.unscaledDeltaTime; else delta = Time.deltaTime;
+		protected virtual void Update()
+		{
+			float delta;
+			if (UnscaledDeltaTime) delta = Time.unscaledDeltaTime;
+			else delta = Time.deltaTime;
 
-            transform.position += transform.TransformVector(TranslationAxis) * delta * TranslationSpeed;
-        }
-    }
+			transform.position += transform.TransformVector(TranslationAxis) * delta * TranslationSpeed;
+		}
+	}
 }

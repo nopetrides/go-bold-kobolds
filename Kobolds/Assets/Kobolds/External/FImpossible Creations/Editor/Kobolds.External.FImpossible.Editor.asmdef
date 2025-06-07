@@ -1,18 +1,18 @@
 {
-    "name": "Kobolds.External.Fimpossible.Editor",
-    "rootNamespace": "",
-    "references": [
-        "GUID:8518345498be10d4b815af4da24ab8c5"
-    ],
-    "includePlatforms": [
-        "Editor"
-    ],
-    "excludePlatforms": [],
-    "allowUnsafeCode": false,
-    "overrideReferences": false,
-    "precompiledReferences": [],
-    "autoReferenced": true,
-    "defineConstraints": [],
-    "versionDefines": [],
-    "noEngineReferences": false
+  "name": "Kobolds.External.Fimpossible.Editor",
+  "rootNamespace": "",
+  "references": [
+    "GUID:8518345498be10d4b815af4da24ab8c5"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
 }

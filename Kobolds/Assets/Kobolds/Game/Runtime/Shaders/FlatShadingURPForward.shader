@@ -6,18 +6,24 @@ Shader "Custom/FlatShadingURP"
     }
     SubShader
     {
-        Tags { "RenderPipeline"="UniversalRenderPipeline" "RenderType"="Opaque" }
+        Tags
+        {
+            "RenderPipeline"="UniversalRenderPipeline" "RenderType"="Opaque"
+        }
         Pass
         {
-            Tags { "LightMode"="UniversalForward" }
+            Tags
+            {
+                "LightMode"="UniversalForward"
+            }
 
             HLSLPROGRAM
             #pragma once
-            
+
             #pragma vertex vert
             #pragma fragment frag
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
-            
+
             // Include this if you are doing a lit shader. This includes lighting shader variables,
             // lighting and shadow functions
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
@@ -36,7 +42,7 @@ Shader "Custom/FlatShadingURP"
             };
 
             CBUFFER_START(UnityPerMaterial)
-            float4 _BaseColor;
+                float4 _BaseColor;
             CBUFFER_END
 
             // Vertex Shader

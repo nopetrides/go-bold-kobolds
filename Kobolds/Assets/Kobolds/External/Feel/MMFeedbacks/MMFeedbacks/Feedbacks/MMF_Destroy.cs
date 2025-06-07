@@ -1,68 +1,66 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Scripting.APIUpdating;
 
 namespace MoreMountains.Feedbacks
 {
 	/// <summary>
-	/// This feedback allows you to destroy a target gameobject, either via Destroy, DestroyImmediate, or SetActive:False
+	///     This feedback allows you to destroy a target gameobject, either via Destroy, DestroyImmediate, or SetActive:False
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback allows you to destroy a target gameobject, either via Destroy, DestroyImmediate, or SetActive:False")]
+	[FeedbackHelp(
+		"This feedback allows you to destroy a target gameobject, either via Destroy, DestroyImmediate, or SetActive:False")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
 	[FeedbackPath("GameObject/Destroy")]
 	public class MMF_Destroy : MMF_Feedback
 	{
+		/// the possible ways to destroy an object
+		public enum Modes
+		{
+			Destroy,
+			DestroyImmediate,
+			Disable
+		}
+
 		/// a static bool used to disable all feedbacks of this type at once
 		public static bool FeedbackTypeAuthorized = true;
-		/// sets the inspector color for this feedback
-		#if UNITY_EDITOR
-		public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.GameObjectColor; } }
-		public override bool EvaluateRequiresSetup() { return (TargetGameObject == null); }
-		public override string RequiredTargetText { get { return TargetGameObject != null ? TargetGameObject.name : "";  } }
-		public override string RequiresSetupText { get { return "This feedback requires that a TargetGameObject be set to be able to work properly. You can set one below."; } }
-		#endif
-		public override bool HasAutomatedTargetAcquisition => true;
-		protected override void AutomateTargetAcquisition() => TargetGameObject = FindAutomatedTargetGameObject();
 
-		/// the possible ways to destroy an object
-		public enum Modes { Destroy, DestroyImmediate, Disable }
+		protected bool _initialActiveState;
+
+		/// the optional list of extra gameobjects we want to change the active state of
+		[Tooltip("the optional list of extra gameobjects we want to change the active state of")]
+		public List<GameObject> ExtraTargetGameObjects;
+
+		/// the selected destruction mode
+		[Tooltip("the selected destruction mode")]
+		public Modes Mode;
 
 		[MMFInspectorGroup("Destruction", true, 18, true)]
 		/// the gameobject we want to change the active state of
 		[Tooltip("the game object we want to destroy")]
 		public GameObject TargetGameObject;
-		/// the optional list of extra gameobjects we want to change the active state of
-		[Tooltip("the optional list of extra gameobjects we want to change the active state of")]
-		public List<GameObject> ExtraTargetGameObjects;
-		
-		/// the selected destruction mode 
-		[Tooltip("the selected destruction mode")]
-		public Modes Mode;
 
-		protected bool _initialActiveState;
+		public override bool HasAutomatedTargetAcquisition => true;
+
+		protected override void AutomateTargetAcquisition()
+		{
+			TargetGameObject = FindAutomatedTargetGameObject();
+		}
 
 		/// <summary>
-		/// On Play we change the state of our Behaviour if needed
+		///     On Play we change the state of our Behaviour if needed
 		/// </summary>
 		/// <param name="position"></param>
 		/// <param name="feedbacksIntensity"></param>
 		protected override void CustomPlayFeedback(Vector3 position, float feedbacksIntensity = 1.0f)
 		{
-			if (!Active || !FeedbackTypeAuthorized || (TargetGameObject == null))
-			{
-				return;
-			}
+			if (!Active || !FeedbackTypeAuthorized || TargetGameObject == null) return;
 			ProceedWithDestruction(TargetGameObject);
-			foreach (GameObject go in ExtraTargetGameObjects)
-			{
-				ProceedWithDestruction(go);
-			}
+			foreach (var go in ExtraTargetGameObjects) ProceedWithDestruction(go);
 		}
-        
+
 		/// <summary>
-		/// Changes the status of the Behaviour
+		///     Changes the status of the Behaviour
 		/// </summary>
 		/// <param name="state"></param>
 		protected virtual void ProceedWithDestruction(GameObject go)
@@ -81,21 +79,32 @@ namespace MoreMountains.Feedbacks
 					break;
 			}
 		}
-		
+
 		/// <summary>
-		/// On restore, we put our object back at its initial position
+		///     On restore, we put our object back at its initial position
 		/// </summary>
 		protected override void CustomRestoreInitialValues()
 		{
-			if (!Active || !FeedbackTypeAuthorized)
-			{
-				return;
-			}
+			if (!Active || !FeedbackTypeAuthorized) return;
 
-			if (Mode == Modes.Disable)
-			{
-				TargetGameObject.SetActive(_initialActiveState);
-			}
+			if (Mode == Modes.Disable) TargetGameObject.SetActive(_initialActiveState);
 		}
+
+		/// sets the inspector color for this feedback
+#if UNITY_EDITOR
+		public override Color FeedbackColor
+		{
+			get { return MMFeedbacksInspectorColors.GameObjectColor; }
+		}
+
+		public override bool EvaluateRequiresSetup()
+		{
+			return TargetGameObject == null;
+		}
+
+		public override string RequiredTargetText => TargetGameObject != null ? TargetGameObject.name : "";
+		public override string RequiresSetupText =>
+			"This feedback requires that a TargetGameObject be set to be able to work properly. You can set one below.";
+#endif
 	}
 }

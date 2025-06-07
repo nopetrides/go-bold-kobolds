@@ -3,12 +3,12 @@
 namespace MoreMountains.Tools
 {
 	/// <summary>
-	/// Vector4 Extensions
+	///     Vector4 Extensions
 	/// </summary>
 	public static class MMVector4Extensions
 	{
 		/// <summary>
-		/// Returns the sum of all components of a vector4
+		///     Returns the sum of all components of a vector4
 		/// </summary>
 		/// <param name="vector"></param>
 		/// <returns></returns>
@@ -16,9 +16,9 @@ namespace MoreMountains.Tools
 		{
 			return vector.x + vector.y + vector.z + vector.w;
 		}
-		
+
 		/// <summary>
-		/// Sets the x value of a vector
+		///     Sets the x value of a vector
 		/// </summary>
 		/// <param name="vector"></param>
 		/// <param name="newValue"></param>
@@ -30,7 +30,7 @@ namespace MoreMountains.Tools
 		}
 
 		/// <summary>
-		/// Sets the y value of a vector
+		///     Sets the y value of a vector
 		/// </summary>
 		/// <param name="vector"></param>
 		/// <param name="newValue"></param>
@@ -42,7 +42,7 @@ namespace MoreMountains.Tools
 		}
 
 		/// <summary>
-		/// Sets the z value of a vector
+		///     Sets the z value of a vector
 		/// </summary>
 		/// <param name="vector"></param>
 		/// <param name="newValue"></param>
@@ -54,7 +54,7 @@ namespace MoreMountains.Tools
 		}
 
 		/// <summary>
-		/// Sets the z value of a vector
+		///     Sets the z value of a vector
 		/// </summary>
 		/// <param name="vector"></param>
 		/// <param name="newValue"></param>
@@ -66,7 +66,7 @@ namespace MoreMountains.Tools
 		}
 
 		/// <summary>
-		/// Inverts a vector
+		///     Inverts a vector
 		/// </summary>
 		/// <param name="newValue"></param>
 		/// <returns></returns>
@@ -82,19 +82,19 @@ namespace MoreMountains.Tools
 		}
 
 		/// <summary>
-		/// Projects a vector on another
+		///     Projects a vector on another
 		/// </summary>
 		/// <param name="vector"></param>
 		/// <param name="projectedVector"></param>
 		/// <returns></returns>
 		public static Vector4 MMProject(this Vector4 vector, Vector4 projectedVector)
 		{
-			float _dot = Vector4.Dot(vector, projectedVector);
+			var _dot = Vector4.Dot(vector, projectedVector);
 			return _dot * projectedVector;
 		}
 
 		/// <summary>
-		/// Rejects a vector on another
+		///     Rejects a vector on another
 		/// </summary>
 		/// <param name="vector"></param>
 		/// <param name="rejectedVector"></param>
@@ -105,7 +105,7 @@ namespace MoreMountains.Tools
 		}
 
 		/// <summary>
-		/// Rounds all components of a vector
+		///     Rounds all components of a vector
 		/// </summary>
 		/// <param name="vector"></param>
 		/// <returns></returns>

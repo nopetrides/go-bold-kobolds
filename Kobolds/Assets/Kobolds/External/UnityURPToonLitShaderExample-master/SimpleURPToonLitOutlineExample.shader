@@ -173,7 +173,7 @@ to solve this problem, please switch the context using the "Unity Shader Context
 
 For details, see this Rider document about "Unity Shader Context picker in the status bar":
 https://github.com/JetBrains/resharper-unity/wiki/Switching-code-analysis-context-for-hlsl-cginc-files-in-Rider
-*/ 
+*/
 Shader "SimpleURPToonLitExample(With Outline)"
 {
     Properties
@@ -207,13 +207,13 @@ Shader "SimpleURPToonLitExample(With Outline)"
         [Header(Indirect Light)]
         _IndirectLightMinColor("Min Color", Color) = (0.1,0.1,0.1,1) // can prevent completely black if light prob is not baked
         _IndirectLightMultiplier("Multiplier", Range(0,1)) = 1
-        
+
         [Header(Direct Light)]
         _DirectLightMultiplier("Brightness", Range(0,1)) = 1
         _CelShadeMidPoint("MidPoint", Range(-1,1)) = -0.5
         _CelShadeSoftness("Softness", Range(0,1)) = 0.05
         _MainLightIgnoreCelShade("Remove Shadow", Range(0,1)) = 0
-        
+
         [Header(Additional Light)]
         _AdditionalLightIgnoreCelShade("Remove Shadow", Range(0,1)) = 0.9
 
@@ -225,7 +225,7 @@ Shader "SimpleURPToonLitExample(With Outline)"
         [Header(Outline)]
         _OutlineWidth("Width", Range(0,4)) = 1
         _OutlineColor("Color", Color) = (0.5,0.5,0.5,1)
-        
+
         [Header(Outline ZOffset)]
         _OutlineZOffset("ZOffset (View Space)", Range(0,1)) = 0.0001
         [NoScaleOffset]_OutlineZOffsetMaskTex("    Mask (black is apply ZOffset)", 2D) = "black" {}
@@ -233,8 +233,8 @@ Shader "SimpleURPToonLitExample(With Outline)"
         _OutlineZOffsetMaskRemapEnd("    RemapEnd", Range(0,1)) = 1
     }
     SubShader
-    {       
-        Tags 
+    {
+        Tags
         {
             // SRP introduced a new "RenderPipeline" tag in Subshader. This allows you to create shaders
             // that can match multiple render pipelines. If a RenderPipeline tag is not set it will match
@@ -256,18 +256,16 @@ Shader "SimpleURPToonLitExample(With Outline)"
             "UniversalMaterialType" = "ComplexLit"
             "Queue"="Geometry"
         }
-        
+
         // You can use LOD to control if this SubShader should be used.
         // if this SubShader is not allowed to be use due to LOD,
         // Unity will consider the next SubShader 
         LOD 100
-        
+
         // We can extract duplicated hlsl code from all passes into this HLSLINCLUDE section. Less duplicated code = Less error
         HLSLINCLUDE
-
         // all Passes will need this keyword
         #pragma shader_feature_local_fragment _UseAlphaClipping
-
         ENDHLSL
 
         // [#0 Pass - ForwardLit]
@@ -277,7 +275,7 @@ Shader "SimpleURPToonLitExample(With Outline)"
         // Compared to Builtin pipeline forward renderer, URP forward renderer will
         // render a scene with multiple lights with less draw calls and less overdraw.
         Pass
-        {               
+        {
             Name "ForwardLit"
             Tags
             {
@@ -308,7 +306,7 @@ Shader "SimpleURPToonLitExample(With Outline)"
             // -------------------------------------
             // Material Keywords
             // (all shader_feature that we needed were extracted to a shared SubShader level HLSL block already)
-            
+
             // -------------------------------------
             // Universal Pipeline keywords
             // You can always copy this section from URP's ComplexLit.shader
@@ -358,19 +356,18 @@ Shader "SimpleURPToonLitExample(With Outline)"
             // Includes
             // - all shader logic written inside this .hlsl, remember to write all #define BEFORE writing #include
             #include "SimpleURPToonLitOutlineExample_Shared.hlsl"
-
             ENDHLSL
         }
-        
+
         // [#1 Pass - Outline]
         // Same as the above "ForwardLit" pass, but: 
         // - vertex position are pushed out a bit base on normal direction
         // - also color is tinted by outline color
         // - Cull Front instead of Cull Off because Cull Front is a must for any 2 pass outline method
-        Pass 
+        Pass
         {
             Name "Outline"
-            Tags 
+            Tags
             {
                 // IMPORTANT: don't write this line for any custom pass(e.g. outline pass)! 
                 // else this outline pass(custom pass) will not be rendered by URP!
@@ -399,7 +396,7 @@ Shader "SimpleURPToonLitExample(With Outline)"
 
             HLSLPROGRAM
             #pragma target 2.0
-            
+
             // -------------------------------------
             // Shader Stages
             #pragma vertex VertexShaderWork
@@ -408,7 +405,7 @@ Shader "SimpleURPToonLitExample(With Outline)"
             // -------------------------------------
             // Material Keywords
             // (all shader_feature that we needed were extracted to a shared SubShader level HLSL block already)
-            
+
             // -------------------------------------
             // Universal Pipeline keywords
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _MAIN_LIGHT_SHADOWS_SCREEN
@@ -452,10 +449,9 @@ Shader "SimpleURPToonLitExample(With Outline)"
             // Includes
             // - all shader logic written inside this .hlsl, remember to write all #define BEFORE writing #include
             #include "SimpleURPToonLitOutlineExample_Shared.hlsl"
-
             ENDHLSL
         }
- 
+
         // ShadowCaster pass. Used for rendering URP's shadowmaps
         Pass
         {
@@ -507,7 +503,6 @@ Shader "SimpleURPToonLitExample(With Outline)"
             // Includes
             // - all shader logic written inside this .hlsl, remember to write all #define BEFORE writing #include
             #include "SimpleURPToonLitOutlineExample_Shared.hlsl"
-
             ENDHLSL
         }
 
@@ -529,8 +524,8 @@ Shader "SimpleURPToonLitExample(With Outline)"
             ZWrite On // the only goal of this pass is to write depth!
             ZTest LEqual // early exit at Early-Z stage if possible            
             ColorMask R // we don't care about RGB color, we just want to write depth, ColorMask R will save some write bandwidth
-            Cull Off 
-            
+            Cull Off
+
             HLSLPROGRAM
             #pragma target 2.0
 
@@ -538,7 +533,7 @@ Shader "SimpleURPToonLitExample(With Outline)"
             // Shader Stages
             #pragma vertex VertexShaderWork
             #pragma fragment DepthOnlyFragment // we only need to do Clip(), no need color shading
-            
+
             // -------------------------------------
             // Material Keywords
             // - the only keywords we need in this pass = _UseAlphaClipping, which is already defined inside the SubShader level HLSLINCLUDE block
@@ -562,7 +557,6 @@ Shader "SimpleURPToonLitExample(With Outline)"
             // Includes
             // - all shader logic written inside this .hlsl, remember to write all #define BEFORE writing #include
             #include "SimpleURPToonLitOutlineExample_Shared.hlsl"
-
             ENDHLSL
         }
 
@@ -592,7 +586,7 @@ Shader "SimpleURPToonLitExample(With Outline)"
             // Shader Stages
             #pragma vertex VertexShaderWork
             #pragma fragment DepthNormalsFragment // we only need to do Clip() + normal as rgb color shading
-            
+
             // -------------------------------------
             // Material Keywords
             // - the only keywords we need in this pass = _UseAlphaClipping, which is already defined inside the SubShader level HLSLINCLUDE block
@@ -619,7 +613,6 @@ Shader "SimpleURPToonLitExample(With Outline)"
             // Includes
             // - all shader logic written inside this .hlsl, remember to write all #define BEFORE writing #include
             #include "SimpleURPToonLitOutlineExample_Shared.hlsl"
-
             ENDHLSL
         }
 
@@ -628,7 +621,7 @@ Shader "SimpleURPToonLitExample(With Outline)"
     }
 
     FallBack "Hidden/Universal Render Pipeline/FallbackError"
-    
+
     // Custom editor is possible! We recommend checking out LWGUI(https://github.com/JasonMa0012/LWGUI)
     //CustomEditor "LWGUI.LWGUI"
 }

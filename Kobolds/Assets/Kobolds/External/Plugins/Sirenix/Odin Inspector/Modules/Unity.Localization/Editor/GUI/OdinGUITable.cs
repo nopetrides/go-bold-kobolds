@@ -30,26 +30,27 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 
 		public float Width
 		{
-			get => this._width;
+			get => _width;
 			set
 			{
 				if (value < OdinLocalizationConstants.MIN_COLUMN_WIDTH)
 				{
-					this._width = OdinLocalizationConstants.MIN_COLUMN_WIDTH;
+					_width = OdinLocalizationConstants.MIN_COLUMN_WIDTH;
 					return;
 				}
 
-				this._width = Mathf.Round(value);
+				_width = Mathf.Round(value);
 			}
 		}
 
-		public bool IsDraggingSlider = false;
+		public bool IsDraggingSlider;
 		public bool IsVisible;
 		public string DisplayName;
 		public GUITableType Type;
 
 		[FormerlySerializedAs("Table")]
 		public TTable Asset;
+
 		public bool IsPinned;
 
 		private float _width;
@@ -106,71 +107,41 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 
 		public int CompareTo(OdinGUITable<TTable> other)
 		{
-			if (other == null)
-			{
-				return -1;
-			}
+			if (other == null) return -1;
 
-			if (this.IsVisible && !other.IsVisible)
-			{
-				return -1;
-			}
+			if (IsVisible && !other.IsVisible) return -1;
 
-			if (!this.IsVisible && other.IsVisible)
-			{
-				return 1;
-			}
+			if (!IsVisible && other.IsVisible) return 1;
 
-			if (this.IsPinned && !other.IsPinned)
-			{
-				return -1;
-			}
+			if (IsPinned && !other.IsPinned) return -1;
 
-			if (!this.IsPinned && other.IsPinned)
-			{
-				return 1;
-			}
+			if (!IsPinned && other.IsPinned) return 1;
 
-			if (this.DisplayName == KEY_DISPLAY_NAME && other.DisplayName == KEY_DISPLAY_NAME)
-			{
-				return 0;
-			}
+			if (DisplayName == KEY_DISPLAY_NAME && other.DisplayName == KEY_DISPLAY_NAME) return 0;
 
-			if (other.DisplayName == KEY_DISPLAY_NAME)
-			{
-				return 1;
-			}
+			if (other.DisplayName == KEY_DISPLAY_NAME) return 1;
 
-			if (this.DisplayName == KEY_DISPLAY_NAME)
-			{
-				return -1;
-			}
+			if (DisplayName == KEY_DISPLAY_NAME) return -1;
 
-			return this.Asset.LocaleIdentifier.CompareTo(other.Asset.LocaleIdentifier);
+			return Asset.LocaleIdentifier.CompareTo(other.Asset.LocaleIdentifier);
 		}
 
 		public Vector2 HandleSlider(Rect position)
 		{
-			if (GUIUtility.hotControl == 0)
-			{
-				this.IsDraggingSlider = false;
-			}
-			
-			if (!GUI.enabled)
-			{
-				return Vector2.zero;
-			}
+			if (GUIUtility.hotControl == 0) IsDraggingSlider = false;
+
+			if (!GUI.enabled) return Vector2.zero;
 
 			EditorGUIUtility.AddCursorRect(position, MouseCursor.ResizeHorizontal);
 
 			if (GUI.enabled && Event.current.OnMouseDown(position, 0))
 			{
-				this.IsDraggingSlider = true;
+				IsDraggingSlider = true;
 				SharedUniqueControlId.SetActive();
 				EditorGUIUtility.SetWantsMouseJumping(1);
 				Event.current.Use();
 			}
-			else if (SharedUniqueControlId.IsActive && this.IsDraggingSlider)
+			else if (SharedUniqueControlId.IsActive && IsDraggingSlider)
 			{
 				if (Event.current.type == EventType.MouseDrag)
 				{
@@ -179,12 +150,9 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 					return Event.current.delta;
 				}
 
-				if (Event.current.type != EventType.MouseUp)
-				{
-					return Vector2.zero;
-				}
+				if (Event.current.type != EventType.MouseUp) return Vector2.zero;
 
-				this.IsDraggingSlider = false;
+				IsDraggingSlider = false;
 				SharedUniqueControlId.SetInactive();
 				EditorGUIUtility.SetWantsMouseJumping(0);
 				Event.current.Use();

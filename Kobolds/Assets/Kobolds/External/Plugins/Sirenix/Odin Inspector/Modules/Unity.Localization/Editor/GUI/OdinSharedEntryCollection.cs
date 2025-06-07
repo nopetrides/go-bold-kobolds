@@ -17,31 +17,6 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 {
 	public class OdinSharedEntryCollection
 	{
-		private class StringComparer : IComparer<string>
-		{
-			public bool IsAscending = true;
-
-			public int Compare(string self, string other)
-			{
-				if (string.IsNullOrEmpty(self) && string.IsNullOrEmpty(other))
-				{
-					return 0;
-				}
-
-				if (string.IsNullOrEmpty(self))
-				{
-					return this.IsAscending ? 1 : -1;
-				}
-
-				if (string.IsNullOrEmpty(other))
-				{
-					return this.IsAscending ? -1 : 1;
-				}
-
-				return string.Compare(self, other, StringComparison.InvariantCulture);
-			}
-		}
-		
 		public enum SortOrderState
 		{
 			Unsorted,
@@ -49,72 +24,68 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 			Descending
 		}
 
-		public bool IsSearching;
-
-		public bool IsSorted => this.CurrentSortOrderState != SortOrderState.Unsorted;
-
-		public int Length => this.Entries.Count;
+		public readonly LocalizationTableCollection Collection;
+		public readonly HashSet<SharedTableData.SharedTableEntry> FilteredEntries;
 
 		private string _searchTerm = string.Empty;
 
-		private StringComparer stringComparer = new StringComparer();
+		public SortOrderState CurrentSortOrderState = SortOrderState.Unsorted;
 
-		public string SearchTerm
-		{
-			get => this._searchTerm;
-			private set
-			{
-				this._searchTerm = value;
-
-				this.IsSearching = !string.IsNullOrEmpty(value);
-			}
-		}
-
-		public List<SharedTableData.SharedTableEntry> Entries => this.IsSorted ? this.SortedEntries : this.Collection.SharedData.Entries;
+		public bool IsSearching;
 
 		public List<SharedTableData.SharedTableEntry> SortedEntries;
-		public readonly HashSet<SharedTableData.SharedTableEntry> FilteredEntries;
 
-		public readonly LocalizationTableCollection Collection;
-
-		public SortOrderState CurrentSortOrderState = SortOrderState.Unsorted;
+		private readonly StringComparer stringComparer = new();
 
 		public OdinSharedEntryCollection(LocalizationTableCollection collection)
 		{
-			this.Collection = collection;
+			Collection = collection;
 
-			this.FilteredEntries = new HashSet<SharedTableData.SharedTableEntry>();
+			FilteredEntries = new HashSet<SharedTableData.SharedTableEntry>();
 		}
 
-		public SharedTableData.SharedTableEntry this[int index] => this.Entries[index];
+		public bool IsSorted => CurrentSortOrderState != SortOrderState.Unsorted;
+
+		public int Length => Entries.Count;
+
+		public string SearchTerm
+		{
+			get => _searchTerm;
+			private set
+			{
+				_searchTerm = value;
+
+				IsSearching = !string.IsNullOrEmpty(value);
+			}
+		}
+
+		public List<SharedTableData.SharedTableEntry> Entries =>
+			IsSorted ? SortedEntries : Collection.SharedData.Entries;
+
+		public SharedTableData.SharedTableEntry this[int index] => Entries[index];
 
 		public bool IsVisible(SharedTableData.SharedTableEntry sharedEntry)
 		{
-			return !this.IsSearching || (this.IsSearching && this.FilteredEntries.Contains(sharedEntry));
+			return !IsSearching || (IsSearching && FilteredEntries.Contains(sharedEntry));
 		}
 
-		public bool UpdateSearchTerm<TTable>(string value,
-														 OdinGUITableCollection<TTable> tables,
-														 LocalizationTableCollection collection,
-														 bool forceUpdate = false) where TTable : LocalizationTable
+		public bool UpdateSearchTerm<TTable>(
+			string value,
+			OdinGUITableCollection<TTable> tables,
+			LocalizationTableCollection collection,
+			bool forceUpdate = false) where TTable : LocalizationTable
 		{
-			if (this.SearchTerm == value && !forceUpdate)
-			{
-				return false;
-			}
-			
-			this.SearchTerm = value;
+			if (SearchTerm == value && !forceUpdate) return false;
 
-			if (string.IsNullOrEmpty(this.SearchTerm))
-			{
-				return true;
-			}
+			SearchTerm = value;
 
-			this.FilteredEntries.Clear();
+			if (string.IsNullOrEmpty(SearchTerm)) return true;
+
+			FilteredEntries.Clear();
 
 			for (var i = 0; i < tables.Count; i++)
 			{
-				OdinGUITable<TTable> table = tables[i];
+				var table = tables[i];
 
 				switch (table.Type)
 				{
@@ -124,43 +95,31 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 							case AssetTable assetTable:
 								var assetCollection = collection as AssetTableCollection;
 
-								for (var j = 0; j < this.Length; j++)
+								for (var j = 0; j < Length; j++)
 								{
-									SharedTableData.SharedTableEntry sharedEntry = this[j];
+									var sharedEntry = this[j];
 
-									Type assetType = assetCollection.GetEntryAssetType(sharedEntry.Id);
+									var assetType = assetCollection.GetEntryAssetType(sharedEntry.Id);
 
-									UnityEngine.Object asset = OdinLocalizationAssetCache.Get(sharedEntry, assetTable, assetType);
+									var asset = OdinLocalizationAssetCache.Get(sharedEntry, assetTable, assetType);
 
-									if (asset == null)
-									{
-										continue;
-									}
+									if (asset == null) continue;
 
-									if (FuzzySearch.Contains(this.SearchTerm, asset.name))
-									{
-										this.FilteredEntries.Add(sharedEntry);
-									}
+									if (FuzzySearch.Contains(SearchTerm, asset.name)) FilteredEntries.Add(sharedEntry);
 								}
 
 								break;
 
 							case StringTable stringTable:
-								for (var j = 0; j < this.Length; j++)
+								for (var j = 0; j < Length; j++)
 								{
-									SharedTableData.SharedTableEntry sharedEntry = this[j];
+									var sharedEntry = this[j];
 
-									StringTableEntry entry = stringTable.GetEntry(sharedEntry.Id);
+									var entry = stringTable.GetEntry(sharedEntry.Id);
 
-									if (entry is null || string.IsNullOrEmpty(entry.Value))
-									{
-										continue;
-									}
+									if (entry is null || string.IsNullOrEmpty(entry.Value)) continue;
 
-									if (FuzzySearch.Contains(this.SearchTerm, entry.Value))
-									{
-										this.FilteredEntries.Add(sharedEntry);
-									}
+									if (FuzzySearch.Contains(SearchTerm, entry.Value)) FilteredEntries.Add(sharedEntry);
 								}
 
 								break;
@@ -169,13 +128,9 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 						break;
 
 					case OdinGUITable<TTable>.GUITableType.Key:
-						for (var j = 0; j < this.Entries.Count; j++)
-						{
-							if (FuzzySearch.Contains(this.SearchTerm, this.Entries[j].Key))
-							{
-								this.FilteredEntries.Add(this.Entries[j]);
-							}
-						}
+						for (var j = 0; j < Entries.Count; j++)
+							if (FuzzySearch.Contains(SearchTerm, Entries[j].Key))
+								FilteredEntries.Add(Entries[j]);
 
 						break;
 
@@ -189,40 +144,42 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 
 		public void SortByKeys(bool preserveCurrentOrder)
 		{
-			switch (this.CurrentSortOrderState)
+			switch (CurrentSortOrderState)
 			{
 				case SortOrderState.Ascending:
-					this.stringComparer.IsAscending = true;
-						
+					stringComparer.IsAscending = true;
+
 					if (preserveCurrentOrder)
 					{
-						List<SharedTableData.SharedTableEntry> result = this.Collection.SharedData.Entries.OrderBy(entry => entry.Key, this.stringComparer)
-																							 .ThenBy(this.GetOrderIndex)
-																							 .ToList();
+						var result = Collection.SharedData.Entries.OrderBy(entry => entry.Key, stringComparer)
+							.ThenBy(GetOrderIndex)
+							.ToList();
 
-						this.SortedEntries = result;
+						SortedEntries = result;
 					}
 					else
 					{
-						this.SortedEntries = this.Collection.SharedData.Entries.OrderBy(entry => entry.Key, this.stringComparer).ToList();
+						SortedEntries = Collection.SharedData.Entries.OrderBy(entry => entry.Key, stringComparer)
+							.ToList();
 					}
 
 					return;
 
 				case SortOrderState.Descending:
-					this.stringComparer.IsAscending = false;
-						
+					stringComparer.IsAscending = false;
+
 					if (preserveCurrentOrder)
 					{
-						List<SharedTableData.SharedTableEntry> result = this.Collection.SharedData.Entries.OrderByDescending(entry => entry.Key, this.stringComparer)
-																							 .ThenBy(this.GetOrderIndex)
-																							 .ToList();
+						var result = Collection.SharedData.Entries.OrderByDescending(entry => entry.Key, stringComparer)
+							.ThenBy(GetOrderIndex)
+							.ToList();
 
-						this.SortedEntries = result;
+						SortedEntries = result;
 					}
 					else
 					{
-						this.SortedEntries = this.Collection.SharedData.Entries.OrderByDescending(entry => entry.Key, this.stringComparer).ToList();
+						SortedEntries = Collection.SharedData.Entries
+							.OrderByDescending(entry => entry.Key, stringComparer).ToList();
 					}
 
 					return;
@@ -231,44 +188,47 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 
 		public void SortByAssetTable(AssetTableCollection collection, AssetTable table, bool preserveCurrentOrder)
 		{
-			switch (this.CurrentSortOrderState)
+			switch (CurrentSortOrderState)
 			{
 				case SortOrderState.Ascending:
-					this.stringComparer.IsAscending = true;
-					
+					stringComparer.IsAscending = true;
+
 					if (preserveCurrentOrder)
 					{
-						List<SharedTableData.SharedTableEntry> result = this.Collection.SharedData.Entries
-																							 .OrderBy(entry => GetAssetNameFromEntry(entry, table, collection), this.stringComparer)
-																							 .ThenBy(this.GetOrderIndex)
-																							 .ToList();
+						var result = Collection.SharedData.Entries
+							.OrderBy(entry => GetAssetNameFromEntry(entry, table, collection), stringComparer)
+							.ThenBy(GetOrderIndex)
+							.ToList();
 
-						this.SortedEntries = result;
+						SortedEntries = result;
 					}
 					else
 					{
-						this.SortedEntries = this.Collection.SharedData.Entries.OrderBy(entry => GetAssetNameFromEntry(entry, table, collection), this.stringComparer)
-														 .ToList();
+						SortedEntries = Collection.SharedData.Entries.OrderBy(
+								entry => GetAssetNameFromEntry(entry, table, collection), stringComparer)
+							.ToList();
 					}
 
 					return;
 
 				case SortOrderState.Descending:
-					this.stringComparer.IsAscending = false;
-					
+					stringComparer.IsAscending = false;
+
 					if (preserveCurrentOrder)
 					{
-						List<SharedTableData.SharedTableEntry> result = this.Collection.SharedData.Entries
-																							 .OrderByDescending(entry => GetAssetNameFromEntry(entry, table, collection),
-																													  this.stringComparer)
-																							 .ThenBy(this.GetOrderIndex)
-																							 .ToList();
+						var result = Collection.SharedData.Entries
+							.OrderByDescending(
+								entry => GetAssetNameFromEntry(entry, table, collection),
+								stringComparer)
+							.ThenBy(GetOrderIndex)
+							.ToList();
 
-						this.SortedEntries = result;
+						SortedEntries = result;
 					}
 					else
 					{
-						this.SortedEntries = this.Entries.OrderByDescending(entry => GetAssetNameFromEntry(entry, table, collection), this.stringComparer).ToList();
+						SortedEntries = Entries.OrderByDescending(
+							entry => GetAssetNameFromEntry(entry, table, collection), stringComparer).ToList();
 					}
 
 					return;
@@ -277,42 +237,44 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 
 		public void SortByStringTable(StringTable table, bool preserveCurrentOrder)
 		{
-			switch (this.CurrentSortOrderState)
+			switch (CurrentSortOrderState)
 			{
 				case SortOrderState.Ascending:
-					this.stringComparer.IsAscending = true;
-					
+					stringComparer.IsAscending = true;
+
 					if (preserveCurrentOrder)
 					{
-						List<SharedTableData.SharedTableEntry> result = this.Collection.SharedData.Entries
-																							 .OrderBy(entry => GetStringFromEntry(entry, table), this.stringComparer)
-																							 .ThenBy(this.GetOrderIndex)
-																							 .ToList();
+						var result = Collection.SharedData.Entries
+							.OrderBy(entry => GetStringFromEntry(entry, table), stringComparer)
+							.ThenBy(GetOrderIndex)
+							.ToList();
 
-						this.SortedEntries = result;
+						SortedEntries = result;
 					}
 					else
 					{
-						this.SortedEntries = this.Collection.SharedData.Entries.OrderBy(entry => GetStringFromEntry(entry, table), this.stringComparer).ToList();
+						SortedEntries = Collection.SharedData.Entries.OrderBy(
+							entry => GetStringFromEntry(entry, table), stringComparer).ToList();
 					}
 
 					return;
 
 				case SortOrderState.Descending:
-					this.stringComparer.IsAscending = false;
-					
+					stringComparer.IsAscending = false;
+
 					if (preserveCurrentOrder)
 					{
-						List<SharedTableData.SharedTableEntry> result = this.Collection.SharedData.Entries
-																							 .OrderByDescending(entry => GetStringFromEntry(entry, table), this.stringComparer)
-																							 .ThenBy(this.GetOrderIndex)
-																							 .ToList();
+						var result = Collection.SharedData.Entries
+							.OrderByDescending(entry => GetStringFromEntry(entry, table), stringComparer)
+							.ThenBy(GetOrderIndex)
+							.ToList();
 
-						this.SortedEntries = result;
+						SortedEntries = result;
 					}
 					else
 					{
-						this.SortedEntries = this.Entries.OrderByDescending(entry => GetStringFromEntry(entry, table), this.stringComparer).ToList();
+						SortedEntries = Entries.OrderByDescending(
+							entry => GetStringFromEntry(entry, table), stringComparer).ToList();
 					}
 
 					return;
@@ -321,77 +283,63 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 
 		private static string GetStringFromEntry(SharedTableData.SharedTableEntry sharedEntry, StringTable table)
 		{
-			StringTableEntry entry = table.GetEntry(sharedEntry.Id);
+			var entry = table.GetEntry(sharedEntry.Id);
 
 			return entry?.Value;
 		}
 
-		private static string GetAssetNameFromEntry(SharedTableData.SharedTableEntry sharedEntry, AssetTable table, AssetTableCollection collection)
+		private static string GetAssetNameFromEntry(
+			SharedTableData.SharedTableEntry sharedEntry, AssetTable table, AssetTableCollection collection)
 		{
-			AssetTableEntry entry = table.GetEntry(sharedEntry.Id);
+			var entry = table.GetEntry(sharedEntry.Id);
 
-			if (entry == null || entry.IsEmpty)
-			{
-				return null;
-			}
+			if (entry == null || entry.IsEmpty) return null;
 
-			Type type = collection.GetEntryAssetType(sharedEntry.Id);
+			var type = collection.GetEntryAssetType(sharedEntry.Id);
 
-			UnityEngine.Object asset = OdinLocalizationAssetCache.Get(entry.Guid, type);
+			var asset = OdinLocalizationAssetCache.Get(entry.Guid, type);
 
 			return asset == null ? null : asset.name;
 		}
 
 		public void MoveEntry(int from, int to)
 		{
-			if (from < 0 || from >= this.Entries.Count)
-			{
-				return;
-			}
+			if (from < 0 || from >= Entries.Count) return;
 
-			if (to < 0 || to > this.Entries.Count)
-			{
-				return;
-			}
+			if (to < 0 || to > Entries.Count) return;
 
-			if (from == to)
-			{
-				return;
-			}
+			if (from == to) return;
 
-			SharedTableData.SharedTableEntry fromEntry = this.Collection.SharedData.Entries[from];
+			var fromEntry = Collection.SharedData.Entries[from];
 
-			if (to > from)
-			{
-				to -= 1;
-			}
+			if (to > from) to -= 1;
 
 			//to = afterTo ? to + 1 : to;
 
-			this.Collection.SharedData.Entries.RemoveAt(from);
+			Collection.SharedData.Entries.RemoveAt(from);
 
-			this.Collection.SharedData.Entries.Insert(to, fromEntry);
+			Collection.SharedData.Entries.Insert(to, fromEntry);
 
-			OdinLocalizationEvents.RaiseTableEntryModified(this.Collection.SharedData.Entries[from]);
-			OdinLocalizationEvents.RaiseTableEntryModified(this.Collection.SharedData.Entries[to]);
+			OdinLocalizationEvents.RaiseTableEntryModified(Collection.SharedData.Entries[from]);
+			OdinLocalizationEvents.RaiseTableEntryModified(Collection.SharedData.Entries[to]);
 
-			EditorUtility.SetDirty(this.Collection.SharedData);
+			EditorUtility.SetDirty(Collection.SharedData);
 		}
 
 		public void GotoNextSortOrderState()
 		{
-			switch (this.CurrentSortOrderState)
+			switch (CurrentSortOrderState)
 			{
 				case SortOrderState.Unsorted:
-					this.CurrentSortOrderState = SortOrderState.Ascending;
+					CurrentSortOrderState = SortOrderState.Ascending;
 					break;
 
 				case SortOrderState.Ascending:
-					this.CurrentSortOrderState = SortOrderState.Descending;
+					CurrentSortOrderState = SortOrderState.Descending;
 					break;
 
 				case SortOrderState.Descending:
-					this.CurrentSortOrderState = SortOrderState.Unsorted;
+					CurrentSortOrderState = SortOrderState.Unsorted;
 					break;
 
 				default:
@@ -401,41 +349,45 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 
 		public int GetIndex(SharedTableData.SharedTableEntry sharedEntry)
 		{
-			for (var i = 0; i < this.Length; i++)
-			{
+			for (var i = 0; i < Length; i++)
 				if (this[i].Id == sharedEntry.Id)
-				{
 					return i;
-				}
-			}
 
 			return -1;
 		}
 
 		public int GetOrderIndex(SharedTableData.SharedTableEntry sharedEntry)
 		{
-			if (this.IsSorted && this.SortedEntries.Count == this.Length)
+			if (IsSorted && SortedEntries.Count == Length)
 			{
-				for (var i = 0; i < this.SortedEntries.Count; i++)
-				{
-					if (this.SortedEntries[i].Id == sharedEntry.Id)
-					{
+				for (var i = 0; i < SortedEntries.Count; i++)
+					if (SortedEntries[i].Id == sharedEntry.Id)
 						return i;
-					}
-				}
 
 				return -1;
 			}
 
-			for (var i = 0; i < this.Length; i++)
-			{
+			for (var i = 0; i < Length; i++)
 				if (this[i].Id == sharedEntry.Id)
-				{
 					return i;
-				}
-			}
 
 			return -1;
+		}
+
+		private class StringComparer : IComparer<string>
+		{
+			public bool IsAscending = true;
+
+			public int Compare(string self, string other)
+			{
+				if (string.IsNullOrEmpty(self) && string.IsNullOrEmpty(other)) return 0;
+
+				if (string.IsNullOrEmpty(self)) return IsAscending ? 1 : -1;
+
+				if (string.IsNullOrEmpty(other)) return IsAscending ? -1 : 1;
+
+				return string.Compare(self, other, StringComparison.InvariantCulture);
+			}
 		}
 	}
 }

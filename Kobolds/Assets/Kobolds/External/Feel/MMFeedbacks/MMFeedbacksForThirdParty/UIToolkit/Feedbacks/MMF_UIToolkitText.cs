@@ -1,14 +1,12 @@
-﻿using System.Collections;
-using MoreMountains.Feedbacks;
-using MoreMountains.Tools;
+﻿using MoreMountains.Feedbacks;
 using UnityEngine;
-using UnityEngine.UIElements;
 using UnityEngine.Scripting.APIUpdating;
+using UnityEngine.UIElements;
 
 namespace MoreMountains.FeedbacksForThirdParty
 {
 	/// <summary>
-	/// This feedback will let you change the text an element on a target UI Document
+	///     This feedback will let you change the text an element on a target UI Document
 	/// </summary>
 	[AddComponentMenu("")]
 	[FeedbackHelp("This feedback will let you change the text an element on a target UI Document")]
@@ -16,13 +14,13 @@ namespace MoreMountains.FeedbacksForThirdParty
 	[MovedFrom(false, null, "MoreMountains.Feedbacks.UIToolkit")]
 	public class MMF_UIToolkitText : MMF_UIToolkit
 	{
+		protected string _initialText;
+
 		[Header("Text")]
 		/// the new text to set on the target object(s)
 		[Tooltip("the new text to set on the target object(s)")]
 		public string NewText = "";
 
-		protected string _initialText;
-		
 		protected override void CustomPlayFeedback(Vector3 position, float feedbacksIntensity = 1)
 		{
 			SetValue(NewText);
@@ -30,20 +28,17 @@ namespace MoreMountains.FeedbacksForThirdParty
 
 		protected virtual void SetValue(string newValue)
 		{
-			foreach (VisualElement element in _visualElements)
+			foreach (var element in _visualElements)
 			{
 				(element as TextElement).text = newValue;
 				HandleMarkDirty(element);
 			}
 		}
-		
+
 		protected override void CustomInitialization(MMF_Player owner)
 		{
 			base.CustomInitialization(owner);
-			if ((_visualElements == null) || (_visualElements.Count == 0))
-			{
-				return;
-			}
+			if (_visualElements == null || _visualElements.Count == 0) return;
 			_initialText = GetInitialValue();
 		}
 
@@ -51,16 +46,13 @@ namespace MoreMountains.FeedbacksForThirdParty
 		{
 			return (_visualElements[0] as TextElement).text;
 		}
-		
+
 		/// <summary>
-		/// On restore, we put our object back at its initial position
+		///     On restore, we put our object back at its initial position
 		/// </summary>
 		protected override void CustomRestoreInitialValues()
 		{
-			if (!Active || !FeedbackTypeAuthorized)
-			{
-				return;
-			}
+			if (!Active || !FeedbackTypeAuthorized) return;
 			SetValue(_initialText);
 		}
 	}

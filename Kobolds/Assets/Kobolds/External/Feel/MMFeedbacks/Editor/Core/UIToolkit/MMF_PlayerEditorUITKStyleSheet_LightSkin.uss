@@ -57,9 +57,9 @@
 }
 
 .mm-mmf-inspector .unity-decorator-drawers-container .unity-header-drawer__label,
-.mm-mmf-inspector .unity-decorator-drawers-container .unity-header-drawer__label:hover{ /* Header attributes */
-    border-color: rgba(59,163,196,0.3);
-    color: rgba(12,13,18,1);
+.mm-mmf-inspector .unity-decorator-drawers-container .unity-header-drawer__label:hover { /* Header attributes */
+    border-color: rgba(59, 163, 196, 0.3);
+    color: rgba(12, 13, 18, 1);
 }
 
 .mm-mmf-group .mm-foldout { /* feedback foldout */
@@ -73,12 +73,13 @@
 .mm-feedback-control-buttons { /* play and stop buttons at the bottom */
     background-color: rgba(255, 255, 255, 0.1);
 }
+
 .mm-feedback-required-target-label { /* required target label */
-    color: rgba(255,255,255,0.4);
+    color: rgba(255, 255, 255, 0.4);
 }
 
 .mm-feedback-timing-label { /* required timing label */
-    color: rgba(255,255,255,0.4);
+    color: rgba(255, 255, 255, 0.4);
 }
 
 .mm-feedbacks-list-empty Label { /* custom empty list label */

@@ -8,140 +8,151 @@ using static UnityEditor.EditorGUIUtility;
 
 namespace LeTai.TrueShadow.Editor
 {
-[CanEditMultipleObjects]
-[CustomEditor(typeof(ProjectSettings))]
-public class ProjectSettingsEditor : UnityEditor.Editor
-{
-    EditorProperty  useGlobalAngleByDefault;
-    EditorProperty  globalAngle;
-    EditorProperty  showQuickPresetsButtons;
-    EditorProperty  quickPresets;
-    ReorderableList reorderableList;
+	[CanEditMultipleObjects]
+	[CustomEditor(typeof(ProjectSettings))]
+	public class ProjectSettingsEditor : UnityEditor.Editor
+	{
+		private EditorProperty globalAngle;
+		private EditorProperty quickPresets;
+		private ReorderableList reorderableList;
+		private EditorProperty showQuickPresetsButtons;
+		private EditorProperty useGlobalAngleByDefault;
 
-    void OnEnable()
-    {
-        // Domain reload cause target to be null
-        if(target == null) return;
+		private void OnEnable()
+		{
+			// Domain reload cause target to be null
+			if (target == null) return;
 
-        useGlobalAngleByDefault = new EditorProperty(serializedObject, nameof(ProjectSettings.UseGlobalAngleByDefault));
-        globalAngle             = new EditorProperty(serializedObject, nameof(ProjectSettings.GlobalAngle));
-        showQuickPresetsButtons = new EditorProperty(serializedObject, nameof(ProjectSettings.ShowQuickPresetsButtons));
-        quickPresets            = new EditorProperty(serializedObject, nameof(ProjectSettings.QuickPresets));
+			useGlobalAngleByDefault = new EditorProperty(
+				serializedObject, nameof(ProjectSettings.UseGlobalAngleByDefault));
+			globalAngle = new EditorProperty(serializedObject, nameof(ProjectSettings.GlobalAngle));
+			showQuickPresetsButtons = new EditorProperty(
+				serializedObject, nameof(ProjectSettings.ShowQuickPresetsButtons));
+			quickPresets = new EditorProperty(serializedObject, nameof(ProjectSettings.QuickPresets));
 
-        reorderableList = new ReorderableList(serializedObject, quickPresets.serializedProperty, true, true, true, true) {
-            drawHeaderCallback  = DrawPresetsHListHeader,
-            drawElementCallback = DrawPresetListItems,
-            elementHeight = singleLineHeight * 6
-                          + standardVerticalSpacing * 7,
-        };
-    }
+			reorderableList = new ReorderableList(
+				serializedObject, quickPresets.serializedProperty, true, true, true, true)
+			{
+				drawHeaderCallback = DrawPresetsHListHeader,
+				drawElementCallback = DrawPresetListItems,
+				elementHeight = singleLineHeight * 6
+								+ standardVerticalSpacing * 7
+			};
+		}
 
-    void DrawPresetsHListHeader(Rect rect)
-    {
-        EditorGUI.PrefixLabel(rect, new GUIContent(quickPresets.serializedProperty.displayName));
-    }
+		private void DrawPresetsHListHeader(Rect rect)
+		{
+			EditorGUI.PrefixLabel(rect, new GUIContent(quickPresets.serializedProperty.displayName));
+		}
 
-    void DrawPresetListItems(Rect rect, int index, bool isActive, bool isFocused)
-    {
-        SerializedProperty element = reorderableList.serializedProperty.GetArrayElementAtIndex(index);
+		private void DrawPresetListItems(Rect rect, int index, bool isActive, bool isFocused)
+		{
+			var element = reorderableList.serializedProperty.GetArrayElementAtIndex(index);
 
-        var childRect = new Rect(rect) { height = singleLineHeight };
-        EditorGUI.LabelField(childRect, element.FindPropertyRelative(nameof(QuickPreset.name)).stringValue);
-        childRect.y += singleLineHeight + standardVerticalSpacing;
+			var childRect = new Rect(rect) {height = singleLineHeight};
+			EditorGUI.LabelField(childRect, element.FindPropertyRelative(nameof(QuickPreset.name)).stringValue);
+			childRect.y += singleLineHeight + standardVerticalSpacing;
 
-        var oldLabelWidth = labelWidth;
-        labelWidth = Mathf.Min(labelWidth, pixelsPerPoint * 60);
-        foreach (var childProp in element)
-        {
-            EditorGUI.PropertyField(childRect, (SerializedProperty)childProp, true);
-            childRect.y += singleLineHeight + standardVerticalSpacing;
-        }
+			var oldLabelWidth = labelWidth;
+			labelWidth = Mathf.Min(labelWidth, pixelsPerPoint * 60);
+			foreach (var childProp in element)
+			{
+				EditorGUI.PropertyField(childRect, (SerializedProperty) childProp, true);
+				childRect.y += singleLineHeight + standardVerticalSpacing;
+			}
 
-        labelWidth = oldLabelWidth;
-    }
+			labelWidth = oldLabelWidth;
+		}
 
-    public override void OnInspectorGUI()
-    {
-        serializedObject.Update();
+		public override void OnInspectorGUI()
+		{
+			serializedObject.Update();
 
-        useGlobalAngleByDefault.Draw();
-        globalAngle.Draw();
-        Space();
-        showQuickPresetsButtons.Draw();
+			useGlobalAngleByDefault.Draw();
+			globalAngle.Draw();
+			Space();
+			showQuickPresetsButtons.Draw();
 
-        using (new GUILayout.HorizontalScope())
-        {
-            Space(pixelsPerPoint * 8, false);
-            using (new GUILayout.VerticalScope(GUILayout.MaxWidth(pixelsPerPoint * 400)))
-                reorderableList.DoLayoutList();
-            Space(pixelsPerPoint * 8, false);
-        }
+			using (new GUILayout.HorizontalScope())
+			{
+				Space(pixelsPerPoint * 8, false);
+				using (new GUILayout.VerticalScope(GUILayout.MaxWidth(pixelsPerPoint * 400)))
+				{
+					reorderableList.DoLayoutList();
+				}
 
-        serializedObject.ApplyModifiedProperties();
-    }
+				Space(pixelsPerPoint * 8, false);
+			}
 
-    [SettingsProvider]
-    public static SettingsProvider CreatSettingsProvider()
-    {
-        if (!Resources.Load(ProjectSettings.RESOURCE_PATH))
-            return null;
+			serializedObject.ApplyModifiedProperties();
+		}
 
-        return AssetSettingsProvider.CreateProviderFromResourcePath(
-            "Project/True Shadow",
-            ProjectSettings.RESOURCE_PATH,
-            SettingsProvider.GetSearchKeywordsFromPath(ProjectSettings.RESOURCE_PATH)
-        );
-    }
-}
+		[SettingsProvider]
+		public static SettingsProvider CreatSettingsProvider()
+		{
+			if (!Resources.Load(ProjectSettings.RESOURCE_PATH))
+				return null;
 
-class RunOnImport : AssetPostprocessor
-{
-    static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
-    {
-        if (Resources.Load(ProjectSettings.RESOURCE_PATH))
-            return;
+			return AssetSettingsProvider.CreateProviderFromResourcePath(
+				"Project/True Shadow",
+				ProjectSettings.RESOURCE_PATH,
+				SettingsProvider.GetSearchKeywordsFromPath(ProjectSettings.RESOURCE_PATH)
+			);
+		}
+	}
 
-        foreach (var path in importedAssets)
-        {
-            var fileName = Path.GetFileNameWithoutExtension(path);
+	internal class RunOnImport : AssetPostprocessor
+	{
+		private static void OnPostprocessAllAssets(
+			string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
+		{
+			if (Resources.Load(ProjectSettings.RESOURCE_PATH))
+				return;
 
-            if (string.Compare(fileName,
-                               ProjectSettings.DEFAULT_RESOURCE_PATH,
-                               StringComparison.InvariantCulture) == 0)
-            {
-                EnsureSettingAsset(path);
-                break;
-            }
+			foreach (var path in importedAssets)
+			{
+				var fileName = Path.GetFileNameWithoutExtension(path);
 
-            if (string.Compare(fileName,
-                               ProjectSettings.RESOURCE_PATH,
-                               StringComparison.InvariantCulture) == 0)
-            {
-                EditorApplication.update += NotifySettingsProviderChanged;
-                break;
-            }
-        }
-    }
+				if (string.Compare(
+						fileName,
+						ProjectSettings.DEFAULT_RESOURCE_PATH,
+						StringComparison.InvariantCulture) == 0)
+				{
+					EnsureSettingAsset(path);
+					break;
+				}
 
-    static void NotifySettingsProviderChanged()
-    {
-        SettingsService.NotifySettingsProviderChanged();
+				if (string.Compare(
+						fileName,
+						ProjectSettings.RESOURCE_PATH,
+						StringComparison.InvariantCulture) == 0)
+				{
+					EditorApplication.update += NotifySettingsProviderChanged;
+					break;
+				}
+			}
+		}
 
-        EditorApplication.update -= NotifySettingsProviderChanged;
-    }
+		private static void NotifySettingsProviderChanged()
+		{
+			SettingsService.NotifySettingsProviderChanged();
 
-    static void EnsureSettingAsset(string defaultPath)
-    {
-        // ReSharper disable once AssignNullToNotNullAttribute
-        var userPath     = Path.Combine(Path.GetDirectoryName(defaultPath), ProjectSettings.RESOURCE_PATH + ".asset");
-        var userSettings = AssetDatabase.LoadAssetAtPath<ProjectSettings>(userPath);
-        if (userSettings)
-            return;
+			EditorApplication.update -= NotifySettingsProviderChanged;
+		}
 
-        AssetDatabase.CopyAsset(defaultPath, userPath);
-        AssetDatabase.ImportAsset(userPath,
-                                  ImportAssetOptions.ForceUpdate
-                                | ImportAssetOptions.ForceSynchronousImport);
-    }
-}
+		private static void EnsureSettingAsset(string defaultPath)
+		{
+			// ReSharper disable once AssignNullToNotNullAttribute
+			var userPath = Path.Combine(Path.GetDirectoryName(defaultPath), ProjectSettings.RESOURCE_PATH + ".asset");
+			var userSettings = AssetDatabase.LoadAssetAtPath<ProjectSettings>(userPath);
+			if (userSettings)
+				return;
+
+			AssetDatabase.CopyAsset(defaultPath, userPath);
+			AssetDatabase.ImportAsset(
+				userPath,
+				ImportAssetOptions.ForceUpdate
+				| ImportAssetOptions.ForceSynchronousImport);
+		}
+	}
 }

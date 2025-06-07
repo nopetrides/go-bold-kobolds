@@ -1,66 +1,62 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿using System.IO;
 using UnityEditor;
 using UnityEngine;
 
 namespace TheraBytes.BetterUi.Editor
 {
-    public enum InstallSelectionState
-    {
-        None,
-        Install,
-        Remove,
-    }
+	public enum InstallSelectionState
+	{
+		None,
+		Install,
+		Remove
+	}
 
-    public class InstallPackageSelectionWizardPageElement : WizardPageElementBase
-    {
-        string title;
-        string pathToPackage;
-        string pathToFolder;
-        InstallSelectionState selectionState;
+	public class InstallPackageSelectionWizardPageElement : WizardPageElementBase
+	{
+		private readonly string title;
 
-        public string PathToPackage { get { return pathToPackage; } }
-        public string PathToFolder { get { return pathToFolder; } }
-        public InstallSelectionState SelectionState { get { return selectionState; } }
+		public InstallPackageSelectionWizardPageElement(string title, string pathToPackage, string pathToFolder)
+		{
+			this.title = title;
+			this.PathToPackage = pathToPackage;
+			this.PathToFolder = pathToFolder;
+		}
 
-        public InstallPackageSelectionWizardPageElement(string title, string pathToPackage, string pathToFolder)
-        {
-            this.title = title;
-            this.pathToPackage = pathToPackage;
-            this.pathToFolder = pathToFolder;
-        }
+		public string PathToPackage { get; }
 
-        public override void DrawGui()
-        {
-            bool isInstalled = Directory.Exists(pathToFolder);
+		public string PathToFolder { get; }
 
-            EditorGUILayout.BeginHorizontal();
+		public InstallSelectionState SelectionState { get; private set; }
 
-            EditorGUILayout.LabelField(title, EditorStyles.boldLabel);
+		public override void DrawGui()
+		{
+			var isInstalled = Directory.Exists(PathToFolder);
 
-            GUILayout.FlexibleSpace();
+			EditorGUILayout.BeginHorizontal();
 
-            if (isInstalled)
-            {
-                EditorGUILayout.HelpBox("✓ installed", MessageType.None);
-            }
+			EditorGUILayout.LabelField(title, EditorStyles.boldLabel);
+
+			GUILayout.FlexibleSpace();
+
+			if (isInstalled) EditorGUILayout.HelpBox("✓ installed", MessageType.None);
 
 
-            if(isInstalled)
-            {
-                bool remove = GUILayout.Toggle(selectionState == InstallSelectionState.Remove, "Remove", EditorStyles.miniButton, GUILayout.Width(100));
-                selectionState = (remove) ? InstallSelectionState.Remove : InstallSelectionState.None;
-            }
-            else
-            {
-                bool install = GUILayout.Toggle(selectionState == InstallSelectionState.Install, "Install", EditorStyles.miniButton, GUILayout.Width(100));
-                selectionState = (install) ? InstallSelectionState.Install : InstallSelectionState.None;
-            }
-            EditorGUILayout.EndHorizontal();
+			if (isInstalled)
+			{
+				var remove = GUILayout.Toggle(
+					SelectionState == InstallSelectionState.Remove, "Remove", EditorStyles.miniButton,
+					GUILayout.Width(100));
+				SelectionState = remove ? InstallSelectionState.Remove : InstallSelectionState.None;
+			}
+			else
+			{
+				var install = GUILayout.Toggle(
+					SelectionState == InstallSelectionState.Install, "Install", EditorStyles.miniButton,
+					GUILayout.Width(100));
+				SelectionState = install ? InstallSelectionState.Install : InstallSelectionState.None;
+			}
 
-        }
-    }
+			EditorGUILayout.EndHorizontal();
+		}
+	}
 }

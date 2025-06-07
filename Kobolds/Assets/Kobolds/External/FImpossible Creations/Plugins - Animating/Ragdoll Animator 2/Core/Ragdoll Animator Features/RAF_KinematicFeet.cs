@@ -6,6 +6,7 @@ namespace FIMSpace.FProceduralAnimation
         {
             foreach( var chain in ParentRagdollHandler.Chains )
             {
+                if (chain.BoneSetups.Count == 0) continue;
                 if( chain.ChainType.IsLeg() == false ) continue;
 
                 if( chain.ChainType.IsLeg() )
@@ -23,6 +24,7 @@ namespace FIMSpace.FProceduralAnimation
         {
             foreach( var chain in ParentRagdollHandler.Chains )
             {
+                if (chain.BoneSetups.Count == 0) continue;
                 if( chain.ChainType.IsLeg() == false ) continue;
 
                 chain.BoneSetups[chain.BoneSetups.Count - 1].ForceKinematicOnStanding = false;
@@ -39,6 +41,7 @@ namespace FIMSpace.FProceduralAnimation
             // Restore values
             foreach( var chain in ragdollHandler.Chains )
             {
+                if (chain.BoneSetups.Count == 0) continue;
                 if( chain.ChainType.IsLeg() == false ) continue;
 
                 chain.BoneSetups[chain.BoneSetups.Count - 1].ForceKinematicOnStanding = false;

@@ -564,17 +564,20 @@ namespace FIMSpace.FProceduralAnimation
         {
             List<RagdollChainBone.InBetweenBone> fills = new List<RagdollChainBone.InBetweenBone>();
 
-            // Remove fill bones to avoid null reference exceptions
-            for( int i = ParentHandler.skeletonFillExtraBonesList.Count - 1; i >= 0; i-- )
+            if (ParentHandler.skeletonFillExtraBonesList != null)
             {
-                var fillbone = ParentHandler.skeletonFillExtraBonesList[i];
-
-                foreach( var bone in bones )
+                // Remove fill bones to avoid null reference exceptions
+                for (int i = ParentHandler.skeletonFillExtraBonesList.Count - 1; i >= 0; i--)
                 {
-                    if( SkeletonRecognize.IsChildOf( fillbone.DummyBone, bone.PhysicalDummyBone ) )
+                    var fillbone = ParentHandler.skeletonFillExtraBonesList[i];
+
+                    foreach (var bone in bones)
                     {
-                        fills.Add( fillbone );
-                        break; // Stop checking for this fill bone
+                        if (SkeletonRecognize.IsChildOf(fillbone.DummyBone, bone.PhysicalDummyBone))
+                        {
+                            fills.Add(fillbone);
+                            break; // Stop checking for this fill bone
+                        }
                     }
                 }
             }

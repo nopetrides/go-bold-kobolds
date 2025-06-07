@@ -1,17 +1,23 @@
-﻿Shader "Starter Assets/Triplanar" {
-Properties{
-    _MainTex("Albedo (RGB)", 2D) = "white" {}
-    [NoScaleOffset] _BumpMap("Normal Map", 2D) = "bump" {}
-    _Glossiness("Smoothness", Range(0, 1)) = 0.5
-    [Gamma] _Metallic("Metallic", Range(0, 1)) = 0
-    [NoScaleOffset] _OcclusionMap("Occlusion", 2D) = "white" {}
-    _OcclusionStrength("Strength", Range(0.0, 1.0)) = 1.0
-}
-SubShader{
-    Tags { "RenderType" = "Opaque" }
-    LOD 200
+﻿Shader "Starter Assets/Triplanar"
+{
+    Properties
+    {
+        _MainTex("Albedo (RGB)", 2D) = "white" {}
+        [NoScaleOffset] _BumpMap("Normal Map", 2D) = "bump" {}
+        _Glossiness("Smoothness", Range(0, 1)) = 0.5
+        [Gamma] _Metallic("Metallic", Range(0, 1)) = 0
+        [NoScaleOffset] _OcclusionMap("Occlusion", 2D) = "white" {}
+        _OcclusionStrength("Strength", Range(0.0, 1.0)) = 1.0
+    }
+    SubShader
+    {
+        Tags
+        {
+            "RenderType" = "Opaque"
+        }
+        LOD 200
 
-    CGPROGRAM
+        CGPROGRAM
         // Physically based Standard lighting model, and enable shadows on all light types
         #pragma surface surf Standard fullforwardshadows
 
@@ -47,13 +53,15 @@ SubShader{
 
         half _OcclusionStrength;
 
-        struct Input {
+        struct Input
+        {
             float3 worldPos;
             float3 worldNormal;
             INTERNAL_DATA
         };
 
-        float3 WorldToTangentNormalVector(Input IN, float3 normal) {
+        float3 WorldToTangentNormalVector(Input IN, float3 normal)
+        {
             float3 t2w0 = WorldNormalVector(IN, float3(1,0,0));
             float3 t2w1 = WorldNormalVector(IN, float3(0,1,0));
             float3 t2w2 = WorldNormalVector(IN, float3(0,0,1));
@@ -61,13 +69,14 @@ SubShader{
             return normalize(mul(t2w, normal));
         }
 
-        void surf(Input IN, inout SurfaceOutputStandard o) {
+        void surf(Input IN, inout SurfaceOutputStandard o)
+        {
             // work around bug where IN.worldNormal is always (0,0,0)!
             IN.worldNormal = WorldNormalVector(IN, float3(0,0,1));
 
             // calculate triplanar blend
             half3 triblend = saturate(pow(IN.worldNormal, 4));
-            triblend /= max(dot(triblend, half3(1,1,1)), 0.0001);
+            triblend /= max(dot(triblend, half3(1, 1, 1)), 0.0001);
 
             // calculate triplanar uvs
             // applying texture scale and offset values ala TRANSFORM_TEX macro
@@ -76,20 +85,20 @@ SubShader{
             float2 uvZ = IN.worldPos.xy * _MainTex_ST.xy + _MainTex_ST.zy;
 
             // offset UVs to prevent obvious mirroring
-        #if defined(TRIPLANAR_UV_OFFSET)
+            #if defined(TRIPLANAR_UV_OFFSET)
             uvY += 0.33;
             uvZ += 0.67;
-        #endif
+            #endif
 
             // minor optimization of sign(). prevents return value of 0
             half3 axisSign = IN.worldNormal < 0 ? -1 : 1;
 
             // flip UVs horizontally to correct for back side projection
-        #if defined(TRIPLANAR_CORRECT_PROJECTED_U)
+            #if defined(TRIPLANAR_CORRECT_PROJECTED_U)
             uvX.x *= axisSign.x;
             uvY.x *= axisSign.y;
             uvZ.x *= -axisSign.z;
-        #endif
+            #endif
 
             // albedo textures
             fixed4 colX = tex2D(_MainTex, uvX);
@@ -109,11 +118,11 @@ SubShader{
             half3 tnormalZ = UnpackNormal(tex2D(_BumpMap, uvZ));
 
             // flip normal maps' x axis to account for flipped UVs
-        #if defined(TRIPLANAR_CORRECT_PROJECTED_U)
+            #if defined(TRIPLANAR_CORRECT_PROJECTED_U)
             tnormalX.x *= axisSign.x;
             tnormalY.x *= axisSign.y;
             tnormalZ.x *= -axisSign.z;
-        #endif
+            #endif
 
             half3 absVertNormal = abs(IN.worldNormal);
 
@@ -132,7 +141,7 @@ SubShader{
                 tnormalX.zyx * triblend.x +
                 tnormalY.xzy * triblend.y +
                 tnormalZ.xyz * triblend.z
-                );
+            );
 
             // set surface ouput properties
             o.Albedo = col.rgb;
@@ -145,5 +154,5 @@ SubShader{
         }
         ENDCG
     }
-        FallBack "Diffuse"
+    FallBack "Diffuse"
 }

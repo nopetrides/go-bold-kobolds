@@ -1,93 +1,98 @@
 ﻿using System.Collections;
+using UnityEditor;
 using UnityEngine;
 
 namespace FIMSpace.Jiggling
 {
-    /// <summary>
-    /// FM: Animating transform's rotation and scale to make it look kinda like jelly
-    /// </summary>
-    [AddComponentMenu("FImpossible Creations/Jiggling/FJiggling Simple - Bones")]
-    public class FJiggling_SimpleBones : FJiggling_Simple
-    {
-        public bool NoRotationKeyframes = false;
+	/// <summary>
+	///     FM: Animating transform's rotation and scale to make it look kinda like jelly
+	/// </summary>
+	[AddComponentMenu("FImpossible Creations/Jiggling/FJiggling Simple - Bones")]
+	public class FJiggling_SimpleBones : FJiggling_Simple
+	{
+		public bool NoRotationKeyframes;
 
-        [Tooltip("If your animation is scaling bones set this to false")]
-        public bool NoScaleKeyframes = true;
+		[Tooltip("If your animation is scaling bones set this to false")]
+		public bool NoScaleKeyframes = true;
 
-        [Tooltip("Toggle it to true if you animator is using 'Animated Physics' update mode")]
-        public bool AnimatePhysics = false;
-        private bool animatePhysicsWorking = false;
-        private bool triggerAnimatePhysics = false;
+		[Tooltip("Toggle it to true if you animator is using 'Animated Physics' update mode")]
+		public bool AnimatePhysics;
 
-        private Quaternion initialKeyRotation;
-        private Vector3 initialKeyScale;
+		private bool animatePhysicsWorking;
 
-        protected override void Init()
-        {
-            if (initialized) return;
+		private Quaternion initialKeyRotation;
+		private Vector3 initialKeyScale;
+		private bool triggerAnimatePhysics;
 
-            base.Init();
-            initialKeyRotation = TransformToAnimate.localRotation;
-            initialKeyScale = TransformToAnimate.localScale;
-        }
+		protected override void Update()
+		{
+			// Erasing all actions made in Update() 
+		}
 
-        protected override void Update()
-        {
-            // Erasing all actions made in Update() 
-        }
+		protected virtual void LateUpdate()
+		{
+			if (AnimatePhysics)
+			{
+				if (!animatePhysicsWorking) StartCoroutine(AnimatePhysicsClock());
+				if (!triggerAnimatePhysics) return;
+				triggerAnimatePhysics = false;
+			}
 
-        protected virtual void LateUpdate()
-        {
-            if (AnimatePhysics)
-            {
-                if (!animatePhysicsWorking) StartCoroutine(AnimatePhysicsClock());
-                if (!triggerAnimatePhysics) return; else triggerAnimatePhysics = false;
-            }
+			if (NoRotationKeyframes) TransformToAnimate.localRotation = initialKeyRotation;
+			if (NoScaleKeyframes) TransformToAnimate.localScale = initialKeyScale;
 
-            if (NoRotationKeyframes) TransformToAnimate.localRotation = initialKeyRotation;
-            if (NoScaleKeyframes) TransformToAnimate.localScale = initialKeyScale;
+			// Every beginning of late update rotations are the same as in animation played by Animator component
+			initRotation = TransformToAnimate.localRotation; // initialKeyRotation;
+			initScale = TransformToAnimate.localScale;
 
-            // Every beginning of late update rotations are the same as in animation played by Animator component
-            initRotation = TransformToAnimate.localRotation;// initialKeyRotation;
-            initScale = TransformToAnimate.localScale;
+			// Doing update calculations in LateUpdate() to override Animator's work
+			base.Update();
+		}
 
-            // Doing update calculations in LateUpdate() to override Animator's work
-            base.Update();
-        }
+		protected override void Init()
+		{
+			if (initialized) return;
 
-        /// <summary>
-        /// Support for 'animate physics' option inside unity's Animator
-        /// </summary>
-        private IEnumerator AnimatePhysicsClock()
-        {
-            animatePhysicsWorking = true;
+			base.Init();
+			initialKeyRotation = TransformToAnimate.localRotation;
+			initialKeyScale = TransformToAnimate.localScale;
+		}
 
-            while (true)
-            {
-                yield return new WaitForFixedUpdate();
-                triggerAnimatePhysics = true;
-            }
-        }
-    }
+		/// <summary>
+		///     Support for 'animate physics' option inside unity's Animator
+		/// </summary>
+		private IEnumerator AnimatePhysicsClock()
+		{
+			animatePhysicsWorking = true;
+
+			while (true)
+			{
+				yield return new WaitForFixedUpdate();
+				triggerAnimatePhysics = true;
+			}
+		}
+	}
 
 #if UNITY_EDITOR
-    /// <summary>
-    /// FM: Editor class for Jiggle Bones component to check animation from editor level (in playmode)
-    /// </summary>
-    [UnityEditor.CustomEditor(typeof(FJiggling_SimpleBones))]
-    [UnityEditor.CanEditMultipleObjects]
-    public class FJiggling_SimpleBonesEditor : UnityEditor.Editor
-    {
-        public override void OnInspectorGUI()
-        {
-            FJiggling_SimpleBones targetScript = (FJiggling_SimpleBones)target;
-            DrawDefaultInspector();
+	/// <summary>
+	///     FM: Editor class for Jiggle Bones component to check animation from editor level (in playmode)
+	/// </summary>
+	[CustomEditor(typeof(FJiggling_SimpleBones))]
+	[CanEditMultipleObjects]
+	public class FJiggling_SimpleBonesEditor : Editor
+	{
+		public override void OnInspectorGUI()
+		{
+			var targetScript = (FJiggling_SimpleBones) target;
+			DrawDefaultInspector();
 
-            GUILayout.Space(10f);
+			GUILayout.Space(10f);
 
-            if (!Application.isPlaying) GUI.color = FColorMethods.ChangeColorAlpha(GUI.color, 0.45f);
-            if (GUILayout.Button("Jiggle It")) if (Application.isPlaying) targetScript.StartJiggle(); else Debug.Log("You must be in playmode to run this method!");
-        }
-    }
+			if (!Application.isPlaying) GUI.color = GUI.color.ChangeColorAlpha(0.45f);
+			if (GUILayout.Button("Jiggle It"))
+				if (Application.isPlaying) targetScript.StartJiggle();
+				else Debug.Log("You must be in playmode to run this method!");
+		}
+	}
 #endif
 }

@@ -1,29 +1,87 @@
 // Copyright (c) Rotorz Limited. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root.
 
-using TheraBytes.BetterUi.Editor.ThirdParty.Internal;
 using System.Collections.Generic;
+using TheraBytes.BetterUi.Editor.ThirdParty.Internal;
 using UnityEditor;
 using UnityEngine;
 
 namespace TheraBytes.BetterUi.Editor.ThirdParty
 {
-
 	/// <summary>
-	/// Base class for custom reorderable list control.
+	///     Base class for custom reorderable list control.
 	/// </summary>
-	public class ReorderableListControl {
-
+	public class ReorderableListControl
+	{
 		/// <summary>
-		/// Invoked to draw list item.
+		///     Invoked to draw content for empty list.
 		/// </summary>
 		/// <remarks>
-		/// <para>GUI controls must be positioned absolutely within the given rectangle since
-		/// list items must be sized consistently.</para>
+		///     <para>Callback should make use of <c>GUILayout</c> to present controls.</para>
 		/// </remarks>
 		/// <example>
-		/// <para>The following listing presents a text field for each list item:</para>
-		/// <code language="csharp"><![CDATA[
+		///     <para>The following listing displays a label for empty list control:</para>
+		///     <code language="csharp"><![CDATA[
+		/// using Rotorz.ReorderableList;
+		/// using System.Collections.Generic;
+		/// using UnityEditor;
+		/// using UnityEngine;
+		/// 
+		/// public class ExampleWindow : EditorWindow {
+		///     private List<string> _list;
+		/// 
+		///     private void OnEnable() {
+		///         _list = new List<string>();
+		///     }
+		///     private void OnGUI() {
+		///         ReorderableListGUI.ListField(_list, ReorderableListGUI.TextFieldItemDrawer, DrawEmptyMessage);
+		///     }
+		/// 
+		///     private string DrawEmptyMessage() {
+		///         GUILayout.Label("List is empty!", EditorStyles.miniLabel);
+		///     }
+		/// }
+		/// ]]></code>
+		///     <code language="unityscript"><![CDATA[
+		/// import Rotorz.ReorderableList;
+		/// import System.Collections.Generic;
+		/// 
+		/// class ExampleWindow extends EditorWindow {
+		///     private var _list:List.<String>;
+		/// 
+		///     function OnEnable() {
+		///         _list = new List.<String>();
+		///     }
+		///     function OnGUI() {
+		///         ReorderableListGUI.ListField(_list, ReorderableListGUI.TextFieldItemDrawer, DrawEmptyMessage);
+		///     }
+		/// 
+		///     function DrawEmptyMessage() {
+		///         GUILayout.Label('List is empty!', EditorStyles.miniLabel);
+		///     }
+		/// }
+		/// ]]></code>
+		/// </example>
+		public delegate void DrawEmpty();
+
+		/// <summary>
+		///     Invoked to draw content for empty list with absolute positioning.
+		/// </summary>
+		/// <param name="position">Position of empty content.</param>
+		public delegate void DrawEmptyAbsolute(Rect position);
+
+		/// <summary>
+		///     Invoked to draw list item.
+		/// </summary>
+		/// <remarks>
+		///     <para>
+		///         GUI controls must be positioned absolutely within the given rectangle since
+		///         list items must be sized consistently.
+		///     </para>
+		/// </remarks>
+		/// <example>
+		///     <para>The following listing presents a text field for each list item:</para>
+		///     <code language="csharp"><![CDATA[
 		/// using Rotorz.ReorderableList;
 		/// using System.Collections.Generic;
 		/// using UnityEditor;
@@ -44,7 +102,7 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 		///     }
 		/// }
 		/// ]]></code>
-		/// <code language="unityscript"><![CDATA[
+		///     <code language="unityscript"><![CDATA[
 		/// import Rotorz.ReorderableList;
 		/// import System.Collections.Generic;
 		/// 
@@ -68,375 +126,303 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 		/// <param name="position">Position of list item.</param>
 		/// <param name="item">The list item.</param>
 		/// <returns>
-		/// The modified value.
+		///     The modified value.
 		/// </returns>
 		public delegate T ItemDrawer<T>(Rect position, T item);
 
 		/// <summary>
-		/// Invoked to draw content for empty list.
-		/// </summary>
-		/// <remarks>
-		/// <para>Callback should make use of <c>GUILayout</c> to present controls.</para>
-		/// </remarks>
-		/// <example>
-		/// <para>The following listing displays a label for empty list control:</para>
-		/// <code language="csharp"><![CDATA[
-		/// using Rotorz.ReorderableList;
-		/// using System.Collections.Generic;
-		/// using UnityEditor;
-		/// using UnityEngine;
-		/// 
-		/// public class ExampleWindow : EditorWindow {
-		///     private List<string> _list;
-		/// 
-		///     private void OnEnable() {
-		///         _list = new List<string>();
-		///     }
-		///     private void OnGUI() {
-		///         ReorderableListGUI.ListField(_list, ReorderableListGUI.TextFieldItemDrawer, DrawEmptyMessage);
-		///     }
-		/// 
-		///     private string DrawEmptyMessage() {
-		///         GUILayout.Label("List is empty!", EditorStyles.miniLabel);
-		///     }
-		/// }
-		/// ]]></code>
-		/// <code language="unityscript"><![CDATA[
-		/// import Rotorz.ReorderableList;
-		/// import System.Collections.Generic;
-		/// 
-		/// class ExampleWindow extends EditorWindow {
-		///     private var _list:List.<String>;
-		/// 
-		///     function OnEnable() {
-		///         _list = new List.<String>();
-		///     }
-		///     function OnGUI() {
-		///         ReorderableListGUI.ListField(_list, ReorderableListGUI.TextFieldItemDrawer, DrawEmptyMessage);
-		///     }
-		/// 
-		///     function DrawEmptyMessage() {
-		///         GUILayout.Label('List is empty!', EditorStyles.miniLabel);
-		///     }
-		/// }
-		/// ]]></code>
-		/// </example>
-		public delegate void DrawEmpty();
-		/// <summary>
-		/// Invoked to draw content for empty list with absolute positioning.
-		/// </summary>
-		/// <param name="position">Position of empty content.</param>
-		public delegate void DrawEmptyAbsolute(Rect position);
-
-		#region Custom Styles
-
-		/// <summary>
-		/// Background color of anchor list item.
-		/// </summary>
-		public static readonly Color AnchorBackgroundColor;
-		/// <summary>
-		/// Background color of target slot when dragging list item.
-		/// </summary>
-		public static readonly Color TargetBackgroundColor;
-
-		/// <summary>
-		/// Style for right-aligned label for element number prefix.
-		/// </summary>
-		private static GUIStyle s_RightAlignedLabelStyle;
-
-		static ReorderableListControl() {
-			s_CurrentListStack = new Stack<ListInfo>();
-			s_CurrentListStack.Push(default(ListInfo));
-
-			s_CurrentItemStack = new Stack<ItemInfo>();
-			s_CurrentItemStack.Push(new ItemInfo(-1, default(Rect)));
-
-			if (EditorGUIUtility.isProSkin) {
-				AnchorBackgroundColor = new Color(85f / 255f, 85f / 255f, 85f / 255f, 0.85f);
-				TargetBackgroundColor = new Color(0, 0, 0, 0.5f);
-			}
-			else {
-				AnchorBackgroundColor = new Color(225f / 255f, 225f / 255f, 225f / 255f, 0.85f);
-				TargetBackgroundColor = new Color(0, 0, 0, 0.5f);
-			}
-		}
-
-		#endregion
-
-		#region Utility
-
-		private static readonly int s_ReorderableListControlHint = "_ReorderableListControl_".GetHashCode();
-
-		private static int GetReorderableListControlID() {
-			return GUIUtility.GetControlID(s_ReorderableListControlHint, FocusType.Passive);
-		}
-
-		/// <summary>
-		/// Generate and draw control from state object.
-		/// </summary>
-		/// <param name="adaptor">Reorderable list adaptor.</param>
-		/// <param name="drawEmpty">Delegate for drawing empty list.</param>
-		/// <param name="flags">Optional flags to pass into list field.</param>
-		public static void DrawControlFromState(IReorderableListAdaptor adaptor, DrawEmpty drawEmpty, ReorderableListFlags flags) {
-			int controlID = GetReorderableListControlID();
-
-			var control = GUIUtility.GetStateObject(typeof(ReorderableListControl), controlID) as ReorderableListControl;
-			control.Flags = flags;
-			control.Draw(controlID, adaptor, drawEmpty);
-		}
-
-		/// <summary>
-		/// Generate and draw control from state object.
-		/// </summary>
-		/// <param name="position">Position of control.</param>
-		/// <param name="adaptor">Reorderable list adaptor.</param>
-		/// <param name="drawEmpty">Delegate for drawing empty list.</param>
-		/// <param name="flags">Optional flags to pass into list field.</param>
-		public static void DrawControlFromState(Rect position, IReorderableListAdaptor adaptor, DrawEmptyAbsolute drawEmpty, ReorderableListFlags flags) {
-			int controlID = GetReorderableListControlID();
-
-			var control = GUIUtility.GetStateObject(typeof(ReorderableListControl), controlID) as ReorderableListControl;
-			control.Flags = flags;
-			control.Draw(position, controlID, adaptor, drawEmpty);
-		}
-
-		#endregion
-
-		/// <summary>
-		/// Position of mouse upon anchoring item for drag.
+		///     Position of mouse upon anchoring item for drag.
 		/// </summary>
 		private static float s_AnchorMouseOffset;
+
 		/// <summary>
-		/// Zero-based index of anchored list item.
+		///     Zero-based index of anchored list item.
 		/// </summary>
 		private static int s_AnchorIndex = -1;
+
 		/// <summary>
-		/// Zero-based index of target list item for reordering.
+		///     Zero-based index of target list item for reordering.
 		/// </summary>
 		private static int s_TargetIndex = -1;
 
 		/// <summary>
-		/// Unique ID of list control which should be automatically focused. A value
-		/// of zero indicates that no control is to be focused.
+		///     Unique ID of list control which should be automatically focused. A value
+		///     of zero indicates that no control is to be focused.
 		/// </summary>
-		private static int s_AutoFocusControlID = 0;
+		private static int s_AutoFocusControlID;
+
 		/// <summary>
-		/// Zero-based index of item which should be focused.
+		///     Zero-based index of item which should be focused.
 		/// </summary>
 		private static int s_AutoFocusIndex = -1;
 
-		private struct ListInfo {
-			public int ControlID;
-			public Rect Position;
+		/// <summary>
+		///     Represents the current stack of nested reorderable list control positions.
+		/// </summary>
+		private static readonly Stack<ListInfo> s_CurrentListStack;
 
-			public ListInfo(int controlID, Rect position) {
+		/// <summary>
+		///     Represents the current stack of nested reorderable list items.
+		/// </summary>
+		private static readonly Stack<ItemInfo> s_CurrentItemStack;
+
+		/// <summary>
+		///     Gets the control ID of the list that is currently being drawn.
+		/// </summary>
+		public static int CurrentListControlID => s_CurrentListStack.Peek().ControlID;
+
+		/// <summary>
+		///     Gets the position of the list control that is currently being drawn.
+		/// </summary>
+		/// <remarks>
+		///     <para>
+		///         The value of this property should be ignored for <see cref="EventType.Layout" />
+		///         type events when using reorderable list controls with automatic layout.
+		///     </para>
+		/// </remarks>
+		/// <see cref="CurrentItemTotalPosition" />
+		public static Rect CurrentListPosition => s_CurrentListStack.Peek().Position;
+
+		/// <summary>
+		///     Gets the zero-based index of the list item that is currently being drawn;
+		///     or a value of -1 if no item is currently being drawn.
+		/// </summary>
+		/// <remarks>
+		///     <para>Use <see cref="ReorderableListGUI.CurrentItemIndex" /> instead.</para>
+		/// </remarks>
+		internal static int CurrentItemIndex => s_CurrentItemStack.Peek().ItemIndex;
+
+		/// <summary>
+		///     Gets the total position of the list item that is currently being drawn.
+		/// </summary>
+		/// <remarks>
+		///     <para>
+		///         The value of this property should be ignored for <see cref="EventType.Layout" />
+		///         type events when using reorderable list controls with automatic layout.
+		///     </para>
+		/// </remarks>
+		/// <see cref="CurrentItemIndex" />
+		/// <see cref="CurrentListPosition" />
+		public static Rect CurrentItemTotalPosition => s_CurrentItemStack.Peek().ItemPosition;
+
+		private struct ListInfo
+		{
+			public readonly int ControlID;
+			public readonly Rect Position;
+
+			public ListInfo(int controlID, Rect position)
+			{
 				ControlID = controlID;
 				Position = position;
 			}
 		}
 
-		private struct ItemInfo {
-			public int ItemIndex;
-			public Rect ItemPosition;
+		private struct ItemInfo
+		{
+			public readonly int ItemIndex;
+			public readonly Rect ItemPosition;
 
-			public ItemInfo(int itemIndex, Rect itemPosition) {
+			public ItemInfo(int itemIndex, Rect itemPosition)
+			{
 				ItemIndex = itemIndex;
 				ItemPosition = itemPosition;
 			}
 		}
 
-		/// <summary>
-		/// Represents the current stack of nested reorderable list control positions.
-		/// </summary>
-		private static Stack<ListInfo> s_CurrentListStack;
+#region Custom Styles
 
 		/// <summary>
-		/// Represents the current stack of nested reorderable list items.
+		///     Background color of anchor list item.
 		/// </summary>
-		private static Stack<ItemInfo> s_CurrentItemStack;
+		public static readonly Color AnchorBackgroundColor;
 
 		/// <summary>
-		/// Gets the control ID of the list that is currently being drawn.
+		///     Background color of target slot when dragging list item.
 		/// </summary>
-		public static int CurrentListControlID {
-			get { return s_CurrentListStack.Peek().ControlID; }
+		public static readonly Color TargetBackgroundColor;
+
+		/// <summary>
+		///     Style for right-aligned label for element number prefix.
+		/// </summary>
+		private static GUIStyle s_RightAlignedLabelStyle;
+
+		static ReorderableListControl()
+		{
+			s_CurrentListStack = new Stack<ListInfo>();
+			s_CurrentListStack.Push(default);
+
+			s_CurrentItemStack = new Stack<ItemInfo>();
+			s_CurrentItemStack.Push(new ItemInfo(-1, default));
+
+			if (EditorGUIUtility.isProSkin)
+			{
+				AnchorBackgroundColor = new Color(85f / 255f, 85f / 255f, 85f / 255f, 0.85f);
+				TargetBackgroundColor = new Color(0, 0, 0, 0.5f);
+			}
+			else
+			{
+				AnchorBackgroundColor = new Color(225f / 255f, 225f / 255f, 225f / 255f, 0.85f);
+				TargetBackgroundColor = new Color(0, 0, 0, 0.5f);
+			}
+		}
+
+#endregion
+
+#region Utility
+
+		private static readonly int s_ReorderableListControlHint = "_ReorderableListControl_".GetHashCode();
+
+		private static int GetReorderableListControlID()
+		{
+			return GUIUtility.GetControlID(s_ReorderableListControlHint, FocusType.Passive);
 		}
 
 		/// <summary>
-		/// Gets the position of the list control that is currently being drawn.
+		///     Generate and draw control from state object.
 		/// </summary>
-		/// <remarks>
-		/// <para>The value of this property should be ignored for <see cref="EventType.Layout"/>
-		/// type events when using reorderable list controls with automatic layout.</para>
-		/// </remarks>
-		/// <see cref="CurrentItemTotalPosition"/>
-		public static Rect CurrentListPosition {
-			get { return s_CurrentListStack.Peek().Position; }
+		/// <param name="adaptor">Reorderable list adaptor.</param>
+		/// <param name="drawEmpty">Delegate for drawing empty list.</param>
+		/// <param name="flags">Optional flags to pass into list field.</param>
+		public static void DrawControlFromState(
+			IReorderableListAdaptor adaptor, DrawEmpty drawEmpty, ReorderableListFlags flags)
+		{
+			var controlID = GetReorderableListControlID();
+
+			var control =
+				GUIUtility.GetStateObject(typeof(ReorderableListControl), controlID) as ReorderableListControl;
+			control.Flags = flags;
+			control.Draw(controlID, adaptor, drawEmpty);
 		}
 
 		/// <summary>
-		/// Gets the zero-based index of the list item that is currently being drawn;
-		/// or a value of -1 if no item is currently being drawn.
+		///     Generate and draw control from state object.
 		/// </summary>
-		/// <remarks>
-		/// <para>Use <see cref="ReorderableListGUI.CurrentItemIndex"/> instead.</para>
-		/// </remarks>
-		internal static int CurrentItemIndex {
-			get { return s_CurrentItemStack.Peek().ItemIndex; }
+		/// <param name="position">Position of control.</param>
+		/// <param name="adaptor">Reorderable list adaptor.</param>
+		/// <param name="drawEmpty">Delegate for drawing empty list.</param>
+		/// <param name="flags">Optional flags to pass into list field.</param>
+		public static void DrawControlFromState(
+			Rect position, IReorderableListAdaptor adaptor, DrawEmptyAbsolute drawEmpty, ReorderableListFlags flags)
+		{
+			var controlID = GetReorderableListControlID();
+
+			var control =
+				GUIUtility.GetStateObject(typeof(ReorderableListControl), controlID) as ReorderableListControl;
+			control.Flags = flags;
+			control.Draw(position, controlID, adaptor, drawEmpty);
 		}
 
-		/// <summary>
-		/// Gets the total position of the list item that is currently being drawn.
-		/// </summary>
-		/// <remarks>
-		/// <para>The value of this property should be ignored for <see cref="EventType.Layout"/>
-		/// type events when using reorderable list controls with automatic layout.</para>
-		/// </remarks>
-		/// <see cref="CurrentItemIndex"/>
-		/// <see cref="CurrentListPosition"/>
-		public static Rect CurrentItemTotalPosition {
-			get { return s_CurrentItemStack.Peek().ItemPosition; }
-		}
+#endregion
 
-		#region Properties
-
-		private ReorderableListFlags _flags;
+#region Properties
 
 		/// <summary>
-		/// Gets or sets flags which affect behavior of control.
+		///     Gets or sets flags which affect behavior of control.
 		/// </summary>
-		public ReorderableListFlags Flags {
-			get { return _flags; }
-			set { _flags = value; }
-		}
+		public ReorderableListFlags Flags { get; set; }
 
 		/// <summary>
-		/// Gets a value indicating whether any footer controls are shown.
+		///     Gets a value indicating whether any footer controls are shown.
 		/// </summary>
-		private bool HasFooterControls {
-			get { return HasSizeField || HasAddButton || HasAddMenuButton; }
-		}
+		private bool HasFooterControls => HasSizeField || HasAddButton || HasAddMenuButton;
+
 		/// <summary>
-		/// Gets a value indicating whether the size field is shown.
+		///     Gets a value indicating whether the size field is shown.
 		/// </summary>
-		private bool HasSizeField {
-			get { return (_flags & ReorderableListFlags.ShowSizeField) != 0; }
-		}
+		private bool HasSizeField => (Flags & ReorderableListFlags.ShowSizeField) != 0;
+
 		/// <summary>
-		/// Gets a value indicating whether add button is shown.
+		///     Gets a value indicating whether add button is shown.
 		/// </summary>
-		private bool HasAddButton {
-			get { return (_flags & ReorderableListFlags.HideAddButton) == 0; }
-		}
+		private bool HasAddButton => (Flags & ReorderableListFlags.HideAddButton) == 0;
+
 		/// <summary>
-		/// Gets a value indicating whether add menu button is shown.
+		///     Gets a value indicating whether add menu button is shown.
 		/// </summary>
 		private bool HasAddMenuButton { get; set; }
 
 		/// <summary>
-		/// Gets a value indicating whether remove buttons are shown.
+		///     Gets a value indicating whether remove buttons are shown.
 		/// </summary>
-		private bool HasRemoveButtons {
-			get { return (_flags & ReorderableListFlags.HideRemoveButtons) == 0; }
-		}
-
-		private float _verticalSpacing = 10f;
-		private GUIStyle _containerStyle;
-		private GUIStyle _footerButtonStyle;
-		private GUIStyle _itemButtonStyle;
+		private bool HasRemoveButtons => (Flags & ReorderableListFlags.HideRemoveButtons) == 0;
 
 		/// <summary>
-		/// Gets or sets the vertical spacing below the reorderable list control.
+		///     Gets or sets the vertical spacing below the reorderable list control.
 		/// </summary>
-		public float VerticalSpacing {
-			get { return _verticalSpacing; }
-			set { _verticalSpacing = value; }
-		}
-		/// <summary>
-		/// Gets or sets style used to draw background of list control.
-		/// </summary>
-		/// <seealso cref="ReorderableListStyles.Container"/>
-		public GUIStyle ContainerStyle {
-			get { return _containerStyle; }
-			set { _containerStyle = value; }
-		}
-		/// <summary>
-		/// Gets or sets style used to draw footer buttons.
-		/// </summary>
-		/// <seealso cref="ReorderableListStyles.FooterButton"/>
-		public GUIStyle FooterButtonStyle {
-			get { return _footerButtonStyle; }
-			set { _footerButtonStyle = value; }
-		}
-		/// <summary>
-		/// Gets or sets style used to draw list item buttons (like the remove button).
-		/// </summary>
-		/// <seealso cref="ReorderableListStyles.ItemButton"/>
-		public GUIStyle ItemButtonStyle {
-			get { return _itemButtonStyle; }
-			set { _itemButtonStyle = value; }
-		}
-
-		private Color _horizontalLineColor;
-		private bool _horizontalLineAtStart = false;
-		private bool _horizontalLineAtEnd = false;
+		public float VerticalSpacing { get; set; } = 10f;
 
 		/// <summary>
-		/// Gets or sets the color of the horizontal lines that appear between list items.
+		///     Gets or sets style used to draw background of list control.
 		/// </summary>
-		public Color HorizontalLineColor {
-			get { return _horizontalLineColor; }
-			set { _horizontalLineColor = value; }
-		}
+		/// <seealso cref="ReorderableListStyles.Container" />
+		public GUIStyle ContainerStyle { get; set; }
 
 		/// <summary>
-		/// Gets or sets a boolean value indicating whether a horizontal line should be
-		/// shown above the first list item at the start of the list control.
+		///     Gets or sets style used to draw footer buttons.
+		/// </summary>
+		/// <seealso cref="ReorderableListStyles.FooterButton" />
+		public GUIStyle FooterButtonStyle { get; set; }
+
+		/// <summary>
+		///     Gets or sets style used to draw list item buttons (like the remove button).
+		/// </summary>
+		/// <seealso cref="ReorderableListStyles.ItemButton" />
+		public GUIStyle ItemButtonStyle { get; set; }
+
+		/// <summary>
+		///     Gets or sets the color of the horizontal lines that appear between list items.
+		/// </summary>
+		public Color HorizontalLineColor { get; set; }
+
+		/// <summary>
+		///     Gets or sets a boolean value indicating whether a horizontal line should be
+		///     shown above the first list item at the start of the list control.
 		/// </summary>
 		/// <remarks>
-		/// <para>Horizontal line is not drawn for an empty list regardless of the value
-		/// of this property.</para>
+		///     <para>
+		///         Horizontal line is not drawn for an empty list regardless of the value
+		///         of this property.
+		///     </para>
 		/// </remarks>
-		public bool HorizontalLineAtStart {
-			get { return _horizontalLineAtStart; }
-			set { _horizontalLineAtStart = value; }
-		}
+		public bool HorizontalLineAtStart { get; set; }
 
 		/// <summary>
-		/// Gets or sets a boolean value indicating whether a horizontal line should be
-		/// shown below the last list item at the end of the list control.
+		///     Gets or sets a boolean value indicating whether a horizontal line should be
+		///     shown below the last list item at the end of the list control.
 		/// </summary>
 		/// <remarks>
-		/// <para>Horizontal line is not drawn for an empty list regardless of the value
-		/// of this property.</para>
+		///     <para>
+		///         Horizontal line is not drawn for an empty list regardless of the value
+		///         of this property.
+		///     </para>
 		/// </remarks>
-		public bool HorizontalLineAtEnd {
-			get { return _horizontalLineAtEnd; }
-			set { _horizontalLineAtEnd = value; }
-		}
+		public bool HorizontalLineAtEnd { get; set; }
 
-		#endregion
+#endregion
 
-		#region Events
+#region Events
 
 		private event AddMenuClickedEventHandler _addMenuClicked;
-		private int _addMenuClickedSubscriberCount = 0;
+		private int _addMenuClickedSubscriberCount;
 
 		/// <summary>
-		/// Occurs when add menu button is clicked.
+		///     Occurs when add menu button is clicked.
 		/// </summary>
 		/// <remarks>
-		/// <para>Add menu button is only shown when there is at least one subscriber to this event.</para>
+		///     <para>Add menu button is only shown when there is at least one subscriber to this event.</para>
 		/// </remarks>
-		public event AddMenuClickedEventHandler AddMenuClicked {
-			add {
+		public event AddMenuClickedEventHandler AddMenuClicked
+		{
+			add
+			{
 				if (value == null)
 					return;
 				_addMenuClicked += value;
 				++_addMenuClickedSubscriberCount;
 				HasAddMenuButton = _addMenuClickedSubscriberCount != 0;
 			}
-			remove {
+			remove
+			{
 				if (value == null)
 					return;
 				_addMenuClicked -= value;
@@ -446,143 +432,157 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 		}
 
 		/// <summary>
-		/// Raises event when add menu button is clicked.
+		///     Raises event when add menu button is clicked.
 		/// </summary>
 		/// <param name="args">Event arguments.</param>
-		protected virtual void OnAddMenuClicked(AddMenuClickedEventArgs args) {
+		protected virtual void OnAddMenuClicked(AddMenuClickedEventArgs args)
+		{
 			if (_addMenuClicked != null)
 				_addMenuClicked(this, args);
 		}
 
 		/// <summary>
-		/// Occurs after list item is inserted or duplicated.
+		///     Occurs after list item is inserted or duplicated.
 		/// </summary>
 		public event ItemInsertedEventHandler ItemInserted;
 
 		/// <summary>
-		/// Raises event after list item is inserted or duplicated.
+		///     Raises event after list item is inserted or duplicated.
 		/// </summary>
 		/// <param name="args">Event arguments.</param>
-		protected virtual void OnItemInserted(ItemInsertedEventArgs args) {
+		protected virtual void OnItemInserted(ItemInsertedEventArgs args)
+		{
 			if (ItemInserted != null)
 				ItemInserted(this, args);
 		}
 
 		/// <summary>
-		/// Occurs before list item is removed and allowing for remove operation to be cancelled.
+		///     Occurs before list item is removed and allowing for remove operation to be cancelled.
 		/// </summary>
 		public event ItemRemovingEventHandler ItemRemoving;
 
 		/// <summary>
-		/// Raises event before list item is removed and provides oppertunity to cancel.
+		///     Raises event before list item is removed and provides oppertunity to cancel.
 		/// </summary>
 		/// <param name="args">Event arguments.</param>
-		protected virtual void OnItemRemoving(ItemRemovingEventArgs args) {
+		protected virtual void OnItemRemoving(ItemRemovingEventArgs args)
+		{
 			if (ItemRemoving != null)
 				ItemRemoving(this, args);
 		}
 
 		/// <summary>
-		/// Occurs immediately before list item is moved allowing for move operation to be cancelled.
+		///     Occurs immediately before list item is moved allowing for move operation to be cancelled.
 		/// </summary>
 		public event ItemMovingEventHandler ItemMoving;
 
 		/// <summary>
-		/// Raises event immediately before list item is moved and provides oppertunity to cancel.
+		///     Raises event immediately before list item is moved and provides oppertunity to cancel.
 		/// </summary>
 		/// <param name="args">Event arguments.</param>
-		protected virtual void OnItemMoving(ItemMovingEventArgs args) {
+		protected virtual void OnItemMoving(ItemMovingEventArgs args)
+		{
 			if (ItemMoving != null)
 				ItemMoving(this, args);
 		}
 
 		/// <summary>
-		/// Occurs after list item has been moved.
+		///     Occurs after list item has been moved.
 		/// </summary>
 		public event ItemMovedEventHandler ItemMoved;
 
 		/// <summary>
-		/// Raises event after list item has been moved.
+		///     Raises event after list item has been moved.
 		/// </summary>
 		/// <param name="args">Event arguments.</param>
-		protected virtual void OnItemMoved(ItemMovedEventArgs args) {
+		protected virtual void OnItemMoved(ItemMovedEventArgs args)
+		{
 			if (ItemMoved != null)
 				ItemMoved(this, args);
 		}
 
-		#endregion
+#endregion
 
-		#region Construction
+#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="ReorderableListControl"/>.
+		///     Initializes a new instance of <see cref="ReorderableListControl" />.
 		/// </summary>
-		public ReorderableListControl() {
-			_containerStyle = ReorderableListStyles.Container;
-			_footerButtonStyle = ReorderableListStyles.FooterButton;
-			_itemButtonStyle = ReorderableListStyles.ItemButton;
+		public ReorderableListControl()
+		{
+			ContainerStyle = ReorderableListStyles.Container;
+			FooterButtonStyle = ReorderableListStyles.FooterButton;
+			ItemButtonStyle = ReorderableListStyles.ItemButton;
 
-			_horizontalLineColor = ReorderableListStyles.HorizontalLineColor;
+			HorizontalLineColor = ReorderableListStyles.HorizontalLineColor;
 		}
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="ReorderableListControl"/>.
+		///     Initializes a new instance of <see cref="ReorderableListControl" />.
 		/// </summary>
 		/// <param name="flags">Optional flags which affect behavior of control.</param>
 		public ReorderableListControl(ReorderableListFlags flags)
-			: this() {
-			this.Flags = flags;
+			: this()
+		{
+			Flags = flags;
 		}
 
-		#endregion
+#endregion
 
-		#region Control State
+#region Control State
 
 		/// <summary>
-		/// Unique Id of control.
+		///     Unique Id of control.
 		/// </summary>
 		private int _controlID;
+
 		/// <summary>
-		/// Visible rectangle of control.
+		///     Visible rectangle of control.
 		/// </summary>
 		private Rect _visibleRect;
+
 		/// <summary>
-		/// Width of index label in pixels (zero indicates no label).
+		///     Width of index label in pixels (zero indicates no label).
 		/// </summary>
 		private float _indexLabelWidth;
+
 		/// <summary>
-		/// Indicates whether item is currently being dragged within control.
+		///     Indicates whether item is currently being dragged within control.
 		/// </summary>
 		private bool _tracking;
+
 		/// <summary>
-		/// Indicates if reordering is allowed.
+		///     Indicates if reordering is allowed.
 		/// </summary>
 		private bool _allowReordering;
 
 		/// <summary>
-		/// A boolean value indicating whether drop insertion is allowed.
+		///     A boolean value indicating whether drop insertion is allowed.
 		/// </summary>
 		private bool _allowDropInsertion;
+
 		/// <summary>
-		/// Zero-based index for drop insertion when applicable; othewise, a value of -1.
+		///     Zero-based index for drop insertion when applicable; othewise, a value of -1.
 		/// </summary>
 		private int _insertionIndex;
+
 		/// <summary>
-		/// Position of drop insertion on Y-axis in GUI space.
+		///     Position of drop insertion on Y-axis in GUI space.
 		/// </summary>
 		private float _insertionPosition;
 
 		/// <summary>
-		/// New size input value.
+		///     New size input value.
 		/// </summary>
 		private int _newSizeInput;
 
 		/// <summary>
-		/// Prepare initial state for list control.
+		///     Prepare initial state for list control.
 		/// </summary>
 		/// <param name="controlID">Unique ID of list control.</param>
 		/// <param name="adaptor">Reorderable list adaptor.</param>
-		private void PrepareState(int controlID, IReorderableListAdaptor adaptor) {
+		private void PrepareState(int controlID, IReorderableListAdaptor adaptor)
+		{
 			_controlID = controlID;
 			_visibleRect = GUIHelper.VisibleRect();
 
@@ -600,39 +600,43 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 			_allowDropInsertion = true;
 		}
 
-		private static int CountDigits(int number) {
-			return Mathf.Max(2, Mathf.CeilToInt(Mathf.Log10((float)number)));
+		private static int CountDigits(int number)
+		{
+			return Mathf.Max(2, Mathf.CeilToInt(Mathf.Log10(number)));
 		}
 
-		#endregion
+#endregion
 
-		#region Event Handling
+#region Event Handling
 
 		// Indicates whether a "MouseDrag" event should be simulated on the next Layout/Repaint.
 		private static int s_SimulateMouseDragControlID;
 
 		/// <summary>
-		/// Indicate that first control of list item should be automatically focused
-		/// if possible.
+		///     Indicate that first control of list item should be automatically focused
+		///     if possible.
 		/// </summary>
 		/// <param name="controlID">Unique ID of list control.</param>
 		/// <param name="itemIndex">Zero-based index of list item.</param>
-		private void AutoFocusItem(int controlID, int itemIndex) {
-			if ((Flags & ReorderableListFlags.DisableAutoFocus) == 0) {
+		private void AutoFocusItem(int controlID, int itemIndex)
+		{
+			if ((Flags & ReorderableListFlags.DisableAutoFocus) == 0)
+			{
 				s_AutoFocusControlID = controlID;
 				s_AutoFocusIndex = itemIndex;
 			}
 		}
 
 		/// <summary>
-		/// Draw remove button.
+		///     Draw remove button.
 		/// </summary>
 		/// <param name="position">Position of button.</param>
 		/// <param name="visible">Indicates if control is visible within GUI.</param>
 		/// <returns>
-		/// A value of <c>true</c> if clicked; otherwise <c>false</c>.
+		///     A value of <c>true</c> if clicked; otherwise <c>false</c>.
 		/// </returns>
-		private bool DoRemoveButton(Rect position, bool visible) {
+		private bool DoRemoveButton(Rect position, bool visible)
+		{
 			var iconNormal = ReorderableListResources.GetTexture(ReorderableListTexture.Icon_Remove_Normal);
 			var iconActive = ReorderableListResources.GetTexture(ReorderableListTexture.Icon_Remove_Active);
 
@@ -642,11 +646,12 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 		private static bool s_TrackingCancelBlockContext;
 
 		/// <summary>
-		/// Begin tracking drag and drop within list.
+		///     Begin tracking drag and drop within list.
 		/// </summary>
 		/// <param name="controlID">Unique ID of list control.</param>
 		/// <param name="itemIndex">Zero-based index of item which is going to be dragged.</param>
-		private static void BeginTrackingReorderDrag(int controlID, int itemIndex) {
+		private static void BeginTrackingReorderDrag(int controlID, int itemIndex)
+		{
 			GUIUtility.hotControl = controlID;
 			GUIUtility.keyboardControl = 0;
 			s_AnchorIndex = itemIndex;
@@ -655,37 +660,42 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 		}
 
 		/// <summary>
-		/// Stop tracking drag and drop.
+		///     Stop tracking drag and drop.
 		/// </summary>
-		private static void StopTrackingReorderDrag() {
+		private static void StopTrackingReorderDrag()
+		{
 			GUIUtility.hotControl = 0;
 			s_AnchorIndex = -1;
 			s_TargetIndex = -1;
 		}
 
 		/// <summary>
-		/// Gets a value indicating whether item in current list is currently being tracked.
+		///     Gets a value indicating whether item in current list is currently being tracked.
 		/// </summary>
 		/// <param name="controlID">Unique ID of list control.</param>
 		/// <returns>
-		/// A value of <c>true</c> if item is being tracked; otherwise <c>false</c>.
+		///     A value of <c>true</c> if item is being tracked; otherwise <c>false</c>.
 		/// </returns>
-		private static bool IsTrackingControl(int controlID) {
+		private static bool IsTrackingControl(int controlID)
+		{
 			return !s_TrackingCancelBlockContext && GUIUtility.hotControl == controlID;
 		}
 
 		/// <summary>
-		/// Accept reordering.
+		///     Accept reordering.
 		/// </summary>
 		/// <param name="adaptor">Reorderable list adaptor.</param>
-		private void AcceptReorderDrag(IReorderableListAdaptor adaptor) {
-			try {
+		private void AcceptReorderDrag(IReorderableListAdaptor adaptor)
+		{
+			try
+			{
 				// Reorder list as needed!
 				s_TargetIndex = Mathf.Clamp(s_TargetIndex, 0, adaptor.Count + 1);
 				if (s_TargetIndex != s_AnchorIndex && s_TargetIndex != s_AnchorIndex + 1)
 					MoveItem(adaptor, s_AnchorIndex, s_TargetIndex);
 			}
-			finally {
+			finally
+			{
 				StopTrackingReorderDrag();
 			}
 		}
@@ -695,29 +705,34 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 		// Micro-optimisation to avoid repeated construction.
 		private static Rect s_RemoveButtonPosition;
 
-		private void DrawListItem(Rect position, IReorderableListAdaptor adaptor, int itemIndex) {
-			bool isRepainting = Event.current.type == EventType.Repaint;
-			bool isVisible = (position.y < _visibleRect.yMax && position.yMax > _visibleRect.y);
-			bool isDraggable = _allowReordering && adaptor.CanDrag(itemIndex);
+		private void DrawListItem(Rect position, IReorderableListAdaptor adaptor, int itemIndex)
+		{
+			var isRepainting = Event.current.type == EventType.Repaint;
+			var isVisible = position.y < _visibleRect.yMax && position.yMax > _visibleRect.y;
+			var isDraggable = _allowReordering && adaptor.CanDrag(itemIndex);
 
-			Rect itemContentPosition = position;
+			var itemContentPosition = position;
 			itemContentPosition.x = position.x + 2;
 			itemContentPosition.y += 1;
 			itemContentPosition.width = position.width - 4;
 			itemContentPosition.height = position.height - 4;
 
 			// Make space for grab handle?
-			if (isDraggable) {
+			if (isDraggable)
+			{
 				itemContentPosition.x += 20;
 				itemContentPosition.width -= 20;
 			}
 
 			// Make space for element index.
-			if (_indexLabelWidth != 0) {
+			if (_indexLabelWidth != 0)
+			{
 				itemContentPosition.width -= _indexLabelWidth;
 
 				if (isRepainting && isVisible)
-					s_RightAlignedLabelStyle.Draw(new Rect(itemContentPosition.x, position.y, _indexLabelWidth, position.height - 4), itemIndex + ":", false, false, false, false);
+					s_RightAlignedLabelStyle.Draw(
+						new Rect(itemContentPosition.x, position.y, _indexLabelWidth, position.height - 4),
+						itemIndex + ":", false, false, false, false);
 
 				itemContentPosition.x += _indexLabelWidth;
 			}
@@ -726,28 +741,32 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 			if (HasRemoveButtons)
 				itemContentPosition.width -= 27;
 
-			try {
+			try
+			{
 				s_CurrentItemStack.Push(new ItemInfo(itemIndex, position));
 				EditorGUI.BeginChangeCheck();
 
-				if (isRepainting && isVisible) {
+				if (isRepainting && isVisible)
+				{
 					// Draw background of list item.
 					var backgroundPosition = new Rect(position.x, position.y, position.width, position.height - 1);
 					adaptor.DrawItemBackground(backgroundPosition, itemIndex);
 
 					// Draw grab handle?
-					if (isDraggable) {
+					if (isDraggable)
+					{
 						var texturePosition = new Rect(position.x + 6, position.y + position.height / 2f - 3, 9, 5);
-						GUIHelper.DrawTexture(texturePosition, ReorderableListResources.GetTexture(ReorderableListTexture.GrabHandle));
+						GUIHelper.DrawTexture(
+							texturePosition, ReorderableListResources.GetTexture(ReorderableListTexture.GrabHandle));
 					}
 
 					// Draw horizontal line between list items.
-					if (!_tracking || itemIndex != s_AnchorIndex) {
-						if (itemIndex != 0 || HorizontalLineAtStart) {
+					if (!_tracking || itemIndex != s_AnchorIndex)
+						if (itemIndex != 0 || HorizontalLineAtStart)
+						{
 							var horizontalLinePosition = new Rect(position.x, position.y - 1, position.width, 1);
 							GUIHelper.Separator(horizontalLinePosition, HorizontalLineColor);
 						}
-					}
 				}
 
 				// Allow control to be automatically focused.
@@ -761,7 +780,8 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 					ReorderableListGUI.IndexOfChangedItem = itemIndex;
 
 				// Draw remove button?
-				if (HasRemoveButtons && adaptor.CanRemove(itemIndex)) {
+				if (HasRemoveButtons && adaptor.CanRemove(itemIndex))
+				{
 					s_RemoveButtonPosition = position;
 					s_RemoveButtonPosition.width = 27;
 					s_RemoveButtonPosition.x = itemContentPosition.xMax + 2;
@@ -772,24 +792,28 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 				}
 
 				// Check for context click?
-				if ((Flags & ReorderableListFlags.DisableContextMenu) == 0) {
-					if (Event.current.GetTypeForControl(_controlID) == EventType.ContextClick && position.Contains(Event.current.mousePosition)) {
+				if ((Flags & ReorderableListFlags.DisableContextMenu) == 0)
+					if (Event.current.GetTypeForControl(_controlID) == EventType.ContextClick &&
+						position.Contains(Event.current.mousePosition))
+					{
 						ShowContextMenu(itemIndex, adaptor);
 						Event.current.Use();
 					}
-				}
 			}
-			finally {
+			finally
+			{
 				s_CurrentItemStack.Pop();
 			}
 		}
 
-		private void DrawFloatingListItem(IReorderableListAdaptor adaptor, float targetSlotPosition) {
-			if (Event.current.type == EventType.Repaint) {
-				Color restoreColor = GUI.color;
+		private void DrawFloatingListItem(IReorderableListAdaptor adaptor, float targetSlotPosition)
+		{
+			if (Event.current.type == EventType.Repaint)
+			{
+				var restoreColor = GUI.color;
 
 				// Fill background of target area.
-				Rect targetPosition = s_DragItemPosition;
+				var targetPosition = s_DragItemPosition;
 				targetPosition.y = targetSlotPosition - 1;
 				targetPosition.height = 1;
 
@@ -833,33 +857,37 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 		// Counter is incremented whenever a reorderable list control reacts as a drop
 		// target allowing parent reorderable list controls to suppress any reaction that
 		// they might otherwise have.
-		private static int s_DropTargetNestedCounter = 0;
+		private static int s_DropTargetNestedCounter;
 
 		/// <summary>
-		/// Draw list container and items.
+		///     Draw list container and items.
 		/// </summary>
 		/// <param name="position">Position of list control in GUI.</param>
 		/// <param name="adaptor">Reorderable list adaptor.</param>
-		private void DrawListContainerAndItems(Rect position, IReorderableListAdaptor adaptor) {
-			int initialDropTargetNestedCounterValue = s_DropTargetNestedCounter;
+		private void DrawListContainerAndItems(Rect position, IReorderableListAdaptor adaptor)
+		{
+			var initialDropTargetNestedCounterValue = s_DropTargetNestedCounter;
 
 			// Get local copy of event information for efficiency.
-			EventType eventType = Event.current.GetTypeForControl(_controlID);
-			Vector2 mousePosition = Event.current.mousePosition;
+			var eventType = Event.current.GetTypeForControl(_controlID);
+			var mousePosition = Event.current.mousePosition;
 
-			int newTargetIndex = s_TargetIndex;
+			var newTargetIndex = s_TargetIndex;
 
 			// Position of first item in list.
-			float firstItemY = position.y + ContainerStyle.padding.top;
+			var firstItemY = position.y + ContainerStyle.padding.top;
 			// Maximum position of dragged item.
-			float dragItemMaxY = (position.yMax - ContainerStyle.padding.bottom) - s_DragItemPosition.height + 1;
+			var dragItemMaxY = position.yMax - ContainerStyle.padding.bottom - s_DragItemPosition.height + 1;
 
-			bool isMouseDragEvent = eventType == EventType.MouseDrag;
-			if (s_SimulateMouseDragControlID == _controlID && eventType == EventType.Repaint) {
+			var isMouseDragEvent = eventType == EventType.MouseDrag;
+			if (s_SimulateMouseDragControlID == _controlID && eventType == EventType.Repaint)
+			{
 				s_SimulateMouseDragControlID = 0;
 				isMouseDragEvent = true;
 			}
-			if (isMouseDragEvent && _tracking) {
+
+			if (isMouseDragEvent && _tracking)
+			{
 				// Reset target index and adjust when looping through list items.
 				if (mousePosition.y < firstItemY)
 					newTargetIndex = 0;
@@ -869,17 +897,21 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 				s_DragItemPosition.y = Mathf.Clamp(mousePosition.y + s_AnchorMouseOffset, firstItemY, dragItemMaxY);
 			}
 
-			switch (eventType) {
+			switch (eventType)
+			{
 				case EventType.MouseDown:
-					if (_tracking) {
+					if (_tracking)
+					{
 						// Cancel drag when other mouse button is pressed.
 						s_TrackingCancelBlockContext = true;
 						Event.current.Use();
 					}
+
 					break;
 
 				case EventType.MouseUp:
-					if (_controlID == GUIUtility.hotControl) {
+					if (_controlID == GUIUtility.hotControl)
+					{
 						// Allow user code to change control over reordering during drag.
 						if (!s_TrackingCancelBlockContext && _allowReordering)
 							AcceptReorderDrag(adaptor);
@@ -887,27 +919,34 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 							StopTrackingReorderDrag();
 						Event.current.Use();
 					}
+
 					break;
 
 				case EventType.KeyDown:
-					if (_tracking && Event.current.keyCode == KeyCode.Escape) {
+					if (_tracking && Event.current.keyCode == KeyCode.Escape)
+					{
 						StopTrackingReorderDrag();
 						Event.current.Use();
 					}
+
 					break;
 
 				case EventType.ExecuteCommand:
-					if (s_ContextControlID == _controlID) {
-						int itemIndex = s_ContextItemIndex;
-						try {
+					if (s_ContextControlID == _controlID)
+					{
+						var itemIndex = s_ContextItemIndex;
+						try
+						{
 							DoCommand(s_ContextCommandName, itemIndex, adaptor);
 							Event.current.Use();
 						}
-						finally {
+						finally
+						{
 							s_ContextControlID = 0;
 							s_ContextItemIndex = 0;
 						}
 					}
+
 					break;
 
 				case EventType.Repaint:
@@ -919,25 +958,30 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 			ReorderableListGUI.IndexOfChangedItem = -1;
 
 			// Draw list items!
-			Rect itemPosition = new Rect(position.x + ContainerStyle.padding.left, firstItemY, position.width - ContainerStyle.padding.horizontal, 0);
-			float targetSlotPosition = dragItemMaxY;
+			var itemPosition = new Rect(
+				position.x + ContainerStyle.padding.left, firstItemY,
+				position.width - ContainerStyle.padding.horizontal, 0);
+			var targetSlotPosition = dragItemMaxY;
 
 			_insertionIndex = 0;
 			_insertionPosition = itemPosition.yMax;
 
-			float lastMidPoint = 0f;
-			float lastHeight = 0f;
+			var lastMidPoint = 0f;
+			var lastHeight = 0f;
 
-			int count = adaptor.Count;
-			for (int i = 0; i < count; ++i) {
+			var count = adaptor.Count;
+			for (var i = 0; i < count; ++i)
+			{
 				itemPosition.y = itemPosition.yMax;
 				itemPosition.height = 0;
 
 				lastMidPoint = itemPosition.y - lastHeight / 2f;
 
-				if (_tracking) {
+				if (_tracking)
+				{
 					// Does this represent the target index?
-					if (i == s_TargetIndex) {
+					if (i == s_TargetIndex)
+					{
 						targetSlotPosition = itemPosition.y;
 						itemPosition.y += s_DragItemPosition.height;
 					}
@@ -951,27 +995,32 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 					itemPosition.height = adaptor.GetItemHeight(i) + 4;
 					lastHeight = itemPosition.height;
 				}
-				else {
+				else
+				{
 					// Update position for current item.
 					itemPosition.height = adaptor.GetItemHeight(i) + 4;
 					lastHeight = itemPosition.height;
 
 					// Does this represent the drop insertion index?
-					float midpoint = itemPosition.y + itemPosition.height / 2f;
-					if (mousePosition.y > lastMidPoint && mousePosition.y <= midpoint) {
+					var midpoint = itemPosition.y + itemPosition.height / 2f;
+					if (mousePosition.y > lastMidPoint && mousePosition.y <= midpoint)
+					{
 						_insertionIndex = i;
 						_insertionPosition = itemPosition.y;
 					}
 				}
 
-				if (_tracking && isMouseDragEvent) {
-					float midpoint = itemPosition.y + itemPosition.height / 2f;
+				if (_tracking && isMouseDragEvent)
+				{
+					var midpoint = itemPosition.y + itemPosition.height / 2f;
 
-					if (s_TargetIndex < i) {
+					if (s_TargetIndex < i)
+					{
 						if (s_DragItemPosition.yMax > lastMidPoint && s_DragItemPosition.yMax < midpoint)
 							newTargetIndex = i;
 					}
-					else if (s_TargetIndex > i) {
+					else if (s_TargetIndex > i)
+					{
 						if (s_DragItemPosition.y > lastMidPoint && s_DragItemPosition.y < midpoint)
 							newTargetIndex = i;
 					}
@@ -986,7 +1035,8 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 				DrawListItem(itemPosition, adaptor, i);
 
 				// Did list count change (i.e. item removed)?
-				if (adaptor.Count < count) {
+				if (adaptor.Count < count)
+				{
 					// We assume that it was this item which was removed, so --i allows us
 					// to process the next item as usual.
 					count = adaptor.Count;
@@ -995,14 +1045,17 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 				}
 
 				// Event has already been used, skip to next item.
-				if (Event.current.type != EventType.Used) {
-					switch (eventType) {
+				if (Event.current.type != EventType.Used)
+					switch (eventType)
+					{
 						case EventType.MouseDown:
-							if (GUI.enabled && itemPosition.Contains(mousePosition)) {
+							if (GUI.enabled && itemPosition.Contains(mousePosition))
+							{
 								// Remove input focus from control before attempting a context click or drag.
 								GUIUtility.keyboardControl = 0;
 
-								if (_allowReordering && adaptor.CanDrag(i) && Event.current.button == 0) {
+								if (_allowReordering && adaptor.CanDrag(i) && Event.current.button == 0)
+								{
 									s_DragItemPosition = itemPosition;
 
 									BeginTrackingReorderDrag(_controlID, i);
@@ -1012,8 +1065,9 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 									Event.current.Use();
 								}
 							}
+
 							break;
-/* DEBUG
+						/* DEBUG
 						case EventType.Repaint:
 							GUI.color = Color.red;
 							GUI.DrawTexture(new Rect(0, lastMidPoint, 10, 1), EditorGUIUtility.whiteTexture);
@@ -1023,11 +1077,12 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 							break;
 //*/
 					}
-				}
 			}
 
-			if (HorizontalLineAtEnd) {
-				var horizontalLinePosition = new Rect(itemPosition.x, position.yMax - ContainerStyle.padding.vertical, itemPosition.width, 1);
+			if (HorizontalLineAtEnd)
+			{
+				var horizontalLinePosition = new Rect(
+					itemPosition.x, position.yMax - ContainerStyle.padding.vertical, itemPosition.width, 1);
 				GUIHelper.Separator(horizontalLinePosition, HorizontalLineColor);
 			}
 
@@ -1038,8 +1093,10 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 			_allowDropInsertion = false;
 
 			// Item which is being dragged should be shown on top of other controls!
-			if (IsTrackingControl(_controlID)) {
-				if (isMouseDragEvent) {
+			if (IsTrackingControl(_controlID))
+			{
+				if (isMouseDragEvent)
+				{
 					if (s_DragItemPosition.yMax >= lastMidPoint)
 						newTargetIndex = count;
 
@@ -1052,21 +1109,25 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 				}
 
 				DrawFloatingListItem(adaptor, targetSlotPosition);
-/* DEBUG
-				if (eventType == EventType.Repaint) {
-					GUI.color = Color.blue;
-					GUI.DrawTexture(new Rect(100, lastMidPoint, 20, 1), EditorGUIUtility.whiteTexture);
-					GUI.color = Color.white;
-				}
-//*/
+				/* DEBUG
+								if (eventType == EventType.Repaint) {
+									GUI.color = Color.blue;
+									GUI.DrawTexture(new Rect(100, lastMidPoint, 20, 1), EditorGUIUtility.whiteTexture);
+									GUI.color = Color.white;
+								}
+				//*/
 			}
-			else {
+			else
+			{
 				// Cannot react to drop insertion if a nested drop target has already reacted!
-				if (s_DropTargetNestedCounter == initialDropTargetNestedCounterValue) {
-					if (Event.current.mousePosition.y >= lastMidPoint) {
+				if (s_DropTargetNestedCounter == initialDropTargetNestedCounterValue)
+				{
+					if (Event.current.mousePosition.y >= lastMidPoint)
+					{
 						_insertionIndex = adaptor.Count;
 						_insertionPosition = itemPosition.yMax;
 					}
+
 					_allowDropInsertion = true;
 				}
 			}
@@ -1074,23 +1135,29 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 			// Fake control to catch input focus if auto focus was not possible.
 			GUIUtility.GetControlID(FocusType.Keyboard);
 
-			if (isMouseDragEvent && (Flags & ReorderableListFlags.DisableAutoScroll) == 0 && IsTrackingControl(_controlID))
+			if (isMouseDragEvent && (Flags & ReorderableListFlags.DisableAutoScroll) == 0 &&
+				IsTrackingControl(_controlID))
 				AutoScrollTowardsMouse();
 		}
 
-		private static bool ContainsRect(Rect a, Rect b) {
+		private static bool ContainsRect(Rect a, Rect b)
+		{
 			return a.Contains(new Vector2(b.xMin, b.yMin)) && a.Contains(new Vector2(b.xMax, b.yMax));
 		}
 
-		private void AutoScrollTowardsMouse() {
+		private void AutoScrollTowardsMouse()
+		{
 			const float triggerPaddingInPixels = 8f;
 			const float maximumRangeInPixels = 4f;
 
-			Rect visiblePosition = GUIHelper.VisibleRect();
-			Vector2 mousePosition = Event.current.mousePosition;
-			Rect mouseRect = new Rect(mousePosition.x - triggerPaddingInPixels, mousePosition.y - triggerPaddingInPixels, triggerPaddingInPixels * 2, triggerPaddingInPixels * 2);
+			var visiblePosition = GUIHelper.VisibleRect();
+			var mousePosition = Event.current.mousePosition;
+			var mouseRect = new Rect(
+				mousePosition.x - triggerPaddingInPixels, mousePosition.y - triggerPaddingInPixels,
+				triggerPaddingInPixels * 2, triggerPaddingInPixels * 2);
 
-			if (!ContainsRect(visiblePosition, mouseRect)) {
+			if (!ContainsRect(visiblePosition, mouseRect))
+			{
 				if (mousePosition.y < visiblePosition.center.y)
 					mousePosition = new Vector2(mouseRect.xMin, mouseRect.yMin);
 				else
@@ -1108,15 +1175,18 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 			}
 		}
 
-		private void HandleDropInsertion(Rect position, IReorderableListAdaptor adaptor) {
+		private void HandleDropInsertion(Rect position, IReorderableListAdaptor adaptor)
+		{
 			var target = adaptor as IReorderableListDropTarget;
 			if (target == null || !_allowDropInsertion)
 				return;
 
-			if (target.CanDropInsert(_insertionIndex)) {
+			if (target.CanDropInsert(_insertionIndex))
+			{
 				++s_DropTargetNestedCounter;
 
-				switch (Event.current.type) {
+				switch (Event.current.type)
+				{
 					case EventType.DragUpdated:
 						DragAndDrop.visualMode = DragAndDropVisualMode.Move;
 						DragAndDrop.activeControlID = _controlID;
@@ -1143,25 +1213,28 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 		}
 
 		/// <summary>
-		/// Draws drop insertion indicator.
+		///     Draws drop insertion indicator.
 		/// </summary>
 		/// <remarks>
-		/// <para>This method is only ever called during repaint events.</para>
+		///     <para>This method is only ever called during repaint events.</para>
 		/// </remarks>
 		/// <param name="position">Position if the drop indicator.</param>
-		protected virtual void DrawDropIndicator(Rect position) {
+		protected virtual void DrawDropIndicator(Rect position)
+		{
 			GUIHelper.Separator(position);
 		}
 
 		/// <summary>
-		/// Checks to see if list control needs to be automatically focused.
+		///     Checks to see if list control needs to be automatically focused.
 		/// </summary>
-		private void CheckForAutoFocusControl() {
+		private void CheckForAutoFocusControl()
+		{
 			if (Event.current.type == EventType.Used)
 				return;
 
 			// Automatically focus control!
-			if (s_AutoFocusControlID == _controlID) {
+			if (s_AutoFocusControlID == _controlID)
+			{
 				s_AutoFocusControlID = 0;
 				GUIHelper.FocusTextInControl("AutoFocus_" + _controlID + "_" + s_AutoFocusIndex);
 				s_AutoFocusIndex = -1;
@@ -1169,21 +1242,24 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 		}
 
 		/// <summary>
-		/// Draw additional controls below list control and highlight drop target.
+		///     Draw additional controls below list control and highlight drop target.
 		/// </summary>
 		/// <param name="position">Position of list control in GUI.</param>
 		/// <param name="adaptor">Reorderable list adaptor.</param>
-		private void DrawFooterControls(Rect position, IReorderableListAdaptor adaptor) {
-			if (HasFooterControls) {
-				Rect buttonPosition = new Rect(position.xMax - 30, position.yMax - 1, 30, FooterButtonStyle.fixedHeight);
+		private void DrawFooterControls(Rect position, IReorderableListAdaptor adaptor)
+		{
+			if (HasFooterControls)
+			{
+				var buttonPosition = new Rect(position.xMax - 30, position.yMax - 1, 30, FooterButtonStyle.fixedHeight);
 
-				Rect menuButtonPosition = buttonPosition;
+				var menuButtonPosition = buttonPosition;
 				var menuIconNormal = ReorderableListResources.GetTexture(ReorderableListTexture.Icon_AddMenu_Normal);
 				var menuIconActive = ReorderableListResources.GetTexture(ReorderableListTexture.Icon_AddMenu_Active);
 
-				if (HasSizeField) {
+				if (HasSizeField)
+				{
 					// Draw size field.
-					Rect sizeFieldPosition = new Rect(
+					var sizeFieldPosition = new Rect(
 						position.x,
 						position.yMax + 1,
 						Mathf.Max(150f, position.width / 3f),
@@ -1193,9 +1269,11 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 					DrawSizeFooterControl(sizeFieldPosition, adaptor);
 				}
 
-				if (HasAddButton) {
+				if (HasAddButton)
+				{
 					// Draw add menu drop-down button.
-					if (HasAddMenuButton) {
+					if (HasAddMenuButton)
+					{
 						menuButtonPosition.x = buttonPosition.xMax - 14;
 						menuButtonPosition.xMax = buttonPosition.xMax;
 						menuIconNormal = ReorderableListResources.GetTexture(ReorderableListTexture.Icon_Menu_Normal);
@@ -1208,30 +1286,33 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 					var iconNormal = ReorderableListResources.GetTexture(ReorderableListTexture.Icon_Add_Normal);
 					var iconActive = ReorderableListResources.GetTexture(ReorderableListTexture.Icon_Add_Active);
 
-					if (GUIHelper.IconButton(buttonPosition, true, iconNormal, iconActive, FooterButtonStyle)) {
+					if (GUIHelper.IconButton(buttonPosition, true, iconNormal, iconActive, FooterButtonStyle))
+					{
 						// Append item to list.
 						GUIUtility.keyboardControl = 0;
 						AddItem(adaptor);
 					}
 				}
 
-				if (HasAddMenuButton) {
+				if (HasAddMenuButton)
 					// Draw add menu drop-down button.
-					if (GUIHelper.IconButton(menuButtonPosition, true, menuIconNormal, menuIconActive, FooterButtonStyle)) {
+					if (GUIHelper.IconButton(
+							menuButtonPosition, true, menuIconNormal, menuIconActive, FooterButtonStyle))
+					{
 						GUIUtility.keyboardControl = 0;
-						Rect totalAddButtonPosition = buttonPosition;
+						var totalAddButtonPosition = buttonPosition;
 						totalAddButtonPosition.xMax = position.xMax;
 						OnAddMenuClicked(new AddMenuClickedEventArgs(adaptor, totalAddButtonPosition));
 
 						// This will be helpful in many circumstances; including by default!
 						GUIUtility.ExitGUI();
 					}
-				}
 			}
 		}
 
-		private void DrawSizeFooterControl(Rect position, IReorderableListAdaptor adaptor) {
-			float restoreLabelWidth = EditorGUIUtility.labelWidth;
+		private void DrawSizeFooterControl(Rect position, IReorderableListAdaptor adaptor)
+		{
+			var restoreLabelWidth = EditorGUIUtility.labelWidth;
 			EditorGUIUtility.labelWidth = 60f;
 
 			DrawSizeField(position, adaptor);
@@ -1240,22 +1321,23 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 		}
 
 		/// <summary>
-		/// Cache of container heights mapped by control ID.
+		///     Cache of container heights mapped by control ID.
 		/// </summary>
-		private static Dictionary<int, float> s_ContainerHeightCache = new Dictionary<int, float>();
+		private static readonly Dictionary<int, float> s_ContainerHeightCache = new();
 
-		private Rect GetListRectWithAutoLayout(IReorderableListAdaptor adaptor, float padding) {
+		private Rect GetListRectWithAutoLayout(IReorderableListAdaptor adaptor, float padding)
+		{
 			float totalHeight;
 
 			// Calculate position of list field using layout engine.
-			if (Event.current.type == EventType.Layout) {
+			if (Event.current.type == EventType.Layout)
+			{
 				totalHeight = CalculateListHeight(adaptor);
 				s_ContainerHeightCache[_controlID] = totalHeight;
 			}
-			else {
-				totalHeight = s_ContainerHeightCache.ContainsKey(_controlID)
-					? s_ContainerHeightCache[_controlID]
-					: 0;
+			else
+			{
+				totalHeight = s_ContainerHeightCache.ContainsKey(_controlID) ? s_ContainerHeightCache[_controlID] : 0;
 			}
 
 			totalHeight += padding;
@@ -1264,15 +1346,16 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 		}
 
 		/// <summary>
-		/// Do layout version of list field.
+		///     Do layout version of list field.
 		/// </summary>
 		/// <param name="adaptor">Reorderable list adaptor.</param>
 		/// <param name="padding">Padding in pixels.</param>
 		/// <returns>
-		/// Position of list container area in GUI (excludes footer area).
+		///     Position of list container area in GUI (excludes footer area).
 		/// </returns>
-		private Rect DrawLayoutListField(IReorderableListAdaptor adaptor, float padding) {
-			Rect position = GetListRectWithAutoLayout(adaptor, padding);
+		private Rect DrawLayoutListField(IReorderableListAdaptor adaptor, float padding)
+		{
+			var position = GetListRectWithAutoLayout(adaptor, padding);
 
 			// Make room for footer buttons?
 			if (HasFooterControls)
@@ -1282,14 +1365,16 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 			position.height -= VerticalSpacing;
 
 			s_CurrentListStack.Push(new ListInfo(_controlID, position));
-			try {
+			try
+			{
 				// Draw list as normal.
 				adaptor.BeginGUI();
 				DrawListContainerAndItems(position, adaptor);
 				HandleDropInsertion(position, adaptor);
 				adaptor.EndGUI();
 			}
-			finally {
+			finally
+			{
 				s_CurrentListStack.Pop();
 			}
 
@@ -1299,15 +1384,16 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 		}
 
 		/// <summary>
-		/// Draw content for empty list (layout version).
+		///     Draw content for empty list (layout version).
 		/// </summary>
 		/// <param name="adaptor">Reorderable list adaptor.</param>
 		/// <param name="drawEmpty">Callback to draw empty content.</param>
 		/// <returns>
-		/// Position of list container area in GUI (excludes footer area).
+		///     Position of list container area in GUI (excludes footer area).
 		/// </returns>
-		private Rect DrawLayoutEmptyList(IReorderableListAdaptor adaptor, DrawEmpty drawEmpty) {
-			Rect position = EditorGUILayout.BeginVertical(ContainerStyle);
+		private Rect DrawLayoutEmptyList(IReorderableListAdaptor adaptor, DrawEmpty drawEmpty)
+		{
+			var position = EditorGUILayout.BeginVertical(ContainerStyle);
 			{
 				if (drawEmpty != null)
 					drawEmpty();
@@ -1315,14 +1401,16 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 					Debug.LogError("Unexpected call to 'DrawLayoutEmptyList'");
 
 				s_CurrentListStack.Push(new ListInfo(_controlID, position));
-				try {
+				try
+				{
 					adaptor.BeginGUI();
 					_insertionIndex = 0;
 					_insertionPosition = position.y + 2;
 					HandleDropInsertion(position, adaptor);
 					adaptor.EndGUI();
 				}
-				finally {
+				finally
+				{
 					s_CurrentListStack.Pop();
 				}
 			}
@@ -1336,11 +1424,12 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 		}
 
 		/// <summary>
-		/// Draw content for empty list (layout version).
+		///     Draw content for empty list (layout version).
 		/// </summary>
 		/// <param name="position">Position of list control in GUI.</param>
 		/// <param name="drawEmpty">Callback to draw empty content.</param>
-		private void DrawEmptyListControl(Rect position, DrawEmptyAbsolute drawEmpty) {
+		private void DrawEmptyListControl(Rect position, DrawEmptyAbsolute drawEmpty)
+		{
 			if (Event.current.type == EventType.Repaint)
 				ContainerStyle.Draw(position, GUIContent.none, false, false, false, false);
 
@@ -1352,14 +1441,16 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 		}
 
 		/// <summary>
-		/// Correct if for some reason one or more styles are missing!
+		///     Correct if for some reason one or more styles are missing!
 		/// </summary>
-		private void FixStyles() {
+		private void FixStyles()
+		{
 			ContainerStyle = ContainerStyle ?? ReorderableListStyles.Container;
 			FooterButtonStyle = FooterButtonStyle ?? ReorderableListStyles.FooterButton;
 			ItemButtonStyle = ItemButtonStyle ?? ReorderableListStyles.ItemButton;
 
-			if (s_RightAlignedLabelStyle == null) {
+			if (s_RightAlignedLabelStyle == null)
+			{
 				s_RightAlignedLabelStyle = new GUIStyle(GUI.skin.label);
 				s_RightAlignedLabelStyle.alignment = TextAnchor.MiddleRight;
 				s_RightAlignedLabelStyle.padding.right = 4;
@@ -1367,12 +1458,13 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 		}
 
 		/// <summary>
-		/// Draw layout version of list control.
+		///     Draw layout version of list control.
 		/// </summary>
 		/// <param name="controlID">Unique ID of list control.</param>
 		/// <param name="adaptor">Reorderable list adaptor.</param>
 		/// <param name="drawEmpty">Delegate for drawing empty list.</param>
-		private void Draw(int controlID, IReorderableListAdaptor adaptor, DrawEmpty drawEmpty) {
+		private void Draw(int controlID, IReorderableListAdaptor adaptor, DrawEmpty drawEmpty)
+		{
 			FixStyles();
 			PrepareState(controlID, adaptor);
 
@@ -1387,26 +1479,29 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 			DrawFooterControls(position, adaptor);
 		}
 
-		/// <inheritdoc cref="Draw(int, IReorderableListAdaptor, DrawEmpty)"/>
-		public void Draw(IReorderableListAdaptor adaptor, DrawEmpty drawEmpty) {
-			int controlID = GetReorderableListControlID();
+		/// <inheritdoc cref="Draw(int, IReorderableListAdaptor, DrawEmpty)" />
+		public void Draw(IReorderableListAdaptor adaptor, DrawEmpty drawEmpty)
+		{
+			var controlID = GetReorderableListControlID();
 			Draw(controlID, adaptor, drawEmpty);
 		}
 
-		/// <inheritdoc cref="Draw(int, IReorderableListAdaptor, DrawEmpty)"/>
-		public void Draw(IReorderableListAdaptor adaptor) {
-			int controlID = GetReorderableListControlID();
+		/// <inheritdoc cref="Draw(int, IReorderableListAdaptor, DrawEmpty)" />
+		public void Draw(IReorderableListAdaptor adaptor)
+		{
+			var controlID = GetReorderableListControlID();
 			Draw(controlID, adaptor, null);
 		}
 
 		/// <summary>
-		/// Draw list control with absolute positioning.
+		///     Draw list control with absolute positioning.
 		/// </summary>
 		/// <param name="position">Position of list control in GUI.</param>
 		/// <param name="controlID">Unique ID of list control.</param>
 		/// <param name="adaptor">Reorderable list adaptor.</param>
 		/// <param name="drawEmpty">Delegate for drawing empty list.</param>
-		private void Draw(Rect position, int controlID, IReorderableListAdaptor adaptor, DrawEmptyAbsolute drawEmpty) {
+		private void Draw(Rect position, int controlID, IReorderableListAdaptor adaptor, DrawEmptyAbsolute drawEmpty)
+		{
 			FixStyles();
 			PrepareState(controlID, adaptor);
 
@@ -1418,21 +1513,24 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 			position.height -= VerticalSpacing;
 
 			s_CurrentListStack.Push(new ListInfo(_controlID, position));
-			try {
+			try
+			{
 				adaptor.BeginGUI();
 
 				DrawListContainerAndItems(position, adaptor);
 				HandleDropInsertion(position, adaptor);
 				CheckForAutoFocusControl();
 
-				if (adaptor.Count == 0) {
+				if (adaptor.Count == 0)
+				{
 					ReorderableListGUI.IndexOfChangedItem = -1;
 					DrawEmptyListControl(position, drawEmpty);
 				}
 
 				adaptor.EndGUI();
 			}
-			finally {
+			finally
+			{
 				s_CurrentListStack.Pop();
 			}
 
@@ -1440,146 +1538,167 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 		}
 
 		/// <summary>
-		/// Draw list control with absolute positioning.
+		///     Draw list control with absolute positioning.
 		/// </summary>
 		/// <param name="position">Position of list control in GUI.</param>
 		/// <param name="adaptor">Reorderable list adaptor.</param>
 		/// <param name="drawEmpty">Delegate for drawing empty list.</param>
-		public void Draw(Rect position, IReorderableListAdaptor adaptor, DrawEmptyAbsolute drawEmpty) {
-			int controlID = GetReorderableListControlID();
+		public void Draw(Rect position, IReorderableListAdaptor adaptor, DrawEmptyAbsolute drawEmpty)
+		{
+			var controlID = GetReorderableListControlID();
 			Draw(position, controlID, adaptor, drawEmpty);
 		}
 
-		/// <inheritdoc cref="Draw(Rect, IReorderableListAdaptor, DrawEmptyAbsolute)"/>
-		public void Draw(Rect position, IReorderableListAdaptor adaptor) {
-			int controlID = GetReorderableListControlID();
+		/// <inheritdoc cref="Draw(Rect, IReorderableListAdaptor, DrawEmptyAbsolute)" />
+		public void Draw(Rect position, IReorderableListAdaptor adaptor)
+		{
+			var controlID = GetReorderableListControlID();
 			Draw(position, controlID, adaptor, null);
 		}
 
-		#endregion
+#endregion
 
-		#region Size Field
+#region Size Field
 
-		private static readonly GUIContent s_Temp = new GUIContent();
-		private static readonly GUIContent s_SizePrefixLabel = new GUIContent("Size");
+		private static readonly GUIContent s_Temp = new();
+		private static readonly GUIContent s_SizePrefixLabel = new("Size");
 
 		/// <summary>
-		/// Draw list size field with absolute positioning and a custom prefix label.
+		///     Draw list size field with absolute positioning and a custom prefix label.
 		/// </summary>
 		/// <remarks>
-		/// <para>Specify a value of <c>GUIContent.none</c> for argument <paramref name="label"/>
-		/// to omit prefix label from the drawn control.</para>
+		///     <para>
+		///         Specify a value of <c>GUIContent.none</c> for argument <paramref name="label" />
+		///         to omit prefix label from the drawn control.
+		///     </para>
 		/// </remarks>
 		/// <param name="position">Position of list control in GUI.</param>
 		/// <param name="label">Prefix label for the control.</param>
 		/// <param name="adaptor">Reorderable list adaptor.</param>
-		public void DrawSizeField(Rect position, GUIContent label, IReorderableListAdaptor adaptor) {
-			int sizeControlID = GUIUtility.GetControlID(FocusType.Passive);
-			string sizeControlName = "ReorderableListControl.Size." + sizeControlID;
+		public void DrawSizeField(Rect position, GUIContent label, IReorderableListAdaptor adaptor)
+		{
+			var sizeControlID = GUIUtility.GetControlID(FocusType.Passive);
+			var sizeControlName = "ReorderableListControl.Size." + sizeControlID;
 			GUI.SetNextControlName(sizeControlName);
 
-			if (GUI.GetNameOfFocusedControl() == sizeControlName) {
-				if (Event.current.rawType == EventType.KeyDown) {
-					switch (Event.current.keyCode) {
+			if (GUI.GetNameOfFocusedControl() == sizeControlName)
+			{
+				if (Event.current.rawType == EventType.KeyDown)
+					switch (Event.current.keyCode)
+					{
 						case KeyCode.Return:
 						case KeyCode.KeypadEnter:
 							ResizeList(adaptor, _newSizeInput);
 							Event.current.Use();
 							break;
 					}
-				}
+
 				_newSizeInput = EditorGUI.IntField(position, label, _newSizeInput);
 			}
-			else {
+			else
+			{
 				EditorGUI.IntField(position, label, adaptor.Count);
 				_newSizeInput = adaptor.Count;
 			}
 		}
 
 		/// <summary>
-		/// Draw list size field with absolute positioning and a custom prefix label.
+		///     Draw list size field with absolute positioning and a custom prefix label.
 		/// </summary>
 		/// <param name="position">Position of list control in GUI.</param>
 		/// <param name="label">Prefix label for the control.</param>
 		/// <param name="adaptor">Reorderable list adaptor.</param>
-		public void DrawSizeField(Rect position, string label, IReorderableListAdaptor adaptor) {
+		public void DrawSizeField(Rect position, string label, IReorderableListAdaptor adaptor)
+		{
 			s_Temp.text = label;
 			DrawSizeField(position, s_Temp, adaptor);
 		}
 
 		/// <summary>
-		/// Draw list size field with absolute positioning with the default prefix label.
+		///     Draw list size field with absolute positioning with the default prefix label.
 		/// </summary>
 		/// <param name="position">Position of list control in GUI.</param>
 		/// <param name="adaptor">Reorderable list adaptor.</param>
-		public void DrawSizeField(Rect position, IReorderableListAdaptor adaptor) {
+		public void DrawSizeField(Rect position, IReorderableListAdaptor adaptor)
+		{
 			DrawSizeField(position, s_SizePrefixLabel, adaptor);
 		}
 
 		/// <summary>
-		/// Draw list size field with automatic layout and a custom prefix label.
+		///     Draw list size field with automatic layout and a custom prefix label.
 		/// </summary>
 		/// <remarks>
-		/// <para>Specify a value of <c>GUIContent.none</c> for argument <paramref name="label"/>
-		/// to omit prefix label from the drawn control.</para>
+		///     <para>
+		///         Specify a value of <c>GUIContent.none</c> for argument <paramref name="label" />
+		///         to omit prefix label from the drawn control.
+		///     </para>
 		/// </remarks>
 		/// <param name="label">Prefix label for the control.</param>
 		/// <param name="adaptor">Reorderable list adaptor.</param>
-		public void DrawSizeField(GUIContent label, IReorderableListAdaptor adaptor) {
-			Rect position = GUILayoutUtility.GetRect(0, EditorGUIUtility.singleLineHeight);
+		public void DrawSizeField(GUIContent label, IReorderableListAdaptor adaptor)
+		{
+			var position = GUILayoutUtility.GetRect(0, EditorGUIUtility.singleLineHeight);
 			DrawSizeField(position, label, adaptor);
 		}
 
 		/// <summary>
-		/// Draw list size field with automatic layout and a custom prefix label.
+		///     Draw list size field with automatic layout and a custom prefix label.
 		/// </summary>
 		/// <param name="label">Prefix label for the control.</param>
 		/// <param name="adaptor">Reorderable list adaptor.</param>
-		public void DrawSizeField(string label, IReorderableListAdaptor adaptor) {
+		public void DrawSizeField(string label, IReorderableListAdaptor adaptor)
+		{
 			s_Temp.text = label;
 			DrawSizeField(s_Temp, adaptor);
 		}
 
 		/// <summary>
-		/// Draw list size field with automatic layout and the default prefix label.
+		///     Draw list size field with automatic layout and the default prefix label.
 		/// </summary>
 		/// <param name="adaptor">Reorderable list adaptor.</param>
-		public void DrawSizeField(IReorderableListAdaptor adaptor) {
+		public void DrawSizeField(IReorderableListAdaptor adaptor)
+		{
 			DrawSizeField(s_SizePrefixLabel, adaptor);
 		}
 
-		#endregion
+#endregion
 
-		#region Context Menu
+#region Context Menu
 
 		/// <summary>
-		/// Content for "Move to Top" command.
+		///     Content for "Move to Top" command.
 		/// </summary>
-		protected static readonly GUIContent CommandMoveToTop = new GUIContent("Move to Top");
+		protected static readonly GUIContent CommandMoveToTop = new("Move to Top");
+
 		/// <summary>
-		/// Content for "Move to Bottom" command.
+		///     Content for "Move to Bottom" command.
 		/// </summary>
-		protected static readonly GUIContent CommandMoveToBottom = new GUIContent("Move to Bottom");
+		protected static readonly GUIContent CommandMoveToBottom = new("Move to Bottom");
+
 		/// <summary>
-		/// Content for "Insert Above" command.
+		///     Content for "Insert Above" command.
 		/// </summary>
-		protected static readonly GUIContent CommandInsertAbove = new GUIContent("Insert Above");
+		protected static readonly GUIContent CommandInsertAbove = new("Insert Above");
+
 		/// <summary>
-		/// Content for "Insert Below" command.
+		///     Content for "Insert Below" command.
 		/// </summary>
-		protected static readonly GUIContent CommandInsertBelow = new GUIContent("Insert Below");
+		protected static readonly GUIContent CommandInsertBelow = new("Insert Below");
+
 		/// <summary>
-		/// Content for "Duplicate" command.
+		///     Content for "Duplicate" command.
 		/// </summary>
-		protected static readonly GUIContent CommandDuplicate = new GUIContent("Duplicate");
+		protected static readonly GUIContent CommandDuplicate = new("Duplicate");
+
 		/// <summary>
-		/// Content for "Remove" command.
+		///     Content for "Remove" command.
 		/// </summary>
-		protected static readonly GUIContent CommandRemove = new GUIContent("Remove");
+		protected static readonly GUIContent CommandRemove = new("Remove");
+
 		/// <summary>
-		/// Content for "Clear All" command.
+		///     Content for "Clear All" command.
 		/// </summary>
-		protected static readonly GUIContent CommandClearAll = new GUIContent("Clear All");
+		protected static readonly GUIContent CommandClearAll = new("Clear All");
 
 		// Command control id and item index are assigned when context menu is shown.
 		private static int s_ContextControlID;
@@ -1588,8 +1707,9 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 		// Command name is assigned by default context menu handler.
 		private static string s_ContextCommandName;
 
-		private void ShowContextMenu(int itemIndex, IReorderableListAdaptor adaptor) {
-			GenericMenu menu = new GenericMenu();
+		private void ShowContextMenu(int itemIndex, IReorderableListAdaptor adaptor)
+		{
+			var menu = new GenericMenu();
 
 			s_ContextControlID = _controlID;
 			s_ContextItemIndex = itemIndex;
@@ -1601,27 +1721,28 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 		}
 
 		/// <summary>
-		/// Default functionality to handle context command.
+		///     Default functionality to handle context command.
 		/// </summary>
 		/// <example>
-		/// <para>Can be used when adding custom items to the context menu:</para>
-		/// <code language="csharp"><![CDATA[
+		///     <para>Can be used when adding custom items to the context menu:</para>
+		///     <code language="csharp"><![CDATA[
 		/// protected override void AddItemsToMenu(GenericMenu menu, int itemIndex, IReorderableListAdaptor adaptor) {
 		///     var specialCommand = new GUIContent("Special Command");
 		///     menu.AddItem(specialCommand, false, defaultContextHandler, specialCommand);
 		/// }
 		/// ]]></code>
-		/// <code language="unityscript"><![CDATA[
+		///     <code language="unityscript"><![CDATA[
 		/// function AddItemsToMenu(menu:GenericMenu, itemIndex:int, list:IReorderableListAdaptor) {
 		///     var specialCommand = new GUIContent('Special Command');
 		///     menu.AddItem(specialCommand, false, defaultContextHandler, specialCommand);
 		/// }
 		/// ]]></code>
 		/// </example>
-		/// <seealso cref="AddItemsToMenu"/>
+		/// <seealso cref="AddItemsToMenu" />
 		protected static readonly GenericMenu.MenuFunction2 DefaultContextHandler = DefaultContextMenuHandler;
 
-		private static void DefaultContextMenuHandler(object userData) {
+		private static void DefaultContextMenuHandler(object userData)
+		{
 			var commandContent = userData as GUIContent;
 			if (commandContent == null || string.IsNullOrEmpty(commandContent.text))
 				return;
@@ -1633,13 +1754,15 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 		}
 
 		/// <summary>
-		/// Invoked to generate context menu for list item.
+		///     Invoked to generate context menu for list item.
 		/// </summary>
 		/// <param name="menu">Menu which can be populated.</param>
 		/// <param name="itemIndex">Zero-based index of item which was right-clicked.</param>
 		/// <param name="adaptor">Reorderable list adaptor.</param>
-		protected virtual void AddItemsToMenu(GenericMenu menu, int itemIndex, IReorderableListAdaptor adaptor) {
-			if ((Flags & ReorderableListFlags.DisableReordering) == 0) {
+		protected virtual void AddItemsToMenu(GenericMenu menu, int itemIndex, IReorderableListAdaptor adaptor)
+		{
+			if ((Flags & ReorderableListFlags.DisableReordering) == 0)
+			{
 				if (itemIndex > 0)
 					menu.AddItem(CommandMoveToTop, false, DefaultContextHandler, CommandMoveToTop);
 				else
@@ -1650,7 +1773,8 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 				else
 					menu.AddDisabledItem(CommandMoveToBottom);
 
-				if (HasAddButton) {
+				if (HasAddButton)
+				{
 					menu.AddSeparator("");
 
 					menu.AddItem(CommandInsertAbove, false, DefaultContextHandler, CommandInsertAbove);
@@ -1661,7 +1785,8 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 				}
 			}
 
-			if (HasRemoveButtons) {
+			if (HasRemoveButtons)
+			{
 				if (menu.GetItemCount() > 0)
 					menu.AddSeparator("");
 
@@ -1671,18 +1796,20 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 			}
 		}
 
-		#endregion
+#endregion
 
-		#region Command Handling
+#region Command Handling
 
 		/// <summary>
-		/// Invoked to handle context command.
+		///     Invoked to handle context command.
 		/// </summary>
 		/// <remarks>
-		/// <para>It is important to set the value of <c>GUI.changed</c> to <c>true</c> if any
-		/// changes are made by command handler.</para>
-		/// <para>Default command handling functionality can be inherited:</para>
-		/// <code language="csharp"><![CDATA[
+		///     <para>
+		///         It is important to set the value of <c>GUI.changed</c> to <c>true</c> if any
+		///         changes are made by command handler.
+		///     </para>
+		///     <para>Default command handling functionality can be inherited:</para>
+		///     <code language="csharp"><![CDATA[
 		/// protected override bool HandleCommand(string commandName, int itemIndex, IReorderableListAdaptor adaptor) {
 		///     if (base.HandleCommand(itemIndex, adaptor))
 		///         return true;
@@ -1696,7 +1823,7 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 		///     return false;
 		/// }
 		/// ]]></code>
-		/// <code language="unityscript"><![CDATA[
+		///     <code language="unityscript"><![CDATA[
 		/// function HandleCommand(commandName:String, itemIndex:int, adaptor:IReorderableListAdaptor):boolean {
 		///     if (base.HandleCommand(itemIndex, adaptor))
 		///         return true;
@@ -1715,10 +1842,12 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 		/// <param name="itemIndex">Zero-based index of item which was right-clicked.</param>
 		/// <param name="adaptor">Reorderable list adaptor.</param>
 		/// <returns>
-		/// A value of <c>true</c> if command was known; otherwise <c>false</c>.
+		///     A value of <c>true</c> if command was known; otherwise <c>false</c>.
 		/// </returns>
-		protected virtual bool HandleCommand(string commandName, int itemIndex, IReorderableListAdaptor adaptor) {
-			switch (commandName) {
+		protected virtual bool HandleCommand(string commandName, int itemIndex, IReorderableListAdaptor adaptor)
+		{
+			switch (commandName)
+			{
 				case "Move to Top":
 					MoveItem(adaptor, itemIndex, 0);
 					return true;
@@ -1749,60 +1878,65 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 		}
 
 		/// <summary>
-		/// Call to manually perform command.
+		///     Call to manually perform command.
 		/// </summary>
 		/// <remarks>
-		/// <para>Warning message is logged to console if attempted to execute unknown command.</para>
+		///     <para>Warning message is logged to console if attempted to execute unknown command.</para>
 		/// </remarks>
 		/// <param name="commandName">Name of command. This is the text shown in the context menu.</param>
 		/// <param name="itemIndex">Zero-based index of item which was right-clicked.</param>
 		/// <param name="adaptor">Reorderable list adaptor.</param>
 		/// <returns>
-		/// A value of <c>true</c> if command was known; otherwise <c>false</c>.
+		///     A value of <c>true</c> if command was known; otherwise <c>false</c>.
 		/// </returns>
-		public bool DoCommand(string commandName, int itemIndex, IReorderableListAdaptor adaptor) {
-			if (!HandleCommand(s_ContextCommandName, itemIndex, adaptor)) {
+		public bool DoCommand(string commandName, int itemIndex, IReorderableListAdaptor adaptor)
+		{
+			if (!HandleCommand(s_ContextCommandName, itemIndex, adaptor))
+			{
 				Debug.LogWarning("Unknown context command.");
 				return false;
 			}
+
 			return true;
 		}
 
 		/// <summary>
-		/// Call to manually perform command.
+		///     Call to manually perform command.
 		/// </summary>
 		/// <remarks>
-		/// <para>Warning message is logged to console if attempted to execute unknown command.</para>
+		///     <para>Warning message is logged to console if attempted to execute unknown command.</para>
 		/// </remarks>
 		/// <param name="command">Content representing command.</param>
 		/// <param name="itemIndex">Zero-based index of item which was right-clicked.</param>
 		/// <param name="adaptor">Reorderable list adaptor.</param>
 		/// <returns>
-		/// A value of <c>true</c> if command was known; otherwise <c>false</c>.
+		///     A value of <c>true</c> if command was known; otherwise <c>false</c>.
 		/// </returns>
-		public bool DoCommand(GUIContent command, int itemIndex, IReorderableListAdaptor adaptor) {
+		public bool DoCommand(GUIContent command, int itemIndex, IReorderableListAdaptor adaptor)
+		{
 			return DoCommand(command.text, itemIndex, adaptor);
 		}
 
-		#endregion
+#endregion
 
-		#region Methods
+#region Methods
 
 		/// <summary>
-		/// Calculate height of list control in pixels.
+		///     Calculate height of list control in pixels.
 		/// </summary>
 		/// <param name="adaptor">Reorderable list adaptor.</param>
 		/// <returns>
-		/// Required list height in pixels.
+		///     Required list height in pixels.
 		/// </returns>
-		public float CalculateListHeight(IReorderableListAdaptor adaptor) {
+		public float CalculateListHeight(IReorderableListAdaptor adaptor)
+		{
 			FixStyles();
 
-			float totalHeight = ContainerStyle.padding.vertical - 1 + VerticalSpacing;
+			var totalHeight = ContainerStyle.padding.vertical - 1 + VerticalSpacing;
 
 			// Take list items into consideration.
-			int count = adaptor.Count;
-			for (int i = 0; i < count; ++i)
+			var count = adaptor.Count;
+			for (var i = 0; i < count; ++i)
 				totalHeight += adaptor.GetItemHeight(i);
 			// Add spacing between list items.
 			totalHeight += 4 * count;
@@ -1815,17 +1949,18 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 		}
 
 		/// <summary>
-		/// Calculate height of list control in pixels.
+		///     Calculate height of list control in pixels.
 		/// </summary>
 		/// <param name="itemCount">Count of items in list.</param>
 		/// <param name="itemHeight">Fixed height of list item.</param>
 		/// <returns>
-		/// Required list height in pixels.
+		///     Required list height in pixels.
 		/// </returns>
-		public float CalculateListHeight(int itemCount, float itemHeight) {
+		public float CalculateListHeight(int itemCount, float itemHeight)
+		{
 			FixStyles();
 
-			float totalHeight = ContainerStyle.padding.vertical - 1 + VerticalSpacing;
+			var totalHeight = ContainerStyle.padding.vertical - 1 + VerticalSpacing;
 
 			// Take list items into consideration.
 			totalHeight += (itemHeight + 4) * itemCount;
@@ -1838,34 +1973,38 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 		}
 
 		/// <summary>
-		/// Move item from source index to destination index.
+		///     Move item from source index to destination index.
 		/// </summary>
 		/// <param name="adaptor">Reorderable list adaptor.</param>
 		/// <param name="sourceIndex">Zero-based index of source item.</param>
 		/// <param name="destIndex">Zero-based index of destination index.</param>
-		protected void MoveItem(IReorderableListAdaptor adaptor, int sourceIndex, int destIndex) {
+		protected void MoveItem(IReorderableListAdaptor adaptor, int sourceIndex, int destIndex)
+		{
 			// Raise event before moving item so that the operation can be cancelled.
 			var movingEventArgs = new ItemMovingEventArgs(adaptor, sourceIndex, destIndex);
 			OnItemMoving(movingEventArgs);
-			if (!movingEventArgs.Cancel) {
+			if (!movingEventArgs.Cancel)
+			{
 				adaptor.Move(sourceIndex, destIndex);
 
 				// Item was actually moved!
-				int newIndex = destIndex;
+				var newIndex = destIndex;
 				if (newIndex > sourceIndex)
 					--newIndex;
 				OnItemMoved(new ItemMovedEventArgs(adaptor, sourceIndex, newIndex));
 
 				GUI.changed = true;
 			}
+
 			ReorderableListGUI.IndexOfChangedItem = -1;
 		}
 
 		/// <summary>
-		/// Add item at end of list and raises the event <see cref="ItemInserted"/>.
+		///     Add item at end of list and raises the event <see cref="ItemInserted" />.
 		/// </summary>
 		/// <param name="adaptor">Reorderable list adaptor.</param>
-		protected void AddItem(IReorderableListAdaptor adaptor) {
+		protected void AddItem(IReorderableListAdaptor adaptor)
+		{
 			adaptor.Add();
 			AutoFocusItem(s_ContextControlID, adaptor.Count - 1);
 
@@ -1877,11 +2016,12 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 		}
 
 		/// <summary>
-		/// Insert item at specified index and raises the event <see cref="ItemInserted"/>.
+		///     Insert item at specified index and raises the event <see cref="ItemInserted" />.
 		/// </summary>
 		/// <param name="adaptor">Reorderable list adaptor.</param>
 		/// <param name="itemIndex">Zero-based index of item.</param>
-		protected void InsertItem(IReorderableListAdaptor adaptor, int itemIndex) {
+		protected void InsertItem(IReorderableListAdaptor adaptor, int itemIndex)
+		{
 			adaptor.Insert(itemIndex);
 			AutoFocusItem(s_ContextControlID, itemIndex);
 
@@ -1893,11 +2033,12 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 		}
 
 		/// <summary>
-		/// Duplicate specified item and raises the event <see cref="ItemInserted"/>.
+		///     Duplicate specified item and raises the event <see cref="ItemInserted" />.
 		/// </summary>
 		/// <param name="adaptor">Reorderable list adaptor.</param>
 		/// <param name="itemIndex">Zero-based index of item.</param>
-		protected void DuplicateItem(IReorderableListAdaptor adaptor, int itemIndex) {
+		protected void DuplicateItem(IReorderableListAdaptor adaptor, int itemIndex)
+		{
 			adaptor.Duplicate(itemIndex);
 			AutoFocusItem(s_ContextControlID, itemIndex + 1);
 
@@ -1909,18 +2050,21 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 		}
 
 		/// <summary>
-		/// Remove specified item.
+		///     Remove specified item.
 		/// </summary>
 		/// <remarks>
-		/// <para>The event <see cref="ItemRemoving"/> is raised prior to removing item
-		/// and allows removal to be cancelled.</para>
+		///     <para>
+		///         The event <see cref="ItemRemoving" /> is raised prior to removing item
+		///         and allows removal to be cancelled.
+		///     </para>
 		/// </remarks>
 		/// <param name="adaptor">Reorderable list adaptor.</param>
 		/// <param name="itemIndex">Zero-based index of item.</param>
 		/// <returns>
-		/// Returns a value of <c>false</c> if operation was cancelled.
+		///     Returns a value of <c>false</c> if operation was cancelled.
 		/// </returns>
-		protected bool RemoveItem(IReorderableListAdaptor adaptor, int itemIndex) {
+		protected bool RemoveItem(IReorderableListAdaptor adaptor, int itemIndex)
+		{
 			var args = new ItemRemovingEventArgs(adaptor, itemIndex);
 			OnItemRemoving(args);
 			if (args.Cancel)
@@ -1935,23 +2079,27 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 		}
 
 		/// <summary>
-		/// Remove all items from list.
+		///     Remove all items from list.
 		/// </summary>
 		/// <remarks>
-		/// <para>The event <see cref="ItemRemoving"/> is raised for each item prior to
-		/// clearing array and allows entire operation to be cancelled.</para>
+		///     <para>
+		///         The event <see cref="ItemRemoving" /> is raised for each item prior to
+		///         clearing array and allows entire operation to be cancelled.
+		///     </para>
 		/// </remarks>
 		/// <param name="adaptor">Reorderable list adaptor.</param>
 		/// <returns>
-		/// Returns a value of <c>false</c> if operation was cancelled.
+		///     Returns a value of <c>false</c> if operation was cancelled.
 		/// </returns>
-		protected bool ClearAll(IReorderableListAdaptor adaptor) {
+		protected bool ClearAll(IReorderableListAdaptor adaptor)
+		{
 			if (adaptor.Count == 0)
 				return true;
 
 			var args = new ItemRemovingEventArgs(adaptor, 0);
-			int count = adaptor.Count;
-			for (int i = 0; i < count; ++i) {
+			var count = adaptor.Count;
+			for (var i = 0; i < count; ++i)
+			{
 				args.ItemIndex = i;
 				OnItemRemoving(args);
 				if (args.Cancel)
@@ -1967,35 +2115,30 @@ namespace TheraBytes.BetterUi.Editor.ThirdParty
 		}
 
 		/// <summary>
-		/// Set count of items in list by adding or removing items.
+		///     Set count of items in list by adding or removing items.
 		/// </summary>
 		/// <param name="adaptor">Reorderable list adaptor.</param>
 		/// <param name="newCount">New count of items.</param>
 		/// <returns>
-		/// Returns a value of <c>false</c> if operation was cancelled.
+		///     Returns a value of <c>false</c> if operation was cancelled.
 		/// </returns>
-		protected bool ResizeList(IReorderableListAdaptor adaptor, int newCount) {
-			if (newCount < 0) {
+		protected bool ResizeList(IReorderableListAdaptor adaptor, int newCount)
+		{
+			if (newCount < 0)
 				// Do nothing when new count is negative.
 				return true;
-			}
 
-			int removeCount = Mathf.Max(0, adaptor.Count - newCount);
-			int addCount = Mathf.Max(0, newCount - adaptor.Count);
+			var removeCount = Mathf.Max(0, adaptor.Count - newCount);
+			var addCount = Mathf.Max(0, newCount - adaptor.Count);
 
-			while (removeCount-- > 0) {
+			while (removeCount-- > 0)
 				if (!RemoveItem(adaptor, adaptor.Count - 1))
 					return false;
-			}
-			while (addCount-- > 0) {
-				AddItem(adaptor);
-			}
+			while (addCount-- > 0) AddItem(adaptor);
 
 			return true;
 		}
 
-		#endregion
-
+#endregion
 	}
-
 }

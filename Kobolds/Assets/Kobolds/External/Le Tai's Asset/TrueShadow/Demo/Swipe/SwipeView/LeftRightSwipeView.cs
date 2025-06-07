@@ -5,31 +5,33 @@ using UnityEngine.Events;
 
 namespace LeTai.SwipeView
 {
-public enum SwipeDirection
-{
-    Left,
-    Right
-}
+	public enum SwipeDirection
+	{
+		Left,
+		Right
+	}
 
-[Serializable]
-public class CardSwipedToDirectionEvent : UnityEvent<SwipeDirection> { }
+	[Serializable]
+	public class CardSwipedToDirectionEvent : UnityEvent<SwipeDirection>
+	{
+	}
 
-public class LeftRightSwipeView<T> : SwipeView<T>
-{
-    public CardSwipedToDirectionEvent onSwipeToDirection;
+	public class LeftRightSwipeView<T> : SwipeView<T>
+	{
+		public CardSwipedToDirectionEvent onSwipeToDirection;
 
-    protected override void Init(IEnumerable<T> data)
-    {
-        base.Init(data);
-        onSwiped.AddListener(OnSwiped);
-    }
+		protected override void Init(IEnumerable<T> data)
+		{
+			base.Init(data);
+			onSwiped.AddListener(OnSwiped);
+		}
 
-    void OnSwiped(Vector2 offset)
-    {
-        if (Vector2.Dot(offset, Vector2.right) >= 0)
-            onSwipeToDirection.Invoke(SwipeDirection.Right);
-        else
-            onSwipeToDirection.Invoke(SwipeDirection.Left);
-    }
-}
+		private void OnSwiped(Vector2 offset)
+		{
+			if (Vector2.Dot(offset, Vector2.right) >= 0)
+				onSwipeToDirection.Invoke(SwipeDirection.Right);
+			else
+				onSwipeToDirection.Invoke(SwipeDirection.Left);
+		}
+	}
 }

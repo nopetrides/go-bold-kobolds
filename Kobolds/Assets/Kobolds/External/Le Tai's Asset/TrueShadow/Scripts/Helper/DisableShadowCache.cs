@@ -4,35 +4,35 @@ using Random = UnityEngine.Random;
 
 namespace LeTai.TrueShadow
 {
-[ExecuteAlways]
-[RequireComponent(typeof(TrueShadow))]
-public class DisableShadowCache : MonoBehaviour, ITrueShadowCustomHashProvider
-{
-    TrueShadow  shadow;
-    public bool everyFrame;
+	[ExecuteAlways]
+	[RequireComponent(typeof(TrueShadow))]
+	public class DisableShadowCache : MonoBehaviour, ITrueShadowCustomHashProvider
+	{
+		public bool everyFrame;
+		private TrueShadow shadow;
 
-    void OnEnable()
-    {
-        shadow = GetComponent<TrueShadow>();
-        Dirty();
-    }
+		private void Update()
+		{
+			if (everyFrame)
+				Dirty();
+		}
 
-    void Update()
-    {
-        if (everyFrame)
-            Dirty();
-    }
+		private void OnEnable()
+		{
+			shadow = GetComponent<TrueShadow>();
+			Dirty();
+		}
 
-    void Dirty()
-    {
-        shadow.CustomHash = Random.Range(int.MinValue, int.MaxValue);
-        shadow.SetTextureDirty();
-    }
+		private void OnDisable()
+		{
+			shadow.CustomHash = 0;
+			shadow.SetTextureDirty();
+		}
 
-    void OnDisable()
-    {
-        shadow.CustomHash = 0;
-        shadow.SetTextureDirty();
-    }
-}
+		private void Dirty()
+		{
+			shadow.CustomHash = Random.Range(int.MinValue, int.MaxValue);
+			shadow.SetTextureDirty();
+		}
+	}
 }

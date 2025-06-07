@@ -1,7 +1,4 @@
-﻿using UnityEngine;
-using UnityEditor;
-
-#if MM_UI
+﻿#if MM_UI
 namespace MoreMountains.Tools
 {
 	/// <summary>
@@ -242,8 +239,10 @@ namespace MoreMountains.Tools
         
 		protected virtual void DrawLevelProgressBar(Rect position, float level, Color frontColor, Color negativeColor)
 		{
-			Rect levelLabelRect = new Rect(position.x, position.y + (_lineHeight + _lineMargin) * (_numberOfLines - 1), position.width, _lineHeight);
-			Rect levelValueRect = new Rect(position.x - 15 + EditorGUIUtility.labelWidth + 4, position.y + (_lineHeight + _lineMargin) * (_numberOfLines - 1), position.width, _lineHeight);
+			Rect levelLabelRect =
+ new Rect(position.x, position.y + (_lineHeight + _lineMargin) * (_numberOfLines - 1), position.width, _lineHeight);
+			Rect levelValueRect =
+ new Rect(position.x - 15 + EditorGUIUtility.labelWidth + 4, position.y + (_lineHeight + _lineMargin) * (_numberOfLines - 1), position.width, _lineHeight);
 
 			float progressX = position.x - 5 + EditorGUIUtility.labelWidth + 60;
 			float progressY = position.y + (_lineHeight + _lineMargin) * (_numberOfLines - 1) + 6;

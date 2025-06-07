@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using DG.Tweening;
 using Febucci.UI;
 using Kobolds.Runtime.Managers;
@@ -8,18 +6,27 @@ using UnityEngine.Serialization;
 
 namespace Kobolds.Runtime
 {
-    public class Bootloader : MonoBehaviour
-    {
-		[FormerlySerializedAs("_gameLoader")] 
+	public class Bootloader : MonoBehaviour
+	{
+		[FormerlySerializedAs("_gameLoader")]
 		[SerializeField] private GlobalsMgr GameLoader;
 
 		[SerializeField] private float InDelay = 0.1f;
 		[SerializeField] private float OutDelay = 0.1f;
-		
+
 		[SerializeField] private TypewriterByCharacter StartingTypewriter;
 
-		Sequence _sequence;
-		
+		private Sequence _sequence;
+
+		public void Update()
+		{
+			if (Input.anyKeyDown)
+			{
+				_sequence.Kill();
+				IntroComplete();
+			}
+		}
+
 		private void OnEnable()
 		{
 			StartSequence();
@@ -40,7 +47,7 @@ namespace Kobolds.Runtime
 
 
 		// Called by the splash after finishing
-        public void LoadIntro()
+		public void LoadIntro()
 		{
 			EndSequence();
 		}
@@ -56,15 +63,6 @@ namespace Kobolds.Runtime
 		private void IntroComplete()
 		{
 			Instantiate(GameLoader);
-		}
-
-		public void Update()
-		{
-			if (Input.anyKeyDown)
-			{
-				_sequence.Kill();
-				IntroComplete();
-			}
 		}
 	}
 }

@@ -14,15 +14,17 @@ float GetCameraFOV()
     float fov = atan(1.0f / t) * 2.0 * Rad2Deg;
     return fov;
 }
+
 float ApplyOutlineDistanceFadeOut(float inputMulFix)
 {
     //make outline "fadeout" if character is too small in camera's view
     return saturate(inputMulFix);
 }
+
 float GetOutlineCameraFovAndDistanceFixMultiplier(float positionVS_Z)
 {
     float cameraMulFix;
-    if(unity_OrthoParams.w == 0)
+    if (unity_OrthoParams.w == 0)
     {
         ////////////////////////////////
         // Perspective camera case
@@ -35,7 +37,7 @@ float GetOutlineCameraFovAndDistanceFixMultiplier(float positionVS_Z)
         cameraMulFix = ApplyOutlineDistanceFadeOut(cameraMulFix);
 
         // keep outline similar width on screen accoss all camera fov
-        cameraMulFix *= GetCameraFOV();       
+        cameraMulFix *= GetCameraFOV();
     }
     else
     {
@@ -50,4 +52,3 @@ float GetOutlineCameraFovAndDistanceFixMultiplier(float positionVS_Z)
     return cameraMulFix * 0.00005; // mul a const to make return result = default normal expand amount WS
 }
 #endif
-

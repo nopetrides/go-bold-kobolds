@@ -17,7 +17,7 @@ struct v2f
     fixed4 color : COLOR;
     float2 texcoord : TEXCOORD0;
     float4 worldPosition : TEXCOORD1;
-    half4  mask : TEXCOORD2;
+    half4 mask : TEXCOORD2;
     UNITY_VERTEX_OUTPUT_STEREO
 };
 

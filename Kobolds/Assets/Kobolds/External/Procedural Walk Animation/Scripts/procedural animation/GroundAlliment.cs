@@ -2,34 +2,36 @@ using UnityEngine;
 
 namespace Lolopupka
 {
-public class GroundAlliment : MonoBehaviour
-{
-    [SerializeField] float checkRange = 1f;
-    [SerializeField] float orientationSpeed = 50f;
-    [SerializeField] LayerMask layerMask;
+	public class GroundAlliment : MonoBehaviour
+	{
+		[SerializeField] private float checkRange = 1f;
+		[SerializeField] private float orientationSpeed = 50f;
+		[SerializeField] private LayerMask layerMask;
 
-    private Vector3 lastUp;
-    private float t;
-    void Update()
-    {
-        t += Time.deltaTime;
+		private Vector3 lastUp;
+		private float t;
 
-        RaycastHit hit;
-        Physics.Raycast(transform.position + Vector3.up * 1f, -Vector3.up, out hit, checkRange, layerMask);
+		private void Update()
+		{
+			t += Time.deltaTime;
 
-        Vector3 newUp = Vector3.Lerp(lastUp, hit.normal, t * orientationSpeed);
-        var targetRotation = GetTargetRotation(transform.forward, newUp);
+			RaycastHit hit;
+			Physics.Raycast(transform.position + Vector3.up * 1f, -Vector3.up, out hit, checkRange, layerMask);
 
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, orientationSpeed * Time.deltaTime);
-        
-        lastUp = transform.up;
-    }
+			var newUp = Vector3.Lerp(lastUp, hit.normal, t * orientationSpeed);
+			var targetRotation = GetTargetRotation(transform.forward, newUp);
 
-    Quaternion GetTargetRotation(Vector3 approximateForward, Vector3 exactUp) 
-    {
-        Quaternion zToUp = Quaternion.LookRotation(exactUp, -approximateForward);
-        Quaternion yToz = Quaternion.Euler(90, 0, 0);
-        return zToUp * yToz;
-    }
-}
+			transform.rotation = Quaternion.RotateTowards(
+				transform.rotation, targetRotation, orientationSpeed * Time.deltaTime);
+
+			lastUp = transform.up;
+		}
+
+		private Quaternion GetTargetRotation(Vector3 approximateForward, Vector3 exactUp)
+		{
+			var zToUp = Quaternion.LookRotation(exactUp, -approximateForward);
+			var yToz = Quaternion.Euler(90, 0, 0);
+			return zToUp * yToz;
+		}
+	}
 }

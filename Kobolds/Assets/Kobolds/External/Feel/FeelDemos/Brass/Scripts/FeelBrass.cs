@@ -10,6 +10,7 @@ namespace MoreMountains.Feel
 		[Header("Bindings")]
 		/// a reference to the MMAudioAnalyzer in the scene
 		public MMAudioAnalyzer TargetAnalyzer;
+
 		/// a light we want to control based on the current level of the music
 		public Light TargetLight;
 
@@ -22,11 +23,11 @@ namespace MoreMountains.Feel
 		/// a feedback to play when doing a special dance move
 		[Tooltip("a feedback to play when doing a special dance move")]
 		public MMFeedbacks SpecialDanceMoveFeedbacks;
-        
+
 		protected float _lastMoveStartedAt = -100f;
-        
+
 		/// <summary>
-		/// On Update we look for input
+		///     On Update we look for input
 		/// </summary>
 		protected virtual void Update()
 		{
@@ -35,18 +36,15 @@ namespace MoreMountains.Feel
 		}
 
 		/// <summary>
-		/// Detects input
+		///     Detects input
 		/// </summary>
 		protected virtual void HandleInput()
 		{
-			if (FeelDemosInputHelper.CheckMainActionInputPressedThisFrame())
-			{
-				SpecialDanceMove();
-			}
+			if (FeelDemosInputHelper.CheckMainActionInputPressedThisFrame()) SpecialDanceMove();
 		}
 
 		/// <summary>
-		/// Updates the light's intensity in real time based on the music's levels
+		///     Updates the light's intensity in real time based on the music's levels
 		/// </summary>
 		protected virtual void ControlLightIntensity()
 		{
@@ -55,7 +53,7 @@ namespace MoreMountains.Feel
 		}
 
 		/// <summary>
-		/// Performs a move if possible, otherwise plays a denied feedback
+		///     Performs a move if possible, otherwise plays a denied feedback
 		/// </summary>
 		protected virtual void SpecialDanceMove()
 		{
@@ -65,5 +63,5 @@ namespace MoreMountains.Feel
 				_lastMoveStartedAt = Time.time;
 			}
 		}
-	}    
+	}
 }

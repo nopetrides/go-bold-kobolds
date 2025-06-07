@@ -21,10 +21,10 @@ namespace P3T.Scripts.Managers
 
 		[SerializeField] private Transform MenuRoot;
 
-		private readonly Dictionary<Type, MenuBase> _menuInstances = new();
-
 		private readonly Stack<MenuBase> _activeMenus = new();
 		private readonly Dictionary<Type, MenuBase> _disabledMenus = new();
+
+		private readonly Dictionary<Type, MenuBase> _menuInstances = new();
 
 		/// <summary>
 		///     Clear the stack and close all menus
@@ -52,7 +52,8 @@ namespace P3T.Scripts.Managers
 		/// <param name="onMenuOpenComplete"></param>
 		/// <param name="fadeIn"></param>
 		/// <returns></returns>
-		public async Task<MenuBase> ShowMenu(Type menuToOpen,
+		public async Task<MenuBase> ShowMenu(
+			Type menuToOpen,
 			Action onMenuOpenStarting = null,
 			Action onMenuOpenComplete = null,
 			bool fadeIn = true)
@@ -121,10 +122,10 @@ namespace P3T.Scripts.Managers
 		private async Task<MenuBase> GetMenuInstance(Type menuType)
 		{
 			// Check if object already exists
-			if (!_menuInstances.TryGetValue(menuType, out MenuBase menuInstance))
+			if (!_menuInstances.TryGetValue(menuType, out var menuInstance))
 			{
 				// load and instantiate the game object
-				string key = menuType.ToString().Split('.').Last();
+				var key = menuType.ToString().Split('.').Last();
 
 				var prefab = await P3TAssetLoader.LoadAndReturnStoredAssetByKeyAsync(key);
 
@@ -142,7 +143,7 @@ namespace P3T.Scripts.Managers
 					Debug.LogError($"Could not get {nameof(MenuBase)} from {createdObject.name}");
 					return null;
 				}
-				
+
 				menuInstance.OnInstantiate();
 				_menuInstances.Add(menuType, menuInstance);
 

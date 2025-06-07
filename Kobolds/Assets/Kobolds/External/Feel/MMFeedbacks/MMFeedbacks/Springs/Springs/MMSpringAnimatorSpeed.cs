@@ -1,4 +1,3 @@
-using MoreMountains.Tools;
 using UnityEngine;
 
 namespace MoreMountains.Feedbacks
@@ -9,7 +8,7 @@ namespace MoreMountains.Feedbacks
 		public override float TargetFloat
 		{
 			get => Target.speed;
-			set => Target.speed = Mathf.Abs(value); 
+			set => Target.speed = Mathf.Abs(value);
 		}
 	}
 }

@@ -1,10 +1,11 @@
-using UnityEngine;
 using System.Collections.Generic;
 using DG.Tweening;
 using Febucci.UI;
 using Kobolds.Runtime;
 using Kobolds.UI;
 using P3T.Scripts.Managers;
+using TMPro;
+using UnityEngine;
 using UnityEngine.Localization;
 using UnityEngine.Serialization;
 
@@ -12,16 +13,18 @@ namespace P3T.Scripts.KoboldsPreview
 {
 	public class PreviewManager : MonoBehaviour
 	{
-		[FormerlySerializedAs("animationList")] [SerializeField] private List<string> AnimationList = new ()
+		[FormerlySerializedAs("animationList")] [SerializeField]
+		private List<string> AnimationList = new()
 		{
 			"kobold_A_Pose",
 			"kobold_Idle_1",
 			"kobold_Idle_2",
 			"kobold_Walk_1",
-			"kobold_Run_1",
+			"kobold_Run_1"
 		};
 
-		[FormerlySerializedAs("_shapeKeyList")] [SerializeField] private List<string> ShapeKeyList = new ()
+		[FormerlySerializedAs("_shapeKeyList")] [SerializeField]
+		private List<string> ShapeKeyList = new()
 		{
 			"Eyes_Annoyed",
 			"Eyes_Blink",
@@ -47,28 +50,29 @@ namespace P3T.Scripts.KoboldsPreview
 		};
 
 		[SerializeField] private GameObject[] Kobolds;
-		
+
 		[SerializeField] private List<LocalizedString> Descriptions = new();
-		
+
 		[Header("UI")]
-		[SerializeField] private TMPro.TMP_Dropdown DropdownKobold;
-		[SerializeField] private TMPro.TMP_Dropdown DropdownAnimation;
-		[SerializeField] private TMPro.TMP_Dropdown DropdownShapeKey;
+		[SerializeField] private TMP_Dropdown DropdownKobold;
+
+		[SerializeField] private TMP_Dropdown DropdownAnimation;
+		[SerializeField] private TMP_Dropdown DropdownShapeKey;
 		[SerializeField] private TypewriterByCharacter DescriptionText;
 
 		private int _koboldIndex;
-		
+
 		private Sequence _slideInSequence;
 
 		private bool ChangingKobolds => _slideInSequence.IsActive() || DescriptionText.isShowingText;
-		
-		void Start()
-		{
-			List<string> koboldsList = new List<string>();
 
-			for (int i = 0; i < Kobolds.Length; i++)
+		private void Start()
+		{
+			var koboldsList = new List<string>();
+
+			for (var i = 0; i < Kobolds.Length; i++)
 			{
-				string n = Kobolds[i].name;
+				var n = Kobolds[i].name;
 				koboldsList.Add(n);
 
 				if (i == 0)
@@ -80,7 +84,7 @@ namespace P3T.Scripts.KoboldsPreview
 			DropdownKobold.AddOptions(koboldsList);
 			DropdownAnimation.AddOptions(AnimationList);
 			DropdownShapeKey.AddOptions(ShapeKeyList);
-			
+
 			_koboldIndex = DropdownKobold.value = 0;
 			// Run
 			DropdownAnimation.value = 4;
@@ -91,36 +95,23 @@ namespace P3T.Scripts.KoboldsPreview
 			ChangeShapeKey();
 		}
 
-		void Update()
+		private void Update()
 		{
 			if (Input.GetKeyDown("left"))
-			{
 				PrevKobold();
-			}
 			else if (Input.GetKeyDown("right"))
-			{
 				NextKobold();
-			}
 			else if (Input.GetKeyDown("up")
 					&& (Input.GetKey(KeyCode.LeftControl)
 						|| Input.GetKey(KeyCode.RightControl)))
-			{
 				NextShapeKey();
-			}
 			else if (Input.GetKeyDown("down")
 					&& (Input.GetKey(KeyCode.LeftControl)
 						|| Input.GetKey(KeyCode.RightControl)))
-			{
 				PrevShapeKey();
-			}
 			else if (Input.GetKeyDown("up"))
-			{
 				NextAnimation();
-			}
-			else if (Input.GetKeyDown("down"))
-			{
-				PrevAnimation();
-			}
+			else if (Input.GetKeyDown("down")) PrevAnimation();
 		}
 
 
@@ -141,7 +132,7 @@ namespace P3T.Scripts.KoboldsPreview
 		{
 			if (ChangingKobolds)
 				return;
-			
+
 			if (DropdownKobold.value <= 0)
 				DropdownKobold.value = DropdownKobold.options.Count - 1;
 			else
@@ -154,7 +145,7 @@ namespace P3T.Scripts.KoboldsPreview
 		{
 			SlideOutKobold(Kobolds[_koboldIndex], isNext);
 			SlideInKobold(Kobolds[DropdownKobold.value], isNext);
-			
+
 			_koboldIndex = DropdownKobold.value;
 
 			ChangeAnimation();
@@ -164,14 +155,14 @@ namespace P3T.Scripts.KoboldsPreview
 		private void SlideOutKobold(GameObject kobold, bool isNext)
 		{
 			DescriptionText.StartDisappearingText();
-			kobold.transform.DOMove(new Vector3(0, 0, isNext ? -5f :5f), 1f)
+			kobold.transform.DOMove(new Vector3(0, 0, isNext ? -5f : 5f), 1f)
 				.OnComplete(() => kobold.SetActive(false));
 		}
 
 		private void SlideInKobold(GameObject kobold, bool isNext)
 		{
 			kobold.SetActive(true);
-			kobold.transform.position = new Vector3(0, 0, isNext ? 5f :-5f);
+			kobold.transform.position = new Vector3(0, 0, isNext ? 5f : -5f);
 			kobold.transform.DOMove(Vector3.zero, 1f)
 				.OnComplete(() => DescriptionText.ShowText(Descriptions[_koboldIndex].GetLocalizedString()));
 		}
@@ -199,22 +190,17 @@ namespace P3T.Scripts.KoboldsPreview
 
 		public void ChangeAnimation()
 		{
-			Animator animator = Kobolds[DropdownKobold.value].GetComponentInChildren<Animator>();
+			var animator = Kobolds[DropdownKobold.value].GetComponentInChildren<Animator>();
 			if (animator != null)
 			{
-				int index = DropdownAnimation.value;
+				var index = DropdownAnimation.value;
 
 				// If Spin/Splash animation
 				if (index == 15)
 				{
 					if (animator.HasState(0, Animator.StringToHash("Spin")))
-					{
 						animator.Play("Spin");
-					}
-					else if (animator.HasState(0, Animator.StringToHash("Splash")))
-					{
-						animator.Play("Splash");
-					}
+					else if (animator.HasState(0, Animator.StringToHash("Splash"))) animator.Play("Splash");
 				}
 				else
 				{
@@ -245,11 +231,8 @@ namespace P3T.Scripts.KoboldsPreview
 
 		public void ChangeShapeKey()
 		{
-			Animator animator = Kobolds[DropdownKobold.value].GetComponentInChildren<Animator>();
-			if (animator != null)
-			{
-				animator.Play(DropdownShapeKey.options[DropdownShapeKey.value].text);
-			}
+			var animator = Kobolds[DropdownKobold.value].GetComponentInChildren<Animator>();
+			if (animator != null) animator.Play(DropdownShapeKey.options[DropdownShapeKey.value].text);
 		}
 
 		public void ButtonReturn()

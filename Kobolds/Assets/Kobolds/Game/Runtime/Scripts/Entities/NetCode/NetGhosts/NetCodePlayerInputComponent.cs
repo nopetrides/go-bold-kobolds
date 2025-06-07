@@ -6,5 +6,7 @@ namespace Kobolds.NetComponents
 	public struct NetCodePlayerInputComponent : IInputComponentData
 	{
 		public float2 InputVector;
+
+		public bool InputJump;
 	}
 }

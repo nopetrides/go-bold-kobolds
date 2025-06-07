@@ -106,7 +106,8 @@ namespace FIMSpace.FProceduralAnimation
                     bone.GameRigidbody.gameObject.layer = handler.RagdollDummyLayer;
 
                     foreach( var collS in bone.Colliders )
-                        collS.GameCollider.gameObject.layer = handler.RagdollDummyLayer;
+                        if ( collS.GameCollider != null)
+                            collS.GameCollider.gameObject.layer = handler.RagdollDummyLayer;
                 }
 
                 if( chain.ParentConnectionBones != null )

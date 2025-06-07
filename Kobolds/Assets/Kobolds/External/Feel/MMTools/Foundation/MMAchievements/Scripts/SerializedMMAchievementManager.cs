@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
-using System;
+﻿using System;
 
 namespace MoreMountains.Tools
 {
@@ -15,7 +13,7 @@ namespace MoreMountains.Tools
 		public int ProgressCurrent;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="MoreMountains.Tools.SerializedMMAchievement"/> class.
+		///     Initializes a new instance of the <see cref="MoreMountains.Tools.SerializedMMAchievement" /> class.
 		/// </summary>
 		/// <param name="achievementID">Achievement I.</param>
 		/// <param name="unlockedStatus">If set to <c>true</c> unlocked status.</param>
@@ -32,7 +30,7 @@ namespace MoreMountains.Tools
 	/// <summary>
 	/// Serializable MM achievement manager.
 	/// </summary>
-	public class SerializedMMAchievementManager 
+	public class SerializedMMAchievementManager
 	{
 		public SerializedMMAchievement[] Achievements;
 	}

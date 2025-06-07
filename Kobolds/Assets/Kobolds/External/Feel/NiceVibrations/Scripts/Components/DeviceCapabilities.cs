@@ -1,174 +1,35 @@
 // Copyright (c) Meta Platforms, Inc. and affiliates. 
 
 using UnityEngine;
-
 #if (UNITY_IOS && !UNITY_EDITOR)
     using UnityEngine.iOS;
 #endif
 
 namespace Lofelt.NiceVibrations
 {
-    /// <summary>
-    /// A class containing properties that describe the current device capabilities for use with
-    /// Nice Vibrations
-    /// </summary>
-    ///
-    /// This class describes the capabilities of an iOS or Android device, gamepads are not handled
-    /// by it.
-    public static class DeviceCapabilities
-    {
-        /// <summary>
-        /// Property that holds the current RuntimePlatform
-        /// </summary>
-        public static RuntimePlatform platform { get; }
-
-        /// <summary>
-        /// Property that holds the current platform version.
-        /// </summary>
-        /// iOS version on iOS, Android API level on Android or 0 otherwise.
-        public static int platformVersion { get; }
-
-        /// <summary>
-        /// Indicates if the device meets the requirements to play advanced haptics with
-        /// Nice Vibrations
-        /// </summary>
-        ///
-        /// Advanced requirements means that the device can play back <c>.haptic</c> clips.
-        /// While devices that don't meet the advanced requirements can not play back <c>.haptic</c>
-        /// clips, they can still play back simpler fallback haptics as long as
-        /// \ref isVersionSupported is <c>true</c>.
-        ///
-        /// While DeviceCapabilities.isVersionSupported only checks the OS version, this method
-        /// additionally checks the device capabilities.
-        ///
-        /// The required device capabilities are:
-        /// - iOS: iPhone >= 8
-        /// - Android: Amplitude control for the <c>Vibrator</c>
-        ///
-        /// You don't usually need to check this property. All other methods in HapticController
-        /// will check \ref meetsAdvancedRequirements before calling into <c>LofeltHaptics</c>.
-        /// In case the device does not support advanced haptics there is a possibility of fallback
-        /// haptics based on presets.
-        public static bool meetsAdvancedRequirements
-        {
-            get
-            {
-                return _meetsAdvancedRequirements;
-            }
-        }
-        private static bool _meetsAdvancedRequirements;
-
-        /// <summary>
-        /// Indicates if the OS version is high enough to play haptics with Nice Vibrations.
-        /// </summary>
-        ///
-        /// The minimum required versions are:
-        /// - iOS >= 11
-        /// - Android API level >= 17
-        ///
-        /// This only checks the minimum supported OS version in terms of API and does not guarantee
-        /// that advanced haptics with amplitude control can be recreated, For that check with
-        /// \ref meetsAdvancedRequirements.
-        public static bool isVersionSupported { get; }
-
-        /// <summary>
-        /// Indicates if the device is capable of amplitude control in order to recreate
-        /// advanced haptics.
-        /// </summary>
-        public static bool hasAmplitudeControl
-        {
-            get
-            {
-                return _hasAmplitudeControl;
-            }
-        }
-        private static bool _hasAmplitudeControl;
-
-        /// <summary>
-        /// Indicates if the device is capable of changing the frequency of haptic signals
-        /// </summary>
-        public static bool hasFrequencyControl
-        {
-            get
-            {
-                return _hasFrequencyControl;
-            }
-        }
-        private static bool _hasFrequencyControl;
-
-        /// <summary>
-        /// Indicates if the device is capable of real-time amplitude modulation of haptic signals
-        /// </summary>
-        public static bool hasAmplitudeModulation
-        {
-            get
-            {
-                return _hasAmplitudeModulation;
-            }
-        }
-        private static bool _hasAmplitudeModulation;
-
-        /// <summary>
-        /// Indicates if the device is capable of real-time frequency modulation of haptic signals
-        /// </summary>
-        public static bool hasFrequencyModulation
-        {
-            get
-            {
-                return _hasFrequencyModulation;
-            }
-        }
-        private static bool _hasFrequencyModulation;
-
-        /// <summary>
-        /// Indicates if the device is capable of natively reproducing emphasized haptics
-        /// </summary>
-        public static bool hasEmphasis
-        {
-            get
-            {
-                return _hasEmphasis;
-            }
-        }
-        private static bool _hasEmphasis;
-
-        /// <summary>
-        /// Indicates if the device is capable of emulating emphasized haptics
-        /// </summary>
-        public static bool canEmulateEmphasis
-        {
-            get
-            {
-                return _canEmulateEmphasis;
-            }
-        }
-        private static bool _canEmulateEmphasis;
-
-        /// <summary>
-        /// Indicates if the device is capable of looping haptic clips
-        /// </summary>
-        public static bool canLoop
-        {
-            get
-            {
-                return _canLoop;
-            }
-        }
-        private static bool _canLoop;
-
-        /// <summary>
-        /// Constructor that fills in the only the DeviceCapabilities platform version properties.
-        /// </summary>
-        /// This is separate of Init() because we need to first check the version numbers before
-        /// initializing <c>LofeltHaptics</c>
-        static DeviceCapabilities()
-        {
-            platform = Application.platform;
-            platformVersion = 0;
-            isVersionSupported = false;
+	/// <summary>
+	///     A class containing properties that describe the current device capabilities for use with
+	///     Nice Vibrations
+	/// </summary>
+	/// This class describes the capabilities of an iOS or Android device, gamepads are not handled
+	/// by it.
+	public static class DeviceCapabilities
+	{
+		/// <summary>
+		///     Constructor that fills in the only the DeviceCapabilities platform version properties.
+		/// </summary>
+		/// This is separate of Init() because we need to first check the version numbers before
+		/// initializing
+		/// <c>LofeltHaptics</c>
+		static DeviceCapabilities()
+		{
+			platform = Application.platform;
+			platformVersion = 0;
+			isVersionSupported = false;
 
 #if (UNITY_ANDROID && !UNITY_EDITOR)
-            platformVersion = int.Parse(SystemInfo.operatingSystem.Substring(SystemInfo.operatingSystem.IndexOf("-") + 1, 3));
+            platformVersion =
+ int.Parse(SystemInfo.operatingSystem.Substring(SystemInfo.operatingSystem.IndexOf("-") + 1, 3));
             const int minimumSupportedAndroidSDKVersion = 17;
             isVersionSupported = platformVersion >= minimumSupportedAndroidSDKVersion;
 #elif (UNITY_IOS && !UNITY_EDITOR)
@@ -225,16 +86,104 @@ namespace Lofelt.NiceVibrations
             }
 
 #elif (UNITY_EDITOR)
-            isVersionSupported = true;
+			isVersionSupported = true;
 #endif
-        }
+		}
 
-        /// <summary>
-        /// Function that initializes the rest of the DeviceCapabilities properties.
-        /// Must be called after <c>LofeltHaptics</c> was initialized.
-        /// </summary>
-        public static void Init()
-        {
+		/// <summary>
+		///     Property that holds the current RuntimePlatform
+		/// </summary>
+		public static RuntimePlatform platform { get; }
+
+		/// <summary>
+		///     Property that holds the current platform version.
+		/// </summary>
+		/// iOS version on iOS, Android API level on Android or 0 otherwise.
+		public static int platformVersion { get; }
+
+		/// <summary>
+		///     Indicates if the device meets the requirements to play advanced haptics with
+		///     Nice Vibrations
+		/// </summary>
+		/// Advanced requirements means that the device can play back
+		/// <c>.haptic</c>
+		/// clips.
+		/// While devices that don't meet the advanced requirements can not play back
+		/// <c>.haptic</c>
+		/// clips, they can still play back simpler fallback haptics as long as
+		/// \ref isVersionSupported is
+		/// <c>true</c>
+		/// .
+		/// 
+		/// While DeviceCapabilities.isVersionSupported only checks the OS version, this method
+		/// additionally checks the device capabilities.
+		/// 
+		/// The required device capabilities are:
+		/// - iOS: iPhone >= 8
+		/// - Android: Amplitude control for the
+		/// <c>Vibrator</c>
+		/// You don't usually need to check this property. All other methods in HapticController
+		/// will check \ref meetsAdvancedRequirements before calling into
+		/// <c>LofeltHaptics</c>
+		/// .
+		/// In case the device does not support advanced haptics there is a possibility of fallback
+		/// haptics based on presets.
+		public static bool meetsAdvancedRequirements { get; private set; }
+
+		/// <summary>
+		///     Indicates if the OS version is high enough to play haptics with Nice Vibrations.
+		/// </summary>
+		/// The minimum required versions are:
+		/// - iOS >= 11
+		/// - Android API level >= 17
+		/// 
+		/// This only checks the minimum supported OS version in terms of API and does not guarantee
+		/// that advanced haptics with amplitude control can be recreated, For that check with
+		/// \ref meetsAdvancedRequirements.
+		public static bool isVersionSupported { get; }
+
+		/// <summary>
+		///     Indicates if the device is capable of amplitude control in order to recreate
+		///     advanced haptics.
+		/// </summary>
+		public static bool hasAmplitudeControl { get; }
+
+		/// <summary>
+		///     Indicates if the device is capable of changing the frequency of haptic signals
+		/// </summary>
+		public static bool hasFrequencyControl { get; }
+
+		/// <summary>
+		///     Indicates if the device is capable of real-time amplitude modulation of haptic signals
+		/// </summary>
+		public static bool hasAmplitudeModulation { get; }
+
+		/// <summary>
+		///     Indicates if the device is capable of real-time frequency modulation of haptic signals
+		/// </summary>
+		public static bool hasFrequencyModulation { get; }
+
+		/// <summary>
+		///     Indicates if the device is capable of natively reproducing emphasized haptics
+		/// </summary>
+		public static bool hasEmphasis { get; }
+
+		/// <summary>
+		///     Indicates if the device is capable of emulating emphasized haptics
+		/// </summary>
+		public static bool canEmulateEmphasis { get; }
+
+		/// <summary>
+		///     Indicates if the device is capable of looping haptic clips
+		/// </summary>
+		public static bool canLoop { get; }
+
+		/// <summary>
+		///     Function that initializes the rest of the DeviceCapabilities properties.
+		///     Must be called after <c>LofeltHaptics</c> was initialized.
+		/// </summary>
+		public static void Init()
+		{
 #if (UNITY_ANDROID && !UNITY_EDITOR)
             _hasAmplitudeControl = LofeltHaptics.DeviceMeetsMinimumPlatformRequirements();
             _canEmulateEmphasis = LofeltHaptics.DeviceMeetsMinimumPlatformRequirements();
@@ -247,7 +196,7 @@ namespace Lofelt.NiceVibrations
             _hasEmphasis = LofeltHaptics.DeviceMeetsMinimumPlatformRequirements();
             _canLoop = LofeltHaptics.DeviceMeetsMinimumPlatformRequirements();
 #endif
-            _meetsAdvancedRequirements = LofeltHaptics.DeviceMeetsMinimumPlatformRequirements();
-        }
-    }
+			meetsAdvancedRequirements = LofeltHaptics.DeviceMeetsMinimumPlatformRequirements();
+		}
+	}
 }

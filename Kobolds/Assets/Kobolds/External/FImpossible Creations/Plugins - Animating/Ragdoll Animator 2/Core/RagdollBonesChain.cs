@@ -212,6 +212,17 @@ namespace FIMSpace.FProceduralAnimation
         }
 
         /// <summary>
+        /// Returning reference to the bone setup.
+        /// If any of the bones in the chain don't have assigned ERagdollBoneID like one provided, it will return null.
+        /// </summary>
+        public RagdollChainBone GetBone(ERagdollBoneID id)
+        {
+            if (BoneSetups.Count == 0) return null;
+            foreach (var bone in BoneSetups) if (bone.BoneID == id) return bone;
+            return null;
+        }
+
+        /// <summary>
         /// Checking index of the bone reference, if the bone is present in the chain.
         /// If not, method will return value = -1
         /// </summary>
@@ -303,6 +314,7 @@ namespace FIMSpace.FProceduralAnimation
                             inBetween.DummyBone.gameObject.layer = handler.RagdollDummyLayer;
                             inBetween.DummyBone.name += ":InBetween";
                             handler.skeletonFillExtraBones.Add( child, inBetween );
+                            handler.inBetweenPreGenerateMemory.Add(inBetween);
                         }
 
                         inBetweenBones.Add( inBetween );

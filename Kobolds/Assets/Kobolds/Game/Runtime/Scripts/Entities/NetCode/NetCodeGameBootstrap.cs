@@ -1,11 +1,12 @@
 using Unity.NetCode;
+using UnityEngine.Scripting;
 
 namespace Kobolds.NetCode
 {
 	/// <summary>
-	/// Bootstraps the client & server connection for quick testing
+	///     Bootstraps the client & server connection for quick testing
 	/// </summary>
-	[UnityEngine.Scripting.Preserve]
+	[Preserve]
 	public class NetCodeGameBootstrap : ClientServerBootstrap
 	{
 		public override bool Initialize(string defaultWorldName)

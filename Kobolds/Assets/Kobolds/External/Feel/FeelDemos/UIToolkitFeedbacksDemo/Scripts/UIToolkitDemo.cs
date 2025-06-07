@@ -19,16 +19,16 @@ namespace MoreMountains.FeedbacksForThirdParty
 		public List<UIToolkitDemoAction> Actions;
 
 		private Button _button;
-	
-	
+
+
 		private void OnEnable()
 		{
-			VisualElement root = GetComponent<UIDocument>().rootVisualElement;
+			var root = GetComponent<UIDocument>().rootVisualElement;
 
-			VisualElement face = root.Q<VisualElement>("DemoFace");
+			var face = root.Q<VisualElement>("DemoFace");
 			face.style.backgroundImage = FaceTexture;
-		
-			foreach (UIToolkitDemoAction action in Actions)
+
+			foreach (var action in Actions)
 			{
 				_button = root.Q<Button>(action.ButtonName);
 				_button.text = _button.text.ToUpper();
@@ -42,5 +42,3 @@ namespace MoreMountains.FeedbacksForThirdParty
 		}
 	}
 }
-
-

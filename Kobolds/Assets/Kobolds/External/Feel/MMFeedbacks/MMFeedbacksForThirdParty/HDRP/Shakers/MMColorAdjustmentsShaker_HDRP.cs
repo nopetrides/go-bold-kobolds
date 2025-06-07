@@ -1,7 +1,6 @@
-﻿using UnityEngine;
-using UnityEngine.Rendering;
+﻿using MoreMountains.Feedbacks;
 using MoreMountains.Tools;
-using MoreMountains.Feedbacks;
+using UnityEngine;
 #if MM_HDRP
 using UnityEngine.Rendering.HighDefinition;
 #endif
@@ -9,11 +8,12 @@ using UnityEngine.Rendering.HighDefinition;
 namespace MoreMountains.FeedbacksForThirdParty
 {
 	/// <summary>
-	/// Add this class to a Camera with a HDRP color adjustments post processing and it'll be able to "shake" its values by getting events
+	///     Add this class to a Camera with a HDRP color adjustments post processing and it'll be able to "shake" its values by
+	///     getting events
 	/// </summary>
-	#if MM_HDRP
+#if MM_HDRP
 	[RequireComponent(typeof(Volume))]
-	#endif
+#endif
 	[AddComponentMenu("More Mountains/Feedbacks/Shakers/PostProcessing/MM Color Adjustments Shaker HDRP")]
 	public class MMColorAdjustmentsShaker_HDRP : MMShaker
 	{
@@ -23,10 +23,12 @@ namespace MoreMountains.FeedbacksForThirdParty
 		[MMInspectorGroup("Post Exposure", true, 44)]
 		/// the curve used to animate the focus distance value on
 		[Tooltip("the curve used to animate the focus distance value on")]
-		public AnimationCurve ShakePostExposure = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+		public AnimationCurve ShakePostExposure = new(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+
 		/// the value to remap the curve's 0 to
 		[Tooltip("the value to remap the curve's 0 to")]
-		public float RemapPostExposureZero = 0f;
+		public float RemapPostExposureZero;
+
 		/// the value to remap the curve's 1 to
 		[Tooltip("the value to remap the curve's 1 to")]
 		public float RemapPostExposureOne = 1f;
@@ -34,11 +36,13 @@ namespace MoreMountains.FeedbacksForThirdParty
 		[MMInspectorGroup("Hue Shift", true, 45)]
 		/// the curve used to animate the aperture value on
 		[Tooltip("the curve used to animate the aperture value on")]
-		public AnimationCurve ShakeHueShift = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+		public AnimationCurve ShakeHueShift = new(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+
 		/// the value to remap the curve's 0 to
 		[Range(-180f, 180f)]
 		[Tooltip("the value to remap the curve's 0 to")]
-		public float RemapHueShiftZero = 0f;
+		public float RemapHueShiftZero;
+
 		/// the value to remap the curve's 1 to
 		[Tooltip("the value to remap the curve's 1 to")]
 		[Range(-180f, 180f)]
@@ -47,11 +51,13 @@ namespace MoreMountains.FeedbacksForThirdParty
 		[MMInspectorGroup("Saturation", true, 46)]
 		/// the curve used to animate the focal length value on
 		[Tooltip("the curve used to animate the focal length value on")]
-		public AnimationCurve ShakeSaturation = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+		public AnimationCurve ShakeSaturation = new(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+
 		/// the value to remap the curve's 0 to
 		[Tooltip("the value to remap the curve's 0 to")]
 		[Range(-100f, 100f)]
-		public float RemapSaturationZero = 0f;
+		public float RemapSaturationZero;
+
 		/// the value to remap the curve's 1 to
 		[Tooltip("the value to remap the curve's 1 to")]
 		[Range(-100f, 100f)]
@@ -60,37 +66,47 @@ namespace MoreMountains.FeedbacksForThirdParty
 		[MMInspectorGroup("Contrast", true, 47)]
 		/// the curve used to animate the focal length value on
 		[Tooltip("the curve used to animate the focal length value on")]
-		public AnimationCurve ShakeContrast = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+		public AnimationCurve ShakeContrast = new(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+
 		/// the value to remap the curve's 0 to
 		[Tooltip("the value to remap the curve's 0 to")]
 		[Range(-100f, 100f)]
-		public float RemapContrastZero = 0f;
+		public float RemapContrastZero;
+
 		/// the value to remap the curve's 1 to
 		[Tooltip("the value to remap the curve's 1 to")]
 		[Range(-100f, 100f)]
 		public float RemapContrastOne = 100f;
-        
-		public enum ColorFilterModes { None, Gradient, Interpolate }
- 
+
+		public enum ColorFilterModes
+		{
+			None,
+			Gradient,
+			Interpolate
+		}
+
 		[MMInspectorGroup("Color Filter", true, 48)]
 		/// the color filter mode to work with (none, over a gradient, or interpolate to a destination color
 		[Tooltip("the color filter mode to work with (none, over a gradient, or interpolate to a destination color")]
 		public ColorFilterModes ColorFilterMode = ColorFilterModes.None;
+
 		/// the gradient over which to modify the color filter
 		[Tooltip("the gradient over which to modify the color filter")]
-		[MMFEnumCondition("ColorFilterMode", (int)ColorFilterModes.Gradient)]
+		[MMFEnumCondition("ColorFilterMode", (int) ColorFilterModes.Gradient)]
 		[GradientUsage(true)]
 		public Gradient ColorFilterGradient;
+
 		/// the destination color to match when in Interpolate mode
 		[Tooltip("the destination color to match when in Interpolate mode")]
 		[MMFEnumCondition("ColorFilterMode", (int) ColorFilterModes.Interpolate)]
 		public Color ColorFilterDestination = Color.yellow;
+
 		/// the curve over which to interpolate the color filter
 		[Tooltip("the curve over which to interpolate the color filter")]
 		[MMFEnumCondition("ColorFilterMode", (int) ColorFilterModes.Interpolate)]
-		public AnimationCurve ColorFilterCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+		public AnimationCurve ColorFilterCurve = new(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
 
-		#if MM_HDRP
+#if MM_HDRP
 		protected Volume _volume;
 		protected ColorAdjustments _colorAdjustments;
 		protected float _initialPostExposure;
@@ -140,16 +156,21 @@ namespace MoreMountains.FeedbacksForThirdParty
 		/// </summary>
 		protected override void Shake()
 		{
-			float newPostExposure = ShakeFloat(ShakePostExposure, RemapPostExposureZero, RemapPostExposureOne, RelativeValues, _initialPostExposure);
+			float newPostExposure =
+ ShakeFloat(ShakePostExposure, RemapPostExposureZero, RemapPostExposureOne, RelativeValues, _initialPostExposure);
 			_colorAdjustments.postExposure.Override(newPostExposure);
-			float newHueShift = ShakeFloat(ShakeHueShift, RemapHueShiftZero, RemapHueShiftOne, RelativeValues, _initialHueShift);
+			float newHueShift =
+ ShakeFloat(ShakeHueShift, RemapHueShiftZero, RemapHueShiftOne, RelativeValues, _initialHueShift);
 			_colorAdjustments.hueShift.Override(newHueShift);
-			float newSaturation = ShakeFloat(ShakeSaturation, RemapSaturationZero, RemapSaturationOne, RelativeValues, _initialSaturation);
+			float newSaturation =
+ ShakeFloat(ShakeSaturation, RemapSaturationZero, RemapSaturationOne, RelativeValues, _initialSaturation);
 			_colorAdjustments.saturation.Override(newSaturation);
-			float newContrast = ShakeFloat(ShakeContrast, RemapContrastZero, RemapContrastOne, RelativeValues, _initialContrast);
+			float newContrast =
+ ShakeFloat(ShakeContrast, RemapContrastZero, RemapContrastOne, RelativeValues, _initialContrast);
 			_colorAdjustments.contrast.Override(newContrast);
 
-			_remappedTimeSinceStart = MMFeedbacksHelpers.Remap(Time.time - _shakeStartedTimestamp, 0f, ShakeDuration, 0f, 1f);
+			_remappedTimeSinceStart =
+ MMFeedbacksHelpers.Remap(Time.time - _shakeStartedTimestamp, 0f, ShakeDuration, 0f, 1f);
 	            
 			if (ColorFilterMode == ColorFilterModes.Gradient)
 			{
@@ -189,8 +210,10 @@ namespace MoreMountains.FeedbacksForThirdParty
 			AnimationCurve shakeContrast, float remapContrastZero, float remapContrastOne,
 			ColorFilterModes colorFilterMode, Gradient colorFilterGradient, Color colorFilterDestination,AnimationCurve colorFilterCurve,  
 			float duration, bool relativeValues = false,
-			float attenuation = 1.0f, MMChannelData channelData = null, bool resetShakerValuesAfterShake = true, bool resetTargetValuesAfterShake = true, 
-			bool forwardDirection = true, TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false, bool restore = false)
+			float attenuation = 1.0f, MMChannelData channelData = null, bool resetShakerValuesAfterShake =
+ true, bool resetTargetValuesAfterShake = true, 
+			bool forwardDirection = true, TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop =
+ false, bool restore = false)
 		{
 			if (!CheckEventAllowed(channelData) || (!Interruptible && Shaking))
 			{
@@ -317,43 +340,66 @@ namespace MoreMountains.FeedbacksForThirdParty
 			base.StopListening();
 			MMColorAdjustmentsShakeEvent_HDRP.Unregister(OnMMColorGradingShakeEvent);
 		}
-		#endif
+#endif
 	}
 
 	/// <summary>
-	/// An event used to trigger vignette shakes
+	///     An event used to trigger vignette shakes
 	/// </summary>
 	public struct MMColorAdjustmentsShakeEvent_HDRP
 	{
-		static private event Delegate OnEvent;
-		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)] private static void RuntimeInitialization() { OnEvent = null; }
-		static public void Register(Delegate callback) { OnEvent += callback; }
-		static public void Unregister(Delegate callback) { OnEvent -= callback; }
-		
-		public delegate void Delegate(AnimationCurve shakePostExposure, float remapPostExposureZero, float remapPostExposureOne,
-			AnimationCurve shakeHueShift, float remapHueShiftZero, float remapHueShiftOne,
-			AnimationCurve shakeSaturation, float remapSaturationZero, float remapSaturationOne,
-			AnimationCurve shakeContrast, float remapContrastZero, float remapContrastOne,
-			MMColorAdjustmentsShaker_HDRP.ColorFilterModes colorFilterMode, Gradient colorFilterGradient, Color colorFilterDestination,AnimationCurve colorFilterCurve,  
-			float duration, bool relativeValues = false,
-			float attenuation = 1.0f, MMChannelData channelData = null, bool resetShakerValuesAfterShake = true, bool resetTargetValuesAfterShake = true, 
-			bool forwardDirection = true, TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false, bool restore = false);
+		private static event Delegate OnEvent;
 
-		static public void Trigger(AnimationCurve shakePostExposure, float remapPostExposureZero, float remapPostExposureOne,
+		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+		private static void RuntimeInitialization()
+		{
+			OnEvent = null;
+		}
+
+		public static void Register(Delegate callback)
+		{
+			OnEvent += callback;
+		}
+
+		public static void Unregister(Delegate callback)
+		{
+			OnEvent -= callback;
+		}
+
+		public delegate void Delegate(
+			AnimationCurve shakePostExposure, float remapPostExposureZero, float remapPostExposureOne,
 			AnimationCurve shakeHueShift, float remapHueShiftZero, float remapHueShiftOne,
 			AnimationCurve shakeSaturation, float remapSaturationZero, float remapSaturationOne,
 			AnimationCurve shakeContrast, float remapContrastZero, float remapContrastOne,
-			MMColorAdjustmentsShaker_HDRP.ColorFilterModes colorFilterMode, Gradient colorFilterGradient, Color colorFilterDestination,AnimationCurve colorFilterCurve,  
+			MMColorAdjustmentsShaker_HDRP.ColorFilterModes colorFilterMode, Gradient colorFilterGradient,
+			Color colorFilterDestination, AnimationCurve colorFilterCurve,
 			float duration, bool relativeValues = false,
-			float attenuation = 1.0f, MMChannelData channelData = null, bool resetShakerValuesAfterShake = true, bool resetTargetValuesAfterShake = true, 
-			bool forwardDirection = true, TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false, bool restore = false)
+			float attenuation = 1.0f, MMChannelData channelData = null, bool resetShakerValuesAfterShake = true,
+			bool resetTargetValuesAfterShake = true,
+			bool forwardDirection = true, TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false,
+			bool restore = false);
+
+		public static void Trigger(
+			AnimationCurve shakePostExposure, float remapPostExposureZero, float remapPostExposureOne,
+			AnimationCurve shakeHueShift, float remapHueShiftZero, float remapHueShiftOne,
+			AnimationCurve shakeSaturation, float remapSaturationZero, float remapSaturationOne,
+			AnimationCurve shakeContrast, float remapContrastZero, float remapContrastOne,
+			MMColorAdjustmentsShaker_HDRP.ColorFilterModes colorFilterMode, Gradient colorFilterGradient,
+			Color colorFilterDestination, AnimationCurve colorFilterCurve,
+			float duration, bool relativeValues = false,
+			float attenuation = 1.0f, MMChannelData channelData = null, bool resetShakerValuesAfterShake = true,
+			bool resetTargetValuesAfterShake = true,
+			bool forwardDirection = true, TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false,
+			bool restore = false)
 		{
-			OnEvent?.Invoke(shakePostExposure, remapPostExposureZero, remapPostExposureOne,
+			OnEvent?.Invoke(
+				shakePostExposure, remapPostExposureZero, remapPostExposureOne,
 				shakeHueShift, remapHueShiftZero, remapHueShiftOne,
 				shakeSaturation, remapSaturationZero, remapSaturationOne,
 				shakeContrast, remapContrastZero, remapContrastOne,
 				colorFilterMode, colorFilterGradient, colorFilterDestination, colorFilterCurve,
-				duration, relativeValues, attenuation, channelData, resetShakerValuesAfterShake, resetTargetValuesAfterShake, forwardDirection, timescaleMode, stop, restore);
+				duration, relativeValues, attenuation, channelData, resetShakerValuesAfterShake,
+				resetTargetValuesAfterShake, forwardDirection, timescaleMode, stop, restore);
 		}
 	}
 }

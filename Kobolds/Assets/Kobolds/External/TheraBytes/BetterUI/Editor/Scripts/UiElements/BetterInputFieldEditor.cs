@@ -1,47 +1,40 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using TheraBytes.BetterUi.Editor.ThirdParty;
 using UnityEditor;
 using UnityEditor.UI;
-using UnityEditorInternal;
-using UnityEngine;
 using UnityEngine.UI;
 
 namespace TheraBytes.BetterUi.Editor
 {
-    [CustomEditor(typeof(BetterInputField)), CanEditMultipleObjects]
-    public class BetterInputFieldEditor : InputFieldEditor
-    {
-        BetterElementHelper<InputField, BetterInputField> helper =
-            new BetterElementHelper<InputField, BetterInputField>();
+	[CustomEditor(typeof(BetterInputField))] [CanEditMultipleObjects]
+	public class BetterInputFieldEditor : InputFieldEditor
+	{
+		private readonly BetterElementHelper<InputField, BetterInputField> helper = new();
+		private SerializedProperty additionalPlaceholdersProp;
 
-        SerializedProperty additionalPlaceholdersProp;
-
-        protected override void OnEnable()
-        {
-            base.OnEnable();
-            additionalPlaceholdersProp = serializedObject.FindProperty("additionalPlaceholders");
-        }
+		protected override void OnEnable()
+		{
+			base.OnEnable();
+			additionalPlaceholdersProp = serializedObject.FindProperty("additionalPlaceholders");
+		}
 
 
-        public override void OnInspectorGUI()
-        {
-            base.OnInspectorGUI();
+		public override void OnInspectorGUI()
+		{
+			base.OnInspectorGUI();
 
-            helper.DrawGui(serializedObject);
+			helper.DrawGui(serializedObject);
 
-            ThirdParty.ReorderableListGUI.Title("Additional Placeholders");
-            ThirdParty.ReorderableListGUI.ListField(additionalPlaceholdersProp);
+			ReorderableListGUI.Title("Additional Placeholders");
+			ReorderableListGUI.ListField(additionalPlaceholdersProp);
 
-            serializedObject.ApplyModifiedProperties();
-        }
+			serializedObject.ApplyModifiedProperties();
+		}
 
-        [MenuItem("CONTEXT/InputField/♠ Make Better")]
-        public static void MakeBetter(MenuCommand command)
-        {
-            InputField obj = command.context as InputField;
-            Betterizer.MakeBetter<InputField, BetterInputField>(obj);
-        }
-    }
+		[MenuItem("CONTEXT/InputField/♠ Make Better")]
+		public static void MakeBetter(MenuCommand command)
+		{
+			var obj = command.context as InputField;
+			Betterizer.MakeBetter<InputField, BetterInputField>(obj);
+		}
+	}
 }

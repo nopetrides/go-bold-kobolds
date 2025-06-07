@@ -60,7 +60,7 @@
                 half s, c;
                 sincos(angle, s, c);
                 return half2(c * dir.x - s * dir.y,
-                              s * dir.x + c * dir.y);
+                             s * dir.x + c * dir.y);
             }
 
             half _Angle;

@@ -6,25 +6,25 @@ using Unity.NetCode;
 using UnityEngine;
 
 /// <summary>
-/// Client only system for handling input for ghosted entities
+///     Client only system for handling input for ghosted entities
 /// </summary>
 [UpdateInGroup(typeof(GhostInputSystemGroup))]
-partial struct NetCodePlayerInputSystem : ISystem
+internal partial struct NetCodePlayerInputSystem : ISystem
 {
-    [BurstCompile]
-    public void OnCreate(ref SystemState state)
-    {
-        state.RequireForUpdate<NetworkStreamInGame>();
+	[BurstCompile]
+	public void OnCreate(ref SystemState state)
+	{
+		state.RequireForUpdate<NetworkStreamInGame>();
 		state.RequireForUpdate<NetCodePlayerInputComponent>();
-    }
+	}
 
-    [BurstCompile]
-    public void OnUpdate(ref SystemState state)
-    {
-		foreach (RefRW<NetCodePlayerInputComponent> netCodePlayerInput in 
+	[BurstCompile]
+	public void OnUpdate(ref SystemState state)
+	{
+		foreach (var netCodePlayerInput in
 				SystemAPI.Query<RefRW<NetCodePlayerInputComponent>>().WithAll<GhostOwnerIsLocal>())
 		{
-			float2 inputVector = new float2();
+			var inputVector = new float2();
 			if (Input.GetKey(KeyCode.W))
 				inputVector.y += 1;
 			if (Input.GetKey(KeyCode.S))
@@ -34,12 +34,13 @@ partial struct NetCodePlayerInputSystem : ISystem
 			if (Input.GetKey(KeyCode.D))
 				inputVector.x += 1;
 			netCodePlayerInput.ValueRW.InputVector = inputVector;
-		}
-    }
 
-    [BurstCompile]
-    public void OnDestroy(ref SystemState state)
-    {
-        
-    }
+			netCodePlayerInput.ValueRW.InputJump = Input.GetKeyDown(KeyCode.Space);
+		}
+	}
+
+	[BurstCompile]
+	public void OnDestroy(ref SystemState state)
+	{
+	}
 }

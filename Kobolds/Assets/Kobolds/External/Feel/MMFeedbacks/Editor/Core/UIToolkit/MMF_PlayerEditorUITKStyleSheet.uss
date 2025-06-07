@@ -36,6 +36,7 @@
     background-color: transparent;
     color: rgba(230, 230, 230, 1);
 }
+
 .unity-list-view__reorderable-item__container {
     padding-bottom: 0px;
 }

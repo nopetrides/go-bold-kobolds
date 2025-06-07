@@ -1,32 +1,31 @@
-﻿using UnityEngine;
-using System;
+﻿using System;
+using UnityEngine;
 
 namespace MoreMountains.Tools
 {
 	/// <summary>
-	/// Vector2 property setter
+	///     Vector2 property setter
 	/// </summary>
 	public class MMPropertyLinkVector2 : MMPropertyLink
 	{
-		public Func<Vector2> GetVector2Delegate;
-		public Action<Vector2> SetVector2Delegate;
-
 		protected Vector2 _initialValue;
 		protected Vector2 _newValue;
 		protected Vector2 _vector2;
+		public Func<Vector2> GetVector2Delegate;
+		public Action<Vector2> SetVector2Delegate;
 
 		/// <summary>
-		/// On init we grab our vector2
+		///     On init we grab our vector2
 		/// </summary>
 		/// <param name="property"></param>
 		public override void Initialization(MMProperty property)
 		{
 			base.Initialization(property);
-			_initialValue = (Vector2)GetPropertyValue(property);
+			_initialValue = (Vector2) GetPropertyValue(property);
 		}
 
 		/// <summary>
-		/// Creates cached getter and setters for properties
+		///     Creates cached getter and setters for properties
 		/// </summary>
 		/// <param name="property"></param>
 		public override void CreateGettersAndSetters(MMProperty property)
@@ -34,26 +33,26 @@ namespace MoreMountains.Tools
 			base.CreateGettersAndSetters(property);
 			if (property.MemberType == MMProperty.MemberTypes.Property)
 			{
-				object firstArgument = (property.TargetScriptableObject == null) ? (object)property.TargetComponent : (object)property.TargetScriptableObject;
+				var firstArgument = property.TargetScriptableObject == null ?
+					property.TargetComponent :
+					(object) property.TargetScriptableObject;
 
 				if (property.MemberPropertyInfo.GetGetMethod() != null)
-				{
-					GetVector2Delegate = (Func<Vector2>)Delegate.CreateDelegate(typeof(Func<Vector2>),
+					GetVector2Delegate = (Func<Vector2>) Delegate.CreateDelegate(
+						typeof(Func<Vector2>),
 						firstArgument,
 						property.MemberPropertyInfo.GetGetMethod());
-				}
 				if (property.MemberPropertyInfo.GetSetMethod() != null)
-				{
-					SetVector2Delegate = (Action<Vector2>)Delegate.CreateDelegate(typeof(Action<Vector2>),
+					SetVector2Delegate = (Action<Vector2>) Delegate.CreateDelegate(
+						typeof(Action<Vector2>),
 						firstArgument,
 						property.MemberPropertyInfo.GetSetMethod());
-				}
 				_getterSetterInitialized = true;
 			}
 		}
 
 		/// <summary>
-		/// Gets the raw value of the property, a normalized float value, caching the operation if possible
+		///     Gets the raw value of the property, a normalized float value, caching the operation if possible
 		/// </summary>
 		/// <param name="emitter"></param>
 		/// <param name="property"></param>
@@ -64,18 +63,18 @@ namespace MoreMountains.Tools
 		}
 
 		/// <summary>
-		/// Sets the raw property value, float normalized, caching the operation if possible
+		///     Sets the raw property value, float normalized, caching the operation if possible
 		/// </summary>
 		/// <param name="receiver"></param>
 		/// <param name="property"></param>
 		/// <param name="level"></param>
 		public override void SetValue(MMPropertyReceiver receiver, MMProperty property, object newValue)
 		{
-			SetValueOptimized(property, (Vector2)newValue);
+			SetValueOptimized(property, (Vector2) newValue);
 		}
 
 		/// <summary>
-		/// Returns this property link's level between 0 and 1
+		///     Returns this property link's level between 0 and 1
 		/// </summary>
 		/// <param name="receiver"></param>
 		/// <param name="property"></param>
@@ -83,9 +82,9 @@ namespace MoreMountains.Tools
 		/// <returns></returns>
 		public override float GetLevel(MMPropertyEmitter emitter, MMProperty property)
 		{
-			_vector2 = _getterSetterInitialized ? GetVector2Delegate() : (Vector2)GetPropertyValue(property);
+			_vector2 = _getterSetterInitialized ? GetVector2Delegate() : (Vector2) GetPropertyValue(property);
 
-			float newValue = 0f;
+			var newValue = 0f;
 
 			switch (emitter.Vector2Option)
 			{
@@ -97,37 +96,34 @@ namespace MoreMountains.Tools
 					break;
 			}
 
-			float returnValue = newValue;
-			returnValue = MMMaths.Clamp(returnValue, emitter.FloatRemapMinToZero, emitter.FloatRemapMaxToOne, emitter.ClampMin, emitter.ClampMax);
+			var returnValue = newValue;
+			returnValue = MMMaths.Clamp(
+				returnValue, emitter.FloatRemapMinToZero, emitter.FloatRemapMaxToOne, emitter.ClampMin,
+				emitter.ClampMax);
 			returnValue = MMMaths.Remap(returnValue, emitter.FloatRemapMinToZero, emitter.FloatRemapMaxToOne, 0f, 1f);
 
 			emitter.Level = returnValue;
 			return returnValue;
 		}
-		
+
 		public override float GetLevel(MMPropertyReceiver receiver, MMProperty property)
 		{
-			_vector2 = _getterSetterInitialized ? GetVector2Delegate() : (Vector2)GetPropertyValue(property);
+			_vector2 = _getterSetterInitialized ? GetVector2Delegate() : (Vector2) GetPropertyValue(property);
 
-			float newValue = 0f;
+			var newValue = 0f;
 
 			if (receiver.ModifyX)
-			{
 				newValue = _vector2.x;
-			}
-			else if (receiver.ModifyY)
-			{
-				newValue = _vector2.y;
-			}
+			else if (receiver.ModifyY) newValue = _vector2.y;
 
-			float returnValue = newValue;
+			var returnValue = newValue;
 			returnValue = MMMaths.Remap(returnValue, receiver.FloatRemapZero, receiver.FloatRemapOne, 0f, 1f);
 
 			return returnValue;
 		}
 
 		/// <summary>
-		/// Sets the specified level
+		///     Sets the specified level
 		/// </summary>
 		/// <param name="receiver"></param>
 		/// <param name="property"></param>
@@ -136,49 +132,42 @@ namespace MoreMountains.Tools
 		{
 			base.SetLevel(receiver, property, level);
 
-			_newValue.x = receiver.ModifyX ? MMMaths.Remap(level, 0f, 1f, receiver.Vector2RemapZero.x, receiver.Vector2RemapOne.x) : 0f;
-			_newValue.y = receiver.ModifyY ? MMMaths.Remap(level, 0f, 1f, receiver.Vector2RemapZero.y, receiver.Vector2RemapOne.y) : 0f;
+			_newValue.x = receiver.ModifyX ?
+				MMMaths.Remap(level, 0f, 1f, receiver.Vector2RemapZero.x, receiver.Vector2RemapOne.x) :
+				0f;
+			_newValue.y = receiver.ModifyY ?
+				MMMaths.Remap(level, 0f, 1f, receiver.Vector2RemapZero.y, receiver.Vector2RemapOne.y) :
+				0f;
 
-			if (receiver.RelativeValue)
-			{
-				_newValue = _initialValue + _newValue;
-			}
-            
+			if (receiver.RelativeValue) _newValue = _initialValue + _newValue;
+
 			if (_getterSetterInitialized)
-			{
 				SetVector2Delegate(_newValue);
-			}
 			else
-			{
 				SetPropertyValue(property, _newValue);
-			}
 		}
 
 		/// <summary>
-		/// Gets either the cached value or the raw value
+		///     Gets either the cached value or the raw value
 		/// </summary>
 		/// <param name="property"></param>
 		/// <returns></returns>
 		protected virtual Vector2 GetValueOptimized(MMProperty property)
 		{
-			return _getterSetterInitialized ? GetVector2Delegate() : (Vector2)GetPropertyValue(property);
+			return _getterSetterInitialized ? GetVector2Delegate() : (Vector2) GetPropertyValue(property);
 		}
 
 		/// <summary>
-		/// Sets either the cached value or the raw value
+		///     Sets either the cached value or the raw value
 		/// </summary>
 		/// <param name="property"></param>
 		/// <param name="newValue"></param>
 		protected virtual void SetValueOptimized(MMProperty property, Vector2 newValue)
 		{
 			if (_getterSetterInitialized)
-			{
 				SetVector2Delegate(_newValue);
-			}
 			else
-			{
 				SetPropertyValue(property, _newValue);
-			}
 		}
 	}
 }

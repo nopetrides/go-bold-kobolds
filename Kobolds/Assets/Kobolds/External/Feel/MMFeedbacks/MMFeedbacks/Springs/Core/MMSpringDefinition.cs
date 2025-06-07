@@ -1,5 +1,4 @@
 using System;
-using UnityEngine;
 
 namespace MoreMountains.Feedbacks
 {
@@ -7,11 +6,11 @@ namespace MoreMountains.Feedbacks
 	public abstract class MMSpringDefinition<T>
 	{
 		public abstract T CurrentValue { get; set; }
-		
+
 		public abstract T TargetValue { get; set; }
-		
+
 		public abstract T Velocity { get; set; }
-		
+
 		public abstract void UpdateSpringValue(float deltaTime);
 
 		public abstract void MoveToInstant(T newValue);
@@ -39,4 +38,3 @@ namespace MoreMountains.Feedbacks
 		public abstract void Finish();
 	}
 }
-

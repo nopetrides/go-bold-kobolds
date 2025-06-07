@@ -28,7 +28,7 @@ Shader "Hidden/Outlines/Fast Outline/Outline Instanced"
 
         HLSLINCLUDE
         #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
-        
+
         #pragma fragment frag
 
         #pragma multi_compile_instancing
@@ -37,12 +37,12 @@ Shader "Hidden/Outlines/Fast Outline/Outline Instanced"
         #if UNITY_PLATFORM_ANDROID || UNITY_PLATFORM_WEBGL || UNITY_PLATFORM_UWP
             #pragma target 3.5 DOTS_INSTANCING_ON
         #else
-            #pragma target 4.5 DOTS_INSTANCING_ON
+        #pragma target 4.5 DOTS_INSTANCING_ON
         #endif
 
         #pragma multi_compile _ SCALE_WITH_DISTANCE
         #pragma multi_compile _ OCCLUSION
-        
+
         #if defined(OCCLUSION)
         #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DeclareDepthTexture.hlsl"
         #endif
@@ -53,7 +53,7 @@ Shader "Hidden/Outlines/Fast Outline/Outline Instanced"
             UNITY_DEFINE_INSTANCED_PROP(half, _OutlineWidth)
             UNITY_DEFINE_INSTANCED_PROP(half, _MinimumOutlineWidth)
         UNITY_INSTANCING_BUFFER_END(InstancedProperties)
-        
+
         struct Attributes
         {
             float4 positionOS : POSITION;
@@ -61,7 +61,7 @@ Shader "Hidden/Outlines/Fast Outline/Outline Instanced"
             half3 normalOS : NORMAL;
             half4 color : COLOR;
             half2 bakedDirection: TEXCOORD7;
-            
+
             UNITY_VERTEX_INPUT_INSTANCE_ID
         };
 
@@ -75,7 +75,7 @@ Shader "Hidden/Outlines/Fast Outline/Outline Instanced"
         half4 frag(Varyings IN) : SV_Target
         {
             UNITY_SETUP_INSTANCE_ID(IN);
-            
+
             #if defined(OCCLUSION)
             float2 uv = IN.positionHCS.xy / _ScaledScreenParams.xy;
 
@@ -101,7 +101,7 @@ Shader "Hidden/Outlines/Fast Outline/Outline Instanced"
             Varyings vert(Attributes IN)
             {
                 Varyings OUT;
-            
+
                 UNITY_SETUP_INSTANCE_ID(IN);
                 UNITY_TRANSFER_INSTANCE_ID(IN, OUT);
 
@@ -133,7 +133,7 @@ Shader "Hidden/Outlines/Fast Outline/Outline Instanced"
             Varyings vert(Attributes IN)
             {
                 Varyings OUT;
-            
+
                 UNITY_SETUP_INSTANCE_ID(IN);
                 UNITY_TRANSFER_INSTANCE_ID(IN, OUT);
 
@@ -165,7 +165,7 @@ Shader "Hidden/Outlines/Fast Outline/Outline Instanced"
             Varyings vert(Attributes IN)
             {
                 Varyings OUT;
-            
+
                 UNITY_SETUP_INSTANCE_ID(IN);
                 UNITY_TRANSFER_INSTANCE_ID(IN, OUT);
 
@@ -197,7 +197,7 @@ Shader "Hidden/Outlines/Fast Outline/Outline Instanced"
             Varyings vert(Attributes IN)
             {
                 Varyings OUT;
-            
+
                 UNITY_SETUP_INSTANCE_ID(IN);
                 UNITY_TRANSFER_INSTANCE_ID(IN, OUT);
 
@@ -225,7 +225,7 @@ Shader "Hidden/Outlines/Fast Outline/Outline Instanced"
 
             HLSLPROGRAM
             #pragma vertex vert
-            
+
             Varyings vert(Attributes IN)
             {
                 Varyings OUT;
@@ -281,7 +281,7 @@ Shader "Hidden/Outlines/Fast Outline/Outline Instanced"
             Varyings vert(Attributes IN)
             {
                 Varyings OUT;
-            
+
                 UNITY_SETUP_INSTANCE_ID(IN);
                 UNITY_TRANSFER_INSTANCE_ID(IN, OUT);
 
@@ -318,7 +318,7 @@ Shader "Hidden/Outlines/Fast Outline/Outline Instanced"
             Varyings vert(Attributes IN)
             {
                 Varyings OUT;
-            
+
                 UNITY_SETUP_INSTANCE_ID(IN);
                 UNITY_TRANSFER_INSTANCE_ID(IN, OUT);
 
@@ -356,7 +356,8 @@ Shader "Hidden/Outlines/Fast Outline/Outline Instanced"
             float3 OctahedronToUnitVector(float2 octahedron)
             {
                 float3 normal = float3(octahedron, 1 - dot(1, abs(octahedron)));
-                if (normal.z < 0) {
+                if (normal.z < 0)
+                {
                     normal.xy = (1 - abs(normal.yx)) * (normal.xy >= 0 ? float2(1, 1) : float2(-1, -1));
                 }
                 return normalize(normal);
@@ -371,7 +372,7 @@ Shader "Hidden/Outlines/Fast Outline/Outline Instanced"
             Varyings vert(Attributes IN)
             {
                 Varyings OUT;
-            
+
                 UNITY_SETUP_INSTANCE_ID(IN);
                 UNITY_TRANSFER_INSTANCE_ID(IN, OUT);
 
@@ -410,7 +411,8 @@ Shader "Hidden/Outlines/Fast Outline/Outline Instanced"
             float3 OctahedronToUnitVector(float2 octahedron)
             {
                 float3 normal = float3(octahedron, 1 - dot(1, abs(octahedron)));
-                if (normal.z < 0) {
+                if (normal.z < 0)
+                {
                     normal.xy = (1 - abs(normal.yx)) * (normal.xy >= 0 ? float2(1, 1) : float2(-1, -1));
                 }
                 return normalize(normal);
@@ -435,15 +437,20 @@ Shader "Hidden/Outlines/Fast Outline/Outline Instanced"
                 float3 bitangentOS = normalize(cross(normalOS, tangentOS) * IN.tangentOS.w);
                 float3x3 tbn = float3x3(tangentOS, bitangentOS, normalOS);
                 float3 bakedDirection = TransformTBN(IN.bakedDirection, tbn);
-            
+
                 float4 positionHCS = TransformObjectToHClip(IN.positionOS.xyz);
-                float Set_OutlineWidth = positionHCS.w * UNITY_ACCESS_INSTANCED_PROP(InstancedProperties, _OutlineWidth);
-                Set_OutlineWidth = min(Set_OutlineWidth, UNITY_ACCESS_INSTANCED_PROP(InstancedProperties, _OutlineWidth));
+                float Set_OutlineWidth = positionHCS.w *
+                    UNITY_ACCESS_INSTANCED_PROP(InstancedProperties, _OutlineWidth);
+                Set_OutlineWidth = min(Set_OutlineWidth,
+                                                               UNITY_ACCESS_INSTANCED_PROP(
+                                                                   InstancedProperties, _OutlineWidth));
                 Set_OutlineWidth *= UNITY_ACCESS_INSTANCED_PROP(InstancedProperties, _OutlineWidth);
-                Set_OutlineWidth = min(Set_OutlineWidth, UNITY_ACCESS_INSTANCED_PROP(InstancedProperties, _OutlineWidth)) * 0.1;
+                Set_OutlineWidth = min(Set_OutlineWidth,
+                                                                UNITY_ACCESS_INSTANCED_PROP(
+                                                                    InstancedProperties, _OutlineWidth)) * 0.1;
 
                 IN.positionOS.xyz += bakedDirection * Set_OutlineWidth;
-            
+
                 OUT.positionHCS = TransformObjectToHClip(IN.positionOS.xyz);
 
                 return OUT;

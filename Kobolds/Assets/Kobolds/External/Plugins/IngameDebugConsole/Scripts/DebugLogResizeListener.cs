@@ -12,13 +12,13 @@ namespace IngameDebugConsole
 #pragma warning restore 0649
 
 		// This interface must be implemented in order to receive drag events
-		void IBeginDragHandler.OnBeginDrag( PointerEventData eventData )
+		void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)
 		{
 		}
 
-		void IDragHandler.OnDrag( PointerEventData eventData )
+		void IDragHandler.OnDrag(PointerEventData eventData)
 		{
-			debugManager.Resize( eventData );
+			debugManager.Resize(eventData);
 		}
 	}
 }

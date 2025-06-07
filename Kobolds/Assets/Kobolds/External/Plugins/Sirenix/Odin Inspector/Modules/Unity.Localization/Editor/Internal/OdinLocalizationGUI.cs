@@ -18,67 +18,6 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor.Internal
 	// TODO: update name
 	public static class OdinLocalizationGUI
 	{
-		public static GUIStyle RichLabelTextCenteredMultiLine
-		{
-			get
-			{
-				if (_richLabelTextCenteredMultiLine == null)
-				{
-					_richLabelTextCenteredMultiLine = new GUIStyle(SirenixGUIStyles.MultiLineCenteredLabel)
-					{
-						richText = true
-					};
-				}
-
-				return _richLabelTextCenteredMultiLine;
-			}
-		}
-
-		public static GUIStyle CardTitleWhite
-		{
-			get
-			{
-				if (_cardTitleWhite == null)
-				{
-					_cardTitleWhite = new GUIStyle(SirenixGUIStyles.MultiLineWhiteLabel)
-					{
-						fontSize = 12,
-						fontStyle = FontStyle.Bold
-					};
-				}
-
-				return _cardTitleWhite;
-			}
-		}
-
-		public static FancyColor Background => EditorGUIUtility.isProSkin ? Color.black : Color.white;
-
-		// TODO: LIGHT MODE
-		public static FancyColor MenuBackground => EditorGUIUtility.isProSkin ? DarkMenuBackground : LightMenuBackground;
-		public static FancyColor WindowBackground => EditorGUIUtility.isProSkin ? DarkWindowBackground : LightWindowBackground;
-		public static FancyColor Panel => EditorGUIUtility.isProSkin ? DarkPanel : LightPanel;
-		public static FancyColor PanelGap => EditorGUIUtility.isProSkin ? DarkPanelGap : LightPanelGap;
-
-		public static FancyColor Selected => EditorGUIUtility.isProSkin ? DarkSelected : LightSelected;
-
-		public static FancyColor TabsBackground => EditorGUIUtility.isProSkin ? DarkTabsBackground : LightTabsBackground;
-
-		public static FancyColor ColumnBackground => EditorGUIUtility.isProSkin ? DarkColumnBackground : LightColumnBackground;
-
-		public static FancyColor RowEvenBackground => EditorGUIUtility.isProSkin ? DarkRowEvenBackground : LightRowEvenBackground;
-		public static FancyColor RowEvenBackground2 => EditorGUIUtility.isProSkin ? DarkRowEvenBackground2 : LightRowEvenBackground2;
-		public static FancyColor RowOddBackground => EditorGUIUtility.isProSkin ? DarkRowOddBackground : LightRowOddBackground;
-		public static FancyColor RowOddBackground2 => EditorGUIUtility.isProSkin ? DarkRowOddBackground2 : LightRowOddBackground2;
-		public static FancyColor RowBorder => EditorGUIUtility.isProSkin ? DarkRowBorder : LightRowBorder;
-		public static FancyColor RowBorderHover => EditorGUIUtility.isProSkin ? DarkRowBorderHover : LightRowBorderHover;
-
-		public static FancyColor Tab => EditorGUIUtility.isProSkin ? DarkTab : LightTab;
-		public static FancyColor TabHover => EditorGUIUtility.isProSkin ? DarkTabHover : LightTabHover;
-		public static FancyColor TabSelected => EditorGUIUtility.isProSkin ? DarkTabSelected : LightTabSelected;
-
-		public static FancyColor Checkerboard => DarkCheckerboard;
-		public static FancyColor CheckerboardBorder => DarkCheckerboardBorder;
-
 		public static FancyColor DarkMenuBackground;
 
 		public static FancyColor DarkWindowBackground;
@@ -129,7 +68,7 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor.Internal
 		public static FancyColor DarkCheckerboard;
 		public static FancyColor DarkCheckerboardBorder;
 
-		private static GUIStyle DefaultTextStyle;
+		private static readonly GUIStyle DefaultTextStyle;
 
 		private static GUIStyle _richLabelTextCenteredMultiLine;
 		private static GUIStyle _cardTitleWhite;
@@ -192,7 +131,7 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor.Internal
 			DarkTabHover = new Color(0.277f, 0.277f, 0.277f, 1.0f);
 			DarkTabSelected = new Color(0.312f, 0.312f, 0.312f, 1.0f);
 
-			float scalar = 0.925f;
+			var scalar = 0.925f;
 			LightTab = new FancyColor(0.85f * scalar);
 			LightTabHover = new FancyColor(0.915f * scalar);
 			LightTabSelected = new FancyColor(0.95f * scalar);
@@ -208,6 +147,79 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor.Internal
 			LightMenuBackground = new FancyColor(0.84f);
 		}
 
+		public static GUIStyle RichLabelTextCenteredMultiLine
+		{
+			get
+			{
+				if (_richLabelTextCenteredMultiLine == null)
+					_richLabelTextCenteredMultiLine = new GUIStyle(SirenixGUIStyles.MultiLineCenteredLabel)
+					{
+						richText = true
+					};
+
+				return _richLabelTextCenteredMultiLine;
+			}
+		}
+
+		public static GUIStyle CardTitleWhite
+		{
+			get
+			{
+				if (_cardTitleWhite == null)
+					_cardTitleWhite = new GUIStyle(SirenixGUIStyles.MultiLineWhiteLabel)
+					{
+						fontSize = 12,
+						fontStyle = FontStyle.Bold
+					};
+
+				return _cardTitleWhite;
+			}
+		}
+
+		public static FancyColor Background => EditorGUIUtility.isProSkin ? Color.black : Color.white;
+
+		// TODO: LIGHT MODE
+		public static FancyColor MenuBackground =>
+			EditorGUIUtility.isProSkin ? DarkMenuBackground : LightMenuBackground;
+
+		public static FancyColor WindowBackground =>
+			EditorGUIUtility.isProSkin ? DarkWindowBackground : LightWindowBackground;
+
+		public static FancyColor Panel => EditorGUIUtility.isProSkin ? DarkPanel : LightPanel;
+		public static FancyColor PanelGap => EditorGUIUtility.isProSkin ? DarkPanelGap : LightPanelGap;
+
+		public static FancyColor Selected => EditorGUIUtility.isProSkin ? DarkSelected : LightSelected;
+
+		public static FancyColor TabsBackground =>
+			EditorGUIUtility.isProSkin ? DarkTabsBackground : LightTabsBackground;
+
+		public static FancyColor ColumnBackground =>
+			EditorGUIUtility.isProSkin ? DarkColumnBackground : LightColumnBackground;
+
+		public static FancyColor RowEvenBackground =>
+			EditorGUIUtility.isProSkin ? DarkRowEvenBackground : LightRowEvenBackground;
+
+		public static FancyColor RowEvenBackground2 =>
+			EditorGUIUtility.isProSkin ? DarkRowEvenBackground2 : LightRowEvenBackground2;
+
+		public static FancyColor RowOddBackground =>
+			EditorGUIUtility.isProSkin ? DarkRowOddBackground : LightRowOddBackground;
+
+		public static FancyColor RowOddBackground2 =>
+			EditorGUIUtility.isProSkin ? DarkRowOddBackground2 : LightRowOddBackground2;
+
+		public static FancyColor RowBorder => EditorGUIUtility.isProSkin ? DarkRowBorder : LightRowBorder;
+
+		public static FancyColor RowBorderHover =>
+			EditorGUIUtility.isProSkin ? DarkRowBorderHover : LightRowBorderHover;
+
+		public static FancyColor Tab => EditorGUIUtility.isProSkin ? DarkTab : LightTab;
+		public static FancyColor TabHover => EditorGUIUtility.isProSkin ? DarkTabHover : LightTabHover;
+		public static FancyColor TabSelected => EditorGUIUtility.isProSkin ? DarkTabSelected : LightTabSelected;
+
+		public static FancyColor Checkerboard => DarkCheckerboard;
+		public static FancyColor CheckerboardBorder => DarkCheckerboardBorder;
+
 		public static string TextField(Rect position, string text, out bool changed, int id)
 		{
 			if (id == 0)
@@ -217,34 +229,28 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor.Internal
 				return text;
 			}
 
-			Color lastCursorColor = GUI.skin.settings.cursorColor;
+			var lastCursorColor = GUI.skin.settings.cursorColor;
 
-			bool isMouseDown = Event.current.type == EventType.MouseDown;
+			var isMouseDown = Event.current.type == EventType.MouseDown;
 
-			if (isMouseDown)
-			{
-				GUI.skin.settings.cursorColor = Color.clear;
-			}
+			if (isMouseDown) GUI.skin.settings.cursorColor = Color.clear;
 
-			text = EditorGUI_Internals.DoTextField(id, position, text, DefaultTextStyle, null, out changed, false, true, false);
+			text = EditorGUI_Internals.DoTextField(
+				id, position, text, DefaultTextStyle, null, out changed, false, true, false);
 
-			if (isMouseDown)
-			{
-				GUI.skin.settings.cursorColor = lastCursorColor;
-			}
+			if (isMouseDown) GUI.skin.settings.cursorColor = lastCursorColor;
 
 			return text;
 		}
 
-		public static string TextFieldSyntaxHighlighted(Rect position, string text, string syntaxRichText, out bool changed, int id)
+		public static string TextFieldSyntaxHighlighted(
+			Rect position, string text, string syntaxRichText, out bool changed, int id)
 		{
-			if (string.IsNullOrEmpty(syntaxRichText))
-			{
-				return TextField(position, text, out changed, id);
-			}
+			if (string.IsNullOrEmpty(syntaxRichText)) return TextField(position, text, out changed, id);
 
 			GUIHelper.PushContentColor(Color.clear);
-			text = EditorGUI_Internals.DoTextField(id, position, text, SirenixGUIStyles.MultiLineCenteredLabel, null, out changed, false, true, false);
+			text = EditorGUI_Internals.DoTextField(
+				id, position, text, SirenixGUIStyles.MultiLineCenteredLabel, null, out changed, false, true, false);
 			GUIHelper.PopContentColor();
 
 			GUI.Label(position, syntaxRichText, RichLabelTextCenteredMultiLine);
@@ -254,11 +260,11 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor.Internal
 
 		public static bool ObjectPickerButton(Rect position)
 		{
-			bool isMouseOver = Event.current.IsMouseOver(position);
+			var isMouseOver = Event.current.IsMouseOver(position);
 
-			var c1 = EditorGUIUtility.isProSkin
-							? new Color(1, 1, 1, isMouseOver ? 0.8f : 0.3f)
-							: new Color(0, 0, 0, isMouseOver ? 0.8f : 0.3f);
+			var c1 = EditorGUIUtility.isProSkin ?
+				new Color(1, 1, 1, isMouseOver ? 0.8f : 0.3f) :
+				new Color(0, 0, 0, isMouseOver ? 0.8f : 0.3f);
 
 			SdfIcons.DrawIcon(position, SdfIconType.StopCircle, c1);
 
@@ -267,51 +273,42 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor.Internal
 
 		public static TEnum Tabs<TEnum>(Rect rect, TEnum value, float width) where TEnum : Enum
 		{
-			EnumTypeUtilities<TEnum>.EnumMember[] infos = EnumTypeUtilities<TEnum>.VisibleEnumMemberInfos;
+			var infos = EnumTypeUtilities<TEnum>.VisibleEnumMemberInfos;
 
 			for (var i = 0; i < infos.Length; i++)
 			{
-				Rect itemRect = rect.TakeFromLeft(width);
+				var itemRect = rect.TakeFromLeft(width);
 
-				bool isMouseOver = Event.current.IsMouseOver(itemRect);
-				bool isSelected = value.Equals(infos[i].Value);
-				bool isPressed = Event.current.OnMouseDown(itemRect, 0);
+				var isMouseOver = Event.current.IsMouseOver(itemRect);
+				var isSelected = value.Equals(infos[i].Value);
+				var isPressed = Event.current.OnMouseDown(itemRect, 0);
 
 				Color tabColor;
 
 				if (isSelected)
-				{
 					tabColor = TabSelected;
-				}
 				else if (isMouseOver)
-				{
 					tabColor = TabHover;
-				}
 				else
-				{
 					tabColor = Tab;
-				}
 
 				SirenixEditorGUI.DrawSolidRect(itemRect, tabColor);
 
-				Vector2 textSize = EditorStyles.label.CalcSize(GUIHelper.TempContent(infos[i].NiceName));
-				float iconSize = textSize.y;
-				float size = iconSize + 2.0f + textSize.x + 1.0f;
+				var textSize = EditorStyles.label.CalcSize(GUIHelper.TempContent(infos[i].NiceName));
+				var iconSize = textSize.y;
+				var size = iconSize + 2.0f + textSize.x + 1.0f;
 
 				if (size > itemRect.width)
 				{
-					if (iconSize > itemRect.width)
-					{
-						continue;
-					}
+					if (iconSize > itemRect.width) continue;
 
 					SdfIcons.DrawIcon(itemRect.AlignCenter(iconSize), infos[i].Icon);
 				}
 				else
 				{
-					Rect contentRect = itemRect.AlignCenter(size);
+					var contentRect = itemRect.AlignCenter(size);
 
-					Rect iconRect = contentRect.TakeFromLeft(iconSize).AlignMiddle(iconSize);
+					var iconRect = contentRect.TakeFromLeft(iconSize).AlignMiddle(iconSize);
 					SdfIcons.DrawIcon(iconRect, infos[i].Icon);
 
 					contentRect.TakeFromLeft(2);
@@ -319,40 +316,45 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor.Internal
 					GUI.Label(contentRect, infos[i].NiceName);
 				}
 
-				if (isPressed)
-				{
-					value = infos[i].Value;
-				}
+				if (isPressed) value = infos[i].Value;
 			}
 
 			return value;
 		}
 
-		public static bool OverlaidButton(Rect position, string text, SdfIconType icon = SdfIconType.None, GUIStyle labelStyle = null, bool invert = false)
+		public static bool OverlaidButton(
+			Rect position, string text, SdfIconType icon = SdfIconType.None, GUIStyle labelStyle = null,
+			bool invert = false)
 		{
 			const float ICON_SIZE = 18;
 			const float SPACE = 4;
 
-			bool isMouseOver = Event.current.IsMouseOver(position);
+			var isMouseOver = Event.current.IsMouseOver(position);
 
-			ref SirenixAnimationUtility.InterpolatedFloat t = ref SirenixAnimationUtility.GetTemporaryFloat(position, isMouseOver ? 1.0f : 0.0f);
+			ref var t = ref SirenixAnimationUtility.GetTemporaryFloat(position, isMouseOver ? 1.0f : 0.0f);
 
 			t.ChangeDestination(isMouseOver ? 1.0f : 0.0f);
 
 			t.Move(1.0f / 0.15f, Easing.OutQuad);
 
-			float value = t.GetValue();
-			float inverseValue = 1.0f - value;
+			var value = t.GetValue();
+			var inverseValue = 1.0f - value;
 
 			if (invert)
 			{
-				SirenixEditorGUI.DrawRoundRect(position, new Color(0, 0, 0, 0.2f * inverseValue), 5.0f, new Color(0, 0, 0, 0.05f * inverseValue), 1);
-				SirenixEditorGUI.DrawRoundRect(position, new Color(0, 0, 0, 0.4f * value), 5.0f, new Color(1.0f, 1.0f, 1.0f, 0.05f * value), 1);
+				SirenixEditorGUI.DrawRoundRect(
+					position, new Color(0, 0, 0, 0.2f * inverseValue), 5.0f, new Color(0, 0, 0, 0.05f * inverseValue),
+					1);
+				SirenixEditorGUI.DrawRoundRect(
+					position, new Color(0, 0, 0, 0.4f * value), 5.0f, new Color(1.0f, 1.0f, 1.0f, 0.05f * value), 1);
 			}
 			else
 			{
-				SirenixEditorGUI.DrawRoundRect(position, new Color(1, 1, 1, 0.2f * inverseValue), 5.0f, new Color(0, 0, 0, 0.05f * inverseValue), 1);
-				SirenixEditorGUI.DrawRoundRect(position, new Color(1, 1, 1, 0.4f * value), 5.0f, new Color(1.0f, 1.0f, 1.0f, 0.05f * value), 1);
+				SirenixEditorGUI.DrawRoundRect(
+					position, new Color(1, 1, 1, 0.2f * inverseValue), 5.0f, new Color(0, 0, 0, 0.05f * inverseValue),
+					1);
+				SirenixEditorGUI.DrawRoundRect(
+					position, new Color(1, 1, 1, 0.4f * value), 5.0f, new Color(1.0f, 1.0f, 1.0f, 0.05f * value), 1);
 			}
 
 			labelStyle = labelStyle ?? SirenixGUIStyles.WhiteLabelCentered;
@@ -363,9 +365,9 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor.Internal
 			}
 			else
 			{
-				float textWidth = SirenixGUIStyles.WhiteLabelCentered.CalcWidth(text);
+				var textWidth = SirenixGUIStyles.WhiteLabelCentered.CalcWidth(text);
 
-				Rect contentPosition = position.AlignCenter(ICON_SIZE + SPACE + textWidth);
+				var contentPosition = position.AlignCenter(ICON_SIZE + SPACE + textWidth);
 
 				SdfIcons.DrawIcon(contentPosition.AlignLeft(ICON_SIZE), icon, Color.white);
 
@@ -379,22 +381,15 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor.Internal
 		{
 			var isRemoved = false;
 
-			if (isFirst)
-			{
-				EditorGUI.DrawRect(GUILayoutUtility.GetRect(0, 1), new FancyColor(0.06603771f));
-			}
+			if (isFirst) EditorGUI.DrawRect(GUILayoutUtility.GetRect(0, 1), new FancyColor(0.06603771f));
 
-			Vector2 padding = new Vector2(4, 4);
-			Rect rect = GUILayoutUtility.GetRect(0, 24);
+			var padding = new Vector2(4, 4);
+			var rect = GUILayoutUtility.GetRect(0, 24);
 
 			if (Event.current.IsMouseOver(rect))
-			{
 				EditorGUI.DrawRect(rect, new FancyColor(0.2784314f));
-			}
 			else
-			{
 				EditorGUI.DrawRect(rect, new FancyColor(0.2431373f));
-			}
 
 
 			EditorGUI.DrawRect(GUILayoutUtility.GetRect(0, 1), new FancyColor(0.06603771f));
@@ -402,7 +397,8 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor.Internal
 			var iconWidth = 16.0f;
 			var iconPadding = new Vector2(2, 2);
 
-			SdfIcons.DrawIcon(rect.TakeFromLeft(iconWidth).Padding(iconPadding.x, iconPadding.y), SdfIconType.GripVertical);
+			SdfIcons.DrawIcon(
+				rect.TakeFromLeft(iconWidth).Padding(iconPadding.x, iconPadding.y), SdfIconType.GripVertical);
 
 			rect = rect.Padding(padding.x, 0);
 
@@ -415,10 +411,7 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor.Internal
 
 			SdfIcons.DrawIcon(removeRect, SdfIconType.X);
 
-			if (GUI.Button(removeRect, GUIContent.none, GUIStyle.none))
-			{
-				isRemoved = true;
-			}
+			if (GUI.Button(removeRect, GUIContent.none, GUIStyle.none)) isRemoved = true;
 
 			return isRemoved;
 		}

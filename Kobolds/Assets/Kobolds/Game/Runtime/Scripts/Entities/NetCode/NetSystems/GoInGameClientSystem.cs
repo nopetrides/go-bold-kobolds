@@ -1,6 +1,7 @@
 using Kobolds.NetComponents;
 using Kobolds.Rpc;
 using Unity.Burst;
+using Unity.Collections;
 using Unity.Entities;
 using Unity.NetCode;
 using UnityEngine;
@@ -8,10 +9,10 @@ using UnityEngine;
 namespace Kobolds.NetSystems
 {
 	/// <summary>
-	/// System that runs only on the client
+	///     System that runs only on the client
 	/// </summary>
 	[WorldSystemFilter(WorldSystemFilterFlags.ClientSimulation)]
-	partial struct GoInGameClientSystem : ISystem
+	internal partial struct GoInGameClientSystem : ISystem
 	{
 		[BurstCompile]
 		public void OnCreate(ref SystemState state)
@@ -30,23 +31,24 @@ namespace Kobolds.NetSystems
 		private void CheckInGame(ref SystemState state)
 		{
 			// Buffer for the entity so we can execute commands on it when safe
-			EntityCommandBuffer entityCommandBuffer = new EntityCommandBuffer(Unity.Collections.Allocator.Temp);
-			
+			var entityCommandBuffer = new EntityCommandBuffer(Allocator.Temp);
+
 			// Tuple from system api query
-			foreach ((RefRO<NetworkId> networkId, Entity entity)
+			foreach (var (networkId, entity)
 					in SystemAPI.Query<RefRO<NetworkId>>().WithNone<NetworkStreamInGame>().WithEntityAccess())
 			{
 				// Buffer the add component to entity action
 				entityCommandBuffer.AddComponent<NetworkStreamInGame>(entity);
-				
-				Debug.Log($"<color=cyan>[GoInGameClientSystem] Sending client as InGame with NetworkId {networkId.ValueRO.Value}");
+
+				Debug.Log(
+					$"<color=cyan>[GoInGameClientSystem] Sending client as InGame with NetworkId {networkId.ValueRO.Value}");
 
 				// Create an entity for the rpc, send it to the server
-				Entity rpcEntity = entityCommandBuffer.CreateEntity();
+				var rpcEntity = entityCommandBuffer.CreateEntity();
 				entityCommandBuffer.AddComponent(rpcEntity, new GoInGameRequestRpc());
 				entityCommandBuffer.AddComponent(rpcEntity, new SendRpcCommandRequest());
 			}
-			
+
 			// Tell the manager to execute the command buffer
 			entityCommandBuffer.Playback(state.EntityManager);
 		}
@@ -54,7 +56,6 @@ namespace Kobolds.NetSystems
 		[BurstCompile]
 		public void OnDestroy(ref SystemState state)
 		{
-
 		}
 	}
 }

@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 #if MM_UI
 using UnityEngine.UI;
@@ -8,39 +7,43 @@ using UnityEngine.UI;
 namespace MoreMountains.Tools
 {
 	/// <summary>
-	/// A test object to store data to test the MMSaveLoadManager class
+	///     A test object to store data to test the MMSaveLoadManager class
 	/// </summary>
-	[System.Serializable]
+	[Serializable]
 	public class MMSaveLoadTestObject
 	{
 		public string SavedText;
 	}
 
 	/// <summary>
-	/// A simple class used in the MMSaveLoadTestScene to test the MMSaveLoadManager class
+	///     A simple class used in the MMSaveLoadTestScene to test the MMSaveLoadManager class
 	/// </summary>
 	public class MMSaveLoadTester : MonoBehaviour
 	{
 		[Header("Bindings")]
-		#if MM_UI
+#if MM_UI
 		/// the text to save
 		[Tooltip("the text to save")]
 		public InputField TargetInputField;
-		#endif
+#endif
 
 		[Header("Save settings")]
 		/// the chosen save method (json, encrypted json, binary, encrypted binary)
 		[Tooltip("the chosen save method (json, encrypted json, binary, encrypted binary)")]
 		public MMSaveLoadManagerMethods SaveLoadMethod = MMSaveLoadManagerMethods.Binary;
+
 		/// the name of the file to save
 		[Tooltip("the name of the file to save")]
 		public string FileName = "TestObject";
+
 		/// the name of the destination folder
 		[Tooltip("the name of the destination folder")]
 		public string FolderName = "MMTest/";
+
 		/// the extension to use
 		[Tooltip("the extension to use")]
 		public string SaveFileExtension = ".testObject";
+
 		/// the key to use to encrypt the file (if needed)
 		[Tooltip("the key to use to encrypt the file (if needed)")]
 		public string EncryptionKey = "ThisIsTheKey";
@@ -48,9 +51,11 @@ namespace MoreMountains.Tools
 		/// Test button
 		[MMInspectorButton("Save")]
 		public bool TestSaveButton;
+
 		/// Test button
 		[MMInspectorButton("Load")]
 		public bool TestLoadButton;
+
 		/// Test button
 		[MMInspectorButton("Reset")]
 		public bool TestResetButton;
@@ -58,32 +63,7 @@ namespace MoreMountains.Tools
 		protected IMMSaveLoadManagerMethod _saveLoadManagerMethod;
 
 		/// <summary>
-		/// Saves the contents of the TestObject into a file
-		/// </summary>
-		public virtual void Save()
-		{
-			InitializeSaveLoadMethod();
-			MMSaveLoadTestObject testObject = new MMSaveLoadTestObject();
-			#if MM_UI
-			testObject.SavedText = TargetInputField.text;
-			#endif
-			MMSaveLoadManager.Save(testObject, FileName+SaveFileExtension, FolderName);
-		}
-
-		/// <summary>
-		/// Loads the saved data
-		/// </summary>
-		public virtual void Load()
-		{
-			InitializeSaveLoadMethod();
-			MMSaveLoadTestObject testObject = (MMSaveLoadTestObject)MMSaveLoadManager.Load(typeof(MMSaveLoadTestObject), FileName + SaveFileExtension, FolderName);
-			#if MM_UI
-			TargetInputField.text = testObject.SavedText;
-			#endif
-		}
-
-		/// <summary>
-		/// Resets all saves by deleting the whole folder
+		///     Resets all saves by deleting the whole folder
 		/// </summary>
 		protected virtual void Reset()
 		{
@@ -91,11 +71,37 @@ namespace MoreMountains.Tools
 		}
 
 		/// <summary>
-		/// Creates a new MMSaveLoadManagerMethod and passes it to the MMSaveLoadManager
+		///     Saves the contents of the TestObject into a file
+		/// </summary>
+		public virtual void Save()
+		{
+			InitializeSaveLoadMethod();
+			var testObject = new MMSaveLoadTestObject();
+#if MM_UI
+			testObject.SavedText = TargetInputField.text;
+#endif
+			MMSaveLoadManager.Save(testObject, FileName + SaveFileExtension, FolderName);
+		}
+
+		/// <summary>
+		///     Loads the saved data
+		/// </summary>
+		public virtual void Load()
+		{
+			InitializeSaveLoadMethod();
+			var testObject = (MMSaveLoadTestObject) MMSaveLoadManager.Load(
+				typeof(MMSaveLoadTestObject), FileName + SaveFileExtension, FolderName);
+#if MM_UI
+			TargetInputField.text = testObject.SavedText;
+#endif
+		}
+
+		/// <summary>
+		///     Creates a new MMSaveLoadManagerMethod and passes it to the MMSaveLoadManager
 		/// </summary>
 		protected virtual void InitializeSaveLoadMethod()
 		{
-			switch(SaveLoadMethod)
+			switch (SaveLoadMethod)
 			{
 				case MMSaveLoadManagerMethods.Binary:
 					_saveLoadManagerMethod = new MMSaveLoadManagerMethodBinary();
@@ -112,6 +118,7 @@ namespace MoreMountains.Tools
 					(_saveLoadManagerMethod as MMSaveLoadManagerEncrypter).Key = EncryptionKey;
 					break;
 			}
+
 			MMSaveLoadManager.SaveLoadMethod = _saveLoadManagerMethod;
 		}
 	}

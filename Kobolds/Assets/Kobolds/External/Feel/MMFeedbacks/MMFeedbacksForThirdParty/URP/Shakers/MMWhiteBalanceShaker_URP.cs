@@ -1,21 +1,20 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using MoreMountains.Feedbacks;
+using MoreMountains.Tools;
 using UnityEngine;
 using UnityEngine.Rendering;
 #if MM_URP
 using UnityEngine.Rendering.Universal;
 #endif
-using MoreMountains.Feedbacks;
-using MoreMountains.Tools;
 
 namespace MoreMountains.FeedbacksForThirdParty
 {
 	/// <summary>
-	/// Add this class to a Camera with a white balance post processing and it'll be able to "shake" its values by getting events
+	///     Add this class to a Camera with a white balance post processing and it'll be able to "shake" its values by getting
+	///     events
 	/// </summary>
-	#if MM_URP
+#if MM_URP
 	[RequireComponent(typeof(Volume))]
-	#endif
+#endif
 	[AddComponentMenu("More Mountains/Feedbacks/Shakers/PostProcessing/MM White Balance Shaker URP")]
 	public class MMWhiteBalanceShaker_URP : MMShaker
 	{
@@ -26,11 +25,13 @@ namespace MoreMountains.FeedbacksForThirdParty
 		[MMInspectorGroup("Temperature", true, 55)]
 		/// the curve used to animate the temperature value on
 		[Tooltip("the curve used to animate the temperature value on")]
-		public AnimationCurve ShakeTemperature = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+		public AnimationCurve ShakeTemperature = new(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+
 		/// the value to remap the curve's 0 to
 		[Tooltip("the value to remap the curve's 0 to")]
 		[Range(-100f, 100f)]
-		public float RemapTemperatureZero = 0f;
+		public float RemapTemperatureZero;
+
 		/// the value to remap the curve's 1 to
 		[Tooltip("the value to remap the curve's 1 to")]
 		[Range(-100f, 100f)]
@@ -39,17 +40,19 @@ namespace MoreMountains.FeedbacksForThirdParty
 		[MMInspectorGroup("Tint", true, 56)]
 		/// the curve used to animate the tint value on
 		[Tooltip("the curve used to animate the tint value on")]
-		public AnimationCurve ShakeTint = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+		public AnimationCurve ShakeTint = new(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+
 		/// the value to remap the curve's 0 to
 		[Tooltip("the value to remap the curve's 0 to")]
 		[Range(-100f, 100f)]
-		public float RemapTintZero = 0f;
+		public float RemapTintZero;
+
 		/// the value to remap the curve's 1 to
 		[Tooltip("the value to remap the curve's 1 to")]
 		[Range(-100f, 100f)]
 		public float RemapTintOne = 100f;
 
-		#if MM_URP
+#if MM_URP
 		protected Volume _volume;
 		protected WhiteBalance _whiteBalance;
 		protected float _initialTemperature;
@@ -64,28 +67,29 @@ namespace MoreMountains.FeedbacksForThirdParty
 		protected float _originalRemapTintOne;
 
 		/// <summary>
-		/// On init we initialize our values
+		///     On init we initialize our values
 		/// </summary>
 		protected override void Initialization()
 		{
 			base.Initialization();
-			_volume = this.gameObject.GetComponent<Volume>();
+			_volume = gameObject.GetComponent<Volume>();
 			_volume.profile.TryGet(out _whiteBalance);
 		}
 
 		/// <summary>
-		/// Shakes values over time
+		///     Shakes values over time
 		/// </summary>
 		protected override void Shake()
 		{
-			float newTemperature = ShakeFloat(ShakeTemperature, RemapTemperatureZero, RemapTemperatureOne, RelativeValues, _initialTemperature);
+			var newTemperature = ShakeFloat(
+				ShakeTemperature, RemapTemperatureZero, RemapTemperatureOne, RelativeValues, _initialTemperature);
 			_whiteBalance.temperature.Override(newTemperature);
-			float newTint = ShakeFloat(ShakeTint, RemapTintZero, RemapTintOne, RelativeValues, _initialTint);
+			var newTint = ShakeFloat(ShakeTint, RemapTintZero, RemapTintOne, RelativeValues, _initialTint);
 			_whiteBalance.tint.Override(newTint);
 		}
 
 		/// <summary>
-		/// Collects initial values on the target
+		///     Collects initial values on the target
 		/// </summary>
 		protected override void GrabInitialValues()
 		{
@@ -94,7 +98,7 @@ namespace MoreMountains.FeedbacksForThirdParty
 		}
 
 		/// <summary>
-		/// When we get the appropriate event, we trigger a shake
+		///     When we get the appropriate event, we trigger a shake
 		/// </summary>
 		/// <param name="temperature"></param>
 		/// <param name="duration"></param>
@@ -102,16 +106,16 @@ namespace MoreMountains.FeedbacksForThirdParty
 		/// <param name="relativeValues"></param>
 		/// <param name="attenuation"></param>
 		/// <param name="channel"></param>
-		public virtual void OnWhiteBalanceShakeEvent(AnimationCurve temperature, float duration, float remapTemperatureMin, float remapTemperatureMax,
+		public virtual void OnWhiteBalanceShakeEvent(
+			AnimationCurve temperature, float duration, float remapTemperatureMin, float remapTemperatureMax,
 			AnimationCurve tint, float remapTintMin, float remapTintMax, bool relativeValues = false,
-			float attenuation = 1.0f, MMChannelData channelData = null, bool resetShakerValuesAfterShake = true, bool resetTargetValuesAfterShake = true, 
-			bool forwardDirection = true, TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false, bool restore = false)
+			float attenuation = 1.0f, MMChannelData channelData = null, bool resetShakerValuesAfterShake = true,
+			bool resetTargetValuesAfterShake = true,
+			bool forwardDirection = true, TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false,
+			bool restore = false)
 		{
-			if (!CheckEventAllowed(channelData) || (!Interruptible && Shaking))
-			{
-				return;
-			}
-	            
+			if (!CheckEventAllowed(channelData) || (!Interruptible && Shaking)) return;
+
 			if (stop)
 			{
 				Stop();
@@ -123,7 +127,7 @@ namespace MoreMountains.FeedbacksForThirdParty
 				ResetTargetValues();
 				return;
 			}
-	            
+
 			_resetShakerValuesAfterShake = resetShakerValuesAfterShake;
 			_resetTargetValuesAfterShake = resetTargetValuesAfterShake;
 
@@ -157,7 +161,7 @@ namespace MoreMountains.FeedbacksForThirdParty
 		}
 
 		/// <summary>
-		/// Resets the target's values
+		///     Resets the target's values
 		/// </summary>
 		protected override void ResetTargetValues()
 		{
@@ -167,7 +171,7 @@ namespace MoreMountains.FeedbacksForThirdParty
 		}
 
 		/// <summary>
-		/// Resets the shaker's values
+		///     Resets the shaker's values
 		/// </summary>
 		protected override void ResetShakerValues()
 		{
@@ -183,7 +187,7 @@ namespace MoreMountains.FeedbacksForThirdParty
 		}
 
 		/// <summary>
-		/// Starts listening for events
+		///     Starts listening for events
 		/// </summary>
 		public override void StartListening()
 		{
@@ -192,39 +196,60 @@ namespace MoreMountains.FeedbacksForThirdParty
 		}
 
 		/// <summary>
-		/// Stops listening for events
+		///     Stops listening for events
 		/// </summary>
 		public override void StopListening()
 		{
 			base.StopListening();
 			MMWhiteBalanceShakeEvent_URP.Unregister(OnWhiteBalanceShakeEvent);
 		}
-		#endif
+#endif
 	}
 
 	/// <summary>
-	/// An event used to trigger vignette shakes
+	///     An event used to trigger vignette shakes
 	/// </summary>
 	public struct MMWhiteBalanceShakeEvent_URP
 	{
-		static private event Delegate OnEvent;
-		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)] private static void RuntimeInitialization() { OnEvent = null; }
-		static public void Register(Delegate callback) { OnEvent += callback; }
-		static public void Unregister(Delegate callback) { OnEvent -= callback; }
+		private static event Delegate OnEvent;
 
-		public delegate void Delegate(AnimationCurve temperature, float duration, float remapTemperatureMin, float remapTemperatureMax,
-			AnimationCurve tint, float remapTintMin, float remapTintMax, bool relativeValues = false,
-			float attenuation = 1.0f, MMChannelData channelData = null, bool resetShakerValuesAfterShake = true, bool resetTargetValuesAfterShake = true, 
-			bool forwardDirection = true, TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false, bool restore = false);
-
-		static public void Trigger(AnimationCurve temperature, float duration, float remapTemperatureMin, float remapTemperatureMax,
-			AnimationCurve tint, float remapTintMin, float remapTintMax, bool relativeValues = false,
-			float attenuation = 1.0f, MMChannelData channelData = null, bool resetShakerValuesAfterShake = true, bool resetTargetValuesAfterShake = true, 
-			bool forwardDirection = true, TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false, bool restore = false)
+		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+		private static void RuntimeInitialization()
 		{
-			OnEvent?.Invoke(temperature, duration, remapTemperatureMin, remapTemperatureMax,
+			OnEvent = null;
+		}
+
+		public static void Register(Delegate callback)
+		{
+			OnEvent += callback;
+		}
+
+		public static void Unregister(Delegate callback)
+		{
+			OnEvent -= callback;
+		}
+
+		public delegate void Delegate(
+			AnimationCurve temperature, float duration, float remapTemperatureMin, float remapTemperatureMax,
+			AnimationCurve tint, float remapTintMin, float remapTintMax, bool relativeValues = false,
+			float attenuation = 1.0f, MMChannelData channelData = null, bool resetShakerValuesAfterShake = true,
+			bool resetTargetValuesAfterShake = true,
+			bool forwardDirection = true, TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false,
+			bool restore = false);
+
+		public static void Trigger(
+			AnimationCurve temperature, float duration, float remapTemperatureMin, float remapTemperatureMax,
+			AnimationCurve tint, float remapTintMin, float remapTintMax, bool relativeValues = false,
+			float attenuation = 1.0f, MMChannelData channelData = null, bool resetShakerValuesAfterShake = true,
+			bool resetTargetValuesAfterShake = true,
+			bool forwardDirection = true, TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false,
+			bool restore = false)
+		{
+			OnEvent?.Invoke(
+				temperature, duration, remapTemperatureMin, remapTemperatureMax,
 				tint, remapTintMin, remapTintMax, relativeValues,
-				attenuation, channelData, resetShakerValuesAfterShake, resetTargetValuesAfterShake, forwardDirection, timescaleMode, stop, restore);
+				attenuation, channelData, resetShakerValuesAfterShake, resetTargetValuesAfterShake, forwardDirection,
+				timescaleMode, stop, restore);
 		}
 	}
 }

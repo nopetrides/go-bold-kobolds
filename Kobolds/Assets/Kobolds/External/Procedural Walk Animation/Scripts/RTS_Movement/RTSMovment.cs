@@ -1,54 +1,44 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Lolopupka
 {
-public class RTSMovment : MonoBehaviour
-{
+	public class RTSMovment : MonoBehaviour
+	{
+		[SerializeField] private float rotateSpeed;
+		[SerializeField] private float moveSpeed;
+		[SerializeField] private GameObject setDestinationEffect;
 
-    [SerializeField] private float rotateSpeed;
-    [SerializeField] private float moveSpeed;
-    [SerializeField] private GameObject setDestinationEffect;
 
-    private Vector3 targetPosition;
+		private bool IsMoving;
 
-    
-    bool IsMoving;
-    void Start()
-    {
-        
-    }
+		private Vector3 targetPosition;
 
-    void Update()
-    {
+		private void Start()
+		{
+		}
 
-        if (InputManager.Instance.IsMouseButtonDownThisFrame())
-        {
-            targetPosition = MouseWorld.GetPosition();
-            Instantiate(setDestinationEffect, targetPosition, Quaternion.identity);
+		private void Update()
+		{
+			if (InputManager.Instance.IsMouseButtonDownThisFrame())
+			{
+				targetPosition = MouseWorld.GetPosition();
+				Instantiate(setDestinationEffect, targetPosition, Quaternion.identity);
 
-            IsMoving = true;
-        }
+				IsMoving = true;
+			}
 
-        if (!IsMoving)
-        {
-            return;
-        }
+			if (!IsMoving) return;
 
-        Vector3 moveDirection = (targetPosition - transform.position).normalized;
+			var moveDirection = (targetPosition - transform.position).normalized;
 
-        transform.forward = Vector3.Lerp(transform.forward, new Vector3(moveDirection.x, 0, moveDirection.z), Time.deltaTime * rotateSpeed);
+			transform.forward = Vector3.Lerp(
+				transform.forward, new Vector3(moveDirection.x, 0, moveDirection.z), Time.deltaTime * rotateSpeed);
 
-        float stoppingDistance = .1f;
-        if (Vector3.Distance(transform.position, targetPosition) > stoppingDistance)
-        {
-            transform.position += moveDirection * Time.deltaTime * moveSpeed;
-        }
-        else
-        {
-            IsMoving = false;
-        }
-    }
-}
+			var stoppingDistance = .1f;
+			if (Vector3.Distance(transform.position, targetPosition) > stoppingDistance)
+				transform.position += moveDirection * Time.deltaTime * moveSpeed;
+			else
+				IsMoving = false;
+		}
+	}
 }

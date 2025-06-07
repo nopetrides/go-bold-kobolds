@@ -1,12 +1,10 @@
 ﻿using MoreMountains.Feedbacks;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace MoreMountains.Feel
 {
 	/// <summary>
-	/// A simple class used to pilot Feel's Blob demo character, who simply moves on a loop when its target key is pressed
+	///     A simple class used to pilot Feel's Blob demo character, who simply moves on a loop when its target key is pressed
 	/// </summary>
 	[AddComponentMenu("")]
 	public class Blob : MonoBehaviour
@@ -20,6 +18,7 @@ namespace MoreMountains.Feel
 		/// a feedback to call when moving
 		[Tooltip("a feedback to call when moving")]
 		public MMFeedbacks MoveFeedback;
+
 		/// a feedback to call when trying to move while in cooldown
 		[Tooltip("a feedback to call when trying to move while in cooldown")]
 		public MMFeedbacks DeniedFeedback;
@@ -27,7 +26,7 @@ namespace MoreMountains.Feel
 		protected float _lastMoveStartedAt = -100f;
 
 		/// <summary>
-		/// On Update we look for input
+		///     On Update we look for input
 		/// </summary>
 		protected virtual void Update()
 		{
@@ -35,18 +34,15 @@ namespace MoreMountains.Feel
 		}
 
 		/// <summary>
-		/// Detects input
+		///     Detects input
 		/// </summary>
 		protected virtual void HandleInput()
 		{
-			if (FeelDemosInputHelper.CheckMainActionInputPressedThisFrame())
-			{
-				Move();
-			}
+			if (FeelDemosInputHelper.CheckMainActionInputPressedThisFrame()) Move();
 		}
 
 		/// <summary>
-		/// Performs a move if possible, otherwise plays a denied feedback
+		///     Performs a move if possible, otherwise plays a denied feedback
 		/// </summary>
 		protected virtual void Move()
 		{

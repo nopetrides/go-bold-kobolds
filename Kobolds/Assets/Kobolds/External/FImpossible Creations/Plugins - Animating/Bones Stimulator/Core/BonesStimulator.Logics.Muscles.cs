@@ -2,140 +2,135 @@
 
 namespace FIMSpace.BonesStimulation
 {
-    public partial class BonesStimulator
-    {
+	public partial class BonesStimulator
+	{
+		public void UpdateMusclesLogics()
+		{
+			if (MovementMuscles > 0f)
+				UpdateMovementMusclesWith();
 
-        public void UpdateMusclesLogics()
-        {
-            if (MovementMuscles > 0f)
-                UpdateMovementMusclesWith();
-
-            if (RotationSpaceMuscles > 0f)
-                UpdateRotationSpaceMusclesWith();
-        }
-
-
-        public void UpdateMovementMusclesWith()
-        {
-            float mDelta = delta * MusclesSimulationSpeed;
-            bool motionInfl = MotionInfluence < 1f || InfluenceAxes != Vector3.one;
-
-            bool muscleColl = UseCollisions && MovementMusclesCollision;
-
-            Vector3 gravityPush = GravityEffectForce;
-            bool doGravity = false;
-
-            if (gravityPush != Vector3.zero)
-            {
-                doGravity = true;
-                gravityPush *= smoothDelta * 2f;
-            }
-
-            float lengthDiv = (float)Bones.Count - 1; if (lengthDiv <= 0) lengthDiv = 1f;
-            int index = 0;
-
-            Bone bone = Bones[0];
-            if (!muscleColl)
-            {
-                while (bone != null)
-                {
-                    if ( motionInfl ) bone.MotionMuscle.PositionMuscle.MotionInfluence(influenceOffset);
-                    if (doGravity)
-                    {
-                        float gravF = (float)index / lengthDiv;
-                        bone.MotionMuscle.PositionMuscle.Push(gravityPush * (1f + (gravF * gravF) * GravityHeavyness) );
-                    }
-
-                    bone.MotionMuscle.UpdateElasticPosition(mDelta);
-                    bone = bone.Child;
-                    index += 1;
-                }
-            }
-            else
-            {
-                while (bone != null)
-                {
-                    if ( motionInfl ) bone.MotionMuscle.PositionMuscle.MotionInfluence(influenceOffset);
-                    if (doGravity)
-                    {
-                        float gravF = (float)index / lengthDiv;
-                        bone.MotionMuscle.PositionMuscle.Push(gravityPush * (1f + (gravF * gravF) * GravityHeavyness));
-                    }
-
-                    bone.MotionMuscle.UpdateElasticPosition(mDelta);
-
-                    if (bone.EnableCollisions)
-                    {
-                        Vector3 musclePos = bone.MotionMuscle.ProceduralPosition;
-                        PushIfSegmentInsideCollider(bone, ref musclePos);
-                        bone.MotionMuscle.OverrideProceduralPosition(musclePos);
-                    }
-
-                    bone = bone.Child;
-                    index += 1;
-                }
-            }
+			if (RotationSpaceMuscles > 0f)
+				UpdateRotationSpaceMusclesWith();
+		}
 
 
-            bone = Bones[0];
-            while (bone != null)
-            {
-                bone.MotionMuscle.UpdateElasticRotation(MovementMuscles * GetEffectBlendWeight() * MusclesBlend.Evaluate(bone.Evaluation));
-                bone = bone.Child;
-            }
-        }
+		public void UpdateMovementMusclesWith()
+		{
+			var mDelta = delta * MusclesSimulationSpeed;
+			var motionInfl = MotionInfluence < 1f || InfluenceAxes != Vector3.one;
+
+			var muscleColl = UseCollisions && MovementMusclesCollision;
+
+			var gravityPush = GravityEffectForce;
+			var doGravity = false;
+
+			if (gravityPush != Vector3.zero)
+			{
+				doGravity = true;
+				gravityPush *= smoothDelta * 2f;
+			}
+
+			var lengthDiv = (float) Bones.Count - 1;
+			if (lengthDiv <= 0) lengthDiv = 1f;
+			var index = 0;
+
+			var bone = Bones[0];
+			if (!muscleColl)
+				while (bone != null)
+				{
+					if (motionInfl) bone.MotionMuscle.PositionMuscle.MotionInfluence(influenceOffset);
+					if (doGravity)
+					{
+						var gravF = index / lengthDiv;
+						bone.MotionMuscle.PositionMuscle.Push(gravityPush * (1f + gravF * gravF * GravityHeavyness));
+					}
+
+					bone.MotionMuscle.UpdateElasticPosition(mDelta);
+					bone = bone.Child;
+					index += 1;
+				}
+			else
+				while (bone != null)
+				{
+					if (motionInfl) bone.MotionMuscle.PositionMuscle.MotionInfluence(influenceOffset);
+					if (doGravity)
+					{
+						var gravF = index / lengthDiv;
+						bone.MotionMuscle.PositionMuscle.Push(gravityPush * (1f + gravF * gravF * GravityHeavyness));
+					}
+
+					bone.MotionMuscle.UpdateElasticPosition(mDelta);
+
+					if (bone.EnableCollisions)
+					{
+						var musclePos = bone.MotionMuscle.ProceduralPosition;
+						PushIfSegmentInsideCollider(bone, ref musclePos);
+						bone.MotionMuscle.OverrideProceduralPosition(musclePos);
+					}
+
+					bone = bone.Child;
+					index += 1;
+				}
 
 
-        public void UpdateRotationSpaceMusclesWith()
-        {
-            float mDelta = delta * MusclesSimulationSpeed;
-            float blend = RotationSpaceMuscles * GetEffectBlendWeight();
+			bone = Bones[0];
+			while (bone != null)
+			{
+				bone.MotionMuscle.UpdateElasticRotation(
+					MovementMuscles * GetEffectBlendWeight() * MusclesBlend.Evaluate(bone.Evaluation));
+				bone = bone.Child;
+			}
+		}
 
-            Bone bone = Bones[0];
 
-            if (UseEulerRotation)
-            {
-                while (bone != null)
-                {
-                    bone.EulerAnglesMuscle.Update(mDelta, bone.transform.eulerAngles);
+		public void UpdateRotationSpaceMusclesWith()
+		{
+			var mDelta = delta * MusclesSimulationSpeed;
+			var blend = RotationSpaceMuscles * GetEffectBlendWeight();
 
-                    float blendC = blend * MusclesBlend.Evaluate(bone.Evaluation);
+			var bone = Bones[0];
 
-                    Quaternion targetRot = Quaternion.Euler(bone.EulerAnglesMuscle.ProceduralEulerAngles);
-                    //float angle = Quaternion.Angle(bone.transform.rotation, targetRot);
+			if (UseEulerRotation)
+				while (bone != null)
+				{
+					bone.EulerAnglesMuscle.Update(mDelta, bone.transform.eulerAngles);
 
-                    //if (angle > 10f) UnityEngine.Debug.Log("Angle = " + angle);
-                    //if (angle > 45f)
-                    //{
+					var blendC = blend * MusclesBlend.Evaluate(bone.Evaluation);
 
-                    //}
-                    //else
-                    {
-                        if (blendC >= 1f) bone.transform.rotation = targetRot;
-                        else bone.transform.rotation = Quaternion.LerpUnclamped(bone.transform.rotation, targetRot, blendC);
-                    }
+					var targetRot = Quaternion.Euler(bone.EulerAnglesMuscle.ProceduralEulerAngles);
 
-                    bone = bone.Child;
-                }
-            }
-            else
-            {
-                while (bone != null)
-                {
-                    if (EnsureRotation)
-                        bone.RotationMuscle.UpdateEnsured(mDelta, bone.transform.rotation);
-                    else
-                        bone.RotationMuscle.Update(mDelta, bone.transform.rotation);
+					//float angle = Quaternion.Angle(bone.transform.rotation, targetRot);
+					//if (angle > 10f) UnityEngine.Debug.Log("Angle = " + angle);
+					//if (angle > 45f)
+					//{
+					//}
+					//else
+					{
+						if (blendC >= 1f) bone.transform.rotation = targetRot;
+						else
+							bone.transform.rotation = Quaternion.LerpUnclamped(
+								bone.transform.rotation, targetRot, blendC);
+					}
 
-                    float blendC = blend * MusclesBlend.Evaluate(bone.Evaluation);
+					bone = bone.Child;
+				}
+			else
+				while (bone != null)
+				{
+					if (EnsureRotation)
+						bone.RotationMuscle.UpdateEnsured(mDelta, bone.transform.rotation);
+					else
+						bone.RotationMuscle.Update(mDelta, bone.transform.rotation);
 
-                    if (blendC >= 1f) bone.transform.rotation = bone.RotationMuscle.ProceduralRotation;
-                    else bone.transform.rotation = Quaternion.LerpUnclamped(bone.transform.rotation, bone.RotationMuscle.ProceduralRotation, blendC);
+					var blendC = blend * MusclesBlend.Evaluate(bone.Evaluation);
 
-                    bone = bone.Child;
-                }
-            }
-        }
+					if (blendC >= 1f) bone.transform.rotation = bone.RotationMuscle.ProceduralRotation;
+					else
+						bone.transform.rotation = Quaternion.LerpUnclamped(
+							bone.transform.rotation, bone.RotationMuscle.ProceduralRotation, blendC);
 
-    }
+					bone = bone.Child;
+				}
+		}
+	}
 }

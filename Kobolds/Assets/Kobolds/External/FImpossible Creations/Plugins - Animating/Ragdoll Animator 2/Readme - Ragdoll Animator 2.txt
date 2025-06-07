@@ -1,7 +1,7 @@
 ﻿__________________________________________________________________________________________
 
 Package "Ragdoll Animator 2"
-Version 1.0.3.3
+Version 1.0.3.7
 
 Made by FImpossible Creations - Filip Moeglich
 http://www.fimpossiblecreations.pl
@@ -30,6 +30,26 @@ If you encounter something like spine jittery, try lowering muscles spring power
 
 __________________________________________________________________________________________
 Changelog:
+
+version 1.0.3.7
+- Possibility to use bones with no Collider, for example for shoulder bones to improve physical animation match.
+To use no Collider, under Construct bookmark select collider type 'Other' and left reference field empty.
+- Added 'Dont Destroy On Load Dummy' Extra Feature
+
+version 1.0.3.6
+- Now if component has chain with no bones, there will be no errors in console
+- When Ragdoll Animator is re-enabled, the rigidbodies collision detection mode is refreshed now
+
+version 1.0.3.5
+- Fixed collision event trigger, when applying rotation offset to the collider and using just one collider for the bone.
+- AddToUpdateLoop and similar methods are public now, so can be accessed by assembly definitions.
+- Fixed gui horizontal issue on Motion -> Limbs bookmark which could happen in exception situation
+- Dismemberement manager now has extra methods for calling restore on selective bones
+
+version 1.0.3.4
+- The 'Repose Base Transform on Falling' Extra Feature is now including new rotation computing options
+- New 'Fade on played animator' Extra Feature which allows to mask out ragdoll animator motion when certain animation clip/tagged clip plays in the Animator component
+Can be inherited to create cutstom extra feature which animates ragdoll properties when certain animation clip/tagged clips plays.
 
 version 1.0.3.3
 - Implemented 'myRagdoll.Handler.IsStandUpCoroutineRunning' property

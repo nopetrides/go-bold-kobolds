@@ -1,19 +1,20 @@
-﻿using UnityEngine;
+﻿using MoreMountains.Feedbacks;
+using MoreMountains.Tools;
+using UnityEngine;
 #if MM_POSTPROCESSING
 using UnityEngine.Rendering.PostProcessing;
 #endif
-using MoreMountains.Feedbacks;
-using MoreMountains.Tools;
 
 namespace MoreMountains.FeedbacksForThirdParty
 {
 	/// <summary>
-	/// Add this class to a Camera with a depth of field post processing and it'll be able to "shake" its values by getting events
+	///     Add this class to a Camera with a depth of field post processing and it'll be able to "shake" its values by getting
+	///     events
 	/// </summary>
 	[AddComponentMenu("More Mountains/Feedbacks/Shakers/PostProcessing/MM Depth Of Field Shaker")]
-	#if MM_POSTPROCESSING
+#if MM_POSTPROCESSING
 	[RequireComponent(typeof(PostProcessVolume))]
-	#endif
+#endif
 	public class MMDepthOfFieldShaker : MMShaker
 	{
 		/// whether or not to add to the initial value
@@ -22,10 +23,12 @@ namespace MoreMountains.FeedbacksForThirdParty
 		[MMInspectorGroup("Focus Distance", true, 49)]
 		/// the curve used to animate the focus distance value on
 		[Tooltip("the curve used to animate the focus distance value on")]
-		public AnimationCurve ShakeFocusDistance = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+		public AnimationCurve ShakeFocusDistance = new(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+
 		/// the value to remap the curve's 0 to
 		[Tooltip("the value to remap the curve's 0 to")]
-		public float RemapFocusDistanceZero = 0f;
+		public float RemapFocusDistanceZero;
+
 		/// the value to remap the curve's 1 to
 		[Tooltip("the value to remap the curve's 1 to")]
 		public float RemapFocusDistanceOne = 3f;
@@ -33,30 +36,34 @@ namespace MoreMountains.FeedbacksForThirdParty
 		[MMInspectorGroup("Aperture", true, 50)]
 		/// the curve used to animate the aperture value on
 		[Tooltip("the curve used to animate the aperture value on")]
-		public AnimationCurve ShakeAperture = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+		public AnimationCurve ShakeAperture = new(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+
 		/// the value to remap the curve's 0 to
 		[Tooltip("the value to remap the curve's 0 to")]
 		[Range(0.1f, 32f)]
-		public float RemapApertureZero = 0f;
+		public float RemapApertureZero;
+
 		/// the value to remap the curve's 1 to
 		[Tooltip("the value to remap the curve's 1 to")]
 		[Range(0.1f, 32f)]
-		public float RemapApertureOne = 0f;
+		public float RemapApertureOne;
 
 		[MMInspectorGroup("Focal Length", true, 51)]
 		/// the curve used to animate the focal length value on
 		[Tooltip("the curve used to animate the focal length value on")]
-		public AnimationCurve ShakeFocalLength = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+		public AnimationCurve ShakeFocalLength = new(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+
 		/// the value to remap the curve's 0 to
 		[Tooltip("the value to remap the curve's 0 to")]
 		[Range(0f, 300f)]
-		public float RemapFocalLengthZero = 0f;
+		public float RemapFocalLengthZero;
+
 		/// the value to remap the curve's 1 to
 		[Tooltip("the value to remap the curve's 1 to")]
 		[Range(0f, 300f)]
-		public float RemapFocalLengthOne = 0f;
-        
-		#if MM_POSTPROCESSING
+		public float RemapFocalLengthOne;
+
+#if MM_POSTPROCESSING
 		protected PostProcessVolume _volume;
 		protected DepthOfField _depthOfField;
 		protected float _initialFocusDistance;
@@ -75,32 +82,36 @@ namespace MoreMountains.FeedbacksForThirdParty
 		protected float _originalRemapFocalLengthOne;
 
 		/// <summary>
-		/// On init we initialize our values
+		///     On init we initialize our values
 		/// </summary>
 		protected override void Initialization()
 		{
 			base.Initialization();
-			_volume = this.gameObject.GetComponent<PostProcessVolume>();
+			_volume = gameObject.GetComponent<PostProcessVolume>();
 			_volume.profile.TryGetSettings(out _depthOfField);
 		}
 
 		/// <summary>
-		/// Shakes values over time
+		///     Shakes values over time
 		/// </summary>
 		protected override void Shake()
 		{
-			float newFocusDistance = ShakeFloat(ShakeFocusDistance, RemapFocusDistanceZero, RemapFocusDistanceOne, RelativeValues, _initialFocusDistance);
+			var newFocusDistance = ShakeFloat(
+				ShakeFocusDistance, RemapFocusDistanceZero, RemapFocusDistanceOne, RelativeValues,
+				_initialFocusDistance);
 			_depthOfField.focusDistance.Override(newFocusDistance);
 
-			float newAperture = ShakeFloat(ShakeAperture, RemapApertureZero, RemapApertureOne, RelativeValues, _initialAperture);
+			var newAperture = ShakeFloat(
+				ShakeAperture, RemapApertureZero, RemapApertureOne, RelativeValues, _initialAperture);
 			_depthOfField.aperture.Override(newAperture);
 
-			float newFocalLength = ShakeFloat(ShakeFocalLength, RemapFocalLengthZero, RemapFocalLengthOne, RelativeValues, _initialFocalLength);
+			var newFocalLength = ShakeFloat(
+				ShakeFocalLength, RemapFocalLengthZero, RemapFocalLengthOne, RelativeValues, _initialFocalLength);
 			_depthOfField.focalLength.Override(newFocalLength);
 		}
 
 		/// <summary>
-		/// When that shaker gets added, we initialize its shake duration
+		///     When that shaker gets added, we initialize its shake duration
 		/// </summary>
 		protected virtual void Reset()
 		{
@@ -108,7 +119,7 @@ namespace MoreMountains.FeedbacksForThirdParty
 		}
 
 		/// <summary>
-		/// Collects initial values on the target
+		///     Collects initial values on the target
 		/// </summary>
 		protected override void GrabInitialValues()
 		{
@@ -118,7 +129,7 @@ namespace MoreMountains.FeedbacksForThirdParty
 		}
 
 		/// <summary>
-		/// When we get the appropriate event, we trigger a shake
+		///     When we get the appropriate event, we trigger a shake
 		/// </summary>
 		/// <param name="intensity"></param>
 		/// <param name="duration"></param>
@@ -126,18 +137,18 @@ namespace MoreMountains.FeedbacksForThirdParty
 		/// <param name="relativeIntensity"></param>
 		/// <param name="feedbacksIntensity"></param>
 		/// <param name="channel"></param>
-		public virtual void OnDepthOfFieldShakeEvent(AnimationCurve focusDistance, float duration, float remapFocusDistanceMin, float remapFocusDistanceMax,
+		public virtual void OnDepthOfFieldShakeEvent(
+			AnimationCurve focusDistance, float duration, float remapFocusDistanceMin, float remapFocusDistanceMax,
 			AnimationCurve aperture, float remapApertureMin, float remapApertureMax,
 			AnimationCurve focalLength, float remapFocalLengthMin, float remapFocalLengthMax,
 			bool relativeValues = false,
-			float feedbacksIntensity = 1.0f, MMChannelData channelData = null, bool resetShakerValuesAfterShake = true, bool resetTargetValuesAfterShake = true, 
-			bool forwardDirection = true, TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false, bool restore = false)
+			float feedbacksIntensity = 1.0f, MMChannelData channelData = null, bool resetShakerValuesAfterShake = true,
+			bool resetTargetValuesAfterShake = true,
+			bool forwardDirection = true, TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false,
+			bool restore = false)
 		{
-			if (!CheckEventAllowed(channelData) || (!Interruptible && Shaking))
-			{
-				return;
-			}
-            
+			if (!CheckEventAllowed(channelData) || (!Interruptible && Shaking)) return;
+
 			if (stop)
 			{
 				Stop();
@@ -192,19 +203,19 @@ namespace MoreMountains.FeedbacksForThirdParty
 		}
 
 		/// <summary>
-		/// Resets the target's values
+		///     Resets the target's values
 		/// </summary>
 		protected override void ResetTargetValues()
 		{
 			base.ResetTargetValues();
-            
+
 			_depthOfField.focusDistance.Override(_initialFocusDistance);
 			_depthOfField.aperture.Override(_initialAperture);
 			_depthOfField.focalLength.Override(_initialFocalLength);
 		}
 
 		/// <summary>
-		/// Resets the shaker's values
+		///     Resets the shaker's values
 		/// </summary>
 		protected override void ResetShakerValues()
 		{
@@ -227,7 +238,7 @@ namespace MoreMountains.FeedbacksForThirdParty
 		}
 
 		/// <summary>
-		/// Starts listening for events
+		///     Starts listening for events
 		/// </summary>
 		public override void StartListening()
 		{
@@ -236,44 +247,65 @@ namespace MoreMountains.FeedbacksForThirdParty
 		}
 
 		/// <summary>
-		/// Stops listening for events
+		///     Stops listening for events
 		/// </summary>
 		public override void StopListening()
 		{
 			base.StopListening();
 			MMDepthOfFieldShakeEvent.Unregister(OnDepthOfFieldShakeEvent);
 		}
-		#endif
+#endif
 	}
 
 	/// <summary>
-	/// An event used to trigger vignette shakes
+	///     An event used to trigger vignette shakes
 	/// </summary>
 	public struct MMDepthOfFieldShakeEvent
 	{
-		static private event Delegate OnEvent;
-		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)] private static void RuntimeInitialization() { OnEvent = null; }
-		static public void Register(Delegate callback) { OnEvent += callback; }
-		static public void Unregister(Delegate callback) { OnEvent -= callback; }
+		private static event Delegate OnEvent;
 
-		public delegate void Delegate(AnimationCurve focusDistance, float duration, float remapFocusDistanceMin, float remapFocusDistanceMax,
+		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+		private static void RuntimeInitialization()
+		{
+			OnEvent = null;
+		}
+
+		public static void Register(Delegate callback)
+		{
+			OnEvent += callback;
+		}
+
+		public static void Unregister(Delegate callback)
+		{
+			OnEvent -= callback;
+		}
+
+		public delegate void Delegate(
+			AnimationCurve focusDistance, float duration, float remapFocusDistanceMin, float remapFocusDistanceMax,
 			AnimationCurve aperture, float remapApertureMin, float remapApertureMax,
 			AnimationCurve focalLength, float remapFocalLengthMin, float remapFocalLengthMax,
 			bool relativeValues = false,
-			float feedbacksIntensity = 1.0f, MMChannelData channelData = null, bool resetShakerValuesAfterShake = true, bool resetTargetValuesAfterShake = true, 
-			bool forwardDirection = true, TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false, bool restore = false);
+			float feedbacksIntensity = 1.0f, MMChannelData channelData = null, bool resetShakerValuesAfterShake = true,
+			bool resetTargetValuesAfterShake = true,
+			bool forwardDirection = true, TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false,
+			bool restore = false);
 
-		static public void Trigger(AnimationCurve focusDistance, float duration, float remapFocusDistanceMin, float remapFocusDistanceMax,
-			AnimationCurve aperture, float remapApertureMin, float remapApertureMax, 
+		public static void Trigger(
+			AnimationCurve focusDistance, float duration, float remapFocusDistanceMin, float remapFocusDistanceMax,
+			AnimationCurve aperture, float remapApertureMin, float remapApertureMax,
 			AnimationCurve focalLength, float remapFocalLengthMin, float remapFocalLengthMax,
 			bool relativeValues = false,
-			float feedbacksIntensity = 1.0f, MMChannelData channelData = null, bool resetShakerValuesAfterShake = true, bool resetTargetValuesAfterShake = true, 
-			bool forwardDirection = true, TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false, bool restore = false)
+			float feedbacksIntensity = 1.0f, MMChannelData channelData = null, bool resetShakerValuesAfterShake = true,
+			bool resetTargetValuesAfterShake = true,
+			bool forwardDirection = true, TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false,
+			bool restore = false)
 		{
-			OnEvent?.Invoke(focusDistance, duration, remapFocusDistanceMin, remapFocusDistanceMax, 
-				aperture, remapApertureMin, remapApertureMax, 
+			OnEvent?.Invoke(
+				focusDistance, duration, remapFocusDistanceMin, remapFocusDistanceMax,
+				aperture, remapApertureMin, remapApertureMax,
 				focalLength, remapFocalLengthMin, remapFocalLengthMax, relativeValues,
-				feedbacksIntensity, channelData, resetShakerValuesAfterShake, resetTargetValuesAfterShake, forwardDirection, timescaleMode, stop, restore);
+				feedbacksIntensity, channelData, resetShakerValuesAfterShake, resetTargetValuesAfterShake,
+				forwardDirection, timescaleMode, stop, restore);
 		}
 	}
 }

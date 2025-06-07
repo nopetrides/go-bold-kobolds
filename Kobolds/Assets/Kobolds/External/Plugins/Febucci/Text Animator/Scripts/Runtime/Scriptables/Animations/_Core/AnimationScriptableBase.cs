@@ -3,52 +3,59 @@ using UnityEngine;
 
 namespace Febucci.UI.Effects
 {
-    /// <summary>
-    /// Base class for animating letters in Text Animator
-    /// </summary>
-    public abstract class AnimationScriptableBase : ScriptableObject, ITagProvider
-    {
-        [SerializeField] string tagID;
-        public string TagID
-        {
-            get => tagID;
-            set => tagID = value; //TODO if playing, discard rebuild if already initialized
-        }
+	/// <summary>
+	///     Base class for animating letters in Text Animator
+	/// </summary>
+	public abstract class AnimationScriptableBase : ScriptableObject, ITagProvider
+	{
+		[SerializeField] private string tagID;
 
-        //--- INITIALIZATION ---
-        bool initialized = false;
-        public void InitializeOnce()
-        { 
-            if(initialized) return;
+		//--- INITIALIZATION ---
+		private bool initialized;
 
-            initialized = true;
+		private void OnEnable()
+		{
+			//resets for enter playmode settings
+			initialized = false;
+		}
 
-            OnInitialize();
-        }
+		public string TagID
+		{
+			get => tagID;
+			set => tagID = value; //TODO if playing, discard rebuild if already initialized
+		}
 
-        protected virtual void OnInitialize(){ }
+		public void InitializeOnce()
+		{
+			if (initialized) return;
 
-        void OnEnable()
-        {
-            //resets for enter playmode settings
-            initialized = false;
-        }
-        
-        //--- ABSTRACT / VIRTUAL METHODS ---+
+			initialized = true;
 
-        /// <summary>
-        /// Resets the effect context (base variables) for every region, before applying modifiers (if any) with <see cref="SetModifier"/>
-        /// </summary>
-        public abstract void ResetContext(TAnimCore animator);
-        
-        /// <summary>
-        /// Changes an effect' base variable based on the passed parameter.
-        /// </summary>
-        /// <param name="modifier"></param>
-        public virtual void SetModifier(ModifierInfo modifier) { }
-        public abstract float GetMaxDuration();
-        public abstract bool CanApplyEffectTo(CharacterData character, TAnimCore animator);
-        public abstract void ApplyEffectTo(ref CharacterData character, TAnimCore animator);
-    }
+			OnInitialize();
+		}
 
+		protected virtual void OnInitialize()
+		{
+		}
+
+		//--- ABSTRACT / VIRTUAL METHODS ---+
+
+		/// <summary>
+		///     Resets the effect context (base variables) for every region, before applying modifiers (if any) with
+		///     <see cref="SetModifier" />
+		/// </summary>
+		public abstract void ResetContext(TAnimCore animator);
+
+		/// <summary>
+		///     Changes an effect' base variable based on the passed parameter.
+		/// </summary>
+		/// <param name="modifier"></param>
+		public virtual void SetModifier(ModifierInfo modifier)
+		{
+		}
+
+		public abstract float GetMaxDuration();
+		public abstract bool CanApplyEffectTo(CharacterData character, TAnimCore animator);
+		public abstract void ApplyEffectTo(ref CharacterData character, TAnimCore animator);
+	}
 }

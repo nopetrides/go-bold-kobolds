@@ -2,13 +2,11 @@
 
 namespace IngameDebugConsole
 {
-	[AttributeUsage(AttributeTargets.Method, Inherited = false, AllowMultiple = false)]
+	[AttributeUsage(AttributeTargets.Method, Inherited = false)]
 	public class ConsoleCustomTypeParserAttribute : ConsoleAttribute
 	{
-		public readonly Type type;
 		public readonly string readableName;
-
-		public override int Order { get { return 0; } }
+		public readonly Type type;
 
 		public ConsoleCustomTypeParserAttribute(Type type, string readableName = null)
 		{
@@ -16,9 +14,14 @@ namespace IngameDebugConsole
 			this.readableName = readableName;
 		}
 
+		public override int Order => 0;
+
 		public override void Load()
 		{
-			DebugLogConsole.AddCustomParameterType(type, (DebugLogConsole.ParseFunction)Delegate.CreateDelegate(typeof(DebugLogConsole.ParseFunction), Method), readableName);
+			DebugLogConsole.AddCustomParameterType(
+				type,
+				(DebugLogConsole.ParseFunction) Delegate.CreateDelegate(typeof(DebugLogConsole.ParseFunction), Method),
+				readableName);
 		}
 	}
 }

@@ -16695,7 +16695,7 @@ MonoBehaviour:
   cycleLimit: 1
   SetTimingsManually: 0
   manualTimings: []
-  timigsOffset: 0.33
+  timingsOffset: 0.33
   velocityClamp: 3
   layerMask:
     serializedVersion: 2
@@ -22099,7 +22099,7 @@ MonoBehaviour:
   cycleLimit: 1
   SetTimingsManually: 0
   manualTimings: []
-  timigsOffset: 0.08
+  timingsOffset: 0.08
   velocityClamp: 3
   layerMask:
     serializedVersion: 2
@@ -45793,7 +45793,7 @@ MonoBehaviour:
   cycleLimit: 1
   SetTimingsManually: 0
   manualTimings: []
-  timigsOffset: 0.33
+  timingsOffset: 0.33
   velocityClamp: 3
   layerMask:
     serializedVersion: 2
@@ -85016,7 +85016,7 @@ MonoBehaviour:
   cycleLimit: 1
   SetTimingsManually: 0
   manualTimings: []
-  timigsOffset: 0.08
+  timingsOffset: 0.08
   velocityClamp: 5
   layerMask:
     serializedVersion: 2

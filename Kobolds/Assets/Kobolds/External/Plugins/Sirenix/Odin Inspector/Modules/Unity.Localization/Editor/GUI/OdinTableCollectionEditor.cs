@@ -9,7 +9,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using Sirenix.OdinInspector.Editor;
@@ -36,17 +35,18 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 		TableEntry
 	}
 
-	public abstract class OdinTableCollectionEditor<TCollection, TTable, TEntry> where TCollection : LocalizationTableCollection
-																										  where TTable : LocalizationTable
-																										  where TEntry : TableEntry
+	public abstract class OdinTableCollectionEditor<TCollection, TTable, TEntry>
+		where TCollection : LocalizationTableCollection
+		where TTable : LocalizationTable
+		where TEntry : TableEntry
 	{
-		public const int SELECTOR_ID = Int32.MinValue + 14085;
-		
+		public const int SELECTOR_ID = int.MinValue + 14085;
+
 		internal struct DragInfo
 		{
-			public static DragInfo None => new DragInfo {Index = -1};
+			public static DragInfo None => new() {Index = -1};
 
-			public bool IsNone => this.Index == -1;
+			public bool IsNone => Index == -1;
 
 			public int Index;
 		}
@@ -70,7 +70,7 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 		public Dictionary<Locale, OdinGUITable<TTable>> LocaleTableMap;
 
 		[HideInInspector]
-		public SearchField SearchField = new SearchField();
+		public SearchField SearchField = new();
 
 		[HideInInspector]
 		public OdinTableSelectionType SelectionType = OdinTableSelectionType.None;
@@ -120,74 +120,77 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 
 		private Action<LocalizationTableCollection, LocalizationTable> OnTableRemovedFromCollection;
 
-		private Undo.UndoRedoCallback OnUndoRedoPerformed;
+		private readonly Undo.UndoRedoCallback OnUndoRedoPerformed;
 
 		private float rightMenuWidth;
 
 		private OdinGUITable<TTable> sortedTable;
 
-		protected readonly List<LocalizationTable> LooseTables = new List<LocalizationTable>();
-		
-		public OdinTableCollectionEditor(TCollection collection, OdinMenuEditorWindow relatedWindow, OdinLocalizationEditorWindow.WindowState windowState)
-		{
-			this.Collection = collection;
-			this.WindowState = windowState;
+		protected readonly List<LocalizationTable> LooseTables = new();
 
-			this.GUITables = new OdinGUITableCollection<TTable>(this.Collection.Tables.Count);
+		public OdinTableCollectionEditor(
+			TCollection collection, OdinMenuEditorWindow relatedWindow,
+			OdinLocalizationEditorWindow.WindowState windowState)
+		{
+			Collection = collection;
+			WindowState = windowState;
+
+			GUITables = new OdinGUITableCollection<TTable>(Collection.Tables.Count);
 
 #if USING_WIDTH_NON_PERCENT
-			this.GUITables.AddKeyTable();
+			GUITables.AddKeyTable();
 #else
 			float averageWidthPercent = 1.0f / (this.Collection.Tables.Count + 1);
 
 			this.GUITables.AddKeyTable(averageWidthPercent);
 #endif
-			this.KeyTable = this.GUITables.Last();
+			KeyTable = GUITables.Last();
 
-			this.LocaleTableMap = new Dictionary<Locale, OdinGUITable<TTable>>(this.Collection.Tables.Count);
+			LocaleTableMap = new Dictionary<Locale, OdinGUITable<TTable>>(Collection.Tables.Count);
 
-			for (var i = 0; i < this.Collection.Tables.Count; i++)
+			for (var i = 0; i < Collection.Tables.Count; i++)
 			{
-				var tableAsset = (TTable) this.Collection.Tables[i].asset;
+				var tableAsset = (TTable) Collection.Tables[i].asset;
 
-				Locale tableLocale = LocalizationEditorSettings.GetLocale(tableAsset.LocaleIdentifier);
+				var tableLocale = LocalizationEditorSettings.GetLocale(tableAsset.LocaleIdentifier);
 
 				if (tableLocale == null)
 				{
-					Debug.LogWarning($"No locale found for {tableAsset.name} in {this.Collection.name}, searched for: {tableAsset.LocaleIdentifier}");
+					Debug.LogWarning(
+						$"No locale found for {tableAsset.name} in {Collection.name}, searched for: {tableAsset.LocaleIdentifier}");
 					continue;
 				}
 
 #if USING_WIDTH_NON_PERCENT
-				OdinGUITable<TTable> table = OdinGUITable<TTable>.CreateTable(tableAsset, tableLocale);
+				var table = OdinGUITable<TTable>.CreateTable(tableAsset, tableLocale);
 #else
 				OdinGUITable<TTable> table = OdinGUITable<TTable>.CreateTable(tableAsset, averageWidthPercent);
 #endif
 
-				this.GUITables.Add(table);
+				GUITables.Add(table);
 
-				this.LocaleTableMap[LocalizationEditorSettings.GetLocale(tableAsset.LocaleIdentifier)] = table;
+				LocaleTableMap[LocalizationEditorSettings.GetLocale(tableAsset.LocaleIdentifier)] = table;
 			}
 
-			this.SharedEntries = new OdinSharedEntryCollection(this.Collection);
+			SharedEntries = new OdinSharedEntryCollection(Collection);
 
 			//this.ControlIds = new Dictionary<object, int>(this.SharedEntries.Length + 64);
 
-			this.EntryScrollView = new OdinGUIScrollView(this.SharedEntries.Length + 64, adjustViewForVerticalScrollBar: false);
+			EntryScrollView = new OdinGUIScrollView(SharedEntries.Length + 64, adjustViewForVerticalScrollBar: false);
 
-			this.RelatedWindow = relatedWindow;
-			this.RelatedWindowId = this.RelatedWindow.GetInstanceID();
-			this.keyToRemove = null;
-			this.isForceDeleteKey = false;
+			RelatedWindow = relatedWindow;
+			RelatedWindowId = RelatedWindow.GetInstanceID();
+			keyToRemove = null;
+			isForceDeleteKey = false;
 
-			this.LooseTables.Clear();
-			LocalizationEditorSettings.FindLooseStringTablesUsingSharedTableData(this.Collection.SharedData, this.LooseTables);
-			this.rightMenuWidth = EditorPrefs.GetFloat("OdinTableCollectionEditor_RightMenuWidth", 300.0f);
+			LooseTables.Clear();
+			LocalizationEditorSettings.FindLooseStringTablesUsingSharedTableData(Collection.SharedData, LooseTables);
+			rightMenuWidth = EditorPrefs.GetFloat("OdinTableCollectionEditor_RightMenuWidth", 300.0f);
 
-			this.OnUndoRedoPerformed += () =>
+			OnUndoRedoPerformed += () =>
 			{
-				this.Collection.RefreshAddressables();
-				this.MenuItem.Name = this.Collection.SharedData.TableCollectionName;
+				Collection.RefreshAddressables();
+				MenuItem.Name = Collection.SharedData.TableCollectionName;
 			};
 		}
 
@@ -197,35 +200,27 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 
 		public void Initialize()
 		{
-			if (this.hasInitialized)
+			if (hasInitialized) return;
+
+			SharedEntryHeights = new Dictionary<long, float>(SharedEntries.Length + 128);
+
+			OnTableAddedToCollection += (collection, table) =>
 			{
-				return;
-			}
+				if (Collection != collection) return;
 
-			this.SharedEntryHeights = new Dictionary<long, float>(this.SharedEntries.Length + 128);
-
-			this.OnTableAddedToCollection += (collection, table) =>
-			{
-				if (this.Collection != collection)
-				{
-					return;
-				}
-
-				Locale locale = LocalizationEditorSettings.GetLocale(table.LocaleIdentifier);
+				var locale = LocalizationEditorSettings.GetLocale(table.LocaleIdentifier);
 
 				if (locale == null)
 				{
-					Debug.LogWarning($"No locale found for {table.name} in {collection.name}, searched for: {table.LocaleIdentifier}");
+					Debug.LogWarning(
+						$"No locale found for {table.name} in {collection.name}, searched for: {table.LocaleIdentifier}");
 					return;
 				}
 
-				if (this.LocaleTableMap.ContainsKey(locale))
-				{
-					return;
-				}
+				if (LocaleTableMap.ContainsKey(locale)) return;
 
 #if USING_WIDTH_NON_PERCENT
-				OdinGUITable<TTable> guiTable = OdinGUITable<TTable>.CreateTable((TTable) table, locale);
+				var guiTable = OdinGUITable<TTable>.CreateTable((TTable) table, locale);
 #else
 				float lastAveragePercent = 1.0f / this.GUITables.Count;
 
@@ -239,30 +234,28 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 				OdinGUITable<TTable> guiTable = OdinGUITable<TTable>.CreateTable((TTable) table, newAveragePercent);
 #endif
 
-				this.GUITables.Add(guiTable);
+				GUITables.Add(guiTable);
 
-				this.LocaleTableMap[locale] = guiTable;
+				LocaleTableMap[locale] = guiTable;
 
-				this.LooseTables.Clear();
-				LocalizationEditorSettings.FindLooseStringTablesUsingSharedTableData(this.Collection.SharedData, this.LooseTables);
+				LooseTables.Clear();
+				LocalizationEditorSettings.FindLooseStringTablesUsingSharedTableData(
+					Collection.SharedData, LooseTables);
 			};
 
-			this.OnTableRemovedFromCollection += (collection, table) =>
+			OnTableRemovedFromCollection += (collection, table) =>
 			{
-				if (this.Collection != collection)
-				{
-					return;
-				}
+				if (Collection != collection) return;
 
 #if !USING_WIDTH_NON_PERCENT
 				float lastAveragePercent = 1.0f / this.GUITables.Count;
 #endif
 
-				Locale locale = LocalizationEditorSettings.GetLocale(table.LocaleIdentifier);
+				var locale = LocalizationEditorSettings.GetLocale(table.LocaleIdentifier);
 
-				this.GUITables.Remove(this.LocaleTableMap[locale]);
+				GUITables.Remove(LocaleTableMap[locale]);
 
-				this.LocaleTableMap.Remove(locale);
+				LocaleTableMap.Remove(locale);
 
 #if !USING_WIDTH_NON_PERCENT
 				float newAveragePercent = 1.0f / this.GUITables.Count;
@@ -273,8 +266,9 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 				}
 #endif
 
-				this.LooseTables.Clear();
-				LocalizationEditorSettings.FindLooseStringTablesUsingSharedTableData(this.Collection.SharedData, this.LooseTables);
+				LooseTables.Clear();
+				LocalizationEditorSettings.FindLooseStringTablesUsingSharedTableData(
+					Collection.SharedData, LooseTables);
 			};
 
 #if false
@@ -333,117 +327,85 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 			};
 #endif
 
-			this.OnInitialize();
+			OnInitialize();
 
-			this.hasInitialized = true;
+			hasInitialized = true;
 		}
 
-		private bool needsToCheckForErrors = false;
+		private bool needsToCheckForErrors;
 
 		public void OnSelectInWindow()
 		{
-			this.needsToCheckForErrors = true;
+			needsToCheckForErrors = true;
 
-			this.Initialize();
+			Initialize();
 
-			this.AttachEvents();
+			AttachEvents();
 		}
 
 		private bool hasAttachedEvents;
 
 		public void AttachEvents()
 		{
-			if (this.hasAttachedEvents)
-			{
-				return;
-			}
+			if (hasAttachedEvents) return;
 
 			// this.SharedEntries.AttachEvents();
 
-			if (this.OnTableEntryModified != null)
-			{
-				LocalizationEditorSettings.EditorEvents.TableEntryModified += this.OnTableEntryModified;
-			}
+			if (OnTableEntryModified != null)
+				LocalizationEditorSettings.EditorEvents.TableEntryModified += OnTableEntryModified;
 
-			if (this.OnAssetTableEntryAdded != null)
-			{
-				LocalizationEditorSettings.EditorEvents.AssetTableEntryAdded += this.OnAssetTableEntryAdded;
-			}
+			if (OnAssetTableEntryAdded != null)
+				LocalizationEditorSettings.EditorEvents.AssetTableEntryAdded += OnAssetTableEntryAdded;
 
-			if (this.OnAssetTableEntryRemoved != null)
-			{
-				LocalizationEditorSettings.EditorEvents.AssetTableEntryRemoved += this.OnAssetTableEntryRemoved;
-			}
+			if (OnAssetTableEntryRemoved != null)
+				LocalizationEditorSettings.EditorEvents.AssetTableEntryRemoved += OnAssetTableEntryRemoved;
 
-			if (this.OnTableAddedToCollection != null)
-			{
-				LocalizationEditorSettings.EditorEvents.TableAddedToCollection += this.OnTableAddedToCollection;
-			}
+			if (OnTableAddedToCollection != null)
+				LocalizationEditorSettings.EditorEvents.TableAddedToCollection += OnTableAddedToCollection;
 
-			if (this.OnTableRemovedFromCollection != null)
-			{
-				LocalizationEditorSettings.EditorEvents.TableRemovedFromCollection += this.OnTableRemovedFromCollection;
-			}
+			if (OnTableRemovedFromCollection != null)
+				LocalizationEditorSettings.EditorEvents.TableRemovedFromCollection += OnTableRemovedFromCollection;
 
-			if (this.OnUndoRedoPerformed != null)
-			{
-				Undo.undoRedoPerformed += this.OnUndoRedoPerformed;
-			}
+			if (OnUndoRedoPerformed != null) Undo.undoRedoPerformed += OnUndoRedoPerformed;
 
-			this.hasAttachedEvents = true;
+			hasAttachedEvents = true;
 		}
 
 		public void DetachEvents()
 		{
-			if (!this.hasAttachedEvents)
-			{
-				return;
-			}
+			if (!hasAttachedEvents) return;
 
 			// this.SharedEntries.DetachEvents();
 
-			if (this.OnTableEntryModified != null)
-			{
-				LocalizationEditorSettings.EditorEvents.TableEntryModified -= this.OnTableEntryModified;
-			}
+			if (OnTableEntryModified != null)
+				LocalizationEditorSettings.EditorEvents.TableEntryModified -= OnTableEntryModified;
 
-			if (this.OnAssetTableEntryAdded != null)
-			{
-				LocalizationEditorSettings.EditorEvents.AssetTableEntryAdded -= this.OnAssetTableEntryAdded;
-			}
+			if (OnAssetTableEntryAdded != null)
+				LocalizationEditorSettings.EditorEvents.AssetTableEntryAdded -= OnAssetTableEntryAdded;
 
-			if (this.OnAssetTableEntryRemoved != null)
-			{
-				LocalizationEditorSettings.EditorEvents.AssetTableEntryRemoved -= this.OnAssetTableEntryRemoved;
-			}
+			if (OnAssetTableEntryRemoved != null)
+				LocalizationEditorSettings.EditorEvents.AssetTableEntryRemoved -= OnAssetTableEntryRemoved;
 
-			if (this.OnTableAddedToCollection != null)
-			{
-				LocalizationEditorSettings.EditorEvents.TableAddedToCollection -= this.OnTableAddedToCollection;
-			}
+			if (OnTableAddedToCollection != null)
+				LocalizationEditorSettings.EditorEvents.TableAddedToCollection -= OnTableAddedToCollection;
 
-			if (this.OnTableRemovedFromCollection != null)
-			{
-				LocalizationEditorSettings.EditorEvents.TableRemovedFromCollection -= this.OnTableRemovedFromCollection;
-			}
+			if (OnTableRemovedFromCollection != null)
+				LocalizationEditorSettings.EditorEvents.TableRemovedFromCollection -= OnTableRemovedFromCollection;
 
-			if (this.OnUndoRedoPerformed != null)
-			{
-				Undo.undoRedoPerformed -= this.OnUndoRedoPerformed;
-			}
+			if (OnUndoRedoPerformed != null) Undo.undoRedoPerformed -= OnUndoRedoPerformed;
 
-			this.hasAttachedEvents = false;
+			hasAttachedEvents = false;
 		}
 
 		public virtual void RemoveKey(SharedTableData.SharedTableEntry sharedEntry)
 		{
-			this.SharedEntryHeights.Remove(sharedEntry.Id);
-			
-			this.GUITables.UndoRecordCollection(this.Collection.SharedData, "Removed Shared Table Entry from Collection");
+			SharedEntryHeights.Remove(sharedEntry.Id);
 
-			this.Collection.RemoveEntry(sharedEntry.Id);
+			GUITables.UndoRecordCollection(Collection.SharedData, "Removed Shared Table Entry from Collection");
 
-			this.GUITables.SetDirty(this.Collection.SharedData);
+			Collection.RemoveEntry(sharedEntry.Id);
+
+			GUITables.SetDirty(Collection.SharedData);
 		}
 
 		public void SelectEntry(TEntry entry)
@@ -467,123 +429,103 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 				}
 			}
 #endif
-			
-			OdinTableSelectionType lastSelectionType = this.SelectionType;
 
-			this.SelectionType = OdinTableSelectionType.TableEntry;
+			var lastSelectionType = SelectionType;
 
-			TEntry lastSelection = this.CurrentSelectedEntry;
+			SelectionType = OdinTableSelectionType.TableEntry;
 
-			this.CurrentSelectedEntry = entry;
+			var lastSelection = CurrentSelectedEntry;
 
-			if (lastSelection == entry && this.SelectionType == lastSelectionType)
-			{
-				return;
-			}
+			CurrentSelectedEntry = entry;
 
-			this.SelectionAnimFloat = 0.0f;
-			this.SelectionAnimFloat.Destination = 1.0f;
+			if (lastSelection == entry && SelectionType == lastSelectionType) return;
 
-			if (this.WindowState.CurrentTopTab != OdinLocalizationEditorWindow.RightMenuTopTabs.Metadata)
-			{
-				return;
-			}
+			SelectionAnimFloat = 0.0f;
+			SelectionAnimFloat.Destination = 1.0f;
 
-			this.WindowState.ShowSharedMetadata = false;
+			if (WindowState.CurrentTopTab != OdinLocalizationEditorWindow.RightMenuTopTabs.Metadata) return;
 
-			this.UpdateMetadataViewForEntry(entry);
+			WindowState.ShowSharedMetadata = false;
+
+			UpdateMetadataViewForEntry(entry);
 		}
 
 		public void SelectSharedEntry(SharedTableData.SharedTableEntry sharedEntry)
 		{
-			this.SelectionType = OdinTableSelectionType.SharedEntry;
+			SelectionType = OdinTableSelectionType.SharedEntry;
 
-			if (this.CurrentSelectedSharedEntry != sharedEntry)
+			if (CurrentSelectedSharedEntry != sharedEntry)
 			{
-				this.SelectionAnimFloat = 0.0f;
-				this.SelectionAnimFloat.Destination = 1.0f;
+				SelectionAnimFloat = 0.0f;
+				SelectionAnimFloat.Destination = 1.0f;
 			}
 
-			this.CurrentSelectedSharedEntry = sharedEntry;
+			CurrentSelectedSharedEntry = sharedEntry;
 
-			if (this.WindowState.CurrentTopTab != OdinLocalizationEditorWindow.RightMenuTopTabs.Metadata)
-			{
-				return;
-			}
+			if (WindowState.CurrentTopTab != OdinLocalizationEditorWindow.RightMenuTopTabs.Metadata) return;
 
-			this.WindowState.ShowSharedMetadata = true;
+			WindowState.ShowSharedMetadata = true;
 
-			this.WindowState.MetadataTree?.Dispose();
+			WindowState.MetadataTree?.Dispose();
 
-			this.WindowState.MetadataTree = PropertyTree.Create(sharedEntry);
+			WindowState.MetadataTree = PropertyTree.Create(sharedEntry);
 		}
 
 		public void SelectTable(OdinGUITable<TTable> table)
 		{
-			this.SelectionType = table.Type == OdinGUITable<TTable>.GUITableType.Key
-				? OdinTableSelectionType.SharedTable
-				: OdinTableSelectionType.Table;
-			this.CurrentSelectedTable = table;
+			SelectionType = table.Type == OdinGUITable<TTable>.GUITableType.Key ?
+				OdinTableSelectionType.SharedTable :
+				OdinTableSelectionType.Table;
+			CurrentSelectedTable = table;
 		}
 
 		public void UpdateMetadataViewForEntry(TEntry entry)
 		{
-			this.WindowState.MetadataTree?.Dispose();
+			WindowState.MetadataTree?.Dispose();
 
 			object metadataData = null;
 
-			if (this.WindowState.ShowSharedMetadata)
+			if (WindowState.ShowSharedMetadata)
 			{
 				metadataData = entry.SharedEntry;
 			}
 			else
 			{
 				if (typeof(TEntry) == typeof(AssetTableEntry))
-				{
 					metadataData = OdinLocalizationReflectionValues.AssetTableEntry_Data_Property.GetValue(entry);
-				}
 
 				if (typeof(TEntry) == typeof(StringTableEntry))
-				{
 					metadataData = OdinLocalizationReflectionValues.StringTableEntry_Data_Property.GetValue(entry);
-				}
 			}
 
-			if (metadataData != null)
-			{
-				this.WindowState.MetadataTree = PropertyTree.Create(metadataData);
-			}
+			if (metadataData != null) WindowState.MetadataTree = PropertyTree.Create(metadataData);
 		}
 
 		public bool IsSharedEntrySelected(SharedTableData.SharedTableEntry sharedEntry)
 		{
-			return this.SelectionType == OdinTableSelectionType.SharedEntry && this.CurrentSelectedSharedEntry == sharedEntry;
+			return SelectionType == OdinTableSelectionType.SharedEntry && CurrentSelectedSharedEntry == sharedEntry;
 		}
 
 		public bool IsEntrySelected(TEntry entry)
 		{
-			if (entry == null)
-			{
-				return false;
-			}
-			
-			return this.SelectionType == OdinTableSelectionType.TableEntry && this.CurrentSelectedEntry == entry;
+			if (entry == null) return false;
+
+			return SelectionType == OdinTableSelectionType.TableEntry && CurrentSelectedEntry == entry;
 		}
 
 		public bool IsTableSelected(OdinGUITable<TTable> table)
 		{
-
-			return (this.SelectionType == OdinTableSelectionType.Table ||
-			        this.SelectionType == OdinTableSelectionType.SharedTable) && this.CurrentSelectedTable == table;
+			return (SelectionType == OdinTableSelectionType.Table ||
+					SelectionType == OdinTableSelectionType.SharedTable) && CurrentSelectedTable == table;
 		}
 
 		public void ClearSelection()
 		{
 			GUIUtility.hotControl = 0;
 			GUIUtility.keyboardControl = 0;
-			this.SelectionType = OdinTableSelectionType.None;
-			this.WindowState.MetadataTree?.Dispose();
-			this.WindowState.MetadataTree = null;
+			SelectionType = OdinTableSelectionType.None;
+			WindowState.MetadataTree?.Dispose();
+			WindowState.MetadataTree = null;
 		}
 
 		public void ClearFocus()
@@ -606,68 +548,76 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 		[OnInspectorGUI]
 		public void DrawAndHandleExceptions()
 		{
-			if (this.tableAddressableException != null)
+			if (tableAddressableException != null)
 			{
 				const float SPACING = 10;
-				
-				Rect rect = GUILayoutUtility.GetRect(0, 0, GUILayoutOptions.ExpandWidth().ExpandHeight());
+
+				var rect = GUILayoutUtility.GetRect(0, 0, GUILayoutOptions.ExpandWidth().ExpandHeight());
 
 				rect = rect.AlignCenter(520, 200);
 
-				Color shadowColor = EditorGUIUtility.isProSkin ? new Color(1, 0, 0, 0.2588235f) : new Color(1, 0, 0, 0.3137255f);
+				var shadowColor = EditorGUIUtility.isProSkin ?
+					new Color(1, 0, 0, 0.2588235f) :
+					new Color(1, 0, 0, 0.3137255f);
 
 				OdinLocalizationGUI.DrawRoundBlur20(rect, shadowColor);
 
-				Color backgroundColor = EditorGUIUtility.isProSkin ? new Color(0.6037736f, 0.1566394f, 0.1566394f) : new Color(0.8301887f, 0.238875f, 0.238875f);
+				var backgroundColor = EditorGUIUtility.isProSkin ?
+					new Color(0.6037736f, 0.1566394f, 0.1566394f) :
+					new Color(0.8301887f, 0.238875f, 0.238875f);
 
 				SirenixEditorGUI.DrawRoundRect(rect, backgroundColor, 7.5f);
 
 				rect = rect.Padding(14);
 
-				Rect buttonsArea = rect.TakeFromBottom(32);
+				var buttonsArea = rect.TakeFromBottom(32);
 
 				GUI.BeginClip(rect.Expand(14));
 				{
-					Rect watermarkPosition = rect.SetPosition(Vector2.zero).AlignRight(80).Expand(34).AddX(30).SubY(20);
+					var watermarkPosition = rect.SetPosition(Vector2.zero).AlignRight(80).Expand(34).AddX(30).SubY(20);
 
-					SdfIcons.DrawIcon(watermarkPosition, SdfIconType.ExclamationDiamondFill, new Color(1, 1, 1, 0.075f));
+					SdfIcons.DrawIcon(
+						watermarkPosition, SdfIconType.ExclamationDiamondFill, new Color(1, 1, 1, 0.075f));
 				}
 				GUI.EndClip();
 
 				rect.height -= SPACING;
 
-				float msgHeight = OdinLocalizationGUI.CardTitleWhite.CalcHeight(this.exceptionHeaderMsg, rect.width);
-				GUI.Label(rect.TakeFromTop(msgHeight), this.exceptionHeaderMsg, OdinLocalizationGUI.CardTitleWhite);
+				var msgHeight = OdinLocalizationGUI.CardTitleWhite.CalcHeight(exceptionHeaderMsg, rect.width);
+				GUI.Label(rect.TakeFromTop(msgHeight), exceptionHeaderMsg, OdinLocalizationGUI.CardTitleWhite);
 
 				rect.yMin += SPACING;
-				
-				GUI.Label(rect, this.exceptionMsg, SirenixGUIStyles.MultiLineWhiteLabel);
+
+				GUI.Label(rect, exceptionMsg, SirenixGUIStyles.MultiLineWhiteLabel);
 
 				if (OdinLocalizationGUI.OverlaidButton(buttonsArea.TakeFromRight(120), "Fix All", SdfIconType.Tools))
 				{
-					this.Collection.RefreshAddressables();
-					this.tableAddressableException = null;
+					Collection.RefreshAddressables();
+					tableAddressableException = null;
 
-					this.RelatedWindow.ShowToast(ToastPosition.BottomLeft,
-														  SdfIconType.Tools,
-														  $"Refreshed Addressables for '{this.Collection.name}'.",
-														  new Color(0.26f, 0.51f, 0.44f),
-														  12.0f);
+					RelatedWindow.ShowToast(
+						ToastPosition.BottomLeft,
+						SdfIconType.Tools,
+						$"Refreshed Addressables for '{Collection.name}'.",
+						new Color(0.26f, 0.51f, 0.44f),
+						12.0f);
 				}
 
 				buttonsArea.width -= SPACING;
 
-				if (OdinLocalizationGUI.OverlaidButton(buttonsArea.TakeFromRight(160), "Fix And Preload All", SdfIconType.Tools))
+				if (OdinLocalizationGUI.OverlaidButton(
+						buttonsArea.TakeFromRight(160), "Fix And Preload All", SdfIconType.Tools))
 				{
-					this.Collection.RefreshAddressables();
-					this.Collection.SetPreloadTableFlag(true);
-					this.tableAddressableException = null;
+					Collection.RefreshAddressables();
+					Collection.SetPreloadTableFlag(true);
+					tableAddressableException = null;
 
-					this.RelatedWindow.ShowToast(ToastPosition.BottomLeft,
-														  SdfIconType.Tools,
-														  $"Refreshed Addressables and Preloaded All Tables for '{this.Collection.name}'.",
-														  new Color(0.26f, 0.51f, 0.44f),
-														  12.0f);
+					RelatedWindow.ShowToast(
+						ToastPosition.BottomLeft,
+						SdfIconType.Tools,
+						$"Refreshed Addressables and Preloaded All Tables for '{Collection.name}'.",
+						new Color(0.26f, 0.51f, 0.44f),
+						12.0f);
 				}
 
 				return;
@@ -675,130 +625,110 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 
 			try
 			{
-				this.Draw();
+				Draw();
 
-				if (this.needsToCheckForErrors)
+				if (needsToCheckForErrors)
 				{
 					// NOTE: this attempts to catch any AddressableEntryNotFoundException errors, by fetching the Addressables for every table.
-					this.Collection.IsPreloadTableFlagSet();
+					Collection.IsPreloadTableFlagSet();
 
-					this.needsToCheckForErrors = false;
+					needsToCheckForErrors = false;
 				}
 			}
 			catch (AddressableEntryNotFoundException e)
 			{
-				this.tableAddressableException = e;
+				tableAddressableException = e;
 
-				this.exceptionHeaderMsg = e.Message;
-				this.exceptionMsg = $"There could be multiple other tables facing the same issue in '{this.Collection.name}', " +
-										  "this can potentially be resolved by refreshing the Addressables.";
+				exceptionHeaderMsg = e.Message;
+				exceptionMsg = $"There could be multiple other tables facing the same issue in '{Collection.name}', " +
+								"this can potentially be resolved by refreshing the Addressables.";
 
 				GUIHelper.ExitGUI(false);
 			}
 		}
-		
+
 		public void Draw()
 		{
-			if (Event.current.type == EventType.MouseUp)
-			{
-				SharedUniqueControlId.SetInactive();
-			}
-			
-			if (this.EntryScrollView.IsDraggingMouse)
-			{
-				EditorGUIUtility.AddCursorRect(this.EntryScrollView.InteractRect, MouseCursor.Pan);
-			}
-			
-			if (this.HasHandledCurrentModifiedEntry)
-			{
-				this.CurrentModifiedEntry = null;
-			}
+			if (Event.current.type == EventType.MouseUp) SharedUniqueControlId.SetInactive();
+
+			if (EntryScrollView.IsDraggingMouse)
+				EditorGUIUtility.AddCursorRect(EntryScrollView.InteractRect, MouseCursor.Pan);
+
+			if (HasHandledCurrentModifiedEntry) CurrentModifiedEntry = null;
 
 			//	if (Event.current.type == EventType.MouseUp)
 			//	{
 			//		this.isDraggingNonHandle = false;
 			//	}
 			//	
-			bool shouldClearSelection = Event.current.OnKeyDown(KeyCode.Escape, false);
+			var shouldClearSelection = Event.current.OnKeyDown(KeyCode.Escape, false);
 
 			//this.SharedEntries.UpdateIfChangesArePresent();
 
-			Rect position = GUILayoutUtility.GetRect(0, 0, GUILayoutOptions.ExpandWidth().ExpandHeight());
+			var position = GUILayoutUtility.GetRect(0, 0, GUILayoutOptions.ExpandWidth().ExpandHeight());
 
-			position = this.RelatedWindow.position.SetPosition(Vector2.zero);
-			position.TakeFromRight(this.RelatedWindow.MenuWidth);
+			position = RelatedWindow.position.SetPosition(Vector2.zero);
+			position.TakeFromRight(RelatedWindow.MenuWidth);
 
 			var leftMenuSliderRect = position.TakeFromLeft(10).SubX(1);
-			var rightMenuRect = position.TakeFromRight(this.WindowState.RightMenuWidth);
+			var rightMenuRect = position.TakeFromRight(WindowState.RightMenuWidth);
 			var rightMenuSliderRect = position.TakeFromRight(11);
 
-			this.RelatedWindow.MenuWidth += this.VerticalSlideRect(leftMenuSliderRect.AddXMax(1), false);
-			this.RelatedWindow.MenuWidth = Mathf.Max(this.RelatedWindow.MenuWidth, 1);
+			RelatedWindow.MenuWidth += VerticalSlideRect(leftMenuSliderRect.AddXMax(1), false);
+			RelatedWindow.MenuWidth = Mathf.Max(RelatedWindow.MenuWidth, 1);
 
 			if (Event.current.clickCount > 1 && Event.current.IsMouseOver(leftMenuSliderRect))
 			{
-				this.RelatedWindow.MenuWidth = 1;
+				RelatedWindow.MenuWidth = 1;
 
-				if (Event.current.control || Event.current.alt || Event.current.shift)
-				{
-					this.WindowState.RightMenuWidth = 0;
-				}
+				if (Event.current.control || Event.current.alt || Event.current.shift) WindowState.RightMenuWidth = 0;
 			}
 
 			if (Event.current.clickCount > 1 && Event.current.IsMouseOver(rightMenuSliderRect))
 			{
 				if (Event.current.control || Event.current.alt || Event.current.shift)
 				{
-					if (this.WindowState.RightMenuWidth > 0)
+					if (WindowState.RightMenuWidth > 0)
 					{
-						this.WindowState.RightMenuWidth = 0;
-						this.WindowState.LeftMenuWidth = 0;
+						WindowState.RightMenuWidth = 0;
+						WindowState.LeftMenuWidth = 0;
 					}
 					else
 					{
-						this.WindowState.RightMenuWidth = this.WindowState.LastOpenRightMenuWidth;
-						this.RelatedWindow.MenuWidth = this.WindowState.LastOpenRightMenuWidth;
+						WindowState.RightMenuWidth = WindowState.LastOpenRightMenuWidth;
+						RelatedWindow.MenuWidth = WindowState.LastOpenRightMenuWidth;
 					}
 				}
 				else
 				{
-					if (this.WindowState.RightMenuWidth > 0)
-					{
-						this.WindowState.RightMenuWidth = 0;
-					}
+					if (WindowState.RightMenuWidth > 0)
+						WindowState.RightMenuWidth = 0;
 					else
-					{
-						this.WindowState.RightMenuWidth = this.WindowState.LastOpenRightMenuWidth;
-					}
+						WindowState.RightMenuWidth = WindowState.LastOpenRightMenuWidth;
 				}
 			}
 
-			Rect toolbarRect = position.TakeFromTop(OdinLocalizationConstants.TOOLBAR_HEIGHT);
+			var toolbarRect = position.TakeFromTop(OdinLocalizationConstants.TOOLBAR_HEIGHT);
 
-			Rect dragHandleRect = position.TakeFromLeft(OdinLocalizationConstants.DRAG_HANDLE_WIDTH);
+			var dragHandleRect = position.TakeFromLeft(OdinLocalizationConstants.DRAG_HANDLE_WIDTH);
 
-			this.DrawToolbar(toolbarRect);
+			DrawToolbar(toolbarRect);
 
-			this.GUITables.Sort();
+			GUITables.Sort();
 
 #if USING_WIDTH_NON_PERCENT
-			for (var i = 0; i < this.GUITables.Count; i++)
-			{
-				this.GUITables[i].Width = this.GUITables[i].Width;
-			}
+			for (var i = 0; i < GUITables.Count; i++) GUITables[i].Width = GUITables[i].Width;
 #endif
 
-			float viewWidth = position.width;
+			var viewWidth = position.width;
 
 #if USING_WIDTH_NON_PERCENT
-			float columnsWidth = this.GUITables.GetVisibleWidth();
+			var columnsWidth = GUITables.GetVisibleWidth();
 
-			if (columnsWidth >= viewWidth)
-			{
-				viewWidth = columnsWidth;
-			}
+			if (columnsWidth >= viewWidth) viewWidth = columnsWidth;
 #else
-			int columnsMinTotalWidth = this.GUITables.GetVisibleCount() * OdinLocalizationConstants.DEFAULT_COLUMN_WIDTH;
+			int columnsMinTotalWidth =
+ this.GUITables.GetVisibleCount() * OdinLocalizationConstants.DEFAULT_COLUMN_WIDTH;
 
 			if (columnsMinTotalWidth > viewWidth)
 			{
@@ -806,14 +736,11 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 			}
 #endif
 
-			if (position != this.EntryScrollView.InteractRect)
-			{
-				this.HasGUIChanged = true;
-			}
+			if (position != EntryScrollView.InteractRect) HasGUIChanged = true;
 
-			bool isEntryCountChanged = this.Collection.SharedData.Entries.Count != this.lastGUIEntryCount;
+			var isEntryCountChanged = Collection.SharedData.Entries.Count != lastGUIEntryCount;
 
-			if (this.HasGUIChanged || isEntryCountChanged)
+			if (HasGUIChanged || isEntryCountChanged)
 			{
 #if false
 				if (isEntryCountChanged)
@@ -829,153 +756,142 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 					}
 				}
 #endif
-				
-				this.HasGUIChanged = false;
+
+				HasGUIChanged = false;
 
 				if (isEntryCountChanged)
 				{
-					if (this.SharedEntries.IsSorted)
-					{
-						switch (this.sortedTable.Type)
+					if (SharedEntries.IsSorted)
+						switch (sortedTable.Type)
 						{
 							case OdinGUITable<TTable>.GUITableType.Default:
-								switch (this.sortedTable.Asset)
+								switch (sortedTable.Asset)
 								{
 									case AssetTable assetTable:
-										this.SharedEntries.SortByAssetTable(this.Collection as AssetTableCollection, assetTable, false);
+										SharedEntries.SortByAssetTable(
+											Collection as AssetTableCollection, assetTable, false);
 										break;
 
 									case StringTable stringTable:
-										this.SharedEntries.SortByStringTable(stringTable, false);
+										SharedEntries.SortByStringTable(stringTable, false);
 										break;
 								}
 
 								break;
 
 							case OdinGUITable<TTable>.GUITableType.Key:
-								this.SharedEntries.SortByKeys(false);
+								SharedEntries.SortByKeys(false);
 								break;
 
 							default:
 								throw new ArgumentOutOfRangeException();
 						}
-					}
 
-					if (this.SharedEntries.IsSearching)
-					{
-						this.SharedEntries.UpdateSearchTerm(this.SharedEntries.SearchTerm, this.GUITables, this.Collection, true);
-					}
+					if (SharedEntries.IsSearching)
+						SharedEntries.UpdateSearchTerm(SharedEntries.SearchTerm, GUITables, Collection, true);
 				}
 
-				this.lastGUIEntryCount = this.Collection.SharedData.Entries.Count;
+				lastGUIEntryCount = Collection.SharedData.Entries.Count;
 
-				float previousY = this.EntryScrollView.PositionY;
+				var previousY = EntryScrollView.PositionY;
 
-				this.EntryScrollView.SetBounds(position, viewWidth);
+				EntryScrollView.SetBounds(position, viewWidth);
 
-				this.EntryScrollView.BeginAllocations();
+				EntryScrollView.BeginAllocations();
 				{
-					this.AllocateItems();
+					AllocateItems();
 				}
-				this.EntryScrollView.EndAllocations();
+				EntryScrollView.EndAllocations();
 
-				if (this.adjustViewForSeparatorChange &&
-					 this.lastViewHeight != 0.0f &&
-					 Math.Abs(this.lastViewHeight - this.EntryScrollView.ViewRect.height) > 0.01f)
+				if (adjustViewForSeparatorChange &&
+					lastViewHeight != 0.0f &&
+					Math.Abs(lastViewHeight - EntryScrollView.ViewRect.height) > 0.01f)
 				{
-					float newHeight = this.EntryScrollView.ViewRect.height;
+					var newHeight = EntryScrollView.ViewRect.height;
 
-					float change = previousY / this.lastViewHeight;
+					var change = previousY / lastViewHeight;
 
-					this.EntryScrollView.PositionY = change * newHeight;
+					EntryScrollView.PositionY = change * newHeight;
 
-					this.adjustViewForSeparatorChange = false;
+					adjustViewForSeparatorChange = false;
 				}
 			}
 			else
 			{
-				this.EntryScrollView.SetBoundsForCurrentAllocations(position, viewWidth);
+				EntryScrollView.SetBoundsForCurrentAllocations(position, viewWidth);
 			}
 
 #if !USING_WIDTH_NON_PERCENT
 			this.GUITables.CalcWidths(this.EntryScrollView);
 #endif
 
-			this.PinnedWidth = 0.0f;
+			PinnedWidth = 0.0f;
 
-			for (var i = 0; i < this.GUITables.Count; i++)
+			for (var i = 0; i < GUITables.Count; i++)
 			{
-				OdinGUITable<TTable> table = this.GUITables[i];
+				var table = GUITables[i];
 
-				if (!table.IsVisible || !table.IsPinned)
-				{
-					continue;
-				}
-				
+				if (!table.IsVisible || !table.IsPinned) continue;
+
 #if USING_WIDTH_NON_PERCENT
-				this.PinnedWidth += table.Width;
+				PinnedWidth += table.Width;
 #else
 					this.PinnedWidth += this.GUITables[i].Width;
 #endif
 			}
 
-			if (this.PinnedWidth > this.EntryScrollView.Bounds.width)
+			if (PinnedWidth > EntryScrollView.Bounds.width)
 			{
-				this.PinnedWidth = this.EntryScrollView.Bounds.width;
-				this.GUITables.ResizePinnedToFit(this.EntryScrollView.Bounds.width);
+				PinnedWidth = EntryScrollView.Bounds.width;
+				GUITables.ResizePinnedToFit(EntryScrollView.Bounds.width);
 			}
 
-			this.GUITables.UpdateVisibleTables(this.EntryScrollView, this.PinnedWidth);
+			GUITables.UpdateVisibleTables(EntryScrollView, PinnedWidth);
 
-			if (this.firstTimeSeeingTable && columnsWidth < viewWidth)
+			if (firstTimeSeeingTable && columnsWidth < viewWidth)
 			{
-				this.GUITables.ResizeToFit(this.EntryScrollView.Bounds.width - this.PinnedWidth);
-				this.firstTimeSeeingTable = false;
+				GUITables.ResizeToFit(EntryScrollView.Bounds.width - PinnedWidth);
+				firstTimeSeeingTable = false;
 			}
 
 
-			OdinGUIScrollView.VisibleItems visibleItems = this.EntryScrollView.GetVisibleItems();
+			var visibleItems = EntryScrollView.GetVisibleItems();
 
-			this.DrawRows(ref visibleItems);
+			DrawRows(ref visibleItems);
 
-			this.DrawPseudoRows();
+			DrawPseudoRows();
 
-			this.DrawItems(ref visibleItems);
+			DrawItems(ref visibleItems);
 
-			this.DrawColumnsAndSeparators(ref visibleItems);
+			DrawColumnsAndSeparators(ref visibleItems);
 
-			this.DrawDragHandles(dragHandleRect, ref visibleItems);
+			DrawDragHandles(dragHandleRect, ref visibleItems);
 
-			this.DrawRightMenu(rightMenuRect);
+			DrawRightMenu(rightMenuRect);
 
-			if (this.keyToRemove != null)
+			if (keyToRemove != null)
 			{
-				if (this.isForceDeleteKey ||
-					 EditorUtility.DisplayDialog("Odin Table Collection Editor", $"Are you sure you want to remove entry: {this.keyToRemove.Key}?", "Yes", "No"))
-				{
-					this.RemoveKey(this.keyToRemove);
-				}
+				if (isForceDeleteKey ||
+					EditorUtility.DisplayDialog(
+						"Odin Table Collection Editor", $"Are you sure you want to remove entry: {keyToRemove.Key}?",
+						"Yes", "No"))
+					RemoveKey(keyToRemove);
 
-				this.keyToRemove = null;
-				this.isForceDeleteKey = false;
+				keyToRemove = null;
+				isForceDeleteKey = false;
 			}
 
-			if (shouldClearSelection)
-			{
-				this.ClearSelection();
-			}
+			if (shouldClearSelection) ClearSelection();
 
-			this.EntryScrollView.HandleMiddleMouseDrag(inverted: OdinLocalizationConfig.Instance.invertMouseDragNavigation,
-																	 speed: OdinLocalizationConfig.Instance.mouseDragSpeed);
+			EntryScrollView.HandleMiddleMouseDrag(
+				OdinLocalizationConfig.Instance.invertMouseDragNavigation,
+				speed: OdinLocalizationConfig.Instance.mouseDragSpeed);
 
 
-			this.WindowState.RightMenuWidth -= this.VerticalSlideRect(rightMenuSliderRect, true);
-			this.WindowState.RightMenuWidth = Mathf.Max(this.WindowState.RightMenuWidth, 0);
+			WindowState.RightMenuWidth -= VerticalSlideRect(rightMenuSliderRect, true);
+			WindowState.RightMenuWidth = Mathf.Max(WindowState.RightMenuWidth, 0);
 
-			if (this.WindowState.RightMenuWidth > 338)
-			{
-				this.WindowState.LastOpenRightMenuWidth = this.WindowState.RightMenuWidth;
-			}
+			if (WindowState.RightMenuWidth > 338) WindowState.LastOpenRightMenuWidth = WindowState.RightMenuWidth;
 		}
 
 		protected abstract void AllocateItems();
@@ -994,46 +910,48 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 			GUI.DrawTexture(rect, Texture2D.whiteTexture, ScaleMode.StretchToFill, false, 1, background, 0, 2.5f);
 
 			if (Event.current.IsMouseOver(rect) && !DragAndDropUtilities.IsDragging)
-			{
-				GUI.DrawTexture(rect, Texture2D.whiteTexture, ScaleMode.StretchToFill, false, 1, OdinLocalizationGUI.RowBorderHover, 1, 2.5f);
-			}
+				GUI.DrawTexture(
+					rect, Texture2D.whiteTexture, ScaleMode.StretchToFill, false, 1, OdinLocalizationGUI.RowBorderHover,
+					1, 2.5f);
 			else
-			{
-				GUI.DrawTexture(rect, Texture2D.whiteTexture, ScaleMode.StretchToFill, false, 1, OdinLocalizationGUI.RowBorder, 1, 2.5f);
-			}
+				GUI.DrawTexture(
+					rect, Texture2D.whiteTexture, ScaleMode.StretchToFill, false, 1, OdinLocalizationGUI.RowBorder, 1,
+					2.5f);
 
 			rect.x += OdinLocalizationConstants.ROW_MENU_WIDTH;
 			rect.width -= OdinLocalizationConstants.ROW_MENU_WIDTH + OdinLocalizationConstants.ROW_MENU_WIDTH;
-			bool isPressed = Event.current.OnMouseDown(rect, 0, false);
+			var isPressed = Event.current.OnMouseDown(rect, 0, false);
 
 			return isPressed;
 		}
 
 		protected void DrawKey(Rect rect, SharedTableData.SharedTableEntry sharedEntry, int id)
 		{
-			Rect removeRect = rect.TakeFromLeft(OdinLocalizationConstants.ROW_MENU_WIDTH);
-			Rect copyKeyIdRect = rect.TakeFromRight(OdinLocalizationConstants.ROW_MENU_WIDTH);
+			var removeRect = rect.TakeFromLeft(OdinLocalizationConstants.ROW_MENU_WIDTH);
+			var copyKeyIdRect = rect.TakeFromRight(OdinLocalizationConstants.ROW_MENU_WIDTH);
 
-			Color removeBgColor = Event.current.IsMouseOver(removeRect) ? new Color(0.8f, 0.1f, 0.1f, 0.8f) : new Color(0, 0, 0, 0.2f);
+			var removeBgColor = Event.current.IsMouseOver(removeRect) ?
+				new Color(0.8f, 0.1f, 0.1f, 0.8f) :
+				new Color(0, 0, 0, 0.2f);
 
-			GUI.DrawTexture(removeRect, Texture2D.whiteTexture, ScaleMode.StretchToFill, false, 1.0f, removeBgColor, Vector4.zero,
-								 new Vector4(2.5f, 0.0f, 0.0f, 2.5f));
+			GUI.DrawTexture(
+				removeRect, Texture2D.whiteTexture, ScaleMode.StretchToFill, false, 1.0f, removeBgColor, Vector4.zero,
+				new Vector4(2.5f, 0.0f, 0.0f, 2.5f));
 
 			if (Event.current.OnMouseDown(removeRect, 0))
 			{
-				this.keyToRemove = sharedEntry;
+				keyToRemove = sharedEntry;
 
-				if (Event.current.modifiers == EventModifiers.Shift)
-				{
-					this.isForceDeleteKey = true;
-				}
+				if (Event.current.modifiers == EventModifiers.Shift) isForceDeleteKey = true;
 
-				this.ClearSelection();
+				ClearSelection();
 
 				return;
 			}
 
-			Color removeFgColor = Event.current.IsMouseOver(removeRect) ? new Color(1, 1, 1, 0.8f) : new Color(1, 1, 1, 0.5f);
+			var removeFgColor = Event.current.IsMouseOver(removeRect) ?
+				new Color(1, 1, 1, 0.8f) :
+				new Color(1, 1, 1, 0.5f);
 
 			removeRect = removeRect.AlignCenter(14, 14);
 
@@ -1045,50 +963,47 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 
 			var isMouseOverKeyRect = Event.current.IsMouseOver(copyKeyIdRect);
 
-			Matrix4x4 m = GUI.matrix;
+			var m = GUI.matrix;
 			GUIUtility.RotateAroundPivot(45.0f, copyKeyIdRect.center);
 			SdfIcons.DrawIcon(copyKeyIdRect, SdfIconType.KeyFill, new Color(1, 1, 1, isMouseOverKeyRect ? 0.8f : 0.3f));
 			GUI.matrix = m;
 
 			if (isMouseOverKeyRect)
-			{
 				GUI.Label(copyKeyIdRect, GUIHelper.TempContent(string.Empty, "Copy Shared Entry Id"));
-			}
 
 			if (Event.current.OnMouseDown(copyKeyIdRect, 0))
 			{
-				this.RelatedWindow.ShowToast(ToastPosition.BottomLeft,
-													  SdfIconType.Clipboard,
-													  $"Copied Shared Entry Id '{sharedEntry.Id}' to the clipboard.",
-													  new Color(0.23f, 0.36f, 0.68f),
-													  8.0f);
+				RelatedWindow.ShowToast(
+					ToastPosition.BottomLeft,
+					SdfIconType.Clipboard,
+					$"Copied Shared Entry Id '{sharedEntry.Id}' to the clipboard.",
+					new Color(0.23f, 0.36f, 0.68f),
+					8.0f);
 
 				Clipboard.Copy(sharedEntry.Id.ToString());
 
-				this.ClearSelection();
+				ClearSelection();
 			}
 
-			string result = OdinLocalizationGUI.TextField(rect, sharedEntry.Key, out bool changed, id);
+			var result = OdinLocalizationGUI.TextField(rect, sharedEntry.Key, out var changed, id);
 
-			if (!changed)
-			{
-				return;
-			}
+			if (!changed) return;
 
-			if (this.Collection.SharedData.Contains(result) && result != sharedEntry.Key)
+			if (Collection.SharedData.Contains(result) && result != sharedEntry.Key)
 			{
-				this.RelatedWindow.ShowToast(ToastPosition.BottomLeft,
-													  SdfIconType.ExclamationOctagonFill,
-													  $"Key '{result}' already exists in the collection.",
-													  new Color(0.68f, 0.2f, 0.2f),
-													  8.0f);
+				RelatedWindow.ShowToast(
+					ToastPosition.BottomLeft,
+					SdfIconType.ExclamationOctagonFill,
+					$"Key '{result}' already exists in the collection.",
+					new Color(0.68f, 0.2f, 0.2f),
+					8.0f);
 			}
 			else
 			{
-				Undo.RecordObject(this.Collection.SharedData, "Renamed Shared Table Entry Key");
-				this.Collection.SharedData.RenameKey(sharedEntry.Id, result);
+				Undo.RecordObject(Collection.SharedData, "Renamed Shared Table Entry Key");
+				Collection.SharedData.RenameKey(sharedEntry.Id, result);
 				OdinLocalizationEvents.RaiseTableEntryModified(sharedEntry);
-				EditorUtility.SetDirty(this.Collection.SharedData);
+				EditorUtility.SetDirty(Collection.SharedData);
 			}
 		}
 
@@ -1097,96 +1012,92 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 			// TODO: get rid of this magic number
 			width -= 20 + 20 + 8 + 16;
 
-			float rowHeightWithoutText = OdinLocalizationConstants.ROW_HEIGHT - SirenixGUIStyles.MultiLineCenteredLabel.lineHeight;
+			var rowHeightWithoutText = OdinLocalizationConstants.ROW_HEIGHT -
+										SirenixGUIStyles.MultiLineCenteredLabel.lineHeight;
 
-			float heightOfText = SirenixGUIStyles.MultiLineCenteredLabel.CalcHeight(text, width) - SirenixGUIStyles.MultiLineCenteredLabel.padding.vertical;
+			var heightOfText = SirenixGUIStyles.MultiLineCenteredLabel.CalcHeight(text, width) -
+								SirenixGUIStyles.MultiLineCenteredLabel.padding.vertical;
 
 			return rowHeightWithoutText + heightOfText;
 		}
 
 		private void DrawToolbar(Rect position)
 		{
-			Rect originalPosition = position;
-			
-			Rect resizeToFitButtonRect = position.TakeFromRight(180f);
-			Rect addButtonRect = position.TakeFromRight(180f);
+			var originalPosition = position;
+
+			var resizeToFitButtonRect = position.TakeFromRight(180f);
+			var addButtonRect = position.TakeFromRight(180f);
 
 			position = position.Padding(4);
 
 			if (GUI.Button(resizeToFitButtonRect, "Resize Columns To Fit", SirenixGUIStyles.ToolbarButton))
 			{
-				this.GUITables.ResizeToFit(this.EntryScrollView.Bounds.width - this.PinnedWidth);
-				this.HasGUIChanged = true;
+				GUITables.ResizeToFit(EntryScrollView.Bounds.width - PinnedWidth);
+				HasGUIChanged = true;
 			}
-			
+
 			if (GUI.Button(addButtonRect, "Add Shared Entry", SirenixGUIStyles.ToolbarButton))
 			{
-				this.GUITables.UndoRecordCollection(this.Collection.SharedData, "Added Shared Entry To Collection");
-				SharedTableData.SharedTableEntry sharedEntry = this.Collection.SharedData.AddKey();
+				GUITables.UndoRecordCollection(Collection.SharedData, "Added Shared Entry To Collection");
+				var sharedEntry = Collection.SharedData.AddKey();
 
-				OdinLocalizationEvents.RaiseTableEntryAdded(this.Collection, sharedEntry);
-				this.GUITables.SetDirty(this.Collection.SharedData);
+				OdinLocalizationEvents.RaiseTableEntryAdded(Collection, sharedEntry);
+				GUITables.SetDirty(Collection.SharedData);
 			}
 
-			string searchTerm = this.SearchField.Draw(position, this.SharedEntries.SearchTerm, "Search for item(s)...");
+			var searchTerm = SearchField.Draw(position, SharedEntries.SearchTerm, "Search for item(s)...");
 
-			if (this.SharedEntries.UpdateSearchTerm(searchTerm, this.GUITables, this.Collection))
-			{
-				this.HasGUIChanged = true;
-			}
+			if (SharedEntries.UpdateSearchTerm(searchTerm, GUITables, Collection)) HasGUIChanged = true;
 
-			if (!EditorGUIUtility.isProSkin)
-			{
-				EditorGUI.DrawRect(originalPosition, new Color(0, 0, 0, 0.05f));
-			}
+			if (!EditorGUIUtility.isProSkin) EditorGUI.DrawRect(originalPosition, new Color(0, 0, 0, 0.05f));
 		}
 
 		private void DrawRows(ref OdinGUIScrollView.VisibleItems visibleItems)
 		{
-			Rect clipRect = this.EntryScrollView.GetClipRect();
+			var clipRect = EntryScrollView.GetClipRect();
 
 			clipRect.x -= OdinLocalizationConstants.DRAG_HANDLE_WIDTH;
 			clipRect.width += OdinLocalizationConstants.DRAG_HANDLE_WIDTH;
 
-			this.EntryScrollView.BeginClip(clipRect, offset: new Vector2(0, OdinLocalizationConstants.COLUMN_HEIGHT));
+			EntryScrollView.BeginClip(clipRect, new Vector2(0, OdinLocalizationConstants.COLUMN_HEIGHT));
 			{
 				for (var i = 0; i < visibleItems.Length; i++)
 				{
-					Rect rect = visibleItems.GetRect(i);
+					var rect = visibleItems.GetRect(i);
 
-					Rect dropZoneRect = rect;
+					var dropZoneRect = rect;
 
 					rect.width += OdinLocalizationConstants.DRAG_HANDLE_WIDTH;
 
-					bool isEven = (visibleItems.Offset + i) % 2 == 0;
+					var isEven = (visibleItems.Offset + i) % 2 == 0;
 
-					EditorGUI.DrawRect(rect, isEven ? OdinLocalizationGUI.RowEvenBackground : OdinLocalizationGUI.RowOddBackground);
+					EditorGUI.DrawRect(
+						rect, isEven ? OdinLocalizationGUI.RowEvenBackground : OdinLocalizationGUI.RowOddBackground);
 
-					this.HandleDropZone(dropZoneRect, visibleItems.Offset + i);
+					HandleDropZone(dropZoneRect, visibleItems.Offset + i);
 				}
 			}
-			this.EntryScrollView.EndClip();
+			EntryScrollView.EndClip();
 		}
 
 		private void DrawPseudoRows()
 		{
-			if (this.EntryScrollView.IsBeyondVerticalBounds)
-			{
-				return;
-			}
+			if (EntryScrollView.IsBeyondVerticalBounds) return;
 
-			var remainderRect = new Rect(this.EntryScrollView.Bounds.x - OdinLocalizationConstants.DRAG_HANDLE_WIDTH,
-												  this.EntryScrollView.Bounds.y + this.EntryScrollView.ViewRect.height + OdinLocalizationConstants.COLUMN_HEIGHT,
-												  this.EntryScrollView.Bounds.width + OdinLocalizationConstants.DRAG_HANDLE_WIDTH,
-												  this.EntryScrollView.Bounds.height - this.EntryScrollView.ViewRect.height - OdinLocalizationConstants.COLUMN_HEIGHT);
+			var remainderRect = new Rect(
+				EntryScrollView.Bounds.x - OdinLocalizationConstants.DRAG_HANDLE_WIDTH,
+				EntryScrollView.Bounds.y + EntryScrollView.ViewRect.height + OdinLocalizationConstants.COLUMN_HEIGHT,
+				EntryScrollView.Bounds.width + OdinLocalizationConstants.DRAG_HANDLE_WIDTH,
+				EntryScrollView.Bounds.height - EntryScrollView.ViewRect.height -
+				OdinLocalizationConstants.COLUMN_HEIGHT);
 
-			Rect maintainedRemainderRect = remainderRect;
+			var maintainedRemainderRect = remainderRect;
 
-			bool isNextEven = this.SharedEntries.Length % 2 == 0;
+			var isNextEven = SharedEntries.Length % 2 == 0;
 
 			while (remainderRect.height > 0)
 			{
-				Rect rect = remainderRect.TakeFromTop(OdinLocalizationConstants.ROW_HEIGHT);
+				var rect = remainderRect.TakeFromTop(OdinLocalizationConstants.ROW_HEIGHT);
 				Color color = isNextEven ? OdinLocalizationGUI.RowEvenBackground : OdinLocalizationGUI.RowOddBackground;
 
 				EditorGUI.DrawRect(rect, color);
@@ -1199,115 +1110,106 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 
 		private void DrawColumnsAndSeparators(ref OdinGUIScrollView.VisibleItems visibleItems)
 		{
-			EditorGUI.DrawRect(this.EntryScrollView.Bounds.AlignTop(OdinLocalizationConstants.COLUMN_HEIGHT), OdinLocalizationGUI.ColumnBackground);
+			EditorGUI.DrawRect(
+				EntryScrollView.Bounds.AlignTop(OdinLocalizationConstants.COLUMN_HEIGHT),
+				OdinLocalizationGUI.ColumnBackground);
 
-			Rect columnArea = this.EntryScrollView.ViewRect;
+			var columnArea = EntryScrollView.ViewRect;
 
-			if (!this.EntryScrollView.IsBeyondVerticalBounds)
+			if (!EntryScrollView.IsBeyondVerticalBounds) columnArea.height = EntryScrollView.Bounds.height;
+
+			var lastIndex = GUITables.GetLastVisibleIndex();
+
+			EntryScrollView.BeginClip(offset: new Vector2(PinnedWidth, 0), ignoreScrollY: true);
 			{
-				columnArea.height = this.EntryScrollView.Bounds.height;
+				DrawColumns(ref visibleItems, columnArea.AlignRight(columnArea.width), false, lastIndex);
 			}
+			EntryScrollView.EndClip();
 
-			int lastIndex = this.GUITables.GetLastVisibleIndex();
+			var lastPinnedIndex = GUITables.GetLastVisiblePinnedIndex();
 
-			this.EntryScrollView.BeginClip(offset: new Vector2(this.PinnedWidth, 0), ignoreScrollY: true);
+			EntryScrollView.BeginClip(ignoreScrollX: true, ignoreScrollY: true);
 			{
-				this.DrawColumns(ref visibleItems, columnArea.AlignRight(columnArea.width), false, lastIndex);
+				DrawColumns(ref visibleItems, columnArea, true, lastPinnedIndex);
 			}
-			this.EntryScrollView.EndClip();
+			EntryScrollView.EndClip();
 
-			int lastPinnedIndex = this.GUITables.GetLastVisiblePinnedIndex();
-
-			this.EntryScrollView.BeginClip(ignoreScrollX: true, ignoreScrollY: true);
+			if (PinnedWidth > 0.0f && PinnedWidth + 20 <= EntryScrollView.Bounds.width)
 			{
-				this.DrawColumns(ref visibleItems, columnArea, true, lastPinnedIndex);
-			}
-			this.EntryScrollView.EndClip();
+				var shadowRect = EntryScrollView.Bounds;
 
-			if (this.PinnedWidth > 0.0f && this.PinnedWidth + 20 <= this.EntryScrollView.Bounds.width)
-			{
-				Rect shadowRect = this.EntryScrollView.Bounds;
-
-				shadowRect.x += this.PinnedWidth;
+				shadowRect.x += PinnedWidth;
 				shadowRect.width = 24;
 
-				GUI.DrawTexture(shadowRect, OdinLocalizationGUITextures.LeftToRightFade, ScaleMode.StretchToFill, true, 1.0f, new Color(0, 0, 0, 0.35f), 0, 0);
+				GUI.DrawTexture(
+					shadowRect, OdinLocalizationGUITextures.LeftToRightFade, ScaleMode.StretchToFill, true, 1.0f,
+					new Color(0, 0, 0, 0.35f), 0, 0);
 			}
 		}
 
-		private void DrawColumns(ref OdinGUIScrollView.VisibleItems visibleItems, Rect columnArea, bool pinned, int lastIndex)
+		private void DrawColumns(
+			ref OdinGUIScrollView.VisibleItems visibleItems, Rect columnArea, bool pinned, int lastIndex)
 		{
-			for (var i = 0; i < this.GUITables.Count; i++)
+			for (var i = 0; i < GUITables.Count; i++)
 			{
-				OdinGUITable<TTable> table = this.GUITables[i];
+				var table = GUITables[i];
 
-				if (table.IsPinned != pinned)
-				{
-					continue;
-				}
+				if (table.IsPinned != pinned) continue;
 
-				if (!this.GUITables.TablesWithinVisibleBounds.Contains(table))
+				if (!GUITables.TablesWithinVisibleBounds.Contains(table))
 				{
 					columnArea.TakeFromLeft(table.Width);
 					continue;
 				}
 
 #if USING_WIDTH_NON_PERCENT
-				Rect columnRect = columnArea.TakeFromLeft(table.Width);
+				var columnRect = columnArea.TakeFromLeft(table.Width);
 #else
 				Rect columnRect = columnArea.TakeFromLeft(table.Width);
 #endif
 
-				Rect columnHeaderRect = columnRect.AlignTop(OdinLocalizationConstants.COLUMN_HEIGHT);
+				var columnHeaderRect = columnRect.AlignTop(OdinLocalizationConstants.COLUMN_HEIGHT);
 
-				bool isSelected = this.IsTableSelected(table);
+				var isSelected = IsTableSelected(table);
 
 				if (isSelected)
 				{
-					FancyColor.PushBlend(FancyColor.Gray.Lerp(OdinLocalizationGUI.Selected, 0.5f), FancyColor.BlendMode.Overlay);
+					FancyColor.PushBlend(
+						FancyColor.Gray.Lerp(OdinLocalizationGUI.Selected, 0.5f), FancyColor.BlendMode.Overlay);
 					EditorGUI.DrawRect(columnHeaderRect, OdinLocalizationGUI.ColumnBackground);
 				}
 
-				Rect interactColumnRect = columnHeaderRect.Padding(4, 0);
+				var interactColumnRect = columnHeaderRect.Padding(4, 0);
 
 				if (Event.current.IsMouseOver(interactColumnRect))
-				{
 					EditorGUI.DrawRect(columnHeaderRect, new Color(1.0f, 1.0f, 1.0f, 0.035f));
-				}
 
-				Rect pinRect = columnHeaderRect.TakeFromRight(30).SubXMax(10).AlignMiddle(18);
-				SdfIconType pinIcon = table.IsPinned ? SdfIconType.PinAngleFill : SdfIconType.PinAngle;
+				var pinRect = columnHeaderRect.TakeFromRight(30).SubXMax(10).AlignMiddle(18);
+				var pinIcon = table.IsPinned ? SdfIconType.PinAngleFill : SdfIconType.PinAngle;
 
 				GUI.Label(pinRect, GUIHelper.TempContent(string.Empty, "Pin Table"));
 
 				if (Event.current.IsMouseOver(pinRect))
-				{
 					SdfIcons.DrawIcon(pinRect, pinIcon, Color.white);
-				}
 				else
-				{
 					SdfIcons.DrawIcon(pinRect, pinIcon);
-				}
 
 				if (Event.current.OnMouseDown(pinRect, 0))
 				{
 					table.IsPinned = !table.IsPinned;
 
-					this.ClearFocus();
+					ClearFocus();
 				}
 
-				float columnTextWidth = SirenixGUIStyles.LabelCentered.CalcWidth(table.DisplayName);
+				var columnTextWidth = SirenixGUIStyles.LabelCentered.CalcWidth(table.DisplayName);
 
-				Rect minSortRect = columnHeaderRect.TakeFromLeft(30).AddXMin(10);
+				var minSortRect = columnHeaderRect.TakeFromLeft(30).AddXMin(10);
 
-				Rect sortRect = columnHeaderRect.AlignCenter(20, 18);
+				var sortRect = columnHeaderRect.AlignCenter(20, 18);
 
 				sortRect.x -= columnTextWidth * 0.5f + 12.0f;
 
-				if (sortRect.x < minSortRect.x)
-				{
-					sortRect = minSortRect.AlignMiddle(18);
-				}
+				if (sortRect.x < minSortRect.x) sortRect = minSortRect.AlignMiddle(18);
 
 				sortRect = sortRect.AlignCenter(16, 16);
 
@@ -1325,9 +1227,8 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 
 				SdfIconType sortIcon;
 
-				if (this.sortedTable == table)
-				{
-					switch (this.SharedEntries.CurrentSortOrderState)
+				if (sortedTable == table)
+					switch (SharedEntries.CurrentSortOrderState)
 					{
 						case OdinSharedEntryCollection.SortOrderState.Unsorted:
 							sortIcon = SdfIconType.ArrowDownUp;
@@ -1344,31 +1245,22 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 						default:
 							throw new ArgumentOutOfRangeException();
 					}
-				}
 				else
-				{
 					sortIcon = SdfIconType.ArrowDownUp;
-				}
 
 				if (Event.current.IsMouseOver(sortRect))
-				{
 					SdfIcons.DrawIcon(sortRect, sortIcon, Color.white);
-				}
 				else
-				{
 					SdfIcons.DrawIcon(sortRect, sortIcon);
-				}
 
 				GUI.Label(sortRect, GUIHelper.TempContent(string.Empty, "Sort Table"));
 
 				if (Event.current.OnMouseDown(sortRect, 0))
 				{
-					bool wasSorted = this.SharedEntries.IsSorted && this.sortedTable != table;
-					
-					if (this.sortedTable == table || this.SharedEntries.CurrentSortOrderState == OdinSharedEntryCollection.SortOrderState.Unsorted)
-					{
-						this.SharedEntries.GotoNextSortOrderState();
-					}
+					var wasSorted = SharedEntries.IsSorted && sortedTable != table;
+
+					if (sortedTable == table || SharedEntries.CurrentSortOrderState ==
+						OdinSharedEntryCollection.SortOrderState.Unsorted) SharedEntries.GotoNextSortOrderState();
 
 					switch (table.Type)
 					{
@@ -1376,40 +1268,35 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 							switch (table.Asset)
 							{
 								case AssetTable assetTable:
-									this.SharedEntries.SortByAssetTable(this.Collection as AssetTableCollection, assetTable, wasSorted);
+									SharedEntries.SortByAssetTable(
+										Collection as AssetTableCollection, assetTable, wasSorted);
 									break;
 
 								case StringTable stringTable:
-									this.SharedEntries.SortByStringTable(stringTable, wasSorted);
+									SharedEntries.SortByStringTable(stringTable, wasSorted);
 									break;
 							}
 
 							break;
 
 						case OdinGUITable<TTable>.GUITableType.Key:
-							this.SharedEntries.SortByKeys(wasSorted);
+							SharedEntries.SortByKeys(wasSorted);
 							break;
 
 						default:
 							throw new ArgumentOutOfRangeException();
 					}
 
-					this.sortedTable = table;
+					sortedTable = table;
 
-					this.ClearFocus();
+					ClearFocus();
 
-					this.HasGUIChanged = true;
+					HasGUIChanged = true;
 				}
 
-				if (Event.current.OnMouseDown(interactColumnRect, 0))
-				{
-					this.SelectTable(table);
-				}
+				if (Event.current.OnMouseDown(interactColumnRect, 0)) SelectTable(table);
 
-				if (isSelected)
-				{
-					FancyColor.PopBlend();
-				}
+				if (isSelected) FancyColor.PopBlend();
 
 #if !USING_WIDTH_NON_PERCENT
 				if (i == lastIndex)
@@ -1418,30 +1305,30 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 				}
 #endif
 
-				this.DrawSeparator(ref visibleItems, columnRect, table, i, lastIndex);
+				DrawSeparator(ref visibleItems, columnRect, table, i, lastIndex);
 			}
 		}
 
-		private bool hasSeparatorChanged = false;
-		private bool adjustViewForSeparatorChange = false;
+		private bool hasSeparatorChanged;
+		private bool adjustViewForSeparatorChange;
 		private float lastViewHeight;
 
-		private void DrawSeparator(ref OdinGUIScrollView.VisibleItems visibleItems, Rect columnRect, OdinGUITable<TTable> table, int index, int lastIndex)
+		private void DrawSeparator(
+			ref OdinGUIScrollView.VisibleItems visibleItems, Rect columnRect, OdinGUITable<TTable> table, int index,
+			int lastIndex)
 		{
-			Rect separatorRect = columnRect.AlignRight(1);
+			var separatorRect = columnRect.AlignRight(1);
 
 			EditorGUI.DrawRect(separatorRect, OdinLocalizationGUI.RowBorder);
 
-			Rect separatorMouseRect = separatorRect.Expand(1, 0);
+			var separatorMouseRect = separatorRect.Expand(1, 0);
 
 			switch (Event.current.type)
 			{
 				case EventType.MouseDown:
 					if (Event.current.button == 0 && Event.current.IsMouseOver(separatorMouseRect))
-					{
 						//this.isDraggingNonHandle = true;
-						this.ClearFocus();
-					}
+						ClearFocus();
 
 					break;
 
@@ -1449,12 +1336,12 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 					//if (this.isDraggingNonHandle)
 					//{
 					// NOTE: we only adjust the ones we can see while we drag separators, to avoid unnecessary computations.
-					if (this.hasSeparatorChanged)
+					if (hasSeparatorChanged)
 					{
-						this.MeasureAllEntries();
-						this.hasSeparatorChanged = false;
+						MeasureAllEntries();
+						hasSeparatorChanged = false;
 
-						this.adjustViewForSeparatorChange = true;
+						adjustViewForSeparatorChange = true;
 					}
 					//}
 
@@ -1462,23 +1349,17 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 					break;
 			}
 
-			Vector2 slideAmount = table.HandleSlider(separatorMouseRect);
+			var slideAmount = table.HandleSlider(separatorMouseRect);
 
-			if (slideAmount.x == 0.0f)
-			{
-				return;
-			}
+			if (slideAmount.x == 0.0f) return;
 
-			if (!this.hasSeparatorChanged)
-			{
-				this.lastViewHeight = this.EntryScrollView.ViewRect.height;
-			}
-			
-			
-			this.hasSeparatorChanged = true;
+			if (!hasSeparatorChanged) lastViewHeight = EntryScrollView.ViewRect.height;
+
+
+			hasSeparatorChanged = true;
 
 #if USING_WIDTH_NON_PERCENT
-			this.AppendWidth(slideAmount.x, index, lastIndex);
+			AppendWidth(slideAmount.x, index, lastIndex);
 #else
 			float newWidth = table.Width + slideAmount.x;
 
@@ -1508,27 +1389,24 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 
 			nextTable.WidthPercentage *= nextNewWidth / nextTable.Width;
 #endif
-			this.MeasureVisibleEntries(ref visibleItems);
+			MeasureVisibleEntries(ref visibleItems);
 		}
 
 		private void AppendWidth(float change, int index, int lastIndex)
 		{
-			OdinGUITable<TTable> table = this.GUITables[index];
+			var table = GUITables[index];
 
 			table.Width += change;
 
 			if (change < 0.0f && table.Width <= OdinLocalizationConstants.MIN_COLUMN_WIDTH)
 			{
-				int previousIndex = index - 1;
+				var previousIndex = index - 1;
 
 				while (previousIndex > -1)
 				{
-					OdinGUITable<TTable> previousTable = this.GUITables[previousIndex];
+					var previousTable = GUITables[previousIndex];
 
-					if (previousTable.IsPinned != table.IsPinned)
-					{
-						break;
-					}
+					if (previousTable.IsPinned != table.IsPinned) break;
 
 					previousTable.Width += change;
 
@@ -1541,41 +1419,34 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 					break;
 				}
 
-				if (previousIndex == -1)
-				{
-					previousIndex = 0;
-				}
+				if (previousIndex == -1) previousIndex = 0;
 
-				if (index != lastIndex && this.GUITables[previousIndex].Width > OdinLocalizationConstants.MIN_COLUMN_WIDTH)
-				{
-					this.GUITables[index + 1].Width -= change;
-				}
+				if (index != lastIndex && GUITables[previousIndex].Width > OdinLocalizationConstants.MIN_COLUMN_WIDTH)
+					GUITables[index + 1].Width -= change;
 			}
 			else if (index != lastIndex)
 			{
-				this.GUITables[index + 1].Width -= change;
+				GUITables[index + 1].Width -= change;
 			}
 		}
 
 		private void DrawDragHandles(Rect position, ref OdinGUIScrollView.VisibleItems visibleItems)
 		{
-			if (this.EntryScrollView.IsBeyondHorizontalBounds)
-			{
+			if (EntryScrollView.IsBeyondHorizontalBounds)
 				OdinGUIScrollView.ScrollBackground(position.AlignBottom(OdinGUIScrollView.SCROLL_BAR_SIZE), false);
-			}
-			
-			Rect clipRect = this.EntryScrollView.GetClipRect();
+
+			var clipRect = EntryScrollView.GetClipRect();
 
 			clipRect.x -= position.width;
 			clipRect.width = position.width;
 
-			this.EntryScrollView.BeginClip(clipRect, offset: new Vector2(0, OdinLocalizationConstants.COLUMN_HEIGHT), ignoreScrollX: true);
+			EntryScrollView.BeginClip(clipRect, new Vector2(0, OdinLocalizationConstants.COLUMN_HEIGHT), true);
 			{
-				if (this.SharedEntries.IsSorted || this.SharedEntries.IsSearching) //(this.isDraggingNonHandle)
+				if (SharedEntries.IsSorted || SharedEntries.IsSearching) //(this.isDraggingNonHandle)
 				{
 					for (var i = 0; i < visibleItems.Length; i++)
 					{
-						Rect dragHandleRect = visibleItems.GetRect(i);
+						var dragHandleRect = visibleItems.GetRect(i);
 
 						dragHandleRect.width = OdinLocalizationConstants.DRAG_HANDLE_WIDTH;
 
@@ -1583,26 +1454,25 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 						dragHandleRect.width -= 4;
 
 						if (EditorGUIUtility.isProSkin)
-						{
-							SdfIcons.DrawIcon(dragHandleRect.AlignMiddle(16), SdfIconType.GripVertical, new Color(0.35f, 0.35f, 0.35f, 1.0f));
-						}
+							SdfIcons.DrawIcon(
+								dragHandleRect.AlignMiddle(16), SdfIconType.GripVertical,
+								new Color(0.35f, 0.35f, 0.35f, 1.0f));
 						else
-						{
-							SdfIcons.DrawIcon(dragHandleRect.AlignMiddle(16), SdfIconType.GripVertical, new FancyColor(0.66f));
-						}
+							SdfIcons.DrawIcon(
+								dragHandleRect.AlignMiddle(16), SdfIconType.GripVertical, new FancyColor(0.66f));
 					}
 				}
 				else
 				{
-					bool isDraggingAnything = this.IsDraggingAnything();
-					
+					var isDraggingAnything = IsDraggingAnything();
+
 					for (var i = 0; i < visibleItems.Length; i++)
 					{
-						Rect dragHandleRect = visibleItems.GetRect(i);
+						var dragHandleRect = visibleItems.GetRect(i);
 
 						dragHandleRect.width = OdinLocalizationConstants.DRAG_HANDLE_WIDTH;
 
-						bool isMouseOver = Event.current.IsMouseOver(dragHandleRect);
+						var isMouseOver = Event.current.IsMouseOver(dragHandleRect);
 
 						if (!isDraggingAnything)
 						{
@@ -1614,19 +1484,20 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 						dragHandleRect.width -= 4;
 
 						if (EditorGUIUtility.isProSkin)
-						{
-							SdfIcons.DrawIcon(dragHandleRect.AlignMiddle(16), SdfIconType.GripVertical, new Color(1, 1, 1, isMouseOver ? 0.8f : 0.6f));
-						}
+							SdfIcons.DrawIcon(
+								dragHandleRect.AlignMiddle(16), SdfIconType.GripVertical,
+								new Color(1, 1, 1, isMouseOver ? 0.8f : 0.6f));
 						else
-						{
-							SdfIcons.DrawIcon(dragHandleRect.AlignMiddle(16), SdfIconType.GripVertical, new Color(0, 0, 0, isMouseOver ? 0.6f : 0.4f));
-						}
+							SdfIcons.DrawIcon(
+								dragHandleRect.AlignMiddle(16), SdfIconType.GripVertical,
+								new Color(0, 0, 0, isMouseOver ? 0.6f : 0.4f));
 					}
 				}
 			}
-			this.EntryScrollView.EndClip();
+			EntryScrollView.EndClip();
 
-			EditorGUI.DrawRect(position.TakeFromTop(OdinLocalizationConstants.COLUMN_HEIGHT), OdinLocalizationGUI.ColumnBackground);
+			EditorGUI.DrawRect(
+				position.TakeFromTop(OdinLocalizationConstants.COLUMN_HEIGHT), OdinLocalizationGUI.ColumnBackground);
 		}
 
 		// NOTE: for now we pass by index, since you can't drag stuff around when you're searching or sorting
@@ -1634,90 +1505,86 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 		{
 			position.x += OdinLocalizationConstants.DRAG_HANDLE_WIDTH;
 
-			float halfHeight = position.height * 0.5f;
+			var halfHeight = position.height * 0.5f;
 
-			Rect topDropRect = position.AlignTop(halfHeight);
-			Rect bottomDropRect = position.AlignBottom(halfHeight);
+			var topDropRect = position.AlignTop(halfHeight);
+			var bottomDropRect = position.AlignBottom(halfHeight);
 
-			int topId = this.DragDropIdHint + indexTo;
-			
-			DragInfo topValue = DragAndDropUtilities.DropZone(topDropRect, DragInfo.None, this.DragDropIdHint + indexTo);
+			var topId = DragDropIdHint + indexTo;
 
-			int bottomId = this.DragDropIdHint + indexTo + this.SharedEntries.Length;
+			var topValue = DragAndDropUtilities.DropZone(topDropRect, DragInfo.None, DragDropIdHint + indexTo);
 
-			DragInfo bottomValue = DragAndDropUtilities.DropZone(bottomDropRect, DragInfo.None, bottomId);
+			var bottomId = DragDropIdHint + indexTo + SharedEntries.Length;
+
+			var bottomValue = DragAndDropUtilities.DropZone(bottomDropRect, DragInfo.None, bottomId);
 
 			if (DragAndDropUtilities.IsDragging)
 			{
 				if (DragAndDropUtilities.HoveringAcceptedDropZone == topId)
 				{
 					if (EditorGUIUtility.isProSkin)
-					{
-						GUI.DrawTexture(topDropRect.AlignTop(40.0f).SubXMin(OdinLocalizationConstants.DRAG_HANDLE_WIDTH),
-											 OdinLocalizationGUITextures.TopToBottomFade,
-											 ScaleMode.StretchToFill,
-											 true,
-											 1.0f,
-											 new Color(0.16f, 0.7f, 1f, 0.25f),
-											 Vector4.zero,
-											 Vector4.zero);
-					}
+						GUI.DrawTexture(
+							topDropRect.AlignTop(40.0f).SubXMin(OdinLocalizationConstants.DRAG_HANDLE_WIDTH),
+							OdinLocalizationGUITextures.TopToBottomFade,
+							ScaleMode.StretchToFill,
+							true,
+							1.0f,
+							new Color(0.16f, 0.7f, 1f, 0.25f),
+							Vector4.zero,
+							Vector4.zero);
 					else
-					{
-						GUI.DrawTexture(topDropRect.AlignTop(40.0f).SubXMin(OdinLocalizationConstants.DRAG_HANDLE_WIDTH),
-											 OdinLocalizationGUITextures.TopToBottomFade,
-											 ScaleMode.StretchToFill,
-											 true,
-											 1.0f,
-											 new Color(0.8f, 0.8f, 1, 0.7f),
-											 Vector4.zero,
-											 Vector4.zero);
-					}
+						GUI.DrawTexture(
+							topDropRect.AlignTop(40.0f).SubXMin(OdinLocalizationConstants.DRAG_HANDLE_WIDTH),
+							OdinLocalizationGUITextures.TopToBottomFade,
+							ScaleMode.StretchToFill,
+							true,
+							1.0f,
+							new Color(0.8f, 0.8f, 1, 0.7f),
+							Vector4.zero,
+							Vector4.zero);
 					//EditorGUI.DrawRect(topDropRect.AlignTop(1), new Color(0, 1, 1, 0.5f));
 				}
 
 				if (DragAndDropUtilities.HoveringAcceptedDropZone == bottomId)
 				{
 					if (EditorGUIUtility.isProSkin)
-					{
-						GUI.DrawTexture(bottomDropRect.AlignBottom(40.0f).SubXMin(OdinLocalizationConstants.DRAG_HANDLE_WIDTH),
-											 OdinLocalizationGUITextures.BottomToTopFade,
-											 ScaleMode.StretchToFill,
-											 true,
-											 1.0f,
-											 new Color(0.16f, 0.7f, 1f, 0.25f),
-											 Vector4.zero,
-											 Vector4.zero);
-					}
+						GUI.DrawTexture(
+							bottomDropRect.AlignBottom(40.0f).SubXMin(OdinLocalizationConstants.DRAG_HANDLE_WIDTH),
+							OdinLocalizationGUITextures.BottomToTopFade,
+							ScaleMode.StretchToFill,
+							true,
+							1.0f,
+							new Color(0.16f, 0.7f, 1f, 0.25f),
+							Vector4.zero,
+							Vector4.zero);
 					else
-					{
-						GUI.DrawTexture(bottomDropRect.AlignBottom(40.0f).SubXMin(OdinLocalizationConstants.DRAG_HANDLE_WIDTH),
-											 OdinLocalizationGUITextures.BottomToTopFade,
-											 ScaleMode.StretchToFill,
-											 true,
-											 1.0f,
-											 new Color(0.8f, 0.8f, 1, 0.7f),
-											 Vector4.zero,
-											 Vector4.zero);
-					}
+						GUI.DrawTexture(
+							bottomDropRect.AlignBottom(40.0f).SubXMin(OdinLocalizationConstants.DRAG_HANDLE_WIDTH),
+							OdinLocalizationGUITextures.BottomToTopFade,
+							ScaleMode.StretchToFill,
+							true,
+							1.0f,
+							new Color(0.8f, 0.8f, 1, 0.7f),
+							Vector4.zero,
+							Vector4.zero);
 					//EditorGUI.DrawRect(bottomDropRect.AlignBottom(1), new Color(0, 1, 1, 0.5f));
 				}
 			}
 
 			if (!topValue.IsNone)
 			{
-				this.SharedEntries.MoveEntry(topValue.Index, indexTo);
+				SharedEntries.MoveEntry(topValue.Index, indexTo);
 
-				this.HasGUIChanged = true;
-				
+				HasGUIChanged = true;
+
 				return;
 			}
 
 			if (!bottomValue.IsNone)
 			{
-				this.SharedEntries.MoveEntry(bottomValue.Index, indexTo + 1);
+				SharedEntries.MoveEntry(bottomValue.Index, indexTo + 1);
 
-				this.HasGUIChanged = true;
+				HasGUIChanged = true;
 			}
 		}
 
@@ -1726,20 +1593,17 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 			var x = 0.0f;
 
 #if USING_WIDTH_NON_PERCENT
-			for (var i = 0; i < this.GUITables.Count; i++)
+			for (var i = 0; i < GUITables.Count; i++)
 			{
-				if (this.GUITables[i] == table)
+				if (GUITables[i] == table)
 				{
-					x += this.GUITables[i].Width * 0.5f;
+					x += GUITables[i].Width * 0.5f;
 					break;
 				}
 
-				if (!this.GUITables[i].IsVisible || this.GUITables[i].IsPinned)
-				{
-					continue;
-				}
+				if (!GUITables[i].IsVisible || GUITables[i].IsPinned) continue;
 
-				x += this.GUITables[i].Width;
+				x += GUITables[i].Width;
 			}
 #else
 			for (var i = 0; i < this.GUITables.Count; i++)
@@ -1759,11 +1623,11 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 			}
 #endif
 
-			x -= this.EntryScrollView.Bounds.width * 0.5f;
+			x -= EntryScrollView.Bounds.width * 0.5f;
 
-			x += this.PinnedWidth * 0.5f;
+			x += PinnedWidth * 0.5f;
 
-			this.EntryScrollView.ScrollTo(1.0f / 0.35f, xPosition: x, easing: Easing.OutQuad);
+			EntryScrollView.ScrollTo(1.0f / 0.35f, x, easing: Easing.OutQuad);
 		}
 
 		private float rightMenuTopPanelHeight;
@@ -1775,43 +1639,46 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 			EditorGUI.DrawRect(position, OdinLocalizationGUI.WindowBackground);
 
 			var topPanelMaxHeight = position.height - 32;
-			this.topPanelRect = position.TakeFromTop(this.WindowState.RightMenuTopPanelHeight);
-			var topSlideRect = this.topPanelRect.TakeFromBottom(14);
-			this.bottomPanelRect = position;
+			topPanelRect = position.TakeFromTop(WindowState.RightMenuTopPanelHeight);
+			var topSlideRect = topPanelRect.TakeFromBottom(14);
+			bottomPanelRect = position;
 
-			this.WindowState.RightMenuTopPanelHeight += this.HorizontalSlideRect(topSlideRect);
+			WindowState.RightMenuTopPanelHeight += HorizontalSlideRect(topSlideRect);
 			// 183 is enough height to show exactly 3 collapsed entries.
-			this.WindowState.RightMenuTopPanelHeight = Mathf.Clamp(this.WindowState.RightMenuTopPanelHeight, 183, topPanelMaxHeight);
+			WindowState.RightMenuTopPanelHeight = Mathf.Clamp(
+				WindowState.RightMenuTopPanelHeight, 183, topPanelMaxHeight);
 
-			EditorGUI.DrawRect(this.topPanelRect, OdinLocalizationGUI.Panel);
-			EditorGUI.DrawRect(this.bottomPanelRect, OdinLocalizationGUI.Panel);
+			EditorGUI.DrawRect(topPanelRect, OdinLocalizationGUI.Panel);
+			EditorGUI.DrawRect(bottomPanelRect, OdinLocalizationGUI.Panel);
 
 
-			EditorGUI.DrawRect(this.topPanelRect.AlignTop(32), OdinLocalizationGUI.TabsBackground);
-			EditorGUI.DrawRect(this.bottomPanelRect.AlignTop(32), OdinLocalizationGUI.TabsBackground);
+			EditorGUI.DrawRect(topPanelRect.AlignTop(32), OdinLocalizationGUI.TabsBackground);
+			EditorGUI.DrawRect(bottomPanelRect.AlignTop(32), OdinLocalizationGUI.TabsBackground);
 
-			this.WindowState.CurrentTopTab = OdinLocalizationGUI.Tabs(this.topPanelRect.TakeFromTop(32), this.WindowState.CurrentTopTab, 115);
+			WindowState.CurrentTopTab = OdinLocalizationGUI.Tabs(
+				topPanelRect.TakeFromTop(32), WindowState.CurrentTopTab, 115);
 
-			this.WindowState.CurrentBottomTab = OdinLocalizationGUI.Tabs(this.bottomPanelRect.TakeFromTop(32), this.WindowState.CurrentBottomTab, 115);
+			WindowState.CurrentBottomTab = OdinLocalizationGUI.Tabs(
+				bottomPanelRect.TakeFromTop(32), WindowState.CurrentBottomTab, 115);
 
-			switch (this.WindowState.CurrentTopTab)
+			switch (WindowState.CurrentTopTab)
 			{
 				case OdinLocalizationEditorWindow.RightMenuTopTabs.Metadata:
-					this.DrawTopTabMetadata(this.topPanelRect);
+					DrawTopTabMetadata(topPanelRect);
 					break;
 
 				case OdinLocalizationEditorWindow.RightMenuTopTabs.Settings:
-					this.DrawTopTabSettings(this.topPanelRect);
+					DrawTopTabSettings(topPanelRect);
 					break;
 
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
 
-			switch (this.WindowState.CurrentBottomTab)
+			switch (WindowState.CurrentBottomTab)
 			{
 				case OdinLocalizationEditorWindow.RightMenuBottomTabs.Locale:
-					this.DrawBottomTabLocale(this.bottomPanelRect);
+					DrawBottomTabLocale(bottomPanelRect);
 					break;
 
 #if false
@@ -1821,7 +1688,7 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 #endif
 
 				case OdinLocalizationEditorWindow.RightMenuBottomTabs.Settings:
-					this.DrawBottomTabSettings(this.bottomPanelRect);
+					DrawBottomTabSettings(bottomPanelRect);
 					break;
 
 				default:
@@ -1830,21 +1697,21 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 
 			if (Event.current.type == EventType.MouseUp && Event.current.button == 0)
 			{
-				this.dragging = false;
+				dragging = false;
 				GUIHelper.RequestRepaint();
 			}
 		}
 
 		private string metadataSearchTerm = string.Empty;
-		private SearchField metadataSearchField = new SearchField();
-		
+		private SearchField metadataSearchField = new();
+
 		public InspectorProperty[] GetMetadataProperties()
 		{
-			InspectorProperty metadataCollection =
-				this.WindowState?.MetadataTree?.RootProperty?.Children[
+			var metadataCollection =
+				WindowState?.MetadataTree?.RootProperty?.Children[
 					OdinLocalizationReflectionValues.TABLE_ENTRY_DATA__METADATA__PATH];
 
-			InspectorProperty items =
+			var items =
 				metadataCollection?.Children[OdinLocalizationReflectionValues.METADATA_COLLECTION__ITEMS__PATH];
 
 			return items?.Children.OrderBy(c => c.ValueEntry.TypeOfValue.Name).ToArray();
@@ -1854,42 +1721,33 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 
 		private void DrawTopTabMetadata(Rect rect)
 		{
-			if (Event.current.OnMouseDown(rect, 0, false))
-			{
-				GUIHelper.RemoveFocusControl();
-			}
+			if (Event.current.OnMouseDown(rect, 0, false)) GUIHelper.RemoveFocusControl();
 
-			if (this.SelectionType == OdinTableSelectionType.None)
-			{
-				return;
-			}
-			
-			if (this.localizationMetadata == null)
-			{
-				this.localizationMetadata = new LocalizationMetadata(this.Collection, this.WindowState);
-			}
+			if (SelectionType == OdinTableSelectionType.None) return;
 
-			switch (this.SelectionType)
+			if (localizationMetadata == null) localizationMetadata = new LocalizationMetadata(Collection, WindowState);
+
+			switch (SelectionType)
 			{
 				case OdinTableSelectionType.None:
 					break;
 				case OdinTableSelectionType.SharedEntry:
-					this.localizationMetadata.Target = this.CurrentSelectedSharedEntry;
+					localizationMetadata.Target = CurrentSelectedSharedEntry;
 					break;
 				case OdinTableSelectionType.SharedTable:
-					this.localizationMetadata.Target = this.Collection;
+					localizationMetadata.Target = Collection;
 					break;
 				case OdinTableSelectionType.Table:
-					this.localizationMetadata.Target = this.CurrentSelectedTable.Asset;
+					localizationMetadata.Target = CurrentSelectedTable.Asset;
 					break;
 				case OdinTableSelectionType.TableEntry:
-					this.localizationMetadata.Target = this.CurrentSelectedEntry;
+					localizationMetadata.Target = CurrentSelectedEntry;
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
 
-			this.localizationMetadata.Draw(rect);
+			localizationMetadata.Draw(rect);
 		}
 
 		private void DrawTopTabSettings(Rect position)
@@ -1900,22 +1758,22 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 			{
 				bool value;
 
-				switch (this.SelectionType)
+				switch (SelectionType)
 				{
 					case OdinTableSelectionType.Table:
 						EditorGUI.BeginChangeCheck();
 
-						value = GUILayout.Toggle(LocalizationEditorSettings.GetPreloadTableFlag(this.CurrentSelectedTable.Asset), "Preload Table");
+						value = GUILayout.Toggle(
+							LocalizationEditorSettings.GetPreloadTableFlag(CurrentSelectedTable.Asset),
+							"Preload Table");
 
 						if (EditorGUI.EndChangeCheck())
-						{
-							LocalizationEditorSettings.SetPreloadTableFlag(this.CurrentSelectedTable.Asset, value, true);
-						}
+							LocalizationEditorSettings.SetPreloadTableFlag(CurrentSelectedTable.Asset, value, true);
 
 						break;
 
 					case OdinTableSelectionType.TableEntry:
-						if (this.CurrentSelectedEntry is StringTableEntry stringTableEntry)
+						if (CurrentSelectedEntry is StringTableEntry stringTableEntry)
 						{
 							EditorGUI.BeginChangeCheck();
 
@@ -1945,70 +1803,63 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 		private List<Toggle> toggles;
 		private static FancyColor ThumbColorGrayscale = FancyColor.White;
 		private static FancyColor BackgroundColorGrayscale = FancyColor.Gray;
-		private static FancyColor BorderColorGrayscale = new FancyColor(0.91f, 0.91f, 0.91f);
-		private static readonly FancyColor EnabledColor = new FancyColor(EditorGUIUtility.isProSkin ? 0.66f : 0.86f);
-		private static readonly FancyColor DisabledColor = new FancyColor(EditorGUIUtility.isProSkin ? 0.46f : 0.66f);
+		private static FancyColor BorderColorGrayscale = new(0.91f, 0.91f, 0.91f);
+		private static readonly FancyColor EnabledColor = new(EditorGUIUtility.isProSkin ? 0.66f : 0.86f);
+		private static readonly FancyColor DisabledColor = new(EditorGUIUtility.isProSkin ? 0.46f : 0.66f);
 		private bool dragging;
 		private Toggle lastChangedToggle;
 		private bool newValue;
 		private Vector2 localeTabScrollPosition;
+
 		private void DrawBottomTabLocale(Rect position)
 		{
 			position = position.Padding(4);
 
 			GUILayout.BeginArea(position);
 			{
-				ReadOnlyCollection<Locale> projectLocales = LocalizationEditorSettings.GetLocales();
+				var projectLocales = LocalizationEditorSettings.GetLocales();
 
-				if (this.toggles == null)
+				if (toggles == null)
 				{
-					this.toggles = new List<Toggle>
+					toggles = new List<Toggle>
 					{
-						new Toggle
+						new()
 						{
 							Label = "Key",
-							Toggled = this.KeyTable.IsVisible,
+							Toggled = KeyTable.IsVisible
 						}
 					};
-					this.toggles.AddRange(projectLocales.Select(locale =>
-					{
-						this.LocaleTableMap.TryGetValue(locale, out var table);
-
-						return new Toggle
+					toggles.AddRange(
+						projectLocales.Select(locale =>
 						{
-							Label = locale.LocaleName,
-							Toggled = table?.IsVisible ?? false,
-						};
-					}));
+							LocaleTableMap.TryGetValue(locale, out var table);
+
+							return new Toggle
+							{
+								Label = locale.LocaleName,
+								Toggled = table?.IsVisible ?? false
+							};
+						}));
 				}
 
-				bool hasAllLocales = projectLocales.Count == this.LocaleTableMap.Count;
+				var hasAllLocales = projectLocales.Count == LocaleTableMap.Count;
 
 				if (!hasAllLocales)
 				{
 					if (SirenixEditorGUI.Button("Add Missing Locales", ButtonSizes.Large))
-					{
 						for (var i = 0; i < projectLocales.Count; i++)
 						{
-							Locale locale = projectLocales[i];
+							var locale = projectLocales[i];
 
-							if (this.LocaleTableMap.ContainsKey(locale))
-							{
-								continue;
-							}
+							if (LocaleTableMap.ContainsKey(locale)) continue;
 
-							LocalizationTable table = this.Collection.GetTable(locale.Identifier);
+							var table = Collection.GetTable(locale.Identifier);
 
 							if (table != null)
-							{
-								this.Collection.AddTable(table, true);
-							}
+								Collection.AddTable(table, true);
 							else
-							{
-								this.Collection.AddNewTable(locale.Identifier);
-							}
+								Collection.AddNewTable(locale.Identifier);
 						}
-					}
 
 					GUILayout.Space(4);
 					SirenixEditorGUI.HorizontalLineSeparator();
@@ -2018,50 +1869,45 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 				const float LINE_HEIGHT = 20.0f;
 				const float LOCALE_SPACING = 2.0f;
 
-				this.localeTabScrollPosition = GUILayout.BeginScrollView(this.localeTabScrollPosition /*, GUILayoutOptions.MaxHeight(MAX_HEIGHT)*/);
+				localeTabScrollPosition = GUILayout.BeginScrollView(
+					localeTabScrollPosition /*, GUILayoutOptions.MaxHeight(MAX_HEIGHT)*/);
 				{
 					var keyRect = GUILayoutUtility.GetRect(0, LINE_HEIGHT, GUILayoutOptions.ExpandWidth());
-					this.KeyTable.IsVisible = this.DrawLocaleToggle(ref keyRect, this.toggles[0], this.KeyTable);
+					KeyTable.IsVisible = DrawLocaleToggle(ref keyRect, toggles[0], KeyTable);
 
-					if (this.EntryScrollView.IsBeyondHorizontalBounds && this.KeyTable.IsVisible &&
-					    !this.KeyTable.IsPinned)
-					{
+					if (EntryScrollView.IsBeyondHorizontalBounds && KeyTable.IsVisible &&
+						!KeyTable.IsPinned)
 						if (Event.current.OnMouseDown(keyRect, 0))
-						{
-							this.MoveScrollPositionToTable(this.KeyTable);
-						}
-					}
+							MoveScrollPositionToTable(KeyTable);
 
 					var lastLocaleIndex = projectLocales.Count - 1;
 
 					for (var i = 0; i < projectLocales.Count; i++)
 					{
 						var locale = projectLocales[i];
-						var toggle = this.toggles[i + 1];
+						var toggle = toggles[i + 1];
 
 						var totalRect = GUILayoutUtility.GetRect(
-							width: 0,
-							height: LINE_HEIGHT,
-							options: GUILayoutOptions.ExpandWidth().ExpandHeight(false));
+							0,
+							LINE_HEIGHT,
+							GUILayoutOptions.ExpandWidth().ExpandHeight(false));
 
-						if (locale != null && !this.LocaleTableMap.ContainsKey(locale))
+						if (locale != null && !LocaleTableMap.ContainsKey(locale))
 						{
 							GUIHelper.PushGUIEnabled(false);
 							{
-								this.DrawLocaleToggle(ref totalRect, toggle, null);
+								DrawLocaleToggle(ref totalRect, toggle, null);
 							}
 							GUIHelper.PopGUIEnabled();
 
 							LocalizationTable looseTable = null;
 
-							foreach (LocalizationTable localizationTable in this.LooseTables)
-							{
+							foreach (var localizationTable in LooseTables)
 								if (localizationTable.LocaleIdentifier == locale.Identifier)
 								{
 									looseTable = localizationTable;
 									break;
 								}
-							}
 
 							var buttonRect = totalRect.TakeFromRight(80);
 
@@ -2069,9 +1915,9 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 							{
 								if (GUI.Button(buttonRect, "Add"))
 								{
-									this.Collection.AddTable(looseTable, createUndo: false);
+									Collection.AddTable(looseTable);
 									Undo.ClearUndo(looseTable);
-									Undo.ClearUndo(this.Collection);
+									Undo.ClearUndo(Collection);
 									FancyColor.PopBlend();
 									GUIHelper.ExitGUI(false);
 								}
@@ -2080,59 +1926,48 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 							{
 								if (GUI.Button(buttonRect, "Create"))
 								{
-									this.Collection.AddNewTable(locale.Identifier);
-									Undo.ClearUndo(this.Collection);
+									Collection.AddNewTable(locale.Identifier);
+									Undo.ClearUndo(Collection);
 									FancyColor.PopBlend();
 									GUIHelper.ExitGUI(false);
 								}
 							}
 
-							if (i != lastLocaleIndex)
-							{
-								GUILayout.Space(LOCALE_SPACING);
-							}
+							if (i != lastLocaleIndex) GUILayout.Space(LOCALE_SPACING);
 
 							continue;
 						}
 
 
-						OdinGUITable<TTable> table = locale == null ? this.KeyTable : this.LocaleTableMap[locale];
+						var table = locale == null ? KeyTable : LocaleTableMap[locale];
 
-						table.IsVisible = this.DrawLocaleToggle(ref totalRect, toggle, table);
+						table.IsVisible = DrawLocaleToggle(ref totalRect, toggle, table);
 
 						if (table.Type != OdinGUITable<TTable>.GUITableType.Key)
 						{
-							Rect removeLocaleRect = totalRect.TakeFromRight(80);
+							var removeLocaleRect = totalRect.TakeFromRight(80);
 
 							if (GUI.Button(removeLocaleRect, "Remove"))
-							{
-								if (EditorUtility.DisplayDialog("Odin Localization Editor",
-																		  $"Are you sure you want to remove the locale '{locale.Identifier.CultureInfo.EnglishName}' from '{this.Collection.name}'?\n" +
-																		  "This can have side effects that can't be undone.",
-																		  "Yes",
-																		  "No"))
+								if (EditorUtility.DisplayDialog(
+										"Odin Localization Editor",
+										$"Are you sure you want to remove the locale '{locale.Identifier.CultureInfo.EnglishName}' from '{Collection.name}'?\n" +
+										"This can have side effects that can't be undone.",
+										"Yes",
+										"No"))
 								{
-									this.Collection.RemoveTable(table.Asset, createUndo: false);
+									Collection.RemoveTable(table.Asset);
 									Undo.ClearUndo(table.Asset);
-									Undo.ClearUndo(this.Collection);
+									Undo.ClearUndo(Collection);
 									FancyColor.PopBlend();
 									GUIHelper.ExitGUI(false);
 								}
-							}
 						}
 
-						if (this.EntryScrollView.IsBeyondHorizontalBounds && table.IsVisible && !table.IsPinned)
-						{
+						if (EntryScrollView.IsBeyondHorizontalBounds && table.IsVisible && !table.IsPinned)
 							if (Event.current.OnMouseDown(totalRect, 0))
-							{
-								this.MoveScrollPositionToTable(table);
-							}
-						}
-				 
-						if (i != lastLocaleIndex)
-						{
-							GUILayout.Space(LOCALE_SPACING);
-						}
+								MoveScrollPositionToTable(table);
+
+						if (i != lastLocaleIndex) GUILayout.Space(LOCALE_SPACING);
 					}
 				}
 				GUILayout.EndScrollView();
@@ -2142,17 +1977,17 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 				GUILayout.Space(4);
 
 				if (SirenixEditorGUI.Button("Manage Locales", ButtonSizes.Medium))
-				{
 					try
 					{
-						TwoWaySerializationBinder.Default.BindToType("UnityEditor.Localization.UI.LocaleGeneratorWindow, Unity.Localization.Editor")?
+						TwoWaySerializationBinder.Default.BindToType(
+								"UnityEditor.Localization.UI.LocaleGeneratorWindow, Unity.Localization.Editor")?
 							.GetMethod("ShowWindow", BindingFlags.Static | BindingFlags.Public)?.Invoke(null, null);
 					}
 					catch (NullReferenceException nullReferenceException)
 					{
-						Debug.LogError($"[Odin]: Failed to find LocaleGeneratorWindow.ShowWindow.\n{nullReferenceException.Message}");
+						Debug.LogError(
+							$"[Odin]: Failed to find LocaleGeneratorWindow.ShowWindow.\n{nullReferenceException.Message}");
 					}
-				}
 			}
 			GUILayout.EndArea();
 		}
@@ -2167,74 +2002,75 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 
 			// Draw toggle background
 			GUI.DrawTexture(
-				position: toggleRect,
-				image: Texture2D.whiteTexture,
-				scaleMode: ScaleMode.StretchToFill,
-				alphaBlend: false,
-				imageAspect: 1f,
-				color: BackgroundColorGrayscale.Blend(color, FancyColor.BlendMode.Multiply),
-				borderWidth: 0,
-				borderRadius: float.MaxValue);
+				toggleRect,
+				Texture2D.whiteTexture,
+				ScaleMode.StretchToFill,
+				false,
+				1f,
+				BackgroundColorGrayscale.Blend(color, FancyColor.BlendMode.Multiply),
+				0,
+				float.MaxValue);
 
 			// Draw toggle thumb
 			GUI.DrawTexture(
-				position: toggle.CurrentThumbRect,
-				image: Texture2D.whiteTexture,
-				scaleMode: ScaleMode.StretchToFill,
-				alphaBlend: false,
-				imageAspect: 1f,
-				color: ThumbColorGrayscale.Blend(color, FancyColor.BlendMode.Multiply),
-				borderWidth: 0,
-				borderRadius: float.MaxValue);
+				toggle.CurrentThumbRect,
+				Texture2D.whiteTexture,
+				ScaleMode.StretchToFill,
+				false,
+				1f,
+				ThumbColorGrayscale.Blend(color, FancyColor.BlendMode.Multiply),
+				0,
+				float.MaxValue);
 
 			AnimateThumb(toggleRect, toggle);
 
-			GUI.Label(rect, toggle.Label,
+			GUI.Label(
+				rect, toggle.Label,
 				GUI.enabled && Event.current.IsMouseOver(rect) ? SirenixGUIStyles.WhiteLabel : SirenixGUIStyles.Label);
 
 			if (GUI.enabled && Event.current.OnMouseDown(toggleRect, 0))
 			{
-				this.dragging = true;
-				this.lastChangedToggle = toggle;
-				this.newValue = !toggle.Toggled;
-				toggle.Toggled = this.newValue;
+				dragging = true;
+				lastChangedToggle = toggle;
+				newValue = !toggle.Toggled;
+				toggle.Toggled = newValue;
 
 				switch (Event.current.modifiers)
 				{
 					case EventModifiers.Control:
-						for (var i = 0; i < this.toggles.Count; i++)
+						for (var i = 0; i < toggles.Count; i++)
 						{
-							if (!this.toggles[i].Enabled) continue;
-							this.toggles[i].Toggled = this.newValue;
+							if (!toggles[i].Enabled) continue;
+							toggles[i].Toggled = newValue;
 						}
 
 						break;
 					case EventModifiers.Shift:
-						for (var i = 0; i < this.toggles.Count; i++)
+						for (var i = 0; i < toggles.Count; i++)
 						{
-							if (!this.toggles[i].Enabled) continue;
-							this.toggles[i].Toggled = table.IsVisible;
+							if (!toggles[i].Enabled) continue;
+							toggles[i].Toggled = table.IsVisible;
 						}
 
 						break;
 					case EventModifiers.Alt:
-						for (var i = 0; i < this.toggles.Count; i++)
+						for (var i = 0; i < toggles.Count; i++)
 						{
-							if (!this.toggles[i].Enabled) continue;
-							this.toggles[i].Toggled = this.toggles[i] == toggle;
+							if (!toggles[i].Enabled) continue;
+							toggles[i].Toggled = toggles[i] == toggle;
 						}
 
 						break;
 				}
 			}
 
-			if (GUI.enabled && this.dragging)
+			if (GUI.enabled && dragging)
 			{
 				var mp = Event.current.mousePosition;
-				if (toggle != this.lastChangedToggle && toggleRect.y < mp.y && toggleRect.yMax > mp.y)
+				if (toggle != lastChangedToggle && toggleRect.y < mp.y && toggleRect.yMax > mp.y)
 				{
-					this.lastChangedToggle = toggle;
-					toggle.Toggled = this.newValue;
+					lastChangedToggle = toggle;
+					toggle.Toggled = newValue;
 				}
 
 				GUIHelper.RequestRepaint();
@@ -2242,7 +2078,7 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 
 			if (Event.current.type == EventType.MouseUp && Event.current.button == 0)
 			{
-				this.dragging = false;
+				dragging = false;
 				GUIHelper.RequestRepaint();
 			}
 
@@ -2252,22 +2088,22 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 		private static void AnimateThumb(Rect toggleRect, Toggle toggle)
 		{
 			const float thumbAnimationDurationInSeconds = 0.07f;
-			const float thumbAnimationSpeed = 1f / (thumbAnimationDurationInSeconds / 2f); // divided by 2 since the animation is split into 2 phases.
+			const float
+				thumbAnimationSpeed =
+					1f / (thumbAnimationDurationInSeconds /
+						2f); // divided by 2 since the animation is split into 2 phases.
 			const float colorAnimationDurationInSeconds = 0.6f;
 			const float colorAnimationSpeed = 1f / colorAnimationDurationInSeconds;
 
-			var targetRect = toggle.Toggled
-				? toggleRect.AlignRight(toggleRect.height).AlignCenterY(toggleRect.height).Padding(2)
-				: toggleRect.AlignLeft(toggleRect.height).AlignCenterY(toggleRect.height).Padding(2);
+			var targetRect = toggle.Toggled ?
+				toggleRect.AlignRight(toggleRect.height).AlignCenterY(toggleRect.height).Padding(2) :
+				toggleRect.AlignLeft(toggleRect.height).AlignCenterY(toggleRect.height).Padding(2);
 
 			var targetColor = toggle.Toggled ? EnabledColor : DisabledColor;
 
-			if (toggle.CurrentColor != (Color)targetColor)
+			if (toggle.CurrentColor != (Color) targetColor)
 			{
-				if (toggle.T1.IsDone)
-				{
-					toggle.T1.Reset(0f);
-				}
+				if (toggle.T1.IsDone) toggle.T1.Reset(0f);
 
 				toggle.T1.Move(colorAnimationSpeed, Easing.InOutExpo);
 				toggle.CurrentColor = Color.Lerp(toggle.StartColor, targetColor, toggle.T1.GetValue());
@@ -2286,10 +2122,7 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 				{
 					if (toggle.CurrentThumbRect.xMax < targetRect.xMax)
 					{
-						if (toggle.T2.IsDone)
-						{
-							toggle.T2.Reset(0f);
-						}
+						if (toggle.T2.IsDone) toggle.T2.Reset(0f);
 
 						toggle.T2.Move(thumbAnimationSpeed);
 						var xMax = Mathf.Lerp(toggle.StartXMax, targetRect.xMax, toggle.T2.GetValue());
@@ -2297,10 +2130,7 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 					}
 					else if (toggle.CurrentThumbRect.xMin < targetRect.xMin)
 					{
-						if (toggle.T2.IsDone)
-						{
-							toggle.T2.Reset(0f);
-						}
+						if (toggle.T2.IsDone) toggle.T2.Reset(0f);
 
 						toggle.T2.Move(thumbAnimationSpeed);
 						var xMin = Mathf.Lerp(toggle.StartXMin, targetRect.xMin, toggle.T2.GetValue());
@@ -2311,10 +2141,7 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 				{
 					if (toggle.CurrentThumbRect.xMin > targetRect.xMin)
 					{
-						if (toggle.T2.IsDone)
-						{
-							toggle.T2.Reset(0f);
-						}
+						if (toggle.T2.IsDone) toggle.T2.Reset(0f);
 
 						toggle.T2.Move(thumbAnimationSpeed);
 						var xMin = Mathf.Lerp(toggle.StartXMin, targetRect.xMin, toggle.T2.GetValue());
@@ -2322,10 +2149,7 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 					}
 					else if (toggle.CurrentThumbRect.xMax > targetRect.xMax)
 					{
-						if (toggle.T2.IsDone)
-						{
-							toggle.T2.Reset(0f);
-						}
+						if (toggle.T2.IsDone) toggle.T2.Reset(0f);
 
 						toggle.T2.Move(thumbAnimationSpeed);
 						var xMax = Mathf.Lerp(toggle.StartXMax, targetRect.xMax, toggle.T2.GetValue());
@@ -2339,9 +2163,9 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 
 		private void LocaleToggle(Rect position, Locale locale)
 		{
-			if (locale != null && !this.LocaleTableMap.ContainsKey(locale))
+			if (locale != null && !LocaleTableMap.ContainsKey(locale))
 			{
-				Rect createLocaleRect = position.TakeFromRight(80);
+				var createLocaleRect = position.TakeFromRight(80);
 
 				GUIHelper.PushGUIEnabled(false);
 				{
@@ -2353,20 +2177,18 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 
 				LocalizationTable looseTable = null;
 
-				foreach (LocalizationTable localizationTable in this.LooseTables)
-				{
+				foreach (var localizationTable in LooseTables)
 					if (localizationTable.LocaleIdentifier == locale.Identifier)
 					{
 						looseTable = localizationTable;
 						break;
 					}
-				}
 
 				if (looseTable != null)
 				{
 					if (GUI.Button(createLocaleRect, "Add"))
 					{
-						this.Collection.AddTable(looseTable, createUndo: true);
+						Collection.AddTable(looseTable, true);
 						FancyColor.PopBlend();
 						GUIHelper.ExitGUI(false);
 					}
@@ -2375,7 +2197,7 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 				{
 					if (GUI.Button(createLocaleRect, "Create"))
 					{
-						this.Collection.AddNewTable(locale.Identifier);
+						Collection.AddNewTable(locale.Identifier);
 						FancyColor.PopBlend();
 						GUIHelper.ExitGUI(false);
 					}
@@ -2384,56 +2206,47 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 				return;
 			}
 
-			OdinGUITable<TTable> table = locale == null ? this.KeyTable : this.LocaleTableMap[locale];
+			var table = locale == null ? KeyTable : LocaleTableMap[locale];
 
 			EditorGUI.BeginChangeCheck();
 			{
-				table.IsVisible = GUI.Toggle(position.TakeFromLeft(GUI.skin.toggle.padding.left), table.IsVisible, GUIContent.none);
+				table.IsVisible = GUI.Toggle(
+					position.TakeFromLeft(GUI.skin.toggle.padding.left), table.IsVisible, GUIContent.none);
 			}
 			if (EditorGUI.EndChangeCheck())
-			{
 				switch (Event.current.modifiers)
 				{
 					case EventModifiers.Shift:
-						for (var i = 0; i < this.GUITables.Count; i++)
-						{
-							this.GUITables[i].IsVisible = table.IsVisible;
-						}
+						for (var i = 0; i < GUITables.Count; i++) GUITables[i].IsVisible = table.IsVisible;
 
 						break;
 
 					case EventModifiers.Alt:
-						for (var i = 0; i < this.GUITables.Count; i++)
-						{
-							this.GUITables[i].IsVisible = this.GUITables[i] == table;
-						}
+						for (var i = 0; i < GUITables.Count; i++) GUITables[i].IsVisible = GUITables[i] == table;
 
 						break;
 				}
-			}
 
 			if (table.Type != OdinGUITable<TTable>.GUITableType.Key)
 			{
-				Rect removeLocaleRect = position.TakeFromRight(80);
+				var removeLocaleRect = position.TakeFromRight(80);
 
 				if (GUI.Button(removeLocaleRect, "Remove"))
 				{
-					this.Collection.RemoveTable(table.Asset, createUndo: true);
+					Collection.RemoveTable(table.Asset, true);
 					FancyColor.PopBlend();
 					GUIHelper.ExitGUI(false);
 				}
 			}
 
-			if (this.EntryScrollView.IsBeyondHorizontalBounds && table.IsVisible && !table.IsPinned)
+			if (EntryScrollView.IsBeyondHorizontalBounds && table.IsVisible && !table.IsPinned)
 			{
-				bool isMouseOver = Event.current.IsMouseOver(position);
+				var isMouseOver = Event.current.IsMouseOver(position);
 
-				GUI.Label(position, table.DisplayName, isMouseOver ? SirenixGUIStyles.WhiteLabel : SirenixGUIStyles.Label);
+				GUI.Label(
+					position, table.DisplayName, isMouseOver ? SirenixGUIStyles.WhiteLabel : SirenixGUIStyles.Label);
 
-				if (Event.current.OnMouseDown(position, 0))
-				{
-					this.MoveScrollPositionToTable(table);
-				}
+				if (Event.current.OnMouseDown(position, 0)) MoveScrollPositionToTable(table);
 			}
 			else
 			{
@@ -2443,20 +2256,14 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 
 		protected bool IsDraggingAnything()
 		{
-			if (this.EntryScrollView.IsDraggingMouse ||
-				 this.EntryScrollView.IsDraggingHorizontalScrollBar ||
-				 this.EntryScrollView.IsDraggingVerticalScrollBar)
-			{
+			if (EntryScrollView.IsDraggingMouse ||
+				EntryScrollView.IsDraggingHorizontalScrollBar ||
+				EntryScrollView.IsDraggingVerticalScrollBar)
 				return true;
-			}
 
-			for (var i = 0; i < this.GUITables.Count; i++)
-			{
-				if (this.GUITables[i].IsDraggingSlider)
-				{
+			for (var i = 0; i < GUITables.Count; i++)
+				if (GUITables[i].IsDraggingSlider)
 					return true;
-				}
-			}
 
 			return false;
 		}
@@ -2535,11 +2342,13 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 			switch (this.Collection)
 			{
 				case AssetTableCollection _:
-					selector = new TypeSelector(OdinLocalizationMetadataRegistry.AssetEntryMetadataTypes, excludeInheritors: true);
+					selector =
+ new TypeSelector(OdinLocalizationMetadataRegistry.AssetEntryMetadataTypes, excludeInheritors: true);
 					break;
 
 				case StringTableCollection _:
-					selector = new TypeSelector(OdinLocalizationMetadataRegistry.StringEntryMetadataTypes, excludeInheritors: true);
+					selector =
+ new TypeSelector(OdinLocalizationMetadataRegistry.StringEntryMetadataTypes, excludeInheritors: true);
 					break;
 
 				default:
@@ -2591,35 +2400,32 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 			{
 				// Table Collection Name
 				{
-					Rect namePosition = EditorGUILayout.GetControlRect();
+					var namePosition = EditorGUILayout.GetControlRect();
 
 					GUI.Label(namePosition.TakeFromLeft(130), "Collection Name");
 
 					EditorGUI.BeginChangeCheck();
 
-					string value = SirenixEditorFields.DelayedTextField(namePosition, this.Collection.SharedData.TableCollectionName);
+					var value = SirenixEditorFields.DelayedTextField(
+						namePosition, Collection.SharedData.TableCollectionName);
 
 					if (EditorGUI.EndChangeCheck())
-					{
-						if (!string.IsNullOrEmpty(value) && OdinLocalizationEditorSettings.IsTableNameValid(this.Collection.GetType(), value))
+						if (!string.IsNullOrEmpty(value) &&
+							OdinLocalizationEditorSettings.IsTableNameValid(Collection.GetType(), value))
 						{
-							this.Collection.SetTableCollectionName(value, true);
-							this.MenuItem.Name = this.Collection.SharedData.TableCollectionName;
-							this.MenuItem.Select();
+							Collection.SetTableCollectionName(value, true);
+							MenuItem.Name = Collection.SharedData.TableCollectionName;
+							MenuItem.Select();
 						}
-					}
 				}
 
 				// Preload All Tables
 				{
 					EditorGUI.BeginChangeCheck();
 
-					bool value = GUILayout.Toggle(this.Collection.IsPreloadTableFlagSet(), "Preload All Tables");
+					var value = GUILayout.Toggle(Collection.IsPreloadTableFlagSet(), "Preload All Tables");
 
-					if (EditorGUI.EndChangeCheck())
-					{
-						this.Collection.SetPreloadTableFlag(value, true);
-					}
+					if (EditorGUI.EndChangeCheck()) Collection.SetPreloadTableFlag(value, true);
 				}
 
 				GUILayout.Space(4);
@@ -2627,9 +2433,7 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 				GUILayout.Space(4);
 
 				if (SirenixEditorGUI.Button("Manage Collection", ButtonSizes.Large))
-				{
-					GUIHelper.OpenInspectorWindow(this.Collection);
-				}
+					GUIHelper.OpenInspectorWindow(Collection);
 			}
 			GUILayout.EndArea();
 		}
@@ -2639,20 +2443,25 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 			var offset = SirenixEditorGUI.SlideRect(rect, MouseCursor.SplitResizeLeftRight).x;
 
 			var slideThumbColor = Event.current.IsMouseOver(rect)
-				? EditorGUIUtility.isProSkin ? new Color(0.5f, 0.5f, 0.5f) : new Color(1f, 1f, 1f)
-				: this.WindowState.RightMenuWidth > 0
-					? EditorGUIUtility.isProSkin ? new Color(0.25f, 0.25f, 0.25f) : new Color(0.8f, 0.8f, 0.8f)
-					: EditorGUIUtility.isProSkin
-						? new Color(0.4f, 0.4f, 0.4f)
-						: new Color(1f, 1f, 1f);
+				?
+				EditorGUIUtility.isProSkin ? new Color(0.5f, 0.5f, 0.5f) : new Color(1f, 1f, 1f) :
+				WindowState.RightMenuWidth > 0 ?
+					EditorGUIUtility.isProSkin ? new Color(0.25f, 0.25f, 0.25f) : new Color(0.8f, 0.8f, 0.8f) :
+					EditorGUIUtility.isProSkin ?
+						new Color(0.4f, 0.4f, 0.4f)
+						:
+						new Color(1f, 1f, 1f);
 
-			EditorGUI.DrawRect(rect, Event.current.IsMouseOver(rect)
-				? EditorGUIUtility.isProSkin ? new Color(0.26f, 0.26f, 0.26f) : new Color(0.7f, 0.7f, 0.7f)
-				: EditorGUIUtility.isProSkin
-					? new Color(0.2f, 0.2f, 0.2f)
-					: new Color(0.6f, 0.6f, 0.6f));
+			EditorGUI.DrawRect(
+				rect, Event.current.IsMouseOver(rect)
+					?
+					EditorGUIUtility.isProSkin ? new Color(0.26f, 0.26f, 0.26f) : new Color(0.7f, 0.7f, 0.7f) :
+					EditorGUIUtility.isProSkin ?
+						new Color(0.2f, 0.2f, 0.2f)
+						:
+						new Color(0.6f, 0.6f, 0.6f));
 
-			var h2 = connect ? this.WindowState.RightMenuTopPanelHeight : rect.height / 2f - 40;
+			var h2 = connect ? WindowState.RightMenuTopPanelHeight : rect.height / 2f - 40;
 
 			EditorGUI.DrawRect(rect.AlignLeft(1), new Color(0, 0, 0, 0.4f));
 			var left = new Rect(rect.center.x - 1, 0, 1, rect.height);
@@ -2664,9 +2473,10 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 				EditorGUI.DrawRect(right, slideThumbColor);
 				EditorGUI.DrawRect(rect.AlignRight(1), new Color(0, 0, 0, 0.4f));
 			}
-			else if (this.WindowState.RightMenuWidth > 0)
+			else if (WindowState.RightMenuWidth > 0)
 			{
-				var crossTop = new Rect(rect.AlignCenterX(1).AddX(2).x, this.WindowState.RightMenuTopPanelHeight - (14 / 2 + 1), 4, 1);
+				var crossTop = new Rect(
+					rect.AlignCenterX(1).AddX(2).x, WindowState.RightMenuTopPanelHeight - (14 / 2 + 1), 4, 1);
 				var crossBottom = crossTop.AddY(2);
 				var rightTop = new Rect(rect.center.x + 1, 0, 1, crossTop.y + 1);
 				var rightBottom = new Rect(rect.center.x + 1, crossBottom.y, 1, rect.height - crossBottom.y);
@@ -2674,7 +2484,8 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 				EditorGUI.DrawRect(crossBottom, slideThumbColor);
 				EditorGUI.DrawRect(rightTop, slideThumbColor);
 				EditorGUI.DrawRect(rightBottom, slideThumbColor);
-				EditorGUI.DrawRect(rect.AlignRight(1).SetHeight(connect ? h2 - 13 : rect.height), new Color(0, 0, 0, 0.4f));
+				EditorGUI.DrawRect(
+					rect.AlignRight(1).SetHeight(connect ? h2 - 13 : rect.height), new Color(0, 0, 0, 0.4f));
 				EditorGUI.DrawRect(rect.AlignRight(1).AddY(connect ? h2 - 1 : 0), new Color(0, 0, 0, 0.4f));
 			}
 			else
@@ -2692,18 +2503,23 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 			var offset = SirenixEditorGUI.SlideRect(rect, MouseCursor.SplitResizeUpDown).y;
 
 			var slideThumbColor = Event.current.IsMouseOver(rect)
-				? EditorGUIUtility.isProSkin ? new Color(0.5f, 0.5f, 0.5f) : new Color(1f, 1f, 1f)
-				: this.WindowState.RightMenuWidth > 0
-					? EditorGUIUtility.isProSkin ? new Color(0.25f, 0.25f, 0.25f) : new Color(0.8f, 0.8f, 0.8f)
-					: EditorGUIUtility.isProSkin
-						? new Color(0.4f, 0.4f, 0.4f)
-						: new Color(1f, 1f, 1f);
+				?
+				EditorGUIUtility.isProSkin ? new Color(0.5f, 0.5f, 0.5f) : new Color(1f, 1f, 1f) :
+				WindowState.RightMenuWidth > 0 ?
+					EditorGUIUtility.isProSkin ? new Color(0.25f, 0.25f, 0.25f) : new Color(0.8f, 0.8f, 0.8f) :
+					EditorGUIUtility.isProSkin ?
+						new Color(0.4f, 0.4f, 0.4f)
+						:
+						new Color(1f, 1f, 1f);
 
-			EditorGUI.DrawRect(rect, Event.current.IsMouseOver(rect)
-				? EditorGUIUtility.isProSkin ? new Color(0.26f, 0.26f, 0.26f) : new Color(0.7f, 0.7f, 0.7f)
-				: EditorGUIUtility.isProSkin
-					? new Color(0.2f, 0.2f, 0.2f)
-					: new Color(0.6f, 0.6f, 0.6f));
+			EditorGUI.DrawRect(
+				rect, Event.current.IsMouseOver(rect)
+					?
+					EditorGUIUtility.isProSkin ? new Color(0.26f, 0.26f, 0.26f) : new Color(0.7f, 0.7f, 0.7f) :
+					EditorGUIUtility.isProSkin ?
+						new Color(0.2f, 0.2f, 0.2f)
+						:
+						new Color(0.6f, 0.6f, 0.6f));
 
 			var top = new Rect(rect.x, rect.center.y - 1, rect.width, 1);
 			var bottom = new Rect(rect.x, rect.center.y + 1, rect.width, 1);

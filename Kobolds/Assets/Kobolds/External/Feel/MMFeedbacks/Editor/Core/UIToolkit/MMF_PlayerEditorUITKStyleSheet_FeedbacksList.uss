@@ -2,15 +2,15 @@
 
 }
 
-.mm-feedback-foldout-label, 
-    .mm-feedback-foldout-label:hover, 
-    .mm-feedback-foldout-label:focus, 
-    .mm-feedback-foldout-label:active, 
-    .mm-feedback-foldout-label:selected, 
-    .mm-feedback-foldout-label:checked,
-    .mm-feedbacks-list Label:hover, 
-    .mm-feedbacks-list Label:focus, 
-    .mm-feedbacks-list Label:active { /* labels in the list */
+.mm-feedback-foldout-label,
+.mm-feedback-foldout-label:hover,
+.mm-feedback-foldout-label:focus,
+.mm-feedback-foldout-label:active,
+.mm-feedback-foldout-label:selected,
+.mm-feedback-foldout-label:checked,
+.mm-feedbacks-list Label:hover,
+.mm-feedbacks-list Label:focus,
+.mm-feedbacks-list Label:active { /* labels in the list */
     color: rgba(220, 220, 220, 1);
 }
 
@@ -42,7 +42,7 @@
 }
 
 .mm-feedbacks-list .mm-feedback-reorder-blocker { /* prevents reordering */
-    background-color: red;    
+    background-color: red;
     height: 500px;
     flex-grow: 1;
     position: absolute;
@@ -74,7 +74,7 @@
     border-color: black;
     flex-direction: row;
     margin-bottom: 1px;
-    -unity-text-align: middle-left; 
+    -unity-text-align: middle-left;
     align-items: flex-start;
 }
 
@@ -90,8 +90,7 @@
     padding-top: 2px;
 }
 
-.mm-feedback-edit-script-button-box
-{
+.mm-feedback-edit-script-button-box {
     background-color: rgba(0, 0, 0, 0.2);
     color: rgba(255, 255, 255, 0.5);
     margin-right: 5px;
@@ -105,8 +104,8 @@
     opacity: 0.5;
     margin-top: 2px;
     margin-left: 2px;
-    margin-right: 0px;    
-} 
+    margin-right: 0px;
+}
 
 .mm-feedback-edit-script-button-box .unity-object-field__selector {
     position: absolute;
@@ -126,9 +125,9 @@
 
 .mm-feedback-help-box { /* help box */
     margin-left: -51px;
-    margin-right: -6px; 
+    margin-right: -6px;
     padding-left: 10px;
-    -unity-text-align: upper-left; 
+    -unity-text-align: upper-left;
     border-left-width: 0px;
     margin-top: -1px;
     background-color: rgba(255, 255, 255, 0.05);
@@ -148,7 +147,7 @@
 
 .mm-feedback-setup-required-box { /* setup required box */
     margin-left: -51px;
-    margin-right: -6px; 
+    margin-right: -6px;
     padding-left: 0px;
     -unity-text-align: upper-left;
     color: rgba(20, 20, 20, 1);
@@ -179,16 +178,16 @@
 }
 
 .mm-mmf-inspector .unity-decorator-drawers-container .unity-header-drawer__label,
-.mm-mmf-inspector .unity-decorator-drawers-container .unity-header-drawer__label:hover{ /* Header attributes */
-    background-color: rgba(255,255,255,0.00);
-    border-color: rgba(59,163,196,0.3); 
+.mm-mmf-inspector .unity-decorator-drawers-container .unity-header-drawer__label:hover { /* Header attributes */
+    background-color: rgba(255, 255, 255, 0.00);
+    border-color: rgba(59, 163, 196, 0.3);
     border-bottom-width: 1px;
     margin-top: 0px;
     margin-bottom: 4px;
     padding-left: 0px;
     padding-bottom: 2px;
     margin-left: -10px;
-    color: rgba(59,163,196,1);
+    color: rgba(59, 163, 196, 1);
 
 }
 
@@ -225,7 +224,7 @@
 }
 
 .mm-mmf-group #unity-content { /* feedback foldout content */
-    padding-bottom: 10px; 
+    padding-bottom: 10px;
 }
 
 .mm-feedback-left-border { /* feedback left border */
@@ -278,7 +277,7 @@
     top: 2px;
     right: 90px;
     height: 21px;
-    color: rgba(255,255,255,0.4);
+    color: rgba(255, 255, 255, 0.4);
 }
 
 .mm-feedback-timing-label { /* required timing label */
@@ -286,7 +285,7 @@
     top: 2px;
     right: 35px;
     height: 21px;
-    color: rgba(255,255,255,0.4);
+    color: rgba(255, 255, 255, 0.4);
 }
 
 .mm-feedback-contextual-menu-button { /* context menu button */
@@ -302,7 +301,7 @@
     right: 15px;
     top: 2px;
     width: 16px;
-    height: 16px;    
+    height: 16px;
 }
 
 .mm-setup-required-icon { /* setup required icon */
@@ -318,7 +317,7 @@
 }
 
 .mm-feedbacks-list-empty { /* custom empty list label */
-    padding: 10px;    
+    padding: 10px;
     flex-direction: row;
     flex-wrap: wrap;
 }
@@ -357,7 +356,7 @@
     right: 8px;
 }
 
-.mm-feedbacks-inactive-warning { /* inactive warning */    
+.mm-feedbacks-inactive-warning { /* inactive warning */
     background-color: rgba(255, 90, 0, 1);
     color: rgba(255, 255, 255, 0.8);
     padding: 10px;
@@ -367,7 +366,7 @@
 
 .mm-feedbacks-inactive-warning Label { /* inactive warning label */
     white-space: normal;
-    color: rgba(0,0,0,0.8);
+    color: rgba(0, 0, 0, 0.8);
     font-size: 12px;
     -unity-font-style: bold;
 }

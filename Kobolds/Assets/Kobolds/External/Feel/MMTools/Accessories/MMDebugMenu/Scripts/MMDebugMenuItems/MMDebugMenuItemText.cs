@@ -1,13 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿#if MM_UI
 using UnityEngine;
-#if MM_UI
 using UnityEngine.UI;
 
 namespace MoreMountains.Tools
 {
 	/// <summary>
-	/// A class used to bind a text item to a MMDebugMenu
+	///     A class used to bind a text item to a MMDebugMenu
 	/// </summary>
 	public class MMDebugMenuItemText : MonoBehaviour
 	{

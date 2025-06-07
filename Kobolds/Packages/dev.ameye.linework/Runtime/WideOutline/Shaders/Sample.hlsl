@@ -36,7 +36,7 @@ void WideOutline_float(
 
     // Load encoded position.
     float2 EncodedPosition = _BlitTexture.Load(int3(uvInt, 0)).rg;
-    
+
     float2 NearestPosition = 0;
     // Early out if null position.
     if (EncodedPosition.y == -1)
@@ -63,7 +63,8 @@ void WideOutline_float(
     // Calculate relative distance.
     RelativeDistance = distance / _OutlineWidth;
 
-    Color = half4(SAMPLE_TEXTURE2D(_SilhouetteBuffer, sampler_SilhouetteBuffer, NearestPosition / _ScreenParams.xy).rgb, Outline);
+    Color = half4(
+        SAMPLE_TEXTURE2D(_SilhouetteBuffer, sampler_SilhouetteBuffer, NearestPosition / _ScreenParams.xy).rgb, Outline);
 }
 
 #endif

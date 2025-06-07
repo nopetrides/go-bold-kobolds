@@ -9,21 +9,18 @@ namespace MoreMountains.Feedbacks
 	public class MMSpringVignetteColor_URP : MMSpringColorComponent<Volume>
 	{
 		protected Vignette _vignette;
-		
-		protected override void Initialization()
-		{
-			if (Target == null)
-			{
-				Target = this.gameObject.GetComponent<Volume>();
-			}
-			Target.profile.TryGet(out _vignette);
-			base.Initialization();
-		}
-		
+
 		public override Color TargetColor
 		{
 			get => _vignette.color.value;
 			set => _vignette.color.Override(value);
+		}
+
+		protected override void Initialization()
+		{
+			if (Target == null) Target = gameObject.GetComponent<Volume>();
+			Target.profile.TryGet(out _vignette);
+			base.Initialization();
 		}
 	}
 }

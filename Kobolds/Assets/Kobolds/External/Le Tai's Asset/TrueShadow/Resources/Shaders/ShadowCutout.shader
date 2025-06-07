@@ -10,7 +10,7 @@ Shader "Hidden/TrueShadow/Cutout"
         Cull Off ZWrite Off ZTest Always
         Blend Zero OneMinusSrcAlpha, Zero OneMinusSrcAlpha
         BlendOp Add, Add
-//        ColorMask a
+        //        ColorMask a
 
         Pass
         {

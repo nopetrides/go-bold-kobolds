@@ -6,10 +6,16 @@ Shader "Custom/FlatShadingURP_ForwardPlus"
     }
     SubShader
     {
-        Tags { "RenderPipeline"="UniversalRenderPipeline" "RenderType"="Opaque" }
+        Tags
+        {
+            "RenderPipeline"="UniversalRenderPipeline" "RenderType"="Opaque"
+        }
         Pass
         {
-            Tags { "LightMode"="UniversalForward" }
+            Tags
+            {
+                "LightMode"="UniversalForward"
+            }
 
             HLSLPROGRAM
             #pragma vertex vert
@@ -32,13 +38,14 @@ Shader "Custom/FlatShadingURP_ForwardPlus"
                 float3 normalWS : TEXCOORD0;
                 float3 positionWS : TEXCOORD1;
                 // to support GPU instancing and Single Pass Stereo rendering(VR), add the following section
-                UNITY_VERTEX_INPUT_INSTANCE_ID  // For non PSSL, equals to -> uint instanceID : SV_InstanceID;
-                UNITY_VERTEX_OUTPUT_STEREO      // For non OpenGL and non PSSL, equals to -> uint stereoTargetEyeIndexAsRTArrayIdx : SV_RenderTargetArrayIndex; (when UNITY_STEREO_INSTANCING_ENABLED)
+                UNITY_VERTEX_INPUT_INSTANCE_ID // For non PSSL, equals to -> uint instanceID : SV_InstanceID;
+                UNITY_VERTEX_OUTPUT_STEREO
+                // For non OpenGL and non PSSL, equals to -> uint stereoTargetEyeIndexAsRTArrayIdx : SV_RenderTargetArrayIndex; (when UNITY_STEREO_INSTANCING_ENABLED)
             };
 
 
             // all sampler2D don't need to put inside CBUFFER 
-            sampler2D _BaseMap; 
+            sampler2D _BaseMap;
             sampler2D _EmissionMap;
             sampler2D _OcclusionMap;
             sampler2D _OutlineZOffsetMaskTex;
@@ -47,48 +54,48 @@ Shader "Custom/FlatShadingURP_ForwardPlus"
             // see -> https://blogs.unity3d.com/2019/02/28/srp-batcher-speed-up-your-rendering/
             CBUFFER_START(UnityPerMaterial)
                 // base color
-                float4  _BaseMap_ST;
-                half4   _BaseColor;
+                float4 _BaseMap_ST;
+                half4 _BaseColor;
 
                 // alpha
-                half    _Cutoff;
+                half _Cutoff;
 
                 // emission
-                float   _UseEmission;
-                half3   _EmissionColor;
-                half    _EmissionMulByBaseColor;
-                half3   _EmissionMapChannelMask;
+                float _UseEmission;
+                half3 _EmissionColor;
+                half _EmissionMulByBaseColor;
+                half3 _EmissionMapChannelMask;
 
                 // occlusion
-                float   _UseOcclusion;
-                half    _OcclusionStrength;
-                half4   _OcclusionMapChannelMask;
-                half    _OcclusionRemapStart;
-                half    _OcclusionRemapEnd;
+                float _UseOcclusion;
+                half _OcclusionStrength;
+                half4 _OcclusionMapChannelMask;
+                half _OcclusionRemapStart;
+                half _OcclusionRemapEnd;
 
                 // lighting
-                half3   _IndirectLightMinColor;
-                half    _CelShadeMidPoint;
-                half    _CelShadeSoftness;
+                half3 _IndirectLightMinColor;
+                half _CelShadeMidPoint;
+                half _CelShadeSoftness;
 
                 // shadow mapping
-                half    _ReceiveShadowMappingAmount;
-                float   _ReceiveShadowMappingPosOffset;
-                half3   _ShadowMapColor;
+                half _ReceiveShadowMappingAmount;
+                float _ReceiveShadowMappingPosOffset;
+                half3 _ShadowMapColor;
 
                 // outline
-                float   _OutlineWidth;
-                half3   _OutlineColor;
-                float   _OutlineZOffset;
-                float   _OutlineZOffsetMaskRemapStart;
-                float   _OutlineZOffsetMaskRemapEnd;
+                float _OutlineWidth;
+                half3 _OutlineColor;
+                float _OutlineZOffset;
+                float _OutlineZOffsetMaskRemapStart;
+                float _OutlineZOffsetMaskRemapEnd;
 
             CBUFFER_END
 
             //a special uniform for applyShadowBiasFixToHClipPos() only, it is not a per material uniform, 
             //so it is fine to write it outside our UnityPerMaterial CBUFFER
             float3 _LightDirection;
-            
+
             // Vertex Shader
             Varyings vert(Attributes IN)
             {
@@ -103,11 +110,11 @@ Shader "Custom/FlatShadingURP_ForwardPlus"
             float3 ShadeSingleLight(Light light, float3 normal, float3 positionWS)
             {
                 float3 lightDir = normalize(light.direction);
-                half distanceAttenuation = min(4,light.distanceAttenuation);
-                half litOrShadowArea = lerp(1,light.shadowAttenuation,_ReceiveShadowMappingAmount);
-                half3 litOrShadowColor = lerp(_ShadowMapColor,1, litOrShadowArea);
+                half distanceAttenuation = min(4, light.distanceAttenuation);
+                half litOrShadowArea = lerp(1, light.shadowAttenuation, _ReceiveShadowMappingAmount);
+                half3 litOrShadowColor = lerp(_ShadowMapColor, 1, litOrShadowArea);
                 half3 lightAttenuationRGB = litOrShadowColor * distanceAttenuation;
-                
+
                 // If it's a point or spot light, calculate correct direction
                 if (light.distanceAttenuation < 1.0)
                 {
@@ -116,9 +123,9 @@ Shader "Custom/FlatShadingURP_ForwardPlus"
 
                 // Diffuse Lambert shading
                 float diff = max(dot(normal, lightDir), 0.0);
-                
+
                 return saturate(light.color) * diff * distanceAttenuation; //(litOrShadowColor ? 0.25 : 1);
-                
+
                 //
                 // half3 N = normal;
                 // half3 L = light.direction;
@@ -169,20 +176,23 @@ Shader "Custom/FlatShadingURP_ForwardPlus"
                 // return light.color * diff * light.distanceAttenuation * light.shadowAttenuation;
             }
 
-            half3 CompositeAllLightResults(half3 indirectResult, half3 mainLightResult, half3 additionalLightSumResult, half3 emissionResult, half3 albedo)
+            half3 CompositeAllLightResults(half3 indirectResult, half3 mainLightResult, half3 additionalLightSumResult,
+                                           half3 emissionResult, half3 albedo)
             {
                 // [remember you can write anything here, this is just a simple tutorial method]
                 // here we prevent light over bright,
                 // while still want to preserve light color's hue
-                half3 rawLightSum = max(indirectResult, mainLightResult + additionalLightSumResult); // pick the highest between indirect and direct light
+                half3 rawLightSum = max(indirectResult, mainLightResult + additionalLightSumResult);
+                // pick the highest between indirect and direct light
                 return albedo * rawLightSum + emissionResult;
             }
 
             // Fragment Shader
             half4 frag(Varyings IN) : SV_Target
             {
-                UNITY_SETUP_INSTANCE_ID(input);                     // in non OpenGL and non PSSL, MACRO will turn into -> UnitySetupInstanceID(input.instanceID);
-                
+                UNITY_SETUP_INSTANCE_ID(input);
+                // in non OpenGL and non PSSL, MACRO will turn into -> UnitySetupInstanceID(input.instanceID);
+
                 float3 normal = normalize(IN.normalWS);
                 float3 lighting = 0;
 
@@ -198,13 +208,14 @@ Shader "Custom/FlatShadingURP_ForwardPlus"
                 inputData.bakedGI = half3(0.0, 0.0, 0.0); // Default baked GI
                 inputData.normalizedScreenSpaceUV = float2(0.0, 0.0); // Default UV
                 inputData.shadowMask = half4(0.0, 0.0, 0.0, 0.0); // Default shadow mask
-                inputData.tangentToWorld = half3x3(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0); // Default tangent-to-world matrix
+                inputData.tangentToWorld = half3x3(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+                // Default tangent-to-world matrix
 
                 // Check and loop over additional lights for Forward+ mode
                 #ifdef _ADDITIONAL_LIGHTS
                     uint pixelLightCount = GetAdditionalLightsCount();
 
-                    #if USE_FORWARD_PLUS
+                #if USE_FORWARD_PLUS
                         // Loop through directional lights
                         for (uint lightIndex = 0; lightIndex < min(URP_FP_DIRECTIONAL_LIGHTS_COUNT, MAX_VISIBLE_LIGHTS); lightIndex++)
                         {
@@ -213,32 +224,32 @@ Shader "Custom/FlatShadingURP_ForwardPlus"
 
                             Light light = GetAdditionalLight(lightIndex, IN.positionWS);
 
-                            #ifdef _LIGHT_LAYERS
+                #ifdef _LIGHT_LAYERS
                                 if (IsMatchingLightLayer(light.layerMask, 0)) // Assuming we check against the default mesh layer
                                     lighting += ShadeSingleLight(light, normal, IN.positionWS);
-                            #else
+                #else
                                 lighting += ShadeSingleLight(light, normal, IN.positionWS);
-                            #endif
+                #endif
                         }
-                    #endif
+                #endif
 
                     // Loop through all pixel lights
                     LIGHT_LOOP_BEGIN(pixelLightCount)
                         Light light = GetAdditionalLight(lightIndex, IN.positionWS);
 
-                        #ifdef _LIGHT_LAYERS
+                #ifdef _LIGHT_LAYERS
                             if (IsMatchingLightLayer(light.layerMask, 0)) // Assuming we check against the default mesh layer
                                 lighting += ShadeSingleLight(light, normal, IN.positionWS);
-                        #else
+                #else
                             lighting += ShadeSingleLight(light, normal, IN.positionWS);
-                        #endif
+                #endif
                     LIGHT_LOOP_END
                 #endif
 
                 // Final color
                 tex2D(_BaseMap, IN.positionWS) * _BaseColor;
-                float3 finalColor = CompositeAllLightResults (lighting, lighting, lighting, lighting, _BaseColor.rgb);
-                
+                float3 finalColor = CompositeAllLightResults(lighting, lighting, lighting, lighting, _BaseColor.rgb);
+
                 return half4(finalColor, 1.0);
             }
             ENDHLSL

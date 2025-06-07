@@ -5,91 +5,87 @@ using UnityEngine.UI;
 
 namespace LeTai.TrueShadow
 {
-public partial class ShadowRenderer
-{
-    // TODO: cleanup unused mask materials
-    static readonly Dictionary<int, Material> MASK_MATERIALS_CACHE = new Dictionary<int, Material>();
+	public partial class ShadowRenderer
+	{
+		// TODO: cleanup unused mask materials
+		private static readonly Dictionary<int, Material> MASK_MATERIALS_CACHE = new();
 
-    internal static void ClearMaskMaterialCache()
-    {
-        foreach (var keyValuePair in MASK_MATERIALS_CACHE)
-        {
-            if (Application.isPlaying)
-                Destroy(keyValuePair.Value);
-            else
-                DestroyImmediate(keyValuePair.Value);
-        }
+		public Material GetModifiedMaterial(Material baseMaterial)
+		{
+			if (!shadow)
+				return baseMaterial;
 
-        MASK_MATERIALS_CACHE.Clear();
-    }
+			shadow.ModifyShadowRendererMaterial(baseMaterial);
 
-    public Material GetModifiedMaterial(Material baseMaterial)
-    {
-        if (!shadow)
-            return baseMaterial;
+			if (!baseMaterial.HasProperty(ShaderId.STENCIL_ID))
+				return baseMaterial; // Shadow is not masked
 
-        shadow.ModifyShadowRendererMaterial(baseMaterial);
+			var casterMask = shadow.GetComponent<Mask>();
+			var casterIsMask = casterMask != null && casterMask.isActiveAndEnabled;
 
-        if (!baseMaterial.HasProperty(ShaderId.STENCIL_ID))
-            return baseMaterial; // Shadow is not masked
+			var hash = HashUtils.CombineHashCodes(
+				casterIsMask.GetHashCode(),
+				baseMaterial.GetHashCode()
+			);
 
-        var  casterMask   = shadow.GetComponent<Mask>();
-        bool casterIsMask = casterMask != null && casterMask.isActiveAndEnabled;
+			MASK_MATERIALS_CACHE.TryGetValue(hash, out var mat);
 
-        int hash = HashUtils.CombineHashCodes(
-            casterIsMask.GetHashCode(),
-            baseMaterial.GetHashCode()
-        );
+			if (!mat)
+			{
+				mat = new Material(baseMaterial);
 
-        MASK_MATERIALS_CACHE.TryGetValue(hash, out var mat);
+				if (shadow.ShadowAsSibling)
+				{
+					// Prevent shadow from writing to stencil mask
+					mat.SetInt(ShaderId.COLOR_MASK, (int) ColorWriteMask.All);
+					mat.SetInt(ShaderId.STENCIL_OP, (int) StencilOp.Keep);
+				}
+				else if (casterIsMask)
+				{
+					// Escape own mask
+					var baseStencilId = mat.GetInt(ShaderId.STENCIL_ID) + 1;
+					var stencilDepth = 0;
+					for (; stencilDepth < 8; stencilDepth++)
+						if (((baseStencilId >> stencilDepth) & 1) == 1)
+							break;
 
-        if (!mat)
-        {
-            mat = new Material(baseMaterial);
+					stencilDepth = Mathf.Max(0, stencilDepth - 1);
+					var stencilId = (1 << stencilDepth) - 1;
 
-            if (shadow.ShadowAsSibling)
-            {
-                // Prevent shadow from writing to stencil mask
-                mat.SetInt(ShaderId.COLOR_MASK, (int)ColorWriteMask.All);
-                mat.SetInt(ShaderId.STENCIL_OP, (int)StencilOp.Keep);
-            }
-            else if (casterIsMask)
-            {
-                // Escape own mask
-                var baseStencilId = mat.GetInt(ShaderId.STENCIL_ID) + 1;
-                int stencilDepth  = 0;
-                for (; stencilDepth < 8; stencilDepth++)
-                {
-                    if (((baseStencilId >> stencilDepth) & 1) == 1)
-                        break;
-                }
+					mat.SetInt(ShaderId.STENCIL_ID, stencilId);
+					mat.SetInt(ShaderId.STENCIL_READ_MASK, stencilId);
+				}
 
-                stencilDepth = Mathf.Max(0, stencilDepth - 1);
-                var stencilId = (1 << stencilDepth) - 1;
+				MASK_MATERIALS_CACHE[hash] = mat;
+			}
+			else
+			{
+				// Copy over new materials props, but keep masking data
+				var id = mat.GetInt(ShaderId.STENCIL_ID);
+				var op = mat.GetInt(ShaderId.STENCIL_OP);
+				var colorMask = mat.GetInt(ShaderId.COLOR_MASK);
+				var readMask = mat.GetInt(ShaderId.STENCIL_READ_MASK);
 
-                mat.SetInt(ShaderId.STENCIL_ID,        stencilId);
-                mat.SetInt(ShaderId.STENCIL_READ_MASK, stencilId);
-            }
+				mat.CopyPropertiesFromMaterial(baseMaterial);
 
-            MASK_MATERIALS_CACHE[hash] = mat;
-        }
-        else
-        {
-            // Copy over new materials props, but keep masking data
-            var id        = mat.GetInt(ShaderId.STENCIL_ID);
-            var op        = mat.GetInt(ShaderId.STENCIL_OP);
-            var colorMask = mat.GetInt(ShaderId.COLOR_MASK);
-            var readMask  = mat.GetInt(ShaderId.STENCIL_READ_MASK);
+				mat.SetInt(ShaderId.STENCIL_ID, id);
+				mat.SetInt(ShaderId.STENCIL_OP, op);
+				mat.SetInt(ShaderId.COLOR_MASK, colorMask);
+				mat.SetInt(ShaderId.STENCIL_READ_MASK, readMask);
+			}
 
-            mat.CopyPropertiesFromMaterial(baseMaterial);
+			return mat;
+		}
 
-            mat.SetInt(ShaderId.STENCIL_ID,        id);
-            mat.SetInt(ShaderId.STENCIL_OP,        op);
-            mat.SetInt(ShaderId.COLOR_MASK,        colorMask);
-            mat.SetInt(ShaderId.STENCIL_READ_MASK, readMask);
-        }
+		internal static void ClearMaskMaterialCache()
+		{
+			foreach (var keyValuePair in MASK_MATERIALS_CACHE)
+				if (Application.isPlaying)
+					Destroy(keyValuePair.Value);
+				else
+					DestroyImmediate(keyValuePair.Value);
 
-        return mat;
-    }
-}
+			MASK_MATERIALS_CACHE.Clear();
+		}
+	}
 }

@@ -1,14 +1,11 @@
-﻿using System.Collections;
-using MoreMountains.Feedbacks;
-using MoreMountains.Tools;
+﻿using MoreMountains.Feedbacks;
 using UnityEngine;
-using UnityEngine.UIElements;
 using UnityEngine.Scripting.APIUpdating;
 
 namespace MoreMountains.FeedbacksForThirdParty
 {
 	/// <summary>
-	/// This feedback will let you change the size an element on a target UI Document
+	///     This feedback will let you change the size an element on a target UI Document
 	/// </summary>
 	[AddComponentMenu("")]
 	[FeedbackHelp("This feedback will let you change the size an element on a target UI Document")]
@@ -18,7 +15,7 @@ namespace MoreMountains.FeedbacksForThirdParty
 	{
 		protected override void SetValue(Vector2 newValue)
 		{
-			foreach (VisualElement element in _visualElements)
+			foreach (var element in _visualElements)
 			{
 				element.style.width = newValue.x;
 				element.style.height = newValue.y;

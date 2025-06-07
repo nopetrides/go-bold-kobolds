@@ -1,12 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using MoreMountains.Tools;
+﻿using MoreMountains.Tools;
 using UnityEngine;
 
 namespace MoreMountains.Feedbacks
 {
 	/// <summary>
-	/// Add this to an AudioSource to shake its volume remapped along a curve 
+	///     Add this to an AudioSource to shake its volume remapped along a curve
 	/// </summary>
 	[AddComponentMenu("More Mountains/Feedbacks/Shakers/Audio/MM Audio Source Volume Shaker")]
 	[RequireComponent(typeof(AudioSource))]
@@ -15,39 +13,34 @@ namespace MoreMountains.Feedbacks
 		[MMInspectorGroup("Volume", true, 59)]
 		/// whether or not to add to the initial value
 		[Tooltip("whether or not to add to the initial value")]
-		public bool RelativeVolume = false;
+		public bool RelativeVolume;
+
 		/// the curve used to animate the intensity value on
 		[Tooltip("the curve used to animate the intensity value on")]
-		public AnimationCurve ShakeVolume = new AnimationCurve(new Keyframe(0, 1f), new Keyframe(0.5f, 0f), new Keyframe(1, 1f));
+		public AnimationCurve ShakeVolume = new(new Keyframe(0, 1f), new Keyframe(0.5f, 0f), new Keyframe(1, 1f));
+
 		/// the value to remap the curve's 0 to
 		[Tooltip("the value to remap the curve's 0 to")]
 		[Range(-1f, 1f)]
-		public float RemapVolumeZero = 0f;
+		public float RemapVolumeZero;
+
 		/// the value to remap the curve's 1 to
 		[Tooltip("the value to remap the curve's 1 to")]
 		[Range(-1f, 1f)]
 		public float RemapVolumeOne = 1f;
 
+		protected float _initialVolume;
+		protected bool _originalRelativeValues;
+		protected float _originalRemapVolumeOne;
+		protected float _originalRemapVolumeZero;
+		protected float _originalShakeDuration;
+		protected AnimationCurve _originalShakeVolume;
+
 		/// the audio source to pilot
 		protected AudioSource _targetAudioSource;
-		protected float _initialVolume;
-		protected float _originalShakeDuration;
-		protected bool _originalRelativeValues;
-		protected AnimationCurve _originalShakeVolume;
-		protected float _originalRemapVolumeZero;
-		protected float _originalRemapVolumeOne;
 
 		/// <summary>
-		/// On init we initialize our values
-		/// </summary>
-		protected override void Initialization()
-		{
-			base.Initialization();
-			_targetAudioSource = this.gameObject.GetComponent<AudioSource>();
-		}
-               
-		/// <summary>
-		/// When that shaker gets added, we initialize its shake duration
+		///     When that shaker gets added, we initialize its shake duration
 		/// </summary>
 		protected virtual void Reset()
 		{
@@ -55,16 +48,25 @@ namespace MoreMountains.Feedbacks
 		}
 
 		/// <summary>
-		/// Shakes values over time
+		///     On init we initialize our values
+		/// </summary>
+		protected override void Initialization()
+		{
+			base.Initialization();
+			_targetAudioSource = gameObject.GetComponent<AudioSource>();
+		}
+
+		/// <summary>
+		///     Shakes values over time
 		/// </summary>
 		protected override void Shake()
 		{
-			float newVolume = ShakeFloat(ShakeVolume, RemapVolumeZero, RemapVolumeOne, RelativeVolume, _initialVolume);
+			var newVolume = ShakeFloat(ShakeVolume, RemapVolumeZero, RemapVolumeOne, RelativeVolume, _initialVolume);
 			_targetAudioSource.volume = newVolume;
 		}
 
 		/// <summary>
-		/// Collects initial values on the target
+		///     Collects initial values on the target
 		/// </summary>
 		protected override void GrabInitialValues()
 		{
@@ -72,7 +74,7 @@ namespace MoreMountains.Feedbacks
 		}
 
 		/// <summary>
-		/// When we get the appropriate event, we trigger a shake
+		///     When we get the appropriate event, we trigger a shake
 		/// </summary>
 		/// <param name="volumeCurve"></param>
 		/// <param name="duration"></param>
@@ -80,27 +82,27 @@ namespace MoreMountains.Feedbacks
 		/// <param name="relativeVolume"></param>
 		/// <param name="feedbacksIntensity"></param>
 		/// <param name="channel"></param>
-		public virtual void OnMMAudioSourceVolumeShakeEvent(AnimationCurve volumeCurve, float duration, float remapMin, float remapMax, bool relativeVolume = false,
-			float feedbacksIntensity = 1.0f, MMChannelData channelData = null, bool resetShakerValuesAfterShake = true, bool resetTargetValuesAfterShake = true, 
-			bool forwardDirection = true, TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false, bool restore = false)
+		public virtual void OnMMAudioSourceVolumeShakeEvent(
+			AnimationCurve volumeCurve, float duration, float remapMin, float remapMax, bool relativeVolume = false,
+			float feedbacksIntensity = 1.0f, MMChannelData channelData = null, bool resetShakerValuesAfterShake = true,
+			bool resetTargetValuesAfterShake = true,
+			bool forwardDirection = true, TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false,
+			bool restore = false)
 		{
-			if (!CheckEventAllowed(channelData) || (!Interruptible && Shaking))
-			{
-				return;
-			}
-            
+			if (!CheckEventAllowed(channelData) || (!Interruptible && Shaking)) return;
+
 			if (stop)
 			{
 				Stop();
 				return;
 			}
-			
+
 			if (restore)
 			{
 				ResetTargetValues();
 				return;
 			}
-            
+
 			_resetShakerValuesAfterShake = resetShakerValuesAfterShake;
 			_resetTargetValuesAfterShake = resetTargetValuesAfterShake;
 
@@ -128,7 +130,7 @@ namespace MoreMountains.Feedbacks
 		}
 
 		/// <summary>
-		/// Resets the target's values
+		///     Resets the target's values
 		/// </summary>
 		protected override void ResetTargetValues()
 		{
@@ -137,7 +139,7 @@ namespace MoreMountains.Feedbacks
 		}
 
 		/// <summary>
-		/// Resets the shaker's values
+		///     Resets the shaker's values
 		/// </summary>
 		protected override void ResetShakerValues()
 		{
@@ -150,7 +152,7 @@ namespace MoreMountains.Feedbacks
 		}
 
 		/// <summary>
-		/// Starts listening for events
+		///     Starts listening for events
 		/// </summary>
 		public override void StartListening()
 		{
@@ -159,7 +161,7 @@ namespace MoreMountains.Feedbacks
 		}
 
 		/// <summary>
-		/// Stops listening for events
+		///     Stops listening for events
 		/// </summary>
 		public override void StopListening()
 		{
@@ -169,25 +171,46 @@ namespace MoreMountains.Feedbacks
 	}
 
 	/// <summary>
-	/// An event used to trigger vignette shakes
+	///     An event used to trigger vignette shakes
 	/// </summary>
 	public struct MMAudioSourceVolumeShakeEvent
 	{
-		static private event Delegate OnEvent;
-		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)] private static void RuntimeInitialization() { OnEvent = null; }
-		static public void Register(Delegate callback) { OnEvent += callback; }
-		static public void Unregister(Delegate callback) { OnEvent -= callback; }
+		private static event Delegate OnEvent;
 
-		public delegate void Delegate(AnimationCurve volumeCurve, float duration, float remapMin, float remapMax, bool relativeVolume = false,
-			float feedbacksIntensity = 1.0f, MMChannelData channelData = null, bool resetShakerValuesAfterShake = true, bool resetTargetValuesAfterShake = true, 
-			bool forwardDirection = true, TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false, bool restore = false);
-
-		static public void Trigger(AnimationCurve volumeCurve, float duration, float remapMin, float remapMax, bool relativeVolume = false,
-			float feedbacksIntensity = 1.0f, MMChannelData channelData = null, bool resetShakerValuesAfterShake = true, bool resetTargetValuesAfterShake = true, 
-			bool forwardDirection = true, TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false, bool restore = false)
+		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+		private static void RuntimeInitialization()
 		{
-			OnEvent?.Invoke(volumeCurve, duration, remapMin, remapMax, relativeVolume,
-				feedbacksIntensity, channelData, resetShakerValuesAfterShake, resetTargetValuesAfterShake, forwardDirection, timescaleMode, stop, restore);
+			OnEvent = null;
+		}
+
+		public static void Register(Delegate callback)
+		{
+			OnEvent += callback;
+		}
+
+		public static void Unregister(Delegate callback)
+		{
+			OnEvent -= callback;
+		}
+
+		public delegate void Delegate(
+			AnimationCurve volumeCurve, float duration, float remapMin, float remapMax, bool relativeVolume = false,
+			float feedbacksIntensity = 1.0f, MMChannelData channelData = null, bool resetShakerValuesAfterShake = true,
+			bool resetTargetValuesAfterShake = true,
+			bool forwardDirection = true, TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false,
+			bool restore = false);
+
+		public static void Trigger(
+			AnimationCurve volumeCurve, float duration, float remapMin, float remapMax, bool relativeVolume = false,
+			float feedbacksIntensity = 1.0f, MMChannelData channelData = null, bool resetShakerValuesAfterShake = true,
+			bool resetTargetValuesAfterShake = true,
+			bool forwardDirection = true, TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false,
+			bool restore = false)
+		{
+			OnEvent?.Invoke(
+				volumeCurve, duration, remapMin, remapMax, relativeVolume,
+				feedbacksIntensity, channelData, resetShakerValuesAfterShake, resetTargetValuesAfterShake,
+				forwardDirection, timescaleMode, stop, restore);
 		}
 	}
 }

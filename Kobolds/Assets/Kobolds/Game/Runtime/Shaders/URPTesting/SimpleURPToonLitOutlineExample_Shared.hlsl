@@ -46,26 +46,27 @@
 // all pass will share this Attributes struct (define data needed from Unity app to our vertex shader)
 struct Attributes
 {
-    float3 positionOS   : POSITION;
-    half3 normalOS      : NORMAL;
-    half4 tangentOS     : TANGENT;
-    float2 uv           : TEXCOORD0;
+    float3 positionOS : POSITION;
+    half3 normalOS : NORMAL;
+    half4 tangentOS : TANGENT;
+    float2 uv : TEXCOORD0;
 
     // to support GPU instancing and Single Pass Stereo rendering(VR), add the following section
-    UNITY_VERTEX_INPUT_INSTANCE_ID      // For non PSSL, equals to -> uint instanceID : SV_InstanceID;
+    UNITY_VERTEX_INPUT_INSTANCE_ID // For non PSSL, equals to -> uint instanceID : SV_InstanceID;
 };
 
 // all pass will share this Varyings struct (define data needed from our vertex shader to our fragment shader)
 struct Varyings
 {
-    float2 uv                       : TEXCOORD0;
-    float4 positionWSAndFogFactor   : TEXCOORD1; // xyz: positionWS, w: vertex fog factor
-    half3 normalWS                  : TEXCOORD2;
-    float4 positionCS               : SV_POSITION;
+    float2 uv : TEXCOORD0;
+    float4 positionWSAndFogFactor : TEXCOORD1; // xyz: positionWS, w: vertex fog factor
+    half3 normalWS : TEXCOORD2;
+    float4 positionCS : SV_POSITION;
 
     // to support GPU instancing and Single Pass Stereo rendering(VR), add the following section
-    UNITY_VERTEX_INPUT_INSTANCE_ID  // For non PSSL, equals to -> uint instanceID : SV_InstanceID;
-    UNITY_VERTEX_OUTPUT_STEREO      // For non OpenGL and non PSSL, equals to -> uint stereoTargetEyeIndexAsRTArrayIdx : SV_RenderTargetArrayIndex; (when UNITY_STEREO_INSTANCING_ENABLED)
+    UNITY_VERTEX_INPUT_INSTANCE_ID // For non PSSL, equals to -> uint instanceID : SV_InstanceID;
+    UNITY_VERTEX_OUTPUT_STEREO
+    // For non OpenGL and non PSSL, equals to -> uint stereoTargetEyeIndexAsRTArrayIdx : SV_RenderTargetArrayIndex; (when UNITY_STEREO_INSTANCING_ENABLED)
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -74,7 +75,7 @@ struct Varyings
 ///////////////////////////////////////////////////////////////////////////////////////
 
 // all sampler2D don't need to put inside CBUFFER 
-sampler2D _BaseMap; 
+sampler2D _BaseMap;
 sampler2D _EmissionMap;
 sampler2D _OcclusionMap;
 sampler2D _OutlineZOffsetMaskTex;
@@ -82,46 +83,45 @@ sampler2D _OutlineZOffsetMaskTex;
 // put all your uniforms(usually things inside .shader file's properties{}) inside this CBUFFER, in order to make SRP batcher compatible
 // see -> https://blogs.unity3d.com/2019/02/28/srp-batcher-speed-up-your-rendering/
 CBUFFER_START(UnityPerMaterial)
-    
     // high level settings
-    float   _IsFace;
+    float _IsFace;
 
     // base color
-    float4  _BaseMap_ST;
-    half4   _BaseColor;
+    float4 _BaseMap_ST;
+    half4 _BaseColor;
 
     // alpha
-    half    _Cutoff;
+    half _Cutoff;
 
     // emission
-    float   _UseEmission;
-    half3   _EmissionColor;
-    half    _EmissionMulByBaseColor;
-    half3   _EmissionMapChannelMask;
+    float _UseEmission;
+    half3 _EmissionColor;
+    half _EmissionMulByBaseColor;
+    half3 _EmissionMapChannelMask;
 
     // occlusion
-    float   _UseOcclusion;
-    half    _OcclusionStrength;
-    half4   _OcclusionMapChannelMask;
-    half    _OcclusionRemapStart;
-    half    _OcclusionRemapEnd;
+    float _UseOcclusion;
+    half _OcclusionStrength;
+    half4 _OcclusionMapChannelMask;
+    half _OcclusionRemapStart;
+    half _OcclusionRemapEnd;
 
     // lighting
-    half3   _IndirectLightMinColor;
-    half    _CelShadeMidPoint;
-    half    _CelShadeSoftness;
+    half3 _IndirectLightMinColor;
+    half _CelShadeMidPoint;
+    half _CelShadeSoftness;
 
     // shadow mapping
-    half    _ReceiveShadowMappingAmount;
-    float   _ReceiveShadowMappingPosOffset;
-    half3   _ShadowMapColor;
+    half _ReceiveShadowMappingAmount;
+    float _ReceiveShadowMappingPosOffset;
+    half3 _ShadowMapColor;
 
     // outline
-    float   _OutlineWidth;
-    half3   _OutlineColor;
-    float   _OutlineZOffset;
-    float   _OutlineZOffsetMaskRemapStart;
-    float   _OutlineZOffsetMaskRemapEnd;
+    float _OutlineWidth;
+    half3 _OutlineColor;
+    float _OutlineZOffset;
+    float _OutlineZOffsetMaskRemapStart;
+    float _OutlineZOffsetMaskRemapEnd;
 
 CBUFFER_END
 
@@ -131,17 +131,18 @@ float3 _LightDirection;
 
 struct ToonSurfaceData
 {
-    half3   albedo;
-    half    alpha;
-    half3   emission;
-    half    occlusion;
+    half3 albedo;
+    half alpha;
+    half3 emission;
+    half occlusion;
 };
+
 struct ToonLightingData
 {
-    half3   normalWS;
-    float3  positionWS;
-    half3   viewDirectionWS;
-    float4  shadowCoord;
+    half3 normalWS;
+    float3 positionWS;
+    half3 viewDirectionWS;
+    float4 shadowCoord;
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -156,8 +157,8 @@ float3 TransformPositionWSToOutlinePositionWS(float3 positionWS, float positionV
     #if defined(UNITY_STEREO_INSTANCING_ENABLED) || defined(UNITY_STEREO_MULTIVIEW_ENABLED) || defined(UNITY_STEREO_DOUBLE_WIDE_ENABLED)
     outlineExpandAmount *= 0.5;
     #endif
-    
-    return positionWS + normalWS * outlineExpandAmount; 
+
+    return positionWS + normalWS * outlineExpandAmount;
 }
 
 // if "ToonShaderIsOutline" is not defined    = do regular MVP transform
@@ -170,10 +171,13 @@ Varyings VertexShaderWork(Attributes input)
     // after invalid/discard vertex, do this part asap.
     // to support GPU instancing and Single Pass Stereo rendering(VR), add the following section
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    UNITY_SETUP_INSTANCE_ID(input);                 // will turn into this in non OpenGL and non PSSL -> UnitySetupInstanceID(input.instanceID);
-    UNITY_TRANSFER_INSTANCE_ID(input, output);      // will turn into this in non OpenGL and non PSSL -> output.instanceID = input.instanceID;
-    UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(output);  // will turn into this in non OpenGL and non PSSL -> output.stereoTargetEyeIndexAsRTArrayIdx = unity_StereoEyeIndex;
-    
+    UNITY_SETUP_INSTANCE_ID(input);
+    // will turn into this in non OpenGL and non PSSL -> UnitySetupInstanceID(input.instanceID);
+    UNITY_TRANSFER_INSTANCE_ID(input, output);
+    // will turn into this in non OpenGL and non PSSL -> output.instanceID = input.instanceID;
+    UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(output);
+    // will turn into this in non OpenGL and non PSSL -> output.stereoTargetEyeIndexAsRTArrayIdx = unity_StereoEyeIndex;
+
     // VertexPositionInputs contains position in multiple spaces (world, view, homogeneous clip space, ndc)
     // Unity compiler will strip all unused references (say you don't use view space).
     // Therefore there is more flexibility at no additional cost with this struct.
@@ -185,15 +189,15 @@ Varyings VertexShaderWork(Attributes input)
 
     float3 positionWS = vertexInput.positionWS;
 
-#ifdef ToonShaderIsOutline
+    #ifdef ToonShaderIsOutline
     positionWS = TransformPositionWSToOutlinePositionWS(vertexInput.positionWS, vertexInput.positionVS.z, vertexNormalInput.normalWS);
-#endif
+    #endif
 
     // Computes fog factor per-vertex.
     float fogFactor = ComputeFogFactor(vertexInput.positionCS.z);
 
     // TRANSFORM_TEX is the same as the old shader library.
-    output.uv = TRANSFORM_TEX(input.uv,_BaseMap);
+    output.uv = TRANSFORM_TEX(input.uv, _BaseMap);
 
     // packing positionWS(xyz) & fog(w) into a vector4
     output.positionWSAndFogFactor = float4(positionWS, fogFactor);
@@ -201,7 +205,7 @@ Varyings VertexShaderWork(Attributes input)
 
     output.positionCS = TransformWorldToHClip(positionWS);
 
-#ifdef ToonShaderIsOutline
+    #ifdef ToonShaderIsOutline
     // [Read ZOffset mask texture]
     // we can't use tex2D() in vertex shader because ddx & ddy is unknown before rasterization, 
     // so use tex2Dlod() with an explict mip level 0, put explict mip level 0 inside the 4th component of param uv)
@@ -215,11 +219,11 @@ Varyings VertexShaderWork(Attributes input)
 
     // [Apply ZOffset, Use remapped value as ZOffset mask]
     output.positionCS = NiloGetNewClipPosWithZOffset(output.positionCS, _OutlineZOffset * outlineZOffsetMask + 0.03 * _IsFace);
-#endif
+    #endif
 
     // ShadowCaster pass needs special process to positionCS, else shadow artifact will appear
     //--------------------------------------------------------------------------------------
-#ifdef ToonShaderApplyShadowBiasFix
+    #ifdef ToonShaderApplyShadowBiasFix
     // see GetShadowPositionHClip() in URP/Shaders/ShadowCasterPass.hlsl
     // https://github.com/Unity-Technologies/Graphics/blob/master/com.unity.render-pipelines.universal/Shaders/ShadowCasterPass.hlsl
     float4 positionCS = TransformWorldToHClip(ApplyShadowBias(positionWS, output.normalWS, _LightDirection));
@@ -230,7 +234,7 @@ Varyings VertexShaderWork(Attributes input)
     positionCS.z = max(positionCS.z, positionCS.w * UNITY_NEAR_CLIP_VALUE);
     #endif
     output.positionCS = positionCS;
-#endif
+    #endif
     //--------------------------------------------------------------------------------------    
 
     return output;
@@ -243,20 +247,22 @@ half4 GetFinalBaseColor(Varyings input)
 {
     return tex2D(_BaseMap, input.uv) * _BaseColor;
 }
+
 half3 GetFinalEmissionColor(Varyings input)
 {
     half3 result = 0;
-    if(_UseEmission)
+    if (_UseEmission)
     {
         result = tex2D(_EmissionMap, input.uv).rgb * _EmissionMapChannelMask * _EmissionColor.rgb;
     }
 
     return result;
 }
+
 half GetFinalOcculsion(Varyings input)
 {
     half result = 1;
-    if(_UseOcclusion)
+    if (_UseOcclusion)
     {
         half4 texValue = tex2D(_OcclusionMap, input.uv);
         half occlusionValue = dot(texValue, _OcclusionMapChannelMask);
@@ -267,12 +273,14 @@ half GetFinalOcculsion(Varyings input)
 
     return result;
 }
-void DoClipTestToTargetAlphaValue(half alpha) 
+
+void DoClipTestToTargetAlphaValue(half alpha)
 {
-#if _UseAlphaClipping
+    #if _UseAlphaClipping
     clip(alpha - _Cutoff);
-#endif
+    #endif
 }
+
 ToonSurfaceData InitializeSurfaceData(Varyings input)
 {
     ToonSurfaceData output;
@@ -281,7 +289,7 @@ ToonSurfaceData InitializeSurfaceData(Varyings input)
     float4 baseColorFinal = GetFinalBaseColor(input);
     output.albedo = baseColorFinal.rgb;
     output.alpha = baseColorFinal.a;
-    DoClipTestToTargetAlphaValue(output.alpha);// early exit if possible
+    DoClipTestToTargetAlphaValue(output.alpha); // early exit if possible
 
     // emission
     output.emission = GetFinalEmissionColor(input);
@@ -291,11 +299,12 @@ ToonSurfaceData InitializeSurfaceData(Varyings input)
 
     return output;
 }
+
 ToonLightingData InitializeLightingData(Varyings input)
 {
     ToonLightingData lightingData;
     lightingData.positionWS = input.positionWSAndFogFactor.xyz;
-    lightingData.viewDirectionWS = SafeNormalize(GetCameraPositionWS() - lightingData.positionWS);  
+    lightingData.viewDirectionWS = SafeNormalize(GetCameraPositionWS() - lightingData.positionWS);
     lightingData.normalWS = normalize(input.normalWS); //interpolated normal is NOT unit vector, we need to normalize it
 
     return lightingData;
@@ -339,7 +348,7 @@ half3 ShadeAllLights(ToonSurfaceData surfaceData, ToonLightingData lightingData)
     Light mainLight = GetMainLight();
 
     float3 shadowTestPosWS = lightingData.positionWS + mainLight.direction * (_ReceiveShadowMappingPosOffset + _IsFace);
-#ifdef _MAIN_LIGHT_SHADOWS
+    #ifdef _MAIN_LIGHT_SHADOWS
     // compute the shadow coords in the fragment shader now due to this change
     // https://forum.unity.com/threads/shadow-cascades-weird-since-7-2-0.828453/#post-5516425
 
@@ -347,7 +356,7 @@ half3 ShadeAllLights(ToonSurfaceData surfaceData, ToonLightingData lightingData)
     // doing this is usually for hide ugly self shadow for shadow sensitive area like face
     float4 shadowCoord = TransformWorldToShadowCoord(shadowTestPosWS);
     mainLight.shadowAttenuation = MainLightRealtimeShadow(shadowCoord);
-#endif 
+    #endif
 
     // Main light
     half3 mainLightResult = ShadeSingleLight(surfaceData, lightingData, mainLight, false);
@@ -357,7 +366,7 @@ half3 ShadeAllLights(ToonSurfaceData surfaceData, ToonLightingData lightingData)
 
     half3 additionalLightSumResult = 0;
 
-#ifdef _ADDITIONAL_LIGHTS
+    #ifdef _ADDITIONAL_LIGHTS
     // Returns the amount of lights affecting the object being renderer.
     // These lights are culled per-object in the forward renderer of URP.
     int additionalLightsCount = GetAdditionalLightsCount();
@@ -373,19 +382,21 @@ half3 ShadeAllLights(ToonSurfaceData surfaceData, ToonLightingData lightingData)
         // Different function used to shade additional lights.
         additionalLightSumResult += ShadeSingleLight(surfaceData, lightingData, light, true);
     }
-#endif
+    #endif
     //==============================================================================================
 
     // emission
     half3 emissionResult = ShadeEmission(surfaceData, lightingData);
 
-    return CompositeAllLightResults(indirectResult, mainLightResult, additionalLightSumResult, emissionResult, surfaceData, lightingData);
+    return CompositeAllLightResults(indirectResult, mainLightResult, additionalLightSumResult, emissionResult,
+                                    surfaceData, lightingData);
 }
 
 half3 ConvertSurfaceColorToOutlineColor(half3 originalSurfaceColor)
 {
     return originalSurfaceColor * _OutlineColor;
 }
+
 half3 ApplyFog(half3 color, Varyings input)
 {
     half fogFactor = input.positionWSAndFogFactor.w;
@@ -393,7 +404,7 @@ half3 ApplyFog(half3 color, Varyings input)
     // with a custom one.
     color = MixFog(color, fogFactor);
 
-    return color;  
+    return color;
 }
 
 // only the .shader file will call this function by 
@@ -402,10 +413,12 @@ half4 ShadeFinalColor(Varyings input) : SV_TARGET
 {
     // to support GPU instancing and Single Pass Stereo rendering(VR), add the following section
     //------------------------------------------------------------------------------------------------------------------------------
-    UNITY_SETUP_INSTANCE_ID(input);                     // in non OpenGL and non PSSL, MACRO will turn into -> UnitySetupInstanceID(input.instanceID);
-    UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);    // in non OpenGL and non PSSL, MACRO will turn into -> unity_StereoEyeIndex = input.stereoTargetEyeIndexAsRTArrayIdx;
+    UNITY_SETUP_INSTANCE_ID(input);
+    // in non OpenGL and non PSSL, MACRO will turn into -> UnitySetupInstanceID(input.instanceID);
+    UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
+    // in non OpenGL and non PSSL, MACRO will turn into -> unity_StereoEyeIndex = input.stereoTargetEyeIndexAsRTArrayIdx;
     //------------------------------------------------------------------------------------------------------------------------------
-    
+
     //////////////////////////////////////////////////////////////////////////////////////////
     // first prepare all data for lighting function
     //////////////////////////////////////////////////////////////////////////////////////////
@@ -415,13 +428,13 @@ half4 ShadeFinalColor(Varyings input) : SV_TARGET
 
     // fillin ToonLightingData struct:
     ToonLightingData lightingData = InitializeLightingData(input);
- 
+
     // apply all lighting calculation
     half3 color = ShadeAllLights(surfaceData, lightingData);
 
-#ifdef ToonShaderIsOutline
+    #ifdef ToonShaderIsOutline
     color = ConvertSurfaceColorToOutlineColor(color);
-#endif
+    #endif
 
     color = ApplyFog(color, input);
 
@@ -456,9 +469,9 @@ half DepthOnlyFragment(Varyings input) : SV_TARGET
 void DepthNormalsFragment(
     Varyings input
     , out half4 outNormalWS : SV_Target0
-#ifdef _WRITE_RENDERING_LAYERS
+    #ifdef _WRITE_RENDERING_LAYERS
     , out float4 outRenderingLayers : SV_Target1
-#endif
+    #endif
 )
 {
     UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
@@ -472,33 +485,33 @@ void DepthNormalsFragment(
         half3 packedNormalWS = PackFloat2To888(remappedOctNormalWS);      // values between [ 0,  1]
         outNormalWS = half4(packedNormalWS, 0.0);
     #else
-        float2 uv = input.uv;
-        #if defined(_PARALLAXMAP)
-            #if defined(REQUIRES_TANGENT_SPACE_VIEW_DIR_INTERPOLATOR)
+    float2 uv = input.uv;
+    #if defined(_PARALLAXMAP)
+    #if defined(REQUIRES_TANGENT_SPACE_VIEW_DIR_INTERPOLATOR)
                 half3 viewDirTS = input.viewDirTS;
-            #else
+    #else
                 half3 viewDirTS = GetViewDirectionTangentSpace(input.tangentWS, input.normalWS, input.viewDirWS);
-            #endif
+    #endif
             ApplyPerPixelDisplacement(viewDirTS, uv);
-        #endif
+    #endif
 
-        #if defined(_NORMALMAP) || defined(_DETAIL)
+    #if defined(_NORMALMAP) || defined(_DETAIL)
             float sgn = input.tangentWS.w;      // should be either +1 or -1
             float3 bitangent = sgn * cross(input.normalWS.xyz, input.tangentWS.xyz);
             float3 normalTS = SampleNormal(uv, TEXTURE2D_ARGS(_BumpMap, sampler_BumpMap), _BumpScale);
 
-            #if defined(_DETAIL)
+    #if defined(_DETAIL)
                 half detailMask = SAMPLE_TEXTURE2D(_DetailMask, sampler_DetailMask, uv).a;
                 float2 detailUv = uv * _DetailAlbedoMap_ST.xy + _DetailAlbedoMap_ST.zw;
                 normalTS = ApplyDetailNormal(detailUv, normalTS, detailMask);
-            #endif
+    #endif
 
             float3 normalWS = TransformTangentToWorld(normalTS, half3x3(input.tangentWS.xyz, bitangent.xyz, input.normalWS.xyz));
-        #else
-            float3 normalWS = input.normalWS;
-        #endif
+    #else
+    float3 normalWS = input.normalWS;
+    #endif
 
-        outNormalWS = half4(NormalizeNormalPerPixel(normalWS), 0.0);
+    outNormalWS = half4(NormalizeNormalPerPixel(normalWS), 0.0);
     #endif
 
     #ifdef _WRITE_RENDERING_LAYERS

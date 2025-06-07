@@ -2,74 +2,78 @@
 
 namespace FIMSpace.Jiggling
 {
-    /// <summary>
-    /// FM: Animating transform's rotation and scale without ending animation
-    /// </summary>
-    [AddComponentMenu("FImpossible Creations/Jiggling/FJiggling Active")]
-    public class FJiggling_Active : FJiggling_Base
-    {
-        [Header("Left empty - uses component's transform")]
-        public Transform TransformToAnimate;
+	/// <summary>
+	///     FM: Animating transform's rotation and scale without ending animation
+	/// </summary>
+	[AddComponentMenu("FImpossible Creations/Jiggling/FJiggling Active")]
+	public class FJiggling_Active : FJiggling_Base
+	{
+		[Header("Left empty - uses component's transform")]
+		public Transform TransformToAnimate;
 
-        [Header("For more custom animations")]
-        public Vector3 ScaleAxesMultiplier = Vector3.one;
-        public Vector3 RotationAxesMultiplier = new Vector3(1f, 0f, 1f);
+		[Header("For more custom animations")]
+		public Vector3 ScaleAxesMultiplier = Vector3.one;
 
-        /* Remembering initial state of transform */
-        protected Quaternion initRotation;
-        protected Vector3 initScale;
+		public Vector3 RotationAxesMultiplier = new(1f, 0f, 1f);
 
-        protected override void Init()
-        {
-            if (initialized) return;
+		/* Remembering initial state of transform */
+		protected Quaternion initRotation;
+		protected Vector3 initScale;
 
-            base.Init();
+		protected override void Init()
+		{
+			if (initialized) return;
 
-            if (!TransformToAnimate) TransformToAnimate = transform;
+			base.Init();
 
-            initRotation = TransformToAnimate.localRotation;
-            initScale = TransformToAnimate.localScale;
+			if (!TransformToAnimate) TransformToAnimate = transform;
 
-            enabled = true;
-        }
+			initRotation = TransformToAnimate.localRotation;
+			initScale = TransformToAnimate.localScale;
 
-        /// <summary>
-        /// Using variables calculated in base class to animate transform
-        /// </summary>
-        protected override void CalculateJiggle()
-        {
-            base.CalculateJiggle();
+			enabled = true;
+		}
 
-            easedPowerProgress = 1f;
+		/// <summary>
+		///     Using variables calculated in base class to animate transform
+		/// </summary>
+		protected override void CalculateJiggle()
+		{
+			base.CalculateJiggle();
 
-            Transform t = TransformToAnimate;
+			easedPowerProgress = 1f;
 
-            float val1 = 0f;
-            float val2 = 0f;
+			var t = TransformToAnimate;
 
-            for (int i = 0; i < RandomLevel * 2; i++)
-            {
-                if (i % 2 == 0)
-                    val1 += trigParams[i].Value;
-                else
-                    val2 += trigParams[i].Value;
-            }
+			var val1 = 0f;
+			var val2 = 0f;
 
-            val1 /= RandomLevel;
-            val2 /= RandomLevel;
+			for (var i = 0; i < RandomLevel * 2; i++)
+				if (i % 2 == 0)
+					val1 += trigParams[i].Value;
+				else
+					val2 += trigParams[i].Value;
 
-            // Additional variation to rotating
-            float add1 = 0f;
-            float add2 = 0;
-            if ( RandomLevel > 1 )
-            {
-                add1 = trigParams[3].Value;
-                add2 = trigParams[2].Value;
-            }
+			val1 /= RandomLevel;
+			val2 /= RandomLevel;
 
-            t.localRotation = initRotation * Quaternion.Euler((val1 + add1) * RotationAxesMultiplier.x, (-val2 - add1) * RotationAxesMultiplier.y, (val2 + add2) * RotationAxesMultiplier.z);
+			// Additional variation to rotating
+			var add1 = 0f;
+			float add2 = 0;
+			if (RandomLevel > 1)
+			{
+				add1 = trigParams[3].Value;
+				add2 = trigParams[2].Value;
+			}
 
-            t.localScale = initScale + new Vector3(trigParams[0].Value * ScaleAxesMultiplier.x, (((trigParams[0].Value + trigParams[1].Value) / 2f) ) * ScaleAxesMultiplier.y, trigParams[0].Value * ScaleAxesMultiplier.z) * 0.01f;
-        }
-    }
+			t.localRotation = initRotation * Quaternion.Euler(
+				(val1 + add1) * RotationAxesMultiplier.x, (-val2 - add1) * RotationAxesMultiplier.y,
+				(val2 + add2) * RotationAxesMultiplier.z);
+
+			t.localScale = initScale + new Vector3(
+				trigParams[0].Value * ScaleAxesMultiplier.x,
+				(trigParams[0].Value + trigParams[1].Value) / 2f * ScaleAxesMultiplier.y,
+				trigParams[0].Value * ScaleAxesMultiplier.z) * 0.01f;
+		}
+	}
 }

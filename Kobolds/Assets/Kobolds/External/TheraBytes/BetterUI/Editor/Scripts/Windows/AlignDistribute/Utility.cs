@@ -1,279 +1,258 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
 namespace TheraBytes.BetterUi.Editor.AlignDistribute
 {
-    public static class Utility
-    {
-        internal static GameObject helperObject;
+	public static class Utility
+	{
+		internal static GameObject helperObject;
 
-        internal static void CleanUp()
-        {
-            if (helperObject != null)
-            {
-                GameObject.DestroyImmediate(helperObject);
-            }
-        }
+		internal static void CleanUp()
+		{
+			if (helperObject != null) GameObject.DestroyImmediate(helperObject);
+		}
 
-        // Sort from smallest to largest
-        private class AreaComparer : IComparer<Transform>
-        {
-            public int Compare(Transform a, Transform b)
-            {
-                return GetTransformArea(a).CompareTo(GetTransformArea(b));
-            }
+		public static Transform[] SortHierarchically(Transform[] input)
+		{
+			var parent = input[0].parent;
+			var result = new Transform[input.Length];
+			var currentIndex = 0;
 
-            private float GetTransformArea(Transform transform)
-            {
-                Vector2 size = GetTransformSize(transform);
-                return size.x * size.y;
-            }
-        }
+			for (var i = 0; i < parent.childCount && currentIndex < input.Length; i++)
+				foreach (var transform in input)
+				{
+					if (parent.GetChild(i) != transform) continue;
 
-        private class WidthComparer : IComparer<Transform>
-        {
-            public int Compare(Transform a, Transform b)
-            {
-                Vector2 sizeA = GetTransformSize(a);
-                Vector2 sizeB = GetTransformSize(b);
-                return sizeA.x.CompareTo(sizeB.x);
-            }
-        }
+					result[currentIndex] = transform;
+					currentIndex++;
+					break;
+				}
 
-        private class HeightComparer : IComparer<Transform>
-        {
-            public int Compare(Transform a, Transform b)
-            {
-                Vector2 sizeA = GetTransformSize(a);
-                Vector2 sizeB = GetTransformSize(b);
-                return sizeA.y.CompareTo(sizeB.y);
-            }
-        }
+			return result;
+		}
 
-        private class PositionComparerX : IComparer<Transform>
-        {
-            public int Compare(Transform a, Transform b)
-            {
-                return a.position.x.CompareTo(b.position.x);
-            }
-        }
+		public static Transform[] SortByArea(Transform[] input)
+		{
+			Array.Sort(input, new AreaComparer());
+			return input;
+		}
 
-        private class PositionComparerY : IComparer<Transform>
-        {
-            public int Compare(Transform a, Transform b)
-            {
-                return a.position.y.CompareTo(b.position.y);
-            }
-        }
+		public static Transform[] SortByWidth(Transform[] input)
+		{
+			Array.Sort(input, new WidthComparer());
+			return input;
+		}
 
-        public static Transform[] SortHierarchically(Transform[] input)
-        {
-            Transform parent = input[0].parent;
-            Transform[] result = new Transform[input.Length];
-            int currentIndex = 0;
+		public static Transform[] SortByHeight(Transform[] input)
+		{
+			Array.Sort(input, new HeightComparer());
+			return input;
+		}
 
-            for (int i = 0; i < parent.childCount && currentIndex < input.Length; i++)
-            {
-                foreach (Transform transform in input)
-                {
-                    if (parent.GetChild(i) != transform)
-                    {
-                        continue;
-                    }
+		public static Transform[] SortByPositionX(Transform[] input)
+		{
+			Array.Sort(input, new PositionComparerX());
+			return input;
+		}
 
-                    result[currentIndex] = transform;
-                    currentIndex++;
-                    break;
-                }
-            }
+		public static Transform[] SortByPositionY(Transform[] input)
+		{
+			Array.Sort(input, new PositionComparerY());
+			return input;
+		}
 
-            return result;
-        }
+		public static Vector2 GetTransformSize(Transform rectTransform)
+		{
+			return GetTransformSize(rectTransform as RectTransform);
+		}
 
-        public static Transform[] SortByArea(Transform[] input)
-        {
-            Array.Sort(input, new AreaComparer());
-            return input;
-        }
+		public static Vector2 GetTransformSize(RectTransform rectTransform)
+		{
+			var result = new Vector2();
+			result.x = Mathf.Abs(rectTransform.rect.width * rectTransform.lossyScale.x);
+			result.y = Mathf.Abs(rectTransform.rect.height * rectTransform.lossyScale.y);
+			return result;
+		}
 
-        public static Transform[] SortByWidth(Transform[] input)
-        {
-            Array.Sort(input, new WidthComparer());
-            return input;
-        }
+		public static Vector2 GetLocalPivotPosition(RectTransform rectTransform)
+		{
+			var result = GetTransformSize(rectTransform);
+			result.x *= rectTransform.pivot.x;
+			result.y *= rectTransform.pivot.y;
 
-        public static Transform[] SortByHeight(Transform[] input)
-        {
-            Array.Sort(input, new HeightComparer());
-            return input;
-        }
+			return result;
+		}
 
-        public static Transform[] SortByPositionX(Transform[] input)
-        {
-            Array.Sort(input, new PositionComparerX());
-            return input;
-        }
+		public static Vector2 GetPivotAndCenterLocalDistance(RectTransform rectTransform)
+		{
+			var size = GetTransformSize(rectTransform);
 
-        public static Transform[] SortByPositionY(Transform[] input)
-        {
-            Array.Sort(input, new PositionComparerY());
-            return input;
-        }
+			var y = size.y * (rectTransform.pivot.y - 0.5f);
+			var x = size.x * (rectTransform.pivot.x - 0.5f);
 
-        public static Vector2 GetTransformSize(Transform rectTransform)
-        {
-            return GetTransformSize(rectTransform as RectTransform);
-        }
+			return new Vector2(x, y);
+		}
 
-        public static Vector2 GetTransformSize(RectTransform rectTransform)
-        {
-            Vector2 result = new Vector2();
-            result.x = Mathf.Abs(rectTransform.rect.width * rectTransform.lossyScale.x);
-            result.y = Mathf.Abs(rectTransform.rect.height * rectTransform.lossyScale.y);
-            return result;
-        }
+		public static SelectionStatus IsSelectionValid()
+		{
+			var transforms = Selection.GetTransforms(SelectionMode.Unfiltered);
 
-        public static Vector2 GetLocalPivotPosition(RectTransform rectTransform)
-        {
-            Vector2 result = GetTransformSize(rectTransform);
-            result.x *= rectTransform.pivot.x;
-            result.y *= rectTransform.pivot.y;
+			if (transforms == null || transforms.Length < 1) return SelectionStatus.NothingSelected;
 
-            return result;
-        }
+			var sharedParent = transforms[0].parent;
 
-        public static Vector2 GetPivotAndCenterLocalDistance(RectTransform rectTransform)
-        {
-            Vector2 size = GetTransformSize(rectTransform);
+			if (sharedParent == null) return SelectionStatus.ParentIsNull;
 
-            float y = size.y * (rectTransform.pivot.y - 0.5f);
-            float x = size.x * (rectTransform.pivot.x - 0.5f);
+			if (sharedParent.GetComponent(typeof(RectTransform)) == null)
+				return SelectionStatus.ParentIsNoRectTransform;
 
-            return new Vector2(x, y);
-        }
+			for (var i = 1; i < transforms.Length; i++)
+			{
+				if (transforms[i].GetComponent(typeof(RectTransform)) == null)
+					return SelectionStatus.ContainsNoRectTransform;
 
-        public static SelectionStatus IsSelectionValid()
-        {
-            Transform[] transforms = Selection.GetTransforms(SelectionMode.Unfiltered);
+				if (sharedParent != transforms[i].parent) return SelectionStatus.UnequalParents;
+			}
 
-            if (transforms == null || transforms.Length < 1)
-            {
-                return SelectionStatus.NothingSelected;
-            }
+			return SelectionStatus.Valid;
+		}
 
-            Transform sharedParent = transforms[0].parent;
+		public static void AdjustAnchors(RectTransform rectTransform, Vector2 oldPosition)
+		{
+			switch (AlignDistributeWindow.anchorMode)
+			{
+				case AnchorMode.StayAtCurrentPosition:
+					return;
 
-            if (sharedParent == null)
-            {
-                return SelectionStatus.ParentIsNull;
-            }
+				case AnchorMode.SnapToBorder:
+					SnapAnchorsWindow.SnapBorder(rectTransform, true, true, true, true);
+					return;
 
-            if (sharedParent.GetComponent(typeof(RectTransform)) == null)
-            {
-                return SelectionStatus.ParentIsNoRectTransform;
-            }
+				case AnchorMode.FollowObject:
+					FollowAnchor(rectTransform, oldPosition);
+					return;
 
-            for (int i = 1; i < transforms.Length; i++)
-            {
-                if (transforms[i].GetComponent(typeof(RectTransform)) == null)
-                {
-                    return SelectionStatus.ContainsNoRectTransform;
-                }
+				default:
+					Debug.LogError("Unknown AnchorMode: " + AlignDistributeWindow.anchorMode);
+					throw new ArgumentOutOfRangeException();
+			}
+		}
 
-                if (sharedParent != transforms[i].parent)
-                {
-                    return SelectionStatus.UnequalParents;
-                }
-            }
+		private static void FollowAnchor(RectTransform rectTransform, Vector2 oldPosition)
+		{
+			var currentPosition = rectTransform.position;
+			var halfSize = GetTransformSize(rectTransform) * 0.5f;
+			var parentSize = GetTransformSize(rectTransform.parent);
+			var pivotAndCenterDistance = GetPivotAndCenterLocalDistance(rectTransform);
 
-            return SelectionStatus.Valid;
-        }
+			var max = (Vector2) rectTransform.position + halfSize - pivotAndCenterDistance;
+			var min = (Vector2) rectTransform.position - halfSize - pivotAndCenterDistance;
 
-        public static void AdjustAnchors(RectTransform rectTransform, Vector2 oldPosition) 
-        {
-            switch (AlignDistributeWindow.anchorMode)
-            {
-                case AnchorMode.StayAtCurrentPosition:
-                    return;
+			var oldMax = oldPosition + halfSize - pivotAndCenterDistance;
+			var oldMin = oldPosition - halfSize - pivotAndCenterDistance;
 
-                case AnchorMode.SnapToBorder:
-                    SnapAnchorsWindow.SnapBorder(rectTransform, true, true, true, true);
-                    return;
+			var diffMax = oldMax - max;
+			var diffMin = oldMin - min;
 
-                case AnchorMode.FollowObject:
-                    FollowAnchor(rectTransform, oldPosition);
-                    return;
+			// Normalize
+			diffMin.x /= parentSize.x;
+			diffMin.y /= parentSize.y;
 
-                default:
-                    Debug.LogError("Unknown AnchorMode: " + AlignDistributeWindow.anchorMode);
-                    throw new ArgumentOutOfRangeException();
-            }
-        
-        }
+			diffMax.x /= parentSize.x;
+			diffMax.y /= parentSize.y;
 
-        private static void FollowAnchor(RectTransform rectTransform, Vector2 oldPosition)
-        {
-            Vector3 currentPosition = rectTransform.position;
-            Vector2 halfSize = GetTransformSize(rectTransform) * 0.5f;
-            Vector2 parentSize = GetTransformSize(rectTransform.parent);
-            Vector2 pivotAndCenterDistance = GetPivotAndCenterLocalDistance(rectTransform);
+			// Apply Values
+			rectTransform.anchorMax = rectTransform.anchorMax - diffMax;
+			rectTransform.anchorMin = rectTransform.anchorMin - diffMin;
 
-            Vector2 max = (Vector2)rectTransform.position + halfSize - pivotAndCenterDistance;
-            Vector2 min = (Vector2)rectTransform.position - halfSize - pivotAndCenterDistance;
+			rectTransform.position = currentPosition;
+		}
 
-            Vector2 oldMax = oldPosition + halfSize - pivotAndCenterDistance;
-            Vector2 oldMin = oldPosition - halfSize - pivotAndCenterDistance;
+		public static RectTransform GetBoundingBoxRectTransform(Transform[] selection)
+		{
+			// Instantiating a RectTransform doesn't work, therefore we need a temporal GameObject...
+			helperObject = new GameObject("Bounding Box Rect", typeof(RectTransform));
+			helperObject.transform.SetParent(selection[0].parent);
 
-            Vector2 diffMax = oldMax - max;
-            Vector2 diffMin = oldMin - min;
-            
-            // Normalize
-            diffMin.x /= parentSize.x;
-            diffMin.y /= parentSize.y;
+			var result = helperObject.GetComponent<RectTransform>();
+			var min = new Vector2(Mathf.Infinity, Mathf.Infinity);
+			var max = new Vector2(Mathf.NegativeInfinity, Mathf.NegativeInfinity);
 
-            diffMax.x /= parentSize.x;
-            diffMax.y /= parentSize.y;
+			foreach (var transform in selection)
+			{
+				var rectTransform = transform as RectTransform;
 
-            // Apply Values
-            rectTransform.anchorMax = rectTransform.anchorMax - diffMax;
-            rectTransform.anchorMin = rectTransform.anchorMin - diffMin;
+				var size = GetTransformSize(rectTransform);
 
-            rectTransform.position = currentPosition;
-        }
+				var upperRight = (Vector2) rectTransform.position + size * 0.5f -
+								GetPivotAndCenterLocalDistance(rectTransform);
+				var lowerLeft = (Vector2) rectTransform.position - size * 0.5f -
+								GetPivotAndCenterLocalDistance(rectTransform);
 
-        public static RectTransform GetBoundingBoxRectTransform(Transform[] selection)
-        {
-            // Instantiating a RectTransform doesn't work, therefore we need a temporal GameObject...
-            helperObject = new GameObject("Bounding Box Rect", typeof(RectTransform));
-            helperObject.transform.SetParent(selection[0].parent);
+				min.x = Mathf.Min(min.x, lowerLeft.x);
+				min.y = Mathf.Min(min.y, lowerLeft.y);
 
-            RectTransform result = helperObject.GetComponent<RectTransform>();
-            Vector2 min = new Vector2(Mathf.Infinity, Mathf.Infinity);
-            Vector2 max = new Vector2(Mathf.NegativeInfinity, Mathf.NegativeInfinity);
+				max.x = Mathf.Max(max.x, upperRight.x);
+				max.y = Mathf.Max(max.y, upperRight.y);
+			}
 
-            foreach (Transform transform in selection)
-            {
-                RectTransform rectTransform = transform as RectTransform;
+			result.position = new Vector3(min.x + max.x, min.y + max.y) * 0.5f;
+			result.sizeDelta = new Vector2(Mathf.Abs(max.x - min.x), Mathf.Abs(max.y - min.y));
 
-                Vector2 size = Utility.GetTransformSize(rectTransform);
+			return result;
+		}
 
-                Vector2 upperRight = (Vector2)rectTransform.position + size * 0.5f - Utility.GetPivotAndCenterLocalDistance(rectTransform);
-                Vector2 lowerLeft = (Vector2)rectTransform.position - size * 0.5f - Utility.GetPivotAndCenterLocalDistance(rectTransform);
+		// Sort from smallest to largest
+		private class AreaComparer : IComparer<Transform>
+		{
+			public int Compare(Transform a, Transform b)
+			{
+				return GetTransformArea(a).CompareTo(GetTransformArea(b));
+			}
 
-                min.x = Mathf.Min(min.x, lowerLeft.x);
-                min.y = Mathf.Min(min.y, lowerLeft.y);
+			private float GetTransformArea(Transform transform)
+			{
+				var size = GetTransformSize(transform);
+				return size.x * size.y;
+			}
+		}
 
-                max.x = Mathf.Max(max.x, upperRight.x);
-                max.y = Mathf.Max(max.y, upperRight.y);
-            }
+		private class WidthComparer : IComparer<Transform>
+		{
+			public int Compare(Transform a, Transform b)
+			{
+				var sizeA = GetTransformSize(a);
+				var sizeB = GetTransformSize(b);
+				return sizeA.x.CompareTo(sizeB.x);
+			}
+		}
 
-            result.position = new Vector3(min.x + max.x, min.y + max.y) * 0.5f;
-            result.sizeDelta = new Vector2(Mathf.Abs(max.x - min.x), Mathf.Abs(max.y - min.y));
+		private class HeightComparer : IComparer<Transform>
+		{
+			public int Compare(Transform a, Transform b)
+			{
+				var sizeA = GetTransformSize(a);
+				var sizeB = GetTransformSize(b);
+				return sizeA.y.CompareTo(sizeB.y);
+			}
+		}
 
-            return result;
-        }
-    }
+		private class PositionComparerX : IComparer<Transform>
+		{
+			public int Compare(Transform a, Transform b)
+			{
+				return a.position.x.CompareTo(b.position.x);
+			}
+		}
+
+		private class PositionComparerY : IComparer<Transform>
+		{
+			public int Compare(Transform a, Transform b)
+			{
+				return a.position.y.CompareTo(b.position.y);
+			}
+		}
+	}
 }

@@ -2,25 +2,26 @@
 
 namespace TheraBytes.BetterUi
 {
-    public class DefaultTransitionStatesAttribute : TransitionStatesAttribute
-    {
-        public DefaultTransitionStatesAttribute()
-            : base("Normal", "Highlighted", "Pressed",
+	public class DefaultTransitionStatesAttribute : TransitionStatesAttribute
+	{
+		public DefaultTransitionStatesAttribute()
+			: base(
+				"Normal", "Highlighted", "Pressed",
 #if UNITY_2019_1_OR_NEWER
-            "Selected",
+				"Selected",
 #endif
-            "Disabled")
-        { }
-    }
+				"Disabled")
+		{
+		}
+	}
 
-    public class TransitionStatesAttribute : Attribute
-    {
-        string[] states;
-        public string[] States { get { return states; } }
+	public class TransitionStatesAttribute : Attribute
+	{
+		public TransitionStatesAttribute(params string[] states)
+		{
+			this.States = states;
+		}
 
-        public TransitionStatesAttribute(params string[] states)
-        {
-            this.states = states;
-        }
-    }
+		public string[] States { get; }
+	}
 }

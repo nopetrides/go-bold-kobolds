@@ -3,7 +3,7 @@ Shader "Hidden/Outlines/Soft Outline/Silhouette"
     Properties
     {
         _OutlineColor ("_OutlineColor", Color) = (1, 1, 1, 1)
-        
+
         [Toggle(ALPHA_CUTOUT)] _AlphaCutout ("_AlphaCutout", Float) = 0
         _AlphaCutoutTexture ("_AlphaCutoutTexture", 2D) = "white" {}
         _AlphaCutoutThreshold ("_AlphaCutoutThreshold", Float) = 0.5
@@ -41,14 +41,14 @@ Shader "Hidden/Outlines/Soft Outline/Silhouette"
             #if UNITY_PLATFORM_ANDROID || UNITY_PLATFORM_WEBGL || UNITY_PLATFORM_UWP
                 #pragma target 3.5 DOTS_INSTANCING_ON
             #else
-                #pragma target 4.5 DOTS_INSTANCING_ON
+            #pragma target 4.5 DOTS_INSTANCING_ON
             #endif
-            
+
             #pragma multi_compile_local _ ALPHA_CUTOUT
 
             TEXTURE2D(_AlphaCutoutTexture);
             SAMPLER(sampler_AlphaCutoutTexture);
-            
+
             CBUFFER_START(UnityPerMaterial)
                 half4 _OutlineColor;
                 half _AlphaCutoutThreshold;
@@ -58,7 +58,7 @@ Shader "Hidden/Outlines/Soft Outline/Silhouette"
             struct Attributes
             {
                 float4 positionOS : POSITION;
-                
+
                 #if defined(ALPHA_CUTOUT)
                 float2 texcoord     : TEXCOORD0;
                 #endif
@@ -69,7 +69,7 @@ Shader "Hidden/Outlines/Soft Outline/Silhouette"
             struct Varyings
             {
                 float4 positionHCS : SV_POSITION;
-                
+
                 #if defined(ALPHA_CUTOUT)
                 float2 uv           : TEXCOORD0;
                 #endif
@@ -87,7 +87,7 @@ Shader "Hidden/Outlines/Soft Outline/Silhouette"
                 #if defined(ALPHA_CUTOUT)
                 OUT.uv = IN.texcoord * _AlphaCutoutUVTransform.xy + _AlphaCutoutUVTransform.zw;
                 #endif
-                
+
                 return OUT;
             }
 
@@ -97,7 +97,7 @@ Shader "Hidden/Outlines/Soft Outline/Silhouette"
                 float alpha = SAMPLE_TEXTURE2D(_AlphaCutoutTexture, sampler_AlphaCutoutTexture, IN.uv).a;
                 clip(alpha - _AlphaCutoutThreshold);
                 #endif
-                
+
                 return _OutlineColor;
             }
             ENDHLSL

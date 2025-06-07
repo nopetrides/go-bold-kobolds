@@ -4,7 +4,7 @@ using UnityEngine;
 public class UpdateTrueShadowAfterChange : MonoBehaviour
 {
 	private TrueShadow _ts;
-	
+
 	public void UpdateTMPSubmeshesShadow()
 	{
 		// Trying to work around updating after typewriter

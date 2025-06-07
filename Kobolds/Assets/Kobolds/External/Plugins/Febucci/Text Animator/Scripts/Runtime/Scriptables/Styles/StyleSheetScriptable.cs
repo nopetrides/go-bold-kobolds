@@ -4,63 +4,63 @@ using UnityEngine;
 
 namespace Febucci.UI.Styles
 {
-    /// <summary>
-    /// Contains a list of styles that can be used in the text
-    /// </summary>
-    [System.Serializable]
-    [CreateAssetMenu(fileName = "TextAnimator StyleSheet", menuName = "Text Animator/StyleSheet", order = 100)]
-    public class StyleSheetScriptable : ScriptableObject
-    {
-        [SerializeField] Style[] styles = Array.Empty<Style>();
+	/// <summary>
+	///     Contains a list of styles that can be used in the text
+	/// </summary>
+	[Serializable]
+	[CreateAssetMenu(fileName = "TextAnimator StyleSheet", menuName = "Text Animator/StyleSheet", order = 100)]
+	public class StyleSheetScriptable : ScriptableObject
+	{
+		[SerializeField] private Style[] styles = Array.Empty<Style>();
 
-        public Style[] Styles
-        {
-            get => styles;
-            set
-            {
-                styles = value;
-                built = false;
-            }
-        }
-        
-        bool built;
-        Dictionary<string, Style> dictionary;
+		private bool built;
+		private Dictionary<string, Style> dictionary;
 
-        public void BuildOnce()
-        {
-            if (built) return;
-            built = true;
-            
-            if(dictionary != null) dictionary.Clear();
-            else dictionary = new Dictionary<string, Style>();
-            
-            if (styles == null) return;
-            
-            foreach (var style in styles)
-            {
-                var tag = style.styleTag.ToLowerInvariant();
-                if (string.IsNullOrEmpty(tag)) continue;
+		public Style[] Styles
+		{
+			get => styles;
+			set
+			{
+				styles = value;
+				built = false;
+			}
+		}
 
-                if (dictionary.ContainsKey(tag))
-                {
-                    Debug.LogError($"[TextAnimator] StyleSheetScriptable: duplicated style tag '{tag}", this);
-                    continue;
-                }
+		public void BuildOnce()
+		{
+			if (built) return;
+			built = true;
 
-                dictionary.Add(tag, style);
-            }
-        }
+			if (dictionary != null) dictionary.Clear();
+			else dictionary = new Dictionary<string, Style>();
 
-        public void ForceBuildRefresh()
-        {
-            built = false;
-            BuildOnce();
-        }
+			if (styles == null) return;
 
-        public virtual bool TryGetStyle(string tag, out Style result)
-        {
-            BuildOnce();
-            return dictionary.TryGetValue(tag, out result);
-        }
-    }
+			foreach (var style in styles)
+			{
+				var tag = style.styleTag.ToLowerInvariant();
+				if (string.IsNullOrEmpty(tag)) continue;
+
+				if (dictionary.ContainsKey(tag))
+				{
+					Debug.LogError($"[TextAnimator] StyleSheetScriptable: duplicated style tag '{tag}", this);
+					continue;
+				}
+
+				dictionary.Add(tag, style);
+			}
+		}
+
+		public void ForceBuildRefresh()
+		{
+			built = false;
+			BuildOnce();
+		}
+
+		public virtual bool TryGetStyle(string tag, out Style result)
+		{
+			BuildOnce();
+			return dictionary.TryGetValue(tag, out result);
+		}
+	}
 }

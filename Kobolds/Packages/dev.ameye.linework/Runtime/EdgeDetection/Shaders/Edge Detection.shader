@@ -36,7 +36,7 @@
         _DistanceFadeStart ("Distance Fade Start", Float) = 100
         _DistanceFadeDistance ("Distance Fade Distance", Float) = 10
         _DistanceFadeColor ("Distance Fade Color", Color) = (0, 0, 0, 0)
-         [Toggle(FADE_BY_HEIGHT)] _FadeInDistance ("Fade Outline by height", Float) = 0
+        [Toggle(FADE_BY_HEIGHT)] _FadeInDistance ("Fade Outline by height", Float) = 0
         _HeightFadeStart ("Height Fade Start", Float) = 100
         _HeightFadeDistance ("Height Fade Distance", Float) = 10
         _HeightFadeColor ("Height Fade Color", Color) = (0, 0, 0, 0)
@@ -101,7 +101,8 @@
             #include "Packages/dev.ameye.linework/Runtime/EdgeDetection/Shaders/DeclareSectioningTexture.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 
-            float4 _BackgroundColor, _OutlineColor, _FillColor, _OutlineColorShadow, _DistanceFadeColor, _HeightFadeColor;
+            float4 _BackgroundColor, _OutlineColor, _FillColor, _OutlineColorShadow, _DistanceFadeColor,
+                   _HeightFadeColor;
             float _OverrideOutlineColorShadow;
             float _OutlineThickness;
             float _ReferenceResolution;
@@ -130,15 +131,19 @@
 
             float Sobel(float3 samples[9])
             {
-                const float3 difference_1 = samples[0] - samples[2] + 2 * samples[3] - 2 * samples[5] + samples[6] - samples[8];
-                const float3 difference_2 = samples[0] - samples[6] + 2 * samples[1] - 2 * samples[7] + samples[2] - samples[8];
+                const float3 difference_1 = samples[0] - samples[2] + 2 * samples[3] - 2 * samples[5] + samples[6] -
+                    samples[8];
+                const float3 difference_2 = samples[0] - samples[6] + 2 * samples[1] - 2 * samples[7] + samples[2] -
+                    samples[8];
                 return sqrt(dot(difference_1, difference_1) + dot(difference_2, difference_2));
             }
 
             float Sobel(float samples[9])
             {
-                const float difference_1 = samples[0] - samples[2] + 2 * samples[3] - 2 * samples[5] + samples[6] - samples[8];
-                const float difference_2 = samples[0] - samples[6] + 2 * samples[1] - 2 * samples[7] + samples[2] - samples[8];
+                const float difference_1 = samples[0] - samples[2] + 2 * samples[3] - 2 * samples[5] + samples[6] -
+                    samples[8];
+                const float difference_2 = samples[0] - samples[6] + 2 * samples[1] - 2 * samples[7] + samples[2] -
+                    samples[8];
                 return sqrt(difference_1 * difference_1 + difference_2 * difference_2);
             }
 
@@ -193,7 +198,7 @@
                 half color_lut_value = section_rgba.g;
 
                 float4 line_color = _OutlineColor;
-                
+
                 ///
                 /// EDGE DETECTION
                 ///
@@ -203,7 +208,8 @@
                 float edge_luminance = 0;
                 float edge_section = 0;
 
-                float2 texel_size = float2(1.0 / _ScreenParams.x, 1.0 / _ScreenParams.y); // Same as _BlitTexture_TexelSize.xy but this is broken atm
+                float2 texel_size = float2(1.0 / _ScreenParams.x, 1.0 / _ScreenParams.y);
+                // Same as _BlitTexture_TexelSize.xy but this is broken atm
 
                 #if defined(SCALE_WITH_RESOLUTION)
                 float scaled_outline_thickness = _OutlineThickness * _ScreenParams.y / _ReferenceResolution;
@@ -424,23 +430,23 @@
                 // if (fill) return _FillColor;
 
                 half4 colorLUT[5] = {
-    _OutlineColor,  // Red
-    half4(0.0, 1.0, 0.0, 1.0),  // Green
-    half4(0.0, 0.0, 1.0, 1.0),  // Blue
-    half4(1.0, 1.0, 0.0, 1.0),  // Yellow
-    half4(1.0, 0.0, 1.0, 1.0)   // Magenta
-};
+                    _OutlineColor, // Red
+                    half4(0.0, 1.0, 0.0, 1.0), // Green
+                    half4(0.0, 0.0, 1.0, 1.0), // Blue
+                    half4(1.0, 1.0, 0.0, 1.0), // Yellow
+                    half4(1.0, 0.0, 1.0, 1.0) // Magenta
+                };
 
-// Ensure the index is within bounds
-int index = clamp(int(color_lut_value * 5), 0, 4);
+                // Ensure the index is within bounds
+                int index = clamp(int(color_lut_value * 5), 0, 4);
 
-half4 c = colorLUT[index];
-                
+                half4 c = colorLUT[index];
 
-             //   half4 c = half4(color_lut_value, color_lut_value, color_lut_value, 1.0);
-               // if (section_rgba.g != 0)
-                    line_color = c;
-                
+
+                //   half4 c = half4(color_lut_value, color_lut_value, color_lut_value, 1.0);
+                // if (section_rgba.g != 0)
+                line_color = c;
+
                 // Shadows.
                 #if defined(OVERRIDE_SHADOW)
                 float shadow = 1 - SampleShadowmap(

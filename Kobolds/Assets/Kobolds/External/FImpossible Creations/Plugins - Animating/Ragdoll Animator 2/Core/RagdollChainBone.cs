@@ -1406,6 +1406,7 @@ namespace FIMSpace.FProceduralAnimation
             else
             {
                 GameRigidbody.isKinematic = kinematicOnDisabled;
+                if (ParentChain != null && ParentChain.ParentHandler != null) RefreshRigidbodyOptimizationParameters(ParentChain.ParentHandler);
             }
 
             GameRigidbody.detectCollisions = enable;

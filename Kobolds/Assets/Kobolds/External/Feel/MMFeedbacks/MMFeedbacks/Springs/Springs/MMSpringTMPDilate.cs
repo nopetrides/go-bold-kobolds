@@ -1,6 +1,6 @@
-using UnityEngine;
 #if MM_UGUI2
 using TMPro;
+using UnityEngine;
 
 namespace MoreMountains.Feedbacks
 {
@@ -12,7 +12,7 @@ namespace MoreMountains.Feedbacks
 			base.ApplyValue(newValue);
 			Target.fontMaterial.SetFloat(ShaderUtilities.ID_FaceDilate, newValue);
 		}
-		
+
 		protected override void GrabCurrentValue()
 		{
 			FloatSpring.CurrentValue = Target.fontMaterial.GetFloat(ShaderUtilities.ID_FaceDilate);

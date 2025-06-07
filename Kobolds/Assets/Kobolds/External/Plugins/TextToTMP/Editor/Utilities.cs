@@ -11,71 +11,48 @@ namespace TextToTMPNamespace
 	[Serializable]
 	internal class ObjectsToUpgradeList : IEnumerable<string>
 	{
-		private class Enumerator : IEnumerator<string>
-		{
-			public string Current { get { return list.paths[index]; } }
-			object IEnumerator.Current { get { return list.paths[index]; } }
-
-			private readonly ObjectsToUpgradeList list;
-			private int index;
-
-			public Enumerator( ObjectsToUpgradeList list )
-			{
-				this.list = list;
-				Reset();
-			}
-
-			public void Dispose() { }
-
-			public bool MoveNext()
-			{
-				while( ++index < list.m_length )
-				{
-					if( list.enabled[index] )
-						return true;
-				}
-
-				return false;
-			}
-
-			public void Reset()
-			{
-				index = -1;
-			}
-		}
-
 		[SerializeField]
 		private string[] paths;
+
 		[SerializeField]
 		private bool[] enabled;
 
 		[SerializeField]
-		private int m_length = 0;
-		public int Length { get { return m_length; } }
+		private int m_length;
 
 		[SerializeField]
-		private int m_enabledCount = 0;
-		public int EnabledCount { get { return m_enabledCount; } }
+		private int m_enabledCount;
 
-		public void Add( string path )
+		public int Length => m_length;
+		public int EnabledCount => m_enabledCount;
+
+		public IEnumerator<string> GetEnumerator()
 		{
-			if( paths == null )
+			return new Enumerator(this);
+		}
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return new Enumerator(this);
+		}
+
+		public void Add(string path)
+		{
+			if (paths == null)
 			{
 				paths = new string[32];
 				enabled = new bool[32];
 			}
 
-			for( int i = 0; i < m_length; i++ )
-			{
-				if( paths[i] == path )
+			for (var i = 0; i < m_length; i++)
+				if (paths[i] == path)
 					return;
-			}
 
-			if( m_length >= paths.Length )
+			if (m_length >= paths.Length)
 			{
-				int newSize = paths.Length > 0 ? paths.Length * 2 : 2;
-				Array.Resize( ref paths, newSize );
-				Array.Resize( ref enabled, newSize );
+				var newSize = paths.Length > 0 ? paths.Length * 2 : 2;
+				Array.Resize(ref paths, newSize);
+				Array.Resize(ref enabled, newSize);
 			}
 
 			paths[m_length] = path;
@@ -85,24 +62,20 @@ namespace TextToTMPNamespace
 			m_enabledCount++;
 		}
 
-		public bool Contains( string path )
+		public bool Contains(string path)
 		{
-			for( int i = 0; i < m_length; i++ )
-			{
-				if( paths[i] == path )
+			for (var i = 0; i < m_length; i++)
+				if (paths[i] == path)
 					return true;
-			}
 
 			return false;
 		}
 
 		public void Clear()
 		{
-			if( paths != null )
-			{
-				for( int i = 0; i < m_length; i++ )
+			if (paths != null)
+				for (var i = 0; i < m_length; i++)
 					paths[i] = null;
-			}
 
 			m_length = 0;
 			m_enabledCount = 0;
@@ -111,15 +84,15 @@ namespace TextToTMPNamespace
 		public void DrawOnGUI()
 		{
 			// Show "Toggle All" toggle
-			if( m_length > 1 )
+			if (m_length > 1)
 			{
 				EditorGUI.showMixedValue = m_enabledCount > 0 && m_enabledCount < m_length;
 
 				EditorGUI.BeginChangeCheck();
-				bool _enabled = TextToTMPWindow.WordWrappingToggleLeft( "- Toggle All -", m_enabledCount > 0 );
-				if( EditorGUI.EndChangeCheck() )
+				var _enabled = TextToTMPWindow.WordWrappingToggleLeft("- Toggle All -", m_enabledCount > 0);
+				if (EditorGUI.EndChangeCheck())
 				{
-					for( int i = 0; i < m_length; i++ )
+					for (var i = 0; i < m_length; i++)
 						enabled[i] = _enabled;
 
 					m_enabledCount = _enabled ? m_length : 0;
@@ -128,14 +101,14 @@ namespace TextToTMPNamespace
 				EditorGUI.showMixedValue = false;
 			}
 
-			for( int i = 0; i < m_length; i++ )
+			for (var i = 0; i < m_length; i++)
 			{
-				bool _enabled = TextToTMPWindow.WordWrappingToggleLeft( paths[i], enabled[i] );
-				if( _enabled != enabled[i] )
+				var _enabled = TextToTMPWindow.WordWrappingToggleLeft(paths[i], enabled[i]);
+				if (_enabled != enabled[i])
 				{
 					enabled[i] = _enabled;
 
-					if( _enabled )
+					if (_enabled)
 						m_enabledCount++;
 					else
 						m_enabledCount--;
@@ -143,14 +116,37 @@ namespace TextToTMPNamespace
 			}
 		}
 
-		public IEnumerator<string> GetEnumerator()
+		private class Enumerator : IEnumerator<string>
 		{
-			return new Enumerator( this );
-		}
+			private readonly ObjectsToUpgradeList list;
+			private int index;
 
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return new Enumerator( this );
+			public Enumerator(ObjectsToUpgradeList list)
+			{
+				this.list = list;
+				Reset();
+			}
+
+			public string Current => list.paths[index];
+			object IEnumerator.Current => list.paths[index];
+
+			public void Dispose()
+			{
+			}
+
+			public bool MoveNext()
+			{
+				while (++index < list.m_length)
+					if (list.enabled[index])
+						return true;
+
+				return false;
+			}
+
+			public void Reset()
+			{
+				index = -1;
+			}
 		}
 	}
 
@@ -158,27 +154,25 @@ namespace TextToTMPNamespace
 	{
 		private T GetFirstAssetOfType<T>() where T : Object
 		{
-			string[] assetsOfType = AssetDatabase.FindAssets( "t:" + typeof( T ).Name );
-			if( assetsOfType != null && assetsOfType.Length > 0 )
-				return AssetDatabase.LoadAssetAtPath<T>( AssetDatabase.GUIDToAssetPath( assetsOfType[0] ) );
+			var assetsOfType = AssetDatabase.FindAssets("t:" + typeof(T).Name);
+			if (assetsOfType != null && assetsOfType.Length > 0)
+				return AssetDatabase.LoadAssetAtPath<T>(AssetDatabase.GUIDToAssetPath(assetsOfType[0]));
 
 			return null;
 		}
 
-		private bool ComponentHasAnyPrefabInstanceModifications( Object component )
+		private bool ComponentHasAnyPrefabInstanceModifications(Object component)
 		{
 #if UNITY_2018_3_OR_NEWER
-			if( PrefabUtility.IsPartOfPrefabInstance( component ) )
+			if (PrefabUtility.IsPartOfPrefabInstance(component))
 #else
 			if( PrefabUtility.GetPrefabType( component ) == PrefabType.PrefabInstance )
 #endif
 			{
-				SerializedProperty iterator = new SerializedObject( component ).GetIterator();
-				while( iterator.Next( true ) )
-				{
-					if( iterator.prefabOverride )
+				var iterator = new SerializedObject(component).GetIterator();
+				while (iterator.Next(true))
+					if (iterator.prefabOverride)
 						return true;
-				}
 			}
 
 			return false;
@@ -202,10 +196,10 @@ namespace TextToTMPNamespace
 		}
 #endif
 
-		private string GetPathOfObject( Transform obj )
+		private string GetPathOfObject(Transform obj)
 		{
-			string result = obj.name;
-			while( obj.parent )
+			var result = obj.name;
+			while (obj.parent)
 			{
 				obj = obj.parent;
 				result = obj.name + "/" + result;
@@ -216,10 +210,10 @@ namespace TextToTMPNamespace
 
 		private bool AreScenesSaved()
 		{
-			for( int i = 0; i < SceneManager.sceneCount; i++ )
+			for (var i = 0; i < SceneManager.sceneCount; i++)
 			{
-				Scene scene = SceneManager.GetSceneAt( i );
-				if( scene.isDirty || string.IsNullOrEmpty( scene.path ) )
+				var scene = SceneManager.GetSceneAt(i);
+				if (scene.isDirty || string.IsNullOrEmpty(scene.path))
 					return false;
 			}
 

@@ -1,27 +1,27 @@
-﻿using UnityEngine;
+﻿#if MM_UI
+using UnityEngine;
 using UnityEngine.SceneManagement;
-#if MM_UI
 using UnityEngine.UI;
 
 namespace MoreMountains.Tools
 {
 	/// <summary>
-	/// This component, when added on a Text component, will display the name of the level
+	///     This component, when added on a Text component, will display the name of the level
 	/// </summary>
 	public class MMSceneName : MonoBehaviour
 	{
 		protected Text _text;
 
 		/// <summary>
-		/// On Awake, stores the Text component
+		///     On Awake, stores the Text component
 		/// </summary>
 		protected virtual void Awake()
 		{
-			_text = this.gameObject.GetComponent<Text>();
+			_text = gameObject.GetComponent<Text>();
 		}
 
 		/// <summary>
-		/// On Start, sets the level name
+		///     On Start, sets the level name
 		/// </summary>
 		protected virtual void Start()
 		{
@@ -29,14 +29,11 @@ namespace MoreMountains.Tools
 		}
 
 		/// <summary>
-		/// Assigns the level name to the Text
+		///     Assigns the level name to the Text
 		/// </summary>
 		public virtual void SetLevelNameText()
 		{
-			if (_text != null)
-			{
-				_text.text = SceneManager.GetActiveScene().name;
-			}
+			if (_text != null) _text.text = SceneManager.GetActiveScene().name;
 		}
 	}
 }

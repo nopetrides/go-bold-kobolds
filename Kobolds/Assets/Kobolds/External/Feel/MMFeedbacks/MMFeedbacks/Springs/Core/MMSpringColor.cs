@@ -8,7 +8,7 @@ namespace MoreMountains.Feedbacks
 	public class MMSpringColor : MMSpringDefinition<Color>
 	{
 		public MMSpringFloat ColorSpring;
-		
+
 		public MMSpringFloat SpringR;
 		public MMSpringFloat SpringG;
 		public MMSpringFloat SpringB;
@@ -17,7 +17,7 @@ namespace MoreMountains.Feedbacks
 		protected Color _returnCurrentValue;
 		protected Color _returnTargetValue;
 		protected Color _returnVelocity;
-		
+
 		public MMSpringColor()
 		{
 			SpringR = new MMSpringFloat();
@@ -25,6 +25,63 @@ namespace MoreMountains.Feedbacks
 			SpringB = new MMSpringFloat();
 			SpringA = new MMSpringFloat();
 			ColorSpring = new MMSpringFloat();
+		}
+
+		public override Color CurrentValue
+		{
+			get
+			{
+				_returnCurrentValue.r = SpringR.CurrentValue;
+				_returnCurrentValue.g = SpringG.CurrentValue;
+				_returnCurrentValue.b = SpringB.CurrentValue;
+				_returnCurrentValue.a = SpringA.CurrentValue;
+				return _returnCurrentValue;
+			}
+			set
+			{
+				SpringR.CurrentValue = value.r;
+				SpringG.CurrentValue = value.g;
+				SpringB.CurrentValue = value.b;
+				SpringA.CurrentValue = value.a;
+			}
+		}
+
+		public override Color TargetValue
+		{
+			get
+			{
+				_returnTargetValue.r = SpringR.TargetValue;
+				_returnTargetValue.g = SpringG.TargetValue;
+				_returnTargetValue.b = SpringB.TargetValue;
+				_returnTargetValue.a = SpringA.TargetValue;
+				return _returnTargetValue;
+			}
+			set
+			{
+				SpringR.TargetValue = value.r;
+				SpringG.TargetValue = value.g;
+				SpringB.TargetValue = value.b;
+				SpringA.TargetValue = value.a;
+			}
+		}
+
+		public override Color Velocity
+		{
+			get
+			{
+				_returnVelocity.r = SpringR.Velocity;
+				_returnVelocity.g = SpringG.Velocity;
+				_returnVelocity.b = SpringB.Velocity;
+				_returnVelocity.a = SpringA.Velocity;
+				return _returnVelocity;
+			}
+			set
+			{
+				SpringR.Velocity = value.r;
+				SpringG.Velocity = value.g;
+				SpringB.Velocity = value.b;
+				SpringA.Velocity = value.a;
+			}
 		}
 
 		public virtual void SetDamping(float newDamping)
@@ -44,64 +101,7 @@ namespace MoreMountains.Feedbacks
 			SpringB.Frequency = newFrequency;
 			SpringA.Frequency = newFrequency;
 		}
-		
-		public override Color CurrentValue
-		{
-			get
-			{
-				_returnCurrentValue.r = SpringR.CurrentValue;
-				_returnCurrentValue.g = SpringG.CurrentValue;
-				_returnCurrentValue.b = SpringB.CurrentValue;
-				_returnCurrentValue.a = SpringA.CurrentValue;
-				return _returnCurrentValue;
-			} 
-			set
-			{
-				SpringR.CurrentValue = value.r;
-				SpringG.CurrentValue = value.g;
-				SpringB.CurrentValue = value.b;
-				SpringA.CurrentValue = value.a;
-			}
-		}
 
-		public override Color TargetValue
-		{
-			get
-			{
-				_returnTargetValue.r = SpringR.TargetValue;
-				_returnTargetValue.g = SpringG.TargetValue;
-				_returnTargetValue.b = SpringB.TargetValue;
-				_returnTargetValue.a = SpringA.TargetValue;
-				return _returnTargetValue;
-			} 
-			set
-			{
-				SpringR.TargetValue = value.r;
-				SpringG.TargetValue = value.g;
-				SpringB.TargetValue = value.b;
-				SpringA.TargetValue = value.a;
-			}
-		}
-
-		public override Color Velocity
-		{
-			get
-			{
-				_returnVelocity.r = SpringR.Velocity;
-				_returnVelocity.g = SpringG.Velocity;
-				_returnVelocity.b = SpringB.Velocity;
-				_returnVelocity.a = SpringA.Velocity;
-				return _returnVelocity;
-			} 
-			set
-			{
-				SpringR.Velocity = value.r;
-				SpringG.Velocity = value.g;
-				SpringB.Velocity = value.b;
-				SpringA.Velocity = value.a;
-			}
-		}
-		
 		public override void UpdateSpringValue(float deltaTime)
 		{
 			SpringR.Damping = ColorSpring.Damping;
@@ -112,14 +112,14 @@ namespace MoreMountains.Feedbacks
 			SpringG.Frequency = ColorSpring.Frequency;
 			SpringB.Frequency = ColorSpring.Frequency;
 			SpringA.Frequency = ColorSpring.Frequency;
-			
+
 			SpringR.UpdateSpringValue(deltaTime);
 			SpringG.UpdateSpringValue(deltaTime);
 			SpringB.UpdateSpringValue(deltaTime);
 			SpringA.UpdateSpringValue(deltaTime);
 			ColorSpring.UpdateSpringValue(deltaTime);
 		}
-		
+
 		public override void MoveToInstant(Color newValue)
 		{
 			SpringR.MoveToInstant(newValue.r);
@@ -162,7 +162,7 @@ namespace MoreMountains.Feedbacks
 			SpringA.SetCurrentValueAsInitialValue();
 			ColorSpring.SetCurrentValueAsInitialValue();
 		}
-		
+
 		public override void MoveTo(Color newValue)
 		{
 			SpringR.MoveTo(newValue.r);
@@ -171,7 +171,7 @@ namespace MoreMountains.Feedbacks
 			SpringA.MoveTo(newValue.a);
 			ColorSpring.MoveTo(newValue.MMSum());
 		}
-		
+
 		public override void MoveToAdditive(Color newValue)
 		{
 			SpringR.MoveToAdditive(newValue.r);
@@ -180,7 +180,7 @@ namespace MoreMountains.Feedbacks
 			SpringA.MoveToAdditive(newValue.a);
 			ColorSpring.MoveToAdditive(newValue.MMSum());
 		}
-		
+
 		public override void MoveToSubtractive(Color newValue)
 		{
 			SpringR.MoveToSubtractive(newValue.r);
@@ -208,7 +208,7 @@ namespace MoreMountains.Feedbacks
 		{
 			ColorSpring.BumpRandom(min.MMSum(), max.MMSum());
 		}
-		
+
 		public override void Finish()
 		{
 			SpringR.Finish();

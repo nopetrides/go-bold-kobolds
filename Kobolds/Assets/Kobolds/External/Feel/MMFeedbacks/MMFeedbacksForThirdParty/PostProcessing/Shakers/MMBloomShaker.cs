@@ -1,19 +1,19 @@
-﻿using UnityEngine;
+﻿using MoreMountains.Feedbacks;
+using MoreMountains.Tools;
+using UnityEngine;
 #if MM_POSTPROCESSING
 using UnityEngine.Rendering.PostProcessing;
 #endif
-using MoreMountains.Feedbacks;
-using MoreMountains.Tools;
 
 namespace MoreMountains.FeedbacksForThirdParty
 {
 	/// <summary>
-	/// Add this class to a Camera with a bloom post processing and it'll be able to "shake" its values by getting events
+	///     Add this class to a Camera with a bloom post processing and it'll be able to "shake" its values by getting events
 	/// </summary>
 	[AddComponentMenu("More Mountains/Feedbacks/Shakers/PostProcessing/MM Bloom Shaker")]
-	#if MM_POSTPROCESSING
+#if MM_POSTPROCESSING
 	[RequireComponent(typeof(PostProcessVolume))]
-	#endif
+#endif
 	public class MMBloomShaker : MMShaker
 	{
 		/// whether or not to add to the initial value
@@ -22,10 +22,12 @@ namespace MoreMountains.FeedbacksForThirdParty
 		[MMInspectorGroup("Bloom Intensity", true, 45)]
 		/// the curve used to animate the intensity value on
 		[Tooltip("the curve used to animate the intensity value on")]
-		public AnimationCurve ShakeIntensity = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+		public AnimationCurve ShakeIntensity = new(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+
 		/// the value to remap the curve's 0 to
 		[Tooltip("the value to remap the curve's 0 to")]
-		public float RemapIntensityZero = 0f;
+		public float RemapIntensityZero;
+
 		/// the value to remap the curve's 1 to
 		[Tooltip("the value to remap the curve's 1 to")]
 		public float RemapIntensityOne = 10f;
@@ -33,15 +35,17 @@ namespace MoreMountains.FeedbacksForThirdParty
 		[MMInspectorGroup("Bloom Threshold", true, 46)]
 		/// the curve used to animate the threshold value on
 		[Tooltip("the curve used to animate the threshold value on")]
-		public AnimationCurve ShakeThreshold = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+		public AnimationCurve ShakeThreshold = new(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+
 		/// the value to remap the curve's 0 to
 		[Tooltip("the value to remap the curve's 0 to")]
-		public float RemapThresholdZero = 0f;
+		public float RemapThresholdZero;
+
 		/// the value to remap the curve's 1 to
 		[Tooltip("the value to remap the curve's 1 to")]
-		public float RemapThresholdOne = 0f;
+		public float RemapThresholdOne;
 
-		#if MM_POSTPROCESSING
+#if MM_POSTPROCESSING
 		protected PostProcessVolume _volume;
 		protected Bloom _bloom;
 		protected float _initialIntensity;
@@ -56,28 +60,30 @@ namespace MoreMountains.FeedbacksForThirdParty
 		protected float _originalRemapThresholdOne;
 
 		/// <summary>
-		/// On init we initialize our values
+		///     On init we initialize our values
 		/// </summary>
 		protected override void Initialization()
 		{
 			base.Initialization();
-			_volume = this.gameObject.GetComponent<PostProcessVolume>();
+			_volume = gameObject.GetComponent<PostProcessVolume>();
 			_volume.profile.TryGetSettings(out _bloom);
 		}
 
 		/// <summary>
-		/// Shakes values over time
+		///     Shakes values over time
 		/// </summary>
 		protected override void Shake()
 		{
-			float newIntensity = ShakeFloat(ShakeIntensity, RemapIntensityZero, RemapIntensityOne, RelativeValues, _initialIntensity);
+			var newIntensity = ShakeFloat(
+				ShakeIntensity, RemapIntensityZero, RemapIntensityOne, RelativeValues, _initialIntensity);
 			_bloom.intensity.Override(newIntensity);
-			float newThreshold = ShakeFloat(ShakeThreshold, RemapThresholdZero, RemapThresholdOne, RelativeValues, _initialThreshold);
+			var newThreshold = ShakeFloat(
+				ShakeThreshold, RemapThresholdZero, RemapThresholdOne, RelativeValues, _initialThreshold);
 			_bloom.threshold.Override(newThreshold);
 		}
 
 		/// <summary>
-		/// Collects initial values on the target
+		///     Collects initial values on the target
 		/// </summary>
 		protected override void GrabInitialValues()
 		{
@@ -86,7 +92,7 @@ namespace MoreMountains.FeedbacksForThirdParty
 		}
 
 		/// <summary>
-		/// When we get the appropriate event, we trigger a shake
+		///     When we get the appropriate event, we trigger a shake
 		/// </summary>
 		/// <param name="intensity"></param>
 		/// <param name="duration"></param>
@@ -94,15 +100,15 @@ namespace MoreMountains.FeedbacksForThirdParty
 		/// <param name="relativeIntensity"></param>
 		/// <param name="feedbacksIntensity"></param>
 		/// <param name="channel"></param>
-		public virtual void OnBloomShakeEvent(AnimationCurve intensity, float duration, float remapMin, float remapMax,
+		public virtual void OnBloomShakeEvent(
+			AnimationCurve intensity, float duration, float remapMin, float remapMax,
 			AnimationCurve threshold, float remapThresholdMin, float remapThresholdMax, bool relativeIntensity = false,
-			float feedbacksIntensity = 1.0f, MMChannelData channelData = null, bool resetShakerValuesAfterShake = true, bool resetTargetValuesAfterShake = true, bool forwardDirection = true, TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false, bool restore = false)
+			float feedbacksIntensity = 1.0f, MMChannelData channelData = null, bool resetShakerValuesAfterShake = true,
+			bool resetTargetValuesAfterShake = true, bool forwardDirection = true,
+			TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false, bool restore = false)
 		{
-			if (!CheckEventAllowed(channelData) || (!Interruptible && Shaking))
-			{
-				return;
-			}
-            
+			if (!CheckEventAllowed(channelData) || (!Interruptible && Shaking)) return;
+
 			if (stop)
 			{
 				Stop();
@@ -148,7 +154,7 @@ namespace MoreMountains.FeedbacksForThirdParty
 		}
 
 		/// <summary>
-		/// Resets the target's values
+		///     Resets the target's values
 		/// </summary>
 		protected override void ResetTargetValues()
 		{
@@ -158,7 +164,7 @@ namespace MoreMountains.FeedbacksForThirdParty
 		}
 
 		/// <summary>
-		/// Resets the shaker's values
+		///     Resets the shaker's values
 		/// </summary>
 		protected override void ResetShakerValues()
 		{
@@ -174,7 +180,7 @@ namespace MoreMountains.FeedbacksForThirdParty
 		}
 
 		/// <summary>
-		/// Starts listening for events
+		///     Starts listening for events
 		/// </summary>
 		public override void StartListening()
 		{
@@ -183,38 +189,58 @@ namespace MoreMountains.FeedbacksForThirdParty
 		}
 
 		/// <summary>
-		/// Stops listening for events
+		///     Stops listening for events
 		/// </summary>
 		public override void StopListening()
 		{
 			base.StopListening();
 			MMBloomShakeEvent.Unregister(OnBloomShakeEvent);
 		}
-		#endif
+#endif
 	}
 
 	/// <summary>
-	/// An event used to trigger vignette shakes
+	///     An event used to trigger vignette shakes
 	/// </summary>
 	public struct MMBloomShakeEvent
 	{
-		static private event Delegate OnEvent;
-		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)] private static void RuntimeInitialization() { OnEvent = null; }
-		static public void Register(Delegate callback) { OnEvent += callback; }
-		static public void Unregister(Delegate callback) { OnEvent -= callback; }
-		
-		public delegate void Delegate(AnimationCurve intensity, float duration, float remapMin, float remapMax,
-			AnimationCurve threshold, float remapThresholdMin, float remapThresholdMax, bool relativeIntensity = false,
-			float feedbacksIntensity = 1.0f, MMChannelData channelData = null, bool resetShakerValuesAfterShake = true, 
-			bool resetTargetValuesAfterShake = true, bool forwardDirection = true, TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false, bool restore = false);
+		private static event Delegate OnEvent;
 
-		static public void Trigger(AnimationCurve intensity, float duration, float remapMin, float remapMax,
-			AnimationCurve threshold, float remapThresholdMin, float remapThresholdMax, bool relativeIntensity = false,
-			float feedbacksIntensity = 1.0f, MMChannelData channelData = null, bool resetShakerValuesAfterShake = true, 
-			bool resetTargetValuesAfterShake = true, bool forwardDirection = true, TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false, bool restore = false)
+		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+		private static void RuntimeInitialization()
 		{
-			OnEvent?.Invoke(intensity, duration, remapMin, remapMax, threshold, remapThresholdMin, remapThresholdMax, relativeIntensity,
-				feedbacksIntensity, channelData, resetShakerValuesAfterShake, resetTargetValuesAfterShake, forwardDirection, timescaleMode, stop, restore);
+			OnEvent = null;
+		}
+
+		public static void Register(Delegate callback)
+		{
+			OnEvent += callback;
+		}
+
+		public static void Unregister(Delegate callback)
+		{
+			OnEvent -= callback;
+		}
+
+		public delegate void Delegate(
+			AnimationCurve intensity, float duration, float remapMin, float remapMax,
+			AnimationCurve threshold, float remapThresholdMin, float remapThresholdMax, bool relativeIntensity = false,
+			float feedbacksIntensity = 1.0f, MMChannelData channelData = null, bool resetShakerValuesAfterShake = true,
+			bool resetTargetValuesAfterShake = true, bool forwardDirection = true,
+			TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false, bool restore = false);
+
+		public static void Trigger(
+			AnimationCurve intensity, float duration, float remapMin, float remapMax,
+			AnimationCurve threshold, float remapThresholdMin, float remapThresholdMax, bool relativeIntensity = false,
+			float feedbacksIntensity = 1.0f, MMChannelData channelData = null, bool resetShakerValuesAfterShake = true,
+			bool resetTargetValuesAfterShake = true, bool forwardDirection = true,
+			TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false, bool restore = false)
+		{
+			OnEvent?.Invoke(
+				intensity, duration, remapMin, remapMax, threshold, remapThresholdMin, remapThresholdMax,
+				relativeIntensity,
+				feedbacksIntensity, channelData, resetShakerValuesAfterShake, resetTargetValuesAfterShake,
+				forwardDirection, timescaleMode, stop, restore);
 		}
 	}
 }

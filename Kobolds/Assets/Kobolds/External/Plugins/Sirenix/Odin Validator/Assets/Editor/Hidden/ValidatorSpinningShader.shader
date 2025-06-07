@@ -15,12 +15,14 @@
             #pragma fragment frag
             #include "UnityCG.cginc"
 
-            struct appdata {
+            struct appdata
+            {
                 float4 vertex : POSITION;
                 float2 uv : TEXCOORD0;
             };
 
-            struct v2f {
+            struct v2f
+            {
                 float2 uv : TEXCOORD0;
                 float4 vertex : SV_POSITION;
             };
@@ -33,7 +35,8 @@
             float _SirenixOdinSpinner_SpinTime;
             float _SirenixOdinSpinner_T;
 
-            v2f vert(appdata v) {
+            v2f vert(appdata v)
+            {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = v.uv;
@@ -50,7 +53,8 @@
             float ease(float x) { return x * x * (3.0 - 2.0 * x); }
             float anim(float x) { return pow(ease(x), 1.0); }
 
-            float2 rotate(in float2 p, float r) {
+            float2 rotate(in float2 p, float r)
+            {
                 float c = cos(r);
                 float s = sin(r);
                 float2x2 m = float2x2(c, -s, s, c);
@@ -58,7 +62,8 @@
                 return p;
             }
 
-            float sdOctogon(in float2 p, in float r) {
+            float sdOctogon(in float2 p, in float r)
+            {
                 float3 k = float3(-0.9238795325, 0.3826834323, 0.4142135623);
                 p = abs(p);
                 p -= 2.0 * min(dot(float2(k.x, k.y), p), 0.0) * float2(k.x, k.y);
@@ -67,7 +72,8 @@
                 return length(p) * sign(p.y);
             }
 
-            float sdUnevenCapsule(float2 p, float r1, float r2, float h) {
+            float sdUnevenCapsule(float2 p, float r1, float r2, float h)
+            {
                 p.x = abs(p.x);
                 float b = (r1 - r2) / h;
                 float a = sqrt(1.0 - b * b);
@@ -77,17 +83,20 @@
                 return dot(p, float2(a, b)) - r1;
             }
 
-            float sdArc(in float2 p, in float2 sc, in float ra, float rb) {
+            float sdArc(in float2 p, in float2 sc, in float ra, float rb)
+            {
                 p.x = abs(p.x);
                 return ((sc.y * p.x > sc.x * p.y) ? length(p - sc * ra) : abs(length(p) - ra)) - rb;
             }
 
-            float sdBox(in float2 p, in float2 b) {
+            float sdBox(in float2 p, in float2 b)
+            {
                 float2 d = abs(p) - b;
                 return length(max(d, 0.0)) + min(max(d.x, d.y), 0.0);
             }
 
-            float sdEquilateralTriangle(in float2 p) {
+            float sdEquilateralTriangle(in float2 p)
+            {
                 const float k = sqrt(3.0);
                 p.x = abs(p.x) - 1.0;
                 p.y = p.y + 1.0 / k;
@@ -96,17 +105,19 @@
                 return -length(p) * sign(p.y);
             }
 
-            float sdTriangleIsosceles(in float2 p, in float2 q) {
+            float sdTriangleIsosceles(in float2 p, in float2 q)
+            {
                 p.x = abs(p.x);
                 float2 a = p - q * clamp(dot(p, q) / dot(q, q), 0.0, 1.0);
                 float2 b = p - q * float2(clamp(p.x / q.x, 0.0, 1.0), 1.0);
                 float s = -sign(q.y);
                 float2 d = min(float2(dot(a, a), s * (p.x * q.y - p.y * q.x)),
-  float2(dot(b, b), s * (p.y - q.y)));
+                               float2(dot(b, b), s * (p.y - q.y)));
                 return -sqrt(d.x) * sign(d.y);
             }
 
-            float sdExclamationPoint(in float2 p, float t) {
+            float sdExclamationPoint(in float2 p, float t)
+            {
                 float a = anim(t);
 
                 float r1 = RADIUS * 0.08 * a;
@@ -125,7 +136,8 @@
                 return min(t1, t2);
             }
 
-            float sdEquilateralTriangle(in float2 p, float r) {
+            float sdEquilateralTriangle(in float2 p, float r)
+            {
                 float2 p1 = float2(0., 1.);
                 float2 p2 = float2(0.866, -.5);
                 float2 p3 = float2(-0.866, -.5);
@@ -135,7 +147,8 @@
 
 
             // SPINNER
-            float spinnerDist(float2 p) {
+            float spinnerDist(float2 p)
+            {
                 float rad = RADIUS * 0.9;
                 p = rotate(p, SPIN);
 
@@ -146,13 +159,15 @@
                 return sdArc(p, float2(c, s), rad - 0.15 * RADIUS - f, 0.15 * RADIUS + f);
             }
 
-            float spinnerAlpha(float2 p) {
+            float spinnerAlpha(float2 p)
+            {
                 p = rotate(p, SPIN);
                 return (atan2(p.x, p.y) + PI) / (PI * 2.0);
             }
 
             // Animate from/to spin util
-            void spinAnimate(inout float2 p) {
+            void spinAnimate(inout float2 p)
+            {
                 float t = 0.0;
 
                 if (_SirenixOdinSpinner_SpinDir > 0.0)
@@ -164,7 +179,8 @@
             }
 
             // CHECK
-            float validDist(float2 p, float t) {
+            float validDist(float2 p, float t)
+            {
                 float a = anim(t);
 
                 float cr = 1.25 * a;
@@ -184,10 +200,12 @@
             }
 
             // WARNING
-            float warningDist(float2 p, float t) {
+            float warningDist(float2 p, float t)
+            {
                 float s = 0.9;
                 float t1 = sdExclamationPoint(p, t);
-                float t2 = sdTriangleIsosceles(float2(p.x, -p.y + RADIUS * 0.9 * s), float2(RADIUS, RADIUS * 1.6) * s) - 0.2 * RADIUS;
+                float t2 = sdTriangleIsosceles(float2(p.x, -p.y + RADIUS * 0.9 * s), float2(RADIUS, RADIUS * 1.6) * s) -
+                    0.2 * RADIUS;
                 float t3 = length(p) - RADIUS;
 
                 t2 = lerp(t2, t3, easeOutSine(_SirenixOdinSpinner_Spin));
@@ -197,7 +215,8 @@
             }
 
             // ERROR
-            float errorDist(float2 p, float t) {
+            float errorDist(float2 p, float t)
+            {
                 float s = 0.9;
                 float t1 = sdExclamationPoint(p, t);
                 float t2 = sdOctogon(p, RADIUS);
@@ -205,7 +224,8 @@
             }
 
             // Odin
-            float2 rotateArm(inout float2 uv) {
+            float2 rotateArm(inout float2 uv)
+            {
                 float r = PI * -0.7428;
                 float c = cos(PI * r);
                 float s = sin(PI * r);
@@ -216,11 +236,13 @@
                 return uv;
             }
 
-            float sdTri(in float2 p, float size) {
+            float sdTri(in float2 p, float size)
+            {
                 return sdEquilateralTriangle(p) + 0.6199999 - size;
             }
 
-            float sdTriArm(in float2 p, float t) {
+            float sdTriArm(in float2 p, float t)
+            {
                 float spacing = 0.9;
                 float thickness = 0.6 * spacing;
                 float s = 0.22;
@@ -239,7 +261,8 @@
                 return f + 0.00;
             }
 
-            float odinDist(float2 p, float t) {
+            float odinDist(float2 p, float t)
+            {
                 p.y += 0.04;
                 float arm1 = sdTriArm(rotateArm(p), t);
                 float arm2 = sdTriArm(rotateArm(p), t);
@@ -247,7 +270,8 @@
                 return min(min(arm1, arm2), arm3) - 0.02;
             }
 
-            float4 frag(v2f i) : SV_Target {
+            float4 frag(v2f i) : SV_Target
+            {
                 float2 p1 = (i.uv - float2(0.5, 0.5)) * 1.0;
                 float2 p2 = p1;
 

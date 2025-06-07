@@ -86,12 +86,11 @@ namespace P3T.Scripts.UI
 			if (!_canvasGroup.isActiveAndEnabled && Mathf.Approximately(_canvasGroup.alpha, 0f))
 				onFadeOutComplete?.Invoke();
 			else
-				_activeTween = _canvasGroup.DOFade(0f, duration).SetUpdate(true).OnComplete(
-					() =>
-					{
-						HideFader();
-						onFadeOutComplete?.Invoke();
-					});
+				_activeTween = _canvasGroup.DOFade(0f, duration).SetUpdate(true).OnComplete(() =>
+				{
+					HideFader();
+					onFadeOutComplete?.Invoke();
+				});
 		}
 	}
 }

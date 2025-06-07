@@ -26,37 +26,36 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 
 			private readonly OdinGUITableCollection<TTable> collection;
 
-			public VisibleTables(OdinGUITableCollection<TTable> collection, int offset, int length, int pinnedLength, float startOffset)
+			public VisibleTables(
+				OdinGUITableCollection<TTable> collection, int offset, int length, int pinnedLength, float startOffset)
 			{
 				this.collection = collection;
-				this.Offset = offset;
-				this.Length = length + pinnedLength;
-				this.PinnedLength = pinnedLength;
-				this.StartOffset = startOffset;
+				Offset = offset;
+				Length = length + pinnedLength;
+				PinnedLength = pinnedLength;
+				StartOffset = startOffset;
 			}
 
 			public OdinGUITable<TTable> this[int index] =>
-				index >= this.PinnedLength ? this.collection[this.Offset + index - this.PinnedLength] : this.collection[index];
+				index >= PinnedLength ? collection[Offset + index - PinnedLength] : collection[index];
 		}
 
 		//public VisibleTables CurrentVisibleTables;
 
-		public HashSet<OdinGUITable<TTable>> TablesWithinVisibleBounds = new HashSet<OdinGUITable<TTable>>();
-		
-		public OdinGUITableCollection(int capacity) : base(capacity) { }
+		public HashSet<OdinGUITable<TTable>> TablesWithinVisibleBounds = new();
+
+		public OdinGUITableCollection(int capacity) : base(capacity)
+		{
+		}
 
 #if USING_WIDTH_NON_PERCENT
 		public void AddKeyTable()
 		{
-			for (var i = 0; i < this.Count; i++)
-			{
+			for (var i = 0; i < Count; i++)
 				if (this[i].Type == OdinGUITable<TTable>.GUITableType.Key)
-				{
 					return;
-				}
-			}
 
-			this.Add(OdinGUITable<TTable>.CreateKeyTable());
+			Add(OdinGUITable<TTable>.CreateKeyTable());
 		}
 #else
 		public void AddKeyTable(float widthPercent)
@@ -77,31 +76,28 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 		public void UpdateVisibleTables(OdinGUIScrollView view, float pinnedWidth)
 		{
 #if true
-			this.TablesWithinVisibleBounds.Clear();
+			TablesWithinVisibleBounds.Clear();
 
 			var offset = 0;
 			var currentVisibleWidth = 0.0f;
 			var xMin = 0.0f;
 			var xMax = 0.0f;
 
-			for (var i = 0; i < this.Count; i++)
+			for (var i = 0; i < Count; i++)
 			{
-				OdinGUITable<TTable> table = this[i];
+				var table = this[i];
 
-				if (!table.IsVisible)
-				{
-					continue;
-				}
+				if (!table.IsVisible) continue;
 
 				if (table.IsPinned)
 				{
-					this.TablesWithinVisibleBounds.Add(table);
+					TablesWithinVisibleBounds.Add(table);
 					continue;
 				}
 
 				xMax += table.Width;
 
-				bool isVisible = view.Position.x >= xMin && view.Position.x <= xMax;
+				var isVisible = view.Position.x >= xMin && view.Position.x <= xMax;
 
 				if (!isVisible)
 				{
@@ -112,28 +108,25 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 				offset = i;
 
 				currentVisibleWidth = xMax - view.Position.x;
-				this.TablesWithinVisibleBounds.Add(table);
+				TablesWithinVisibleBounds.Add(table);
 				break;
 			}
 
-			float width = view.Bounds.width - pinnedWidth;
+			var width = view.Bounds.width - pinnedWidth;
 
-			for (int i = offset + 1; i < this.Count; i++)
+			for (var i = offset + 1; i < Count; i++)
 			{
-				OdinGUITable<TTable> table = this[i];
+				var table = this[i];
 
-				if (!table.IsVisible)
-				{
-					break;
-				}
+				if (!table.IsVisible) break;
 
 				if (currentVisibleWidth >= width)
 				{
-					this.TablesWithinVisibleBounds.Add(table);
+					TablesWithinVisibleBounds.Add(table);
 					break;
 				}
 
-				this.TablesWithinVisibleBounds.Add(table);
+				TablesWithinVisibleBounds.Add(table);
 				currentVisibleWidth += this[i].Width;
 			}
 #else
@@ -214,31 +207,23 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 			this.CurrentVisibleTables = new VisibleTables(this, offset, length, pinnedCount, startOffset);
 #endif
 		}
-		
+
 		public float GetVisibleWidth()
 		{
 			var result = 0.0f;
 
-			for (var i = 0; i < this.Count; i++)
-			{
+			for (var i = 0; i < Count; i++)
 				if (this[i].IsVisible)
-				{
 					result += this[i].Width;
-				}
-			}
 
 			return result;
 		}
 
 		public void ResizeBy(float factor)
 		{
-			for (var i = 0; i < this.Count; i++)
-			{
+			for (var i = 0; i < Count; i++)
 				if (this[i].IsVisible)
-				{
 					this[i].Width *= factor;
-				}
-			}
 		}
 #else
 		/// <summary> Calculates the <see cref="GUITable.Width"/> field on <see cref="GUITable"/> beforehand. </summary>
@@ -258,26 +243,18 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 
 		public int GetLastVisibleIndex()
 		{
-			for (int i = this.Count - 1; i >= 0; i--)
-			{
+			for (var i = Count - 1; i >= 0; i--)
 				if (this[i].IsVisible)
-				{
 					return i;
-				}
-			}
 
 			return 0;
 		}
 
 		public int GetLastVisiblePinnedIndex()
 		{
-			for (int i = this.Count - 1; i >= 0; i--)
-			{
+			for (var i = Count - 1; i >= 0; i--)
 				if (this[i].IsVisible && this[i].IsPinned)
-				{
 					return i;
-				}
-			}
 
 			return 0;
 		}
@@ -286,13 +263,9 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 		{
 			var result = 0;
 
-			for (var i = 0; i < this.Count; i++)
-			{
+			for (var i = 0; i < Count; i++)
 				if (this[i].IsVisible)
-				{
 					result++;
-				}
-			}
 
 			return result;
 		}
@@ -301,13 +274,9 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 		{
 			var result = 0;
 
-			for (var i = 0; i < this.Count; i++)
-			{
+			for (var i = 0; i < Count; i++)
 				if (!this[i].IsVisible)
-				{
 					result++;
-				}
-			}
 
 			return result;
 		}
@@ -316,34 +285,25 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 		{
 			var result = 0;
 
-			for (var i = 0; i < this.Count; i++)
-			{
+			for (var i = 0; i < Count; i++)
 				if (this[i].IsVisible && this[i].IsPinned)
-				{
 					result++;
-				}
-			}
 
 			return result;
 		}
 
 		public OdinGUITable<TTable> GetNextVisible(int index)
 		{
-			for (int i = index + 1; i < this.Count; i++)
-			{
+			for (var i = index + 1; i < Count; i++)
 				if (this[i].IsVisible)
-				{
 					return this[i];
-				}
-			}
 
 			return null;
 		}
 
 		public void UndoRecordCollection(SharedTableData sharedTableData, string name)
 		{
-			for (var i = 0; i < this.Count; i++)
-			{
+			for (var i = 0; i < Count; i++)
 				switch (this[i].Type)
 				{
 					case OdinGUITable<TTable>.GUITableType.Default:
@@ -351,23 +311,18 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 						break;
 
 					case OdinGUITable<TTable>.GUITableType.Key:
-						if (sharedTableData != null)
-						{
-							Undo.RecordObject(sharedTableData, name);
-						}
+						if (sharedTableData != null) Undo.RecordObject(sharedTableData, name);
 
 						break;
 
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
-			}
 		}
 
 		public void SetDirty(SharedTableData sharedTableData)
 		{
-			for (var i = 0; i < this.Count; i++)
-			{
+			for (var i = 0; i < Count; i++)
 				switch (this[i].Type)
 				{
 					case OdinGUITable<TTable>.GUITableType.Default:
@@ -375,17 +330,13 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 						break;
 
 					case OdinGUITable<TTable>.GUITableType.Key:
-						if (sharedTableData != null)
-						{
-							EditorUtility.SetDirty(sharedTableData);
-						}
+						if (sharedTableData != null) EditorUtility.SetDirty(sharedTableData);
 
 						break;
 
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
-			}
 		}
 
 #if !USING_WIDTH_NON_PERCENT
@@ -418,31 +369,22 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 		{
 			var count = 0;
 
-			for (var i = 0; i < this.Count; i++)
+			for (var i = 0; i < Count; i++)
 			{
-				if (this[i].IsPinned || !this[i].IsVisible)
-				{
-					continue;
-				}
+				if (this[i].IsPinned || !this[i].IsVisible) continue;
 
 				count++;
 			}
 
-			if (count < 1)
+			if (count < 1) return;
+
+			var averageSize = OdinLocalizationConstants.DEFAULT_COLUMN_WIDTH * count;
+
+			var scaleFactor = targetWidth / averageSize;
+
+			for (var i = 0; i < Count; i++)
 			{
-				return;
-			}
-
-			int averageSize = OdinLocalizationConstants.DEFAULT_COLUMN_WIDTH * count;
-
-			float scaleFactor = targetWidth / averageSize;
-
-			for (var i = 0; i < this.Count; i++)
-			{
-				if (!this[i].IsVisible || this[i].IsPinned)
-				{
-					continue;
-				}
+				if (!this[i].IsVisible || this[i].IsPinned) continue;
 
 				this[i].Width = OdinLocalizationConstants.DEFAULT_COLUMN_WIDTH * scaleFactor;
 			}
@@ -452,29 +394,20 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor
 		{
 			var currentTotalWidth = 0.0f;
 
-			for (var i = 0; i < this.Count; i++)
+			for (var i = 0; i < Count; i++)
 			{
-				if (!this[i].IsPinned || !this[i].IsVisible)
-				{
-					continue;
-				}
+				if (!this[i].IsPinned || !this[i].IsVisible) continue;
 
 				currentTotalWidth += this[i].Width;
 			}
 
-			if (currentTotalWidth < 1.0f)
-			{
-				return;
-			}
+			if (currentTotalWidth < 1.0f) return;
 
-			float scaleFactor = targetWidth / currentTotalWidth;
+			var scaleFactor = targetWidth / currentTotalWidth;
 
-			for (var i = 0; i < this.Count; i++)
+			for (var i = 0; i < Count; i++)
 			{
-				if (!this[i].IsVisible || !this[i].IsPinned)
-				{
-					continue;
-				}
+				if (!this[i].IsVisible || !this[i].IsPinned) continue;
 
 				this[i].Width *= scaleFactor;
 			}

@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 namespace MoreMountains.Tools
 {
@@ -9,23 +8,16 @@ namespace MoreMountains.Tools
 	/// Why this is not native, I don't know.
 	/// </summary>
 	[AddComponentMenu("More Mountains/Tools/Particles/MM Change Fog Color")]
-	public class MMChangeFogColor : MonoBehaviour 
+	public class MMChangeFogColor : MonoBehaviour
 	{
 		/// Adds this class to a UnityStandardAssets.ImageEffects.GlobalFog to change its color
-		[MMInformation("Adds this class to a UnityStandardAssets.ImageEffects.GlobalFog to change its color", MMInformationAttribute.InformationType.Info,false)]
+		[MMInformation(
+			"Adds this class to a UnityStandardAssets.ImageEffects.GlobalFog to change its color",
+			MMInformationAttribute.InformationType.Info, false)]
 		public Color FogColor;
 
 		/// <summary>
-		/// Sets the fog's color to the one set in the inspector
-		/// </summary>
-		protected virtual void SetupFogColor () 
-		{
-			RenderSettings.fogColor = FogColor;
-			RenderSettings.fog = true;
-		}
-
-		/// <summary>
-		/// On Start(), we set the fog's color
+		///     On Start(), we set the fog's color
 		/// </summary>
 		protected virtual void Start()
 		{
@@ -33,11 +25,20 @@ namespace MoreMountains.Tools
 		}
 
 		/// <summary>
-		/// Whenever there's a change in the camera's inspector, we change the fog's color
+		///     Whenever there's a change in the camera's inspector, we change the fog's color
 		/// </summary>
 		protected virtual void OnValidate()
 		{
 			SetupFogColor();
+		}
+
+		/// <summary>
+		///     Sets the fog's color to the one set in the inspector
+		/// </summary>
+		protected virtual void SetupFogColor()
+		{
+			RenderSettings.fogColor = FogColor;
+			RenderSettings.fog = true;
 		}
 	}
 }

@@ -126,7 +126,6 @@ AssetOrigin:
   serializedVersion: 1
   productId: 285638
   packageName: Ragdoll Animator 2
-  packageVersion: 1.0.3.3
-  assetPath: Assets/Kobolds/External/FImpossible Creations/Plugins - Shared/Body
-    Definition/Editor/Resources/SPR_BodyExtra.png
-  uploadId: 737666
+  packageVersion: 1.0.3.7
+  assetPath: Assets/Kobolds/External/FImpossible Creations/Editor/Resources/SPR_BodyExtra.png
+  uploadId: 755629

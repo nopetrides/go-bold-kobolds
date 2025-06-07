@@ -1,7 +1,6 @@
-﻿using UnityEngine;
-using UnityEngine.Rendering;
-using MoreMountains.Feedbacks;
+﻿using MoreMountains.Feedbacks;
 using MoreMountains.Tools;
+using UnityEngine;
 #if MM_HDRP
 using UnityEngine.Rendering.HighDefinition;
 #endif
@@ -9,11 +8,12 @@ using UnityEngine.Rendering.HighDefinition;
 namespace MoreMountains.FeedbacksForThirdParty
 {
 	/// <summary>
-	/// Add this class to a Camera with a HDRP depth of field post processing and it'll be able to "shake" its values by getting events
+	///     Add this class to a Camera with a HDRP depth of field post processing and it'll be able to "shake" its values by
+	///     getting events
 	/// </summary>
-	#if MM_HDRP
+#if MM_HDRP
 	[RequireComponent(typeof(Volume))]
-	#endif
+#endif
 	[AddComponentMenu("More Mountains/Feedbacks/Shakers/PostProcessing/MM Depth Of Field Shaker HDRP")]
 	public class MMDepthOfFieldShaker_HDRP : MMShaker
 	{
@@ -21,93 +21,106 @@ namespace MoreMountains.FeedbacksForThirdParty
 		/// whether or not to animate the focus distance
 		[Tooltip("whether or not to animate the focus distance")]
 		public bool AnimateFocusDistance = true;
+
 		/// the curve used to animate the focus distance value on
 		[Tooltip("the curve used to animate the focus distance value on")]
 		[MMCondition("AnimateFocusDistance", true)]
-		public AnimationCurve ShakeFocusDistance = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+		public AnimationCurve ShakeFocusDistance = new(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+
 		/// the value to remap the curve's 0 to
 		[Tooltip("the value to remap the curve's 0 to")]
 		[MMCondition("AnimateFocusDistance", true)]
-		public float RemapFocusDistanceZero = 0f;
+		public float RemapFocusDistanceZero;
+
 		/// the value to remap the curve's 1 to
 		[Tooltip("the value to remap the curve's 1 to")]
 		[MMCondition("AnimateFocusDistance", true)]
 		public float RemapFocusDistanceOne = 3f;
-		
-		
+
+
 		[MMInspectorGroup("Near Range", true, 52)]
-		
 		[Header("Near Range Start")]
 		/// whether or not to animate the near range start
 		[Tooltip("whether or not to animate the near range start")]
-		public bool AnimateNearRangeStart = false;
+		public bool AnimateNearRangeStart;
+
 		/// the curve used to animate the near range start on
 		[Tooltip("the curve used to animate the near range start on")]
 		[MMCondition("AnimateNearRangeStart", true)]
-		public AnimationCurve ShakeNearRangeStart = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+		public AnimationCurve ShakeNearRangeStart = new(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+
 		/// the value to remap the curve's 0 to
 		[Tooltip("the value to remap the curve's 0 to")]
 		[MMCondition("AnimateNearRangeStart", true)]
-		public float RemapNearRangeStartZero = 0f;
+		public float RemapNearRangeStartZero;
+
 		/// the value to remap the curve's 1 to
 		[Tooltip("the value to remap the curve's 1 to")]
 		[MMCondition("AnimateNearRangeStart", true)]
 		public float RemapNearRangeStartOne = 3f;
-		
+
 		[Header("Near Range End")]
 		/// whether or not to animate the near range end
 		[Tooltip("whether or not to animate the near range end")]
-		public bool AnimateNearRangeEnd = false;
+		public bool AnimateNearRangeEnd;
+
 		/// the curve used to animate the near range end on
 		[Tooltip("the curve used to animate the near range end on")]
 		[MMCondition("AnimateNearRangeEnd", true)]
-		public AnimationCurve ShakeNearRangeEnd = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+		public AnimationCurve ShakeNearRangeEnd = new(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+
 		/// the value to remap the curve's 0 to
 		[Tooltip("the value to remap the curve's 0 to")]
 		[MMCondition("AnimateNearRangeEnd", true)]
-		public float RemapNearRangeEndZero = 0f;
+		public float RemapNearRangeEndZero;
+
 		/// the value to remap the curve's 1 to
 		[Tooltip("the value to remap the curve's 1 to")]
 		[MMCondition("AnimateNearRangeEnd", true)]
 		public float RemapNearRangeEndOne = 3f;
-		
+
 		[MMInspectorGroup("Far Range", true, 51)]
-		
 		[Header("Far Range Start")]
 		/// whether or not to animate the far range start
 		[Tooltip("whether or not to animate the far range start")]
-		public bool AnimateFarRangeStart = false;
+		public bool AnimateFarRangeStart;
+
 		/// the curve used to animate the far range start on
 		[Tooltip("the curve used to animate the far range start on")]
 		[MMCondition("AnimateFarRangeStart", true)]
-		public AnimationCurve ShakeFarRangeStart = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+		public AnimationCurve ShakeFarRangeStart = new(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+
 		/// the value to remap the curve's 0 to
 		[Tooltip("the value to remap the curve's 0 to")]
 		[MMCondition("AnimateFarRangeStart", true)]
-		public float RemapFarRangeStartZero = 0f;
+		public float RemapFarRangeStartZero;
+
 		/// the value to remap the curve's 1 to
 		[Tooltip("the value to remap the curve's 1 to")]
 		[MMCondition("AnimateFarRangeStart", true)]
 		public float RemapFarRangeStartOne = 3f;
-		
+
 		[Header("Far Range End")]
 		/// whether or not to animate the far range end
 		[Tooltip("whether or not to animate the far range end")]
-		public bool AnimateFarRangeEnd = false;
+		public bool AnimateFarRangeEnd;
+
 		/// the curve used to animate the far range end on
 		[Tooltip("the curve used to animate the far range end on")]
 		[MMCondition("AnimateFarRangeEnd", true)]
-		public AnimationCurve ShakeFarRangeEnd = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+		public AnimationCurve ShakeFarRangeEnd = new(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+
 		/// the value to remap the curve's 0 to
 		[Tooltip("the value to remap the curve's 0 to")]
 		[MMCondition("AnimateFarRangeEnd", true)]
-		public float RemapFarRangeEndZero = 0f;
+		public float RemapFarRangeEndZero;
+
 		/// the value to remap the curve's 1 to
 		[Tooltip("the value to remap the curve's 1 to")]
 		[MMCondition("AnimateFarRangeEnd", true)]
 		public float RemapFarRangeEndOne = 3f;
-		
-		#if MM_HDRP
+
+#if MM_HDRP
 		protected Volume _volume;
 		protected DepthOfField _depthOfField;
 		protected float _originalShakeDuration;
@@ -157,27 +170,32 @@ namespace MoreMountains.FeedbacksForThirdParty
 		{
 			if (AnimateFocusDistance)
 			{
-				float newValue = ShakeFloat(ShakeFocusDistance, RemapFocusDistanceZero, RemapFocusDistanceOne, false, _initialFocusDistance);
+				float newValue =
+ ShakeFloat(ShakeFocusDistance, RemapFocusDistanceZero, RemapFocusDistanceOne, false, _initialFocusDistance);
 				_depthOfField.focusDistance.Override(newValue);	
 			}
 			if (AnimateNearRangeStart)
 			{
-				float newValue = ShakeFloat(ShakeNearRangeStart, RemapNearRangeStartZero, RemapNearRangeStartOne, false, _initialNearRangeStart);
+				float newValue =
+ ShakeFloat(ShakeNearRangeStart, RemapNearRangeStartZero, RemapNearRangeStartOne, false, _initialNearRangeStart);
 				_depthOfField.nearFocusStart.Override(newValue);	
 			}
 			if (AnimateNearRangeEnd)
 			{
-				float newValue = ShakeFloat(ShakeNearRangeEnd, RemapNearRangeEndZero, RemapNearRangeEndOne, false, _initialNearRangeEnd);
+				float newValue =
+ ShakeFloat(ShakeNearRangeEnd, RemapNearRangeEndZero, RemapNearRangeEndOne, false, _initialNearRangeEnd);
 				_depthOfField.nearFocusEnd.Override(newValue);	
 			}
 			if (AnimateFarRangeStart)
 			{
-				float newValue = ShakeFloat(ShakeFarRangeStart, RemapFarRangeStartZero, RemapFarRangeStartOne, false, _initialFarRangeStart);
+				float newValue =
+ ShakeFloat(ShakeFarRangeStart, RemapFarRangeStartZero, RemapFarRangeStartOne, false, _initialFarRangeStart);
 				_depthOfField.farFocusStart.Override(newValue);	
 			}
 			if (AnimateFarRangeEnd)
 			{
-				float newValue = ShakeFloat(ShakeFarRangeEnd, RemapFarRangeEndZero, RemapFarRangeEndOne, false, _initialFarRangeEnd);
+				float newValue =
+ ShakeFloat(ShakeFarRangeEnd, RemapFarRangeEndZero, RemapFarRangeEndOne, false, _initialFarRangeEnd);
 				_depthOfField.farFocusEnd.Override(newValue);	
 			}
 			
@@ -205,13 +223,20 @@ namespace MoreMountains.FeedbacksForThirdParty
 		/// <param name="attenuation"></param>
 		/// <param name="channel"></param>
 		public virtual void OnDepthOfFieldShakeEvent(float duration, 
-			float attenuation = 1.0f, MMChannelData channelData = null, bool resetShakerValuesAfterShake = true, bool resetTargetValuesAfterShake = true, 
-			bool forwardDirection = true, TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false, bool restore = false,
-			bool animateFocusDistance = false, AnimationCurve shakeFocusDistance = null, float remapFocusDistanceZero = 0f, float remapFocusDistanceOne = 1f,
-			bool animateNearRangeStart = false, AnimationCurve shakeNearRangeStart = null,float remapNearRangeStartZero = 0f, float remapNearRangeStartOne = 0f,
-			bool animateNearRangeEnd = false, AnimationCurve shakeNearRangeEnd = null,float remapNearRangeEndZero = 0f, float remapNearRangeEndOne = 0f,
-			bool animateFarRangeStart = false, AnimationCurve shakeFarRangeStart = null,float remapFarRangeStartZero = 0f, float remapFarRangeStartOne = 0f,
-			bool animateFarRangeEnd = false, AnimationCurve shakeFarRangeEnd = null,float remapFarRangeEndZero = 0f, float remapFarRangeEndOne = 0f)
+			float attenuation = 1.0f, MMChannelData channelData = null, bool resetShakerValuesAfterShake =
+ true, bool resetTargetValuesAfterShake = true, 
+			bool forwardDirection = true, TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop =
+ false, bool restore = false,
+			bool animateFocusDistance = false, AnimationCurve shakeFocusDistance = null, float remapFocusDistanceZero =
+ 0f, float remapFocusDistanceOne = 1f,
+			bool animateNearRangeStart = false, AnimationCurve shakeNearRangeStart = null,float remapNearRangeStartZero
+ = 0f, float remapNearRangeStartOne = 0f,
+			bool animateNearRangeEnd = false, AnimationCurve shakeNearRangeEnd = null,float remapNearRangeEndZero =
+ 0f, float remapNearRangeEndOne = 0f,
+			bool animateFarRangeStart = false, AnimationCurve shakeFarRangeStart = null,float remapFarRangeStartZero =
+ 0f, float remapFarRangeStartOne = 0f,
+			bool animateFarRangeEnd = false, AnimationCurve shakeFarRangeEnd = null,float remapFarRangeEndZero =
+ 0f, float remapFarRangeEndOne = 0f)
 		{
 			if (!CheckEventAllowed(channelData) || (!Interruptible && Shaking))
 			{
@@ -351,43 +376,74 @@ namespace MoreMountains.FeedbacksForThirdParty
 			base.StopListening();
 			MMDepthOfFieldShakeEvent_HDRP.Unregister(OnDepthOfFieldShakeEvent);
 		}
-		#endif
+#endif
 	}
 
 	/// <summary>
-	/// An event used to trigger vignette shakes
+	///     An event used to trigger vignette shakes
 	/// </summary>
 	public struct MMDepthOfFieldShakeEvent_HDRP
 	{
-		static private event Delegate OnEvent;
-		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)] private static void RuntimeInitialization() { OnEvent = null; }
-		static public void Register(Delegate callback) { OnEvent += callback; }
-		static public void Unregister(Delegate callback) { OnEvent -= callback; }
-		
-		public delegate void Delegate(float duration, 
-			float attenuation = 1.0f, MMChannelData channelData = null, bool resetShakerValuesAfterShake = true, bool resetTargetValuesAfterShake = true, 
-			bool forwardDirection = true, TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false, bool restore = false,
-			bool animateFocusDistance = false, AnimationCurve shakeFocusDistance = null, float remapFocusDistanceZero = 0f, float remapFocusDistanceOne = 1f,
-			bool animateNearRangeStart = false, AnimationCurve shakeNearRangeStart = null,float remapNearRangeStartZero = 0f, float remapNearRangeStartOne = 0f,
-			bool animateNearRangeEnd = false, AnimationCurve shakeNearRangeEnd = null,float remapNearRangeEndZero = 0f, float remapNearRangeEndOne = 0f,
-			bool animateFarRangeStart = false, AnimationCurve shakeFarRangeStart = null,float remapFarRangeStartZero = 0f, float remapFarRangeStartOne = 0f,
-			bool animateFarRangeEnd = false, AnimationCurve shakeFarRangeEnd = null,float remapFarRangeEndZero = 0f, float remapFarRangeEndOne = 0f);
-		
-		static public void Trigger(float duration, 
-			float attenuation = 1.0f, MMChannelData channelData = null, bool resetShakerValuesAfterShake = true, bool resetTargetValuesAfterShake = true, 
-			bool forwardDirection = true, TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false, bool restore = false,
-			bool animateFocusDistance = false, AnimationCurve shakeFocusDistance = null, float remapFocusDistanceZero = 0f, float remapFocusDistanceOne = 1f,
-			bool animateNearRangeStart = false, AnimationCurve shakeNearRangeStart = null,float remapNearRangeStartZero = 0f, float remapNearRangeStartOne = 0f,
-			bool animateNearRangeEnd = false, AnimationCurve shakeNearRangeEnd = null,float remapNearRangeEndZero = 0f, float remapNearRangeEndOne = 0f,
-			bool animateFarRangeStart = false, AnimationCurve shakeFarRangeStart = null,float remapFarRangeStartZero = 0f, float remapFarRangeStartOne = 0f,
-			bool animateFarRangeEnd = false, AnimationCurve shakeFarRangeEnd = null,float remapFarRangeEndZero = 0f, float remapFarRangeEndOne = 0f)
+		private static event Delegate OnEvent;
+
+		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+		private static void RuntimeInitialization()
 		{
-			OnEvent?.Invoke(duration, attenuation, channelData, resetShakerValuesAfterShake, 
-				resetTargetValuesAfterShake, forwardDirection, timescaleMode, stop, restore, animateFocusDistance, shakeFocusDistance, remapFocusDistanceZero, remapFocusDistanceOne,
+			OnEvent = null;
+		}
+
+		public static void Register(Delegate callback)
+		{
+			OnEvent += callback;
+		}
+
+		public static void Unregister(Delegate callback)
+		{
+			OnEvent -= callback;
+		}
+
+		public delegate void Delegate(
+			float duration,
+			float attenuation = 1.0f, MMChannelData channelData = null, bool resetShakerValuesAfterShake = true,
+			bool resetTargetValuesAfterShake = true,
+			bool forwardDirection = true, TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false,
+			bool restore = false,
+			bool animateFocusDistance = false, AnimationCurve shakeFocusDistance = null,
+			float remapFocusDistanceZero = 0f, float remapFocusDistanceOne = 1f,
+			bool animateNearRangeStart = false, AnimationCurve shakeNearRangeStart = null,
+			float remapNearRangeStartZero = 0f, float remapNearRangeStartOne = 0f,
+			bool animateNearRangeEnd = false, AnimationCurve shakeNearRangeEnd = null, float remapNearRangeEndZero = 0f,
+			float remapNearRangeEndOne = 0f,
+			bool animateFarRangeStart = false, AnimationCurve shakeFarRangeStart = null,
+			float remapFarRangeStartZero = 0f, float remapFarRangeStartOne = 0f,
+			bool animateFarRangeEnd = false, AnimationCurve shakeFarRangeEnd = null, float remapFarRangeEndZero = 0f,
+			float remapFarRangeEndOne = 0f);
+
+		public static void Trigger(
+			float duration,
+			float attenuation = 1.0f, MMChannelData channelData = null, bool resetShakerValuesAfterShake = true,
+			bool resetTargetValuesAfterShake = true,
+			bool forwardDirection = true, TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false,
+			bool restore = false,
+			bool animateFocusDistance = false, AnimationCurve shakeFocusDistance = null,
+			float remapFocusDistanceZero = 0f, float remapFocusDistanceOne = 1f,
+			bool animateNearRangeStart = false, AnimationCurve shakeNearRangeStart = null,
+			float remapNearRangeStartZero = 0f, float remapNearRangeStartOne = 0f,
+			bool animateNearRangeEnd = false, AnimationCurve shakeNearRangeEnd = null, float remapNearRangeEndZero = 0f,
+			float remapNearRangeEndOne = 0f,
+			bool animateFarRangeStart = false, AnimationCurve shakeFarRangeStart = null,
+			float remapFarRangeStartZero = 0f, float remapFarRangeStartOne = 0f,
+			bool animateFarRangeEnd = false, AnimationCurve shakeFarRangeEnd = null, float remapFarRangeEndZero = 0f,
+			float remapFarRangeEndOne = 0f)
+		{
+			OnEvent?.Invoke(
+				duration, attenuation, channelData, resetShakerValuesAfterShake,
+				resetTargetValuesAfterShake, forwardDirection, timescaleMode, stop, restore, animateFocusDistance,
+				shakeFocusDistance, remapFocusDistanceZero, remapFocusDistanceOne,
 				animateNearRangeStart, shakeNearRangeStart, remapNearRangeStartZero, remapNearRangeStartOne,
 				animateNearRangeEnd, shakeNearRangeEnd, remapNearRangeEndZero, remapNearRangeEndOne,
 				animateFarRangeStart, shakeFarRangeStart, remapFarRangeStartZero, remapFarRangeStartOne,
-				animateFarRangeEnd, shakeFarRangeEnd,remapFarRangeEndZero,remapFarRangeEndOne);
+				animateFarRangeEnd, shakeFarRangeEnd, remapFarRangeEndZero, remapFarRangeEndOne);
 		}
 	}
 }

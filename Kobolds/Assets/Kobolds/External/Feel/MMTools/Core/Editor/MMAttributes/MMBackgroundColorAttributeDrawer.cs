@@ -8,20 +8,21 @@ namespace MoreMountains.Tools
 	[CustomPropertyDrawer(typeof(MMBackgroundColorAttribute))]
 	public class MMBackgroundColorAttributeDrawer : PropertyDrawer
 	{
-		#if  UNITY_EDITOR
-        
+#if UNITY_EDITOR
+
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
 		{
 			var backgroundColorAttribute = attribute as MMBackgroundColorAttribute;
 
-			bool doHighlight = true;
-            
+			var doHighlight = true;
+
 			if (doHighlight)
 			{
 				var color = GetColor(backgroundColorAttribute.Color);
 				var padding = EditorGUIUtility.standardVerticalSpacing;
-				var highlightRect = new Rect(position.x - padding, position.y - padding,
-					position.width + (padding * 2), position.height + (padding * 2));
+				var highlightRect = new Rect(
+					position.x - padding, position.y - padding,
+					position.width + padding * 2, position.height + padding * 2);
 				EditorGUI.DrawRect(highlightRect, color);
 				var cc = GUI.contentColor;
 				GUI.contentColor = Color.black;
@@ -34,8 +35,8 @@ namespace MoreMountains.Tools
 				EditorGUI.PropertyField(position, property, label);
 			}
 		}
-        
-		#endif
+
+#endif
 
 		public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
 		{

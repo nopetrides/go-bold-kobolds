@@ -21,17 +21,17 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor.Internal
 		private const string END_RICH_COLOR = "</color>";
 
 		private static readonly SmartFormatter Formatter;
-		
+
 		private static readonly StringBuilder Buffer;
 
 		// TODO: if this works nicely, maybe implement a custom solution that doesn't rely on SmartFormatter
-		
+
 		static OdinLocalizationSyntaxHighlighter()
 		{
 			Formatter = Smart.CreateDefaultSmartFormat();
 			Formatter.Settings.ParseErrorAction = ErrorAction.MaintainTokens;
 			Formatter.Settings.FormatErrorAction = ErrorAction.MaintainTokens;
-			
+
 			Buffer = new StringBuilder();
 		}
 
@@ -50,7 +50,7 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor.Internal
 
 			Buffer.Clear();
 
-			int expectedSize = source.Length;
+			var expectedSize = source.Length;
 			AppendToBuffer(format, source, ref expectedSize);
 
 			// NOTE: we fallback to source in-case any obvious discrepancies are happening.
@@ -76,14 +76,15 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor.Internal
 
 				Debug.LogException(e);
 
-				return $"Unity Formatter threw {ObjectNames.NicifyVariableName(e.GetType().GetNiceName())}: '{e.Message}'\nCheck the console for more information.";
+				return
+					$"Unity Formatter threw {ObjectNames.NicifyVariableName(e.GetType().GetNiceName())}: '{e.Message}'\nCheck the console for more information.";
 			}
 
 			exception = null;
 
 			Buffer.Clear();
 
-			int expectedSize = source.Length;
+			var expectedSize = source.Length;
 			AppendToBuffer(format, source, ref expectedSize);
 
 			foundError = expectedSize != Buffer.Length;
@@ -106,20 +107,13 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor.Internal
 
 		private static bool IsLastBufferEqual(string expected)
 		{
-			if (expected.Length > Buffer.Length)
-			{
-				return false;
-			}
+			if (expected.Length > Buffer.Length) return false;
 
-			int bufferIndex = Buffer.Length - 1;
+			var bufferIndex = Buffer.Length - 1;
 
-			for (int i1 = expected.Length - 1; i1 >= 0; i1--, bufferIndex--)
-			{
+			for (var i1 = expected.Length - 1; i1 >= 0; i1--, bufferIndex--)
 				if (Buffer[bufferIndex] != expected[i1])
-				{
 					return false;
-				}
-			}
 
 			return true;
 		}
@@ -128,12 +122,9 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor.Internal
 		{
 			for (var i = 0; i < format.Items.Count; i++)
 			{
-				if (Buffer.Length == source.Length)
-				{
-					break;
-				}
-				
-				FormatItem item = format.Items[i];
+				if (Buffer.Length == source.Length) break;
+
+				var item = format.Items[i];
 
 				if (!(item is Placeholder placeholder))
 				{
@@ -147,16 +138,13 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor.Internal
 
 				for (var j = 0; j < placeholder.Selectors.Count; j++)
 				{
-					Selector selector = placeholder.Selectors[j];
+					var selector = placeholder.Selectors[j];
 
 					AppendColorAsRichTag(OdinLocalizationConfig.Instance.selectorColor, ref expectedSize);
 
-					string op = selector.Operator;
+					var op = selector.Operator;
 
-					if (!string.IsNullOrEmpty(op))
-					{
-						Buffer.Append(selector.Operator);
-					}
+					if (!string.IsNullOrEmpty(op)) Buffer.Append(selector.Operator);
 
 					Buffer.Append(selector.RawText);
 
@@ -192,23 +180,16 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor.Internal
 
 				if (placeholder.Format != null)
 				{
-					Format nextFormat = placeholder.Format;
+					var nextFormat = placeholder.Format;
 
 					bool showColon;
 
 					if (nextFormat.startIndex > 0)
-					{
 						showColon = nextFormat.baseString[nextFormat.startIndex - 1] == ':';
-					}
 					else
-					{
 						showColon = true;
-					}
 
-					if (showColon)
-					{
-						Buffer.Append(':');
-					}
+					if (showColon) Buffer.Append(':');
 
 					AppendToBuffer(nextFormat, source, ref expectedSize);
 				}

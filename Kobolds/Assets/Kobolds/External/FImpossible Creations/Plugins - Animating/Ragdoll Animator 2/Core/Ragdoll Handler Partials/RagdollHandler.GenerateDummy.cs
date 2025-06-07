@@ -17,6 +17,7 @@ namespace FIMSpace.FProceduralAnimation
         /// <summary> Playmode generated component on the dummy container object </summary>
         public RagdollAnimatorDummyReference DummyReference { get; private set; } = null;
 
+        [SerializeField,HideInInspector] internal List<RagdollChainBone.InBetweenBone> inBetweenPreGenerateMemory = null;
         internal Dictionary<Transform, RagdollChainBone.InBetweenBone> skeletonFillExtraBones = null;
         [SerializeField, HideInInspector] internal List<RagdollChainBone.InBetweenBone> skeletonFillExtraBonesList = null;
         public List<RagdollChainBone.InBetweenBone> SkeletonFillExtraBonesList { get { return skeletonFillExtraBonesList; } }
@@ -34,9 +35,10 @@ namespace FIMSpace.FProceduralAnimation
 
             // Helper dictionary for skipped bones
             skeletonFillExtraBones = new Dictionary<Transform, RagdollChainBone.InBetweenBone>();
+            inBetweenPreGenerateMemory = new List<RagdollChainBone.InBetweenBone>();
 
             // Generating ragdoll dumym hierarchy bones basing on the settings in the 'Contruct' inspector category
-            for( int i = 0; i < chains.Count; i++ )
+            for ( int i = 0; i < chains.Count; i++ )
             {
                 var chain = chains[i];
                 if( chain.BoneSetups.Count == 0 ) continue;
@@ -85,9 +87,18 @@ namespace FIMSpace.FProceduralAnimation
             this.User_UpdateAllBonesParametersAfterManualChanges();
             //#endif
 
+            // Post initialize dictionaries: TODO - Fill with preGenerated dummy in between transforms
+            skeletonFillExtraBones = new Dictionary<Transform, RagdollChainBone.InBetweenBone>();
+            foreach (var item in inBetweenPreGenerateMemory) skeletonFillExtraBones.Add(item.SourceBone, item);
+            // Defining extra replacement bones for better animation matching in case of skipped bones
+            skeletonFillExtraBonesList = new List<RagdollChainBone.InBetweenBone>();
+            foreach (var item in skeletonFillExtraBones) skeletonFillExtraBonesList.Add(item.Value);
+
             if (WaitForInit || UseReconstruction) ApplyTPoseOnModel( true );
             GetChain( ERagdollChainType.Core ).BoneSetups[0].IsAnchor = true;
         }
+
+
 
         private bool wasInReconstructionMode = false;
 
@@ -380,6 +391,8 @@ namespace FIMSpace.FProceduralAnimation
                 {
                     for( int c = 0; c < bone.Colliders.Count; c++ )
                     {
+                        if (bone.Colliders[c].GameCollider == null) continue;
+
                         RagdollAnimator2BoneIndicator indic = bone.Colliders[c].GameCollider.GetComponent<RagdollAnimator2BoneIndicator>();
 
                         if( bone.DisableCollisionEvents ) // If we want to skip collision events in this bone, lets add just indicator
@@ -400,6 +413,15 @@ namespace FIMSpace.FProceduralAnimation
                         {
                             collisionHandler = bone.Colliders[c].GameCollider.gameObject.AddComponent<RA2BoneCollisionHandler>();
                             collisionHandler.Initialize( this, bone.BoneProcessor, chain, false );
+
+                            if (bone.Colliders.Count == 1)
+                            {
+                                // Additional indicator required if just single bone is used in order to process collision events properly
+                                var rootcollisionHandler = bone.GameRigidbody.gameObject.AddComponent<RA2BoneCollisionHandler>();
+                                rootcollisionHandler.Initialize(this, bone.BoneProcessor, chain, false);
+                                if (collectCollisions) rootcollisionHandler.EnableSavingEnteredCollisionsList();
+                                rootcollisionHandler.UseSelfCollisions = useSelfCollision;
+                            }
                         }
                         else
                         {

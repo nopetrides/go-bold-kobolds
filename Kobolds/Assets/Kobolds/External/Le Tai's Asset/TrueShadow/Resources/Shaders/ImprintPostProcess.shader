@@ -45,7 +45,7 @@ Shader "Hidden/TrueShadow/ImprintPostProcess"
                 #if BLEACH || INSET
                     half4 color = half4(1,1,1, tex2D(_MainTex, i.uv).a);
                 #else
-                    half4 color = tex2D(_MainTex, i.uv);
+                half4 color = tex2D(_MainTex, i.uv);
                 #endif
 
                 #if INSET

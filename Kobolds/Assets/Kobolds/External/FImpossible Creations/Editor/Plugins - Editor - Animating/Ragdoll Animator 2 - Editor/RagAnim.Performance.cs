@@ -8,7 +8,7 @@ namespace FIMSpace.FProceduralAnimation
         private long _perf_totalT = 0;
         private long _perf_lastMin = 0;
         private long _perf_lastMax = 0;
-        private double _perf_totalMS = 0;
+        private dynamic _perf_totalMS = 0;
         private int _perf_totalSteps = 0;
 
         protected void DrawPerformance()

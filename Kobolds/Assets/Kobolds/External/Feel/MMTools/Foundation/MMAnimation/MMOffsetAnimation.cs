@@ -1,25 +1,29 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 namespace MoreMountains.Tools
 {
 	/// <summary>
-	/// Use this class to offset an animation by a random range
+	///     Use this class to offset an animation by a random range
 	/// </summary>
 	[RequireComponent(typeof(Animator))]
 	[AddComponentMenu("More Mountains/Tools/Animation/MM Offset Animation")]
 	public class MMOffsetAnimation : MonoBehaviour
 	{
 		/// the minimum amount (in seconds) by which to offset the animation
-		public float MinimumRandomRange = 0f;
+		public float MinimumRandomRange;
+
 		/// the maximum amount (in seconds) by which to offset the animation
 		public float MaximumRandomRange = 1f;
+
 		/// the layer to affect
-		public int AnimationLayerID = 0;
+		public int AnimationLayerID;
+
 		/// whether or not to apply that offset on Start
 		public bool OffsetOnStart = true;
+
 		/// whether or not to offset animation on enable
-		public bool OffsetOnEnable = false;
+		public bool OffsetOnEnable;
+
 		/// whether or not to self disable after offsetting
 		public bool DisableAfterOffset = true;
 
@@ -27,48 +31,39 @@ namespace MoreMountains.Tools
 		protected AnimatorStateInfo _stateInfo;
 
 		/// <summary>
-		/// On awake we store our animator
+		///     On awake we store our animator
 		/// </summary>
 		protected virtual void Awake()
 		{
-			_animator = this.gameObject.GetComponent<Animator>();
+			_animator = gameObject.GetComponent<Animator>();
 		}
 
 		/// <summary>
-		/// On Start we offset our animation
+		///     On Start we offset our animation
 		/// </summary>
 		protected virtual void Start()
 		{
-			if (!OffsetOnStart)
-			{
-				return;
-			}
+			if (!OffsetOnStart) return;
 			OffsetCurrentAnimation();
 		}
 
 		/// <summary>
-		/// On Enable we offset our animation if needed
+		///     On Enable we offset our animation if needed
 		/// </summary>
 		protected virtual void OnEnable()
 		{
-			if (!OffsetOnEnable)
-			{
-				return;
-			}
+			if (!OffsetOnEnable) return;
 			OffsetCurrentAnimation();
 		}
 
 		/// <summary>
-		/// offsets the target animation
+		///     offsets the target animation
 		/// </summary>
 		public virtual void OffsetCurrentAnimation()
 		{
 			_stateInfo = _animator.GetCurrentAnimatorStateInfo(AnimationLayerID);
 			_animator.Play(_stateInfo.fullPathHash, -1, Random.Range(MinimumRandomRange, MaximumRandomRange));
-			if (DisableAfterOffset)
-			{
-				this.enabled = false;
-			}
+			if (DisableAfterOffset) enabled = false;
 		}
 	}
 }

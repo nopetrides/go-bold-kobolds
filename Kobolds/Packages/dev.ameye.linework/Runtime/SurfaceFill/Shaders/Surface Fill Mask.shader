@@ -33,7 +33,7 @@ Shader "Hidden/Outlines/Surface Fill/Mask"
             #if UNITY_PLATFORM_ANDROID || UNITY_PLATFORM_WEBGL || UNITY_PLATFORM_UWP
                 #pragma target 3.5 DOTS_INSTANCING_ON
             #else
-                #pragma target 4.5 DOTS_INSTANCING_ON
+            #pragma target 4.5 DOTS_INSTANCING_ON
             #endif
 
             #pragma multi_compile_local _ ALPHA_CUTOUT
@@ -82,7 +82,7 @@ Shader "Hidden/Outlines/Surface Fill/Mask"
                 #else
                 OUT.positionHCS.z = OUT.positionHCS.z * (1.0f - depthBias);
                 #endif
-                
+
                 #if defined(ALPHA_CUTOUT)
                 OUT.uv = IN.texcoord;
                 #endif

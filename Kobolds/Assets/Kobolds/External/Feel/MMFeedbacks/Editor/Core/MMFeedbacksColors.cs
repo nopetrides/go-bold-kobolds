@@ -1,14 +1,28 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace MoreMountains.Feedbacks
 {
 	/// <summary>
-	/// Color helpers
+	///     Color helpers
 	/// </summary>
 	public static class MMFeedbacksColors
 	{
+		/// <summary>
+		///     Tint : Uses HSV color conversions, keeps the original values, multiplies alpha
+		///     Multiply : The whole color, including alpha, is multiplied over the original
+		///     Replace : completely replaces the original with the target color
+		///     ReplaceKeepAlpha : color is replaced but the original alpha channel is ignored
+		///     Add : target color gets added (including its alpha)
+		/// </summary>
+		public enum ColoringMode
+		{
+			Tint,
+			Multiply,
+			Replace,
+			ReplaceKeepAlpha,
+			Add
+		}
 		// via https://gist.github.com/LotteMakesStuff/f7ce43f11e545a151b95b5e87f76304c
 		// NOTE: The follwing color names come from the CSS3 specification, Section 4.3 Extended Color Keywords
 		// http://www.w3.org/TR/css3-color/#svg-color
@@ -160,178 +174,170 @@ namespace MoreMountains.Feedbacks
 
 		public static Color RandomColor()
 		{
-			int random = Random.Range(0, 140);
+			var random = Random.Range(0, 140);
 			return GetColorAt(random);
 		}
 
 		public static Color GetColorAt(int index)
 		{
-			if (ColorDictionary == null)
-			{
-				InitializeDictionary();
-			}
-	        
-			if (index < ColorDictionary.Count)
-			{
-				return ColorDictionary[index];
-			}
-			else
-			{
-				return Color.white;
-			}
+			if (ColorDictionary == null) InitializeDictionary();
+
+			if (index < ColorDictionary.Count) return ColorDictionary[index];
+
+			return Color.white;
 		}
 
 		public static void InitializeDictionary()
 		{
 			ColorDictionary = new Dictionary<int, Color>
 			{
-				{ 0, AliceBlue },
-				{ 1, AntiqueWhite },
-				{ 2, Aqua },
-				{ 3, Aquamarine },
-				{ 4, Azure },
-				{ 5, Beige },
-				{ 6, Bisque },
-				{ 7, Black },
-				{ 8, BlanchedAlmond },
-				{ 9, Blue },
-				{ 10, BlueViolet },
-				{ 11, Brown },
-				{ 12, Burlywood },
-				{ 13, CadetBlue },
-				{ 14, Chartreuse },
-				{ 15, Chocolate },
-				{ 16, Coral },
-				{ 17, CornflowerBlue },
-				{ 18, Cornsilk },
-				{ 19, Crimson },
-				{ 20, Cyan },
-				{ 21, DarkBlue },
-				{ 22, DarkCyan },
-				{ 23, DarkGoldenrod },
-				{ 24, DarkGray },
-				{ 25, DarkGreen },
-				{ 26, DarkKhaki },
-				{ 27, DarkMagenta },
-				{ 28, DarkOliveGreen },
-				{ 29, DarkOrange },
-				{ 30, DarkOrchid },
-				{ 31, DarkRed },
-				{ 32, DarkSalmon },
-				{ 33, DarkSeaGreen },
-				{ 34, DarkSlateBlue },
-				{ 35, DarkSlateGray },
-				{ 36, DarkTurquoise },
-				{ 37, DarkViolet },
-				{ 38, DeepPink },
-				{ 39, DeepSkyBlue },
-				{ 40, DimGray },
-				{ 41, DodgerBlue },
-				{ 42, FireBrick },
-				{ 43, FloralWhite },
-				{ 44, ForestGreen },
-				{ 45, Fuchsia },
-				{ 46, Gainsboro },
-				{ 47, GhostWhite },
-				{ 48, Gold },
-				{ 49, Goldenrod },
-				{ 50, Gray },
-				{ 51, Green },
-				{ 52, GreenYellow },
-				{ 53, Honeydew },
-				{ 54, HotPink },
-				{ 55, IndianRed },
-				{ 56, Indigo },
-				{ 57, Ivory },
-				{ 58, Khaki },
-				{ 59, Lavender },
-				{ 60, Lavenderblush },
-				{ 61, LawnGreen },
-				{ 62, LemonChiffon },
-				{ 63, LightBlue },
-				{ 64, LightCoral },
-				{ 65, LightCyan },
-				{ 66, LightGoldenodYellow },
-				{ 67, LightGray },
-				{ 68, LightGreen },
-				{ 69, LightPink },
-				{ 70, LightSalmon },
-				{ 71, LightSeaGreen },
-				{ 72, LightSkyBlue },
-				{ 73, LightSlateGray },
-				{ 74, LightSteelBlue },
-				{ 75, LightYellow },
-				{ 76, Lime },
-				{ 77, LimeGreen },
-				{ 78, Linen },
-				{ 79, Magenta },
-				{ 80, Maroon },
-				{ 81, MediumAquamarine },
-				{ 82, MediumBlue },
-				{ 83, MediumOrchid },
-				{ 84, MediumPurple },
-				{ 85, MediumSeaGreen },
-				{ 86, MediumSlateBlue },
-				{ 87, MediumSpringGreen },
-				{ 88, MediumTurquoise },
-				{ 89, MediumVioletRed },
-				{ 90, MidnightBlue },
-				{ 91, Mintcream },
-				{ 92, MistyRose },
-				{ 93, Moccasin },
-				{ 94, NavajoWhite },
-				{ 95, Navy },
-				{ 96, OldLace },
-				{ 97, Olive },
-				{ 98, Olivedrab },
-				{ 99, Orange },
-				{ 100, Orangered },
-				{ 101, Orchid },
-				{ 102, PaleGoldenrod },
-				{ 103, PaleGreen },
-				{ 104, PaleTurquoise },
-				{ 105, PaleVioletred },
-				{ 106, PapayaWhip },
-				{ 107, PeachPuff },
-				{ 108, Peru },
-				{ 109, Pink },
-				{ 110, Plum },
-				{ 111, PowderBlue },
-				{ 112, Purple },
-				{ 113, Red },
-				{ 114, RosyBrown },
-				{ 115, RoyalBlue },
-				{ 116, SaddleBrown },
-				{ 117, Salmon },
-				{ 118, SandyBrown },
-				{ 119, SeaGreen },
-				{ 120, Seashell },
-				{ 121, Sienna },
-				{ 122, Silver },
-				{ 123, SkyBlue },
-				{ 124, SlateBlue },
-				{ 125, SlateGray },
-				{ 126, Snow },
-				{ 127, SpringGreen },
-				{ 128, SteelBlue },
-				{ 129, Tan },
-				{ 130, Teal },
-				{ 131, Thistle },
-				{ 132, Tomato },
-				{ 133, Turquoise },
-				{ 134, Violet },
-				{ 135, Wheat },
-				{ 136, White },
-				{ 137, WhiteSmoke },
-				{ 138, Yellow },
-				{ 139, YellowGreen },
-				{ 140, ReunoYellow },
-				{ 141, BestRed }
+				{0, AliceBlue},
+				{1, AntiqueWhite},
+				{2, Aqua},
+				{3, Aquamarine},
+				{4, Azure},
+				{5, Beige},
+				{6, Bisque},
+				{7, Black},
+				{8, BlanchedAlmond},
+				{9, Blue},
+				{10, BlueViolet},
+				{11, Brown},
+				{12, Burlywood},
+				{13, CadetBlue},
+				{14, Chartreuse},
+				{15, Chocolate},
+				{16, Coral},
+				{17, CornflowerBlue},
+				{18, Cornsilk},
+				{19, Crimson},
+				{20, Cyan},
+				{21, DarkBlue},
+				{22, DarkCyan},
+				{23, DarkGoldenrod},
+				{24, DarkGray},
+				{25, DarkGreen},
+				{26, DarkKhaki},
+				{27, DarkMagenta},
+				{28, DarkOliveGreen},
+				{29, DarkOrange},
+				{30, DarkOrchid},
+				{31, DarkRed},
+				{32, DarkSalmon},
+				{33, DarkSeaGreen},
+				{34, DarkSlateBlue},
+				{35, DarkSlateGray},
+				{36, DarkTurquoise},
+				{37, DarkViolet},
+				{38, DeepPink},
+				{39, DeepSkyBlue},
+				{40, DimGray},
+				{41, DodgerBlue},
+				{42, FireBrick},
+				{43, FloralWhite},
+				{44, ForestGreen},
+				{45, Fuchsia},
+				{46, Gainsboro},
+				{47, GhostWhite},
+				{48, Gold},
+				{49, Goldenrod},
+				{50, Gray},
+				{51, Green},
+				{52, GreenYellow},
+				{53, Honeydew},
+				{54, HotPink},
+				{55, IndianRed},
+				{56, Indigo},
+				{57, Ivory},
+				{58, Khaki},
+				{59, Lavender},
+				{60, Lavenderblush},
+				{61, LawnGreen},
+				{62, LemonChiffon},
+				{63, LightBlue},
+				{64, LightCoral},
+				{65, LightCyan},
+				{66, LightGoldenodYellow},
+				{67, LightGray},
+				{68, LightGreen},
+				{69, LightPink},
+				{70, LightSalmon},
+				{71, LightSeaGreen},
+				{72, LightSkyBlue},
+				{73, LightSlateGray},
+				{74, LightSteelBlue},
+				{75, LightYellow},
+				{76, Lime},
+				{77, LimeGreen},
+				{78, Linen},
+				{79, Magenta},
+				{80, Maroon},
+				{81, MediumAquamarine},
+				{82, MediumBlue},
+				{83, MediumOrchid},
+				{84, MediumPurple},
+				{85, MediumSeaGreen},
+				{86, MediumSlateBlue},
+				{87, MediumSpringGreen},
+				{88, MediumTurquoise},
+				{89, MediumVioletRed},
+				{90, MidnightBlue},
+				{91, Mintcream},
+				{92, MistyRose},
+				{93, Moccasin},
+				{94, NavajoWhite},
+				{95, Navy},
+				{96, OldLace},
+				{97, Olive},
+				{98, Olivedrab},
+				{99, Orange},
+				{100, Orangered},
+				{101, Orchid},
+				{102, PaleGoldenrod},
+				{103, PaleGreen},
+				{104, PaleTurquoise},
+				{105, PaleVioletred},
+				{106, PapayaWhip},
+				{107, PeachPuff},
+				{108, Peru},
+				{109, Pink},
+				{110, Plum},
+				{111, PowderBlue},
+				{112, Purple},
+				{113, Red},
+				{114, RosyBrown},
+				{115, RoyalBlue},
+				{116, SaddleBrown},
+				{117, Salmon},
+				{118, SandyBrown},
+				{119, SeaGreen},
+				{120, Seashell},
+				{121, Sienna},
+				{122, Silver},
+				{123, SkyBlue},
+				{124, SlateBlue},
+				{125, SlateGray},
+				{126, Snow},
+				{127, SpringGreen},
+				{128, SteelBlue},
+				{129, Tan},
+				{130, Teal},
+				{131, Thistle},
+				{132, Tomato},
+				{133, Turquoise},
+				{134, Violet},
+				{135, Wheat},
+				{136, White},
+				{137, WhiteSmoke},
+				{138, Yellow},
+				{139, YellowGreen},
+				{140, ReunoYellow},
+				{141, BestRed}
 			};
 		}
 
 		/// <summary>
-		/// Returns a random color between the two min/max specified
+		///     Returns a random color between the two min/max specified
 		/// </summary>
 		/// <param name="color"></param>
 		/// <param name="min"></param>
@@ -339,30 +345,21 @@ namespace MoreMountains.Feedbacks
 		/// <returns></returns>
 		public static Color MMRandomColor(this Color color, Color min, Color max)
 		{
-			Color c = new Color()
+			var c = new Color
 			{
-				r = UnityEngine.Random.Range(min.r, max.r),
-				g = UnityEngine.Random.Range(min.g, max.g),
-				b = UnityEngine.Random.Range(min.b, max.b),
-				a = UnityEngine.Random.Range(min.a, max.a)
+				r = Random.Range(min.r, max.r),
+				g = Random.Range(min.g, max.g),
+				b = Random.Range(min.b, max.b),
+				a = Random.Range(min.a, max.a)
 			};
 
 			return c;
 		}
 
-
-		/// <summary>
-		/// Tint : Uses HSV color conversions, keeps the original values, multiplies alpha
-		/// Multiply : The whole color, including alpha, is multiplied over the original 
-		/// Replace : completely replaces the original with the target color
-		/// ReplaceKeepAlpha : color is replaced but the original alpha channel is ignored
-		/// Add : target color gets added (including its alpha)
-		/// </summary>
-		public enum ColoringMode { Tint, Multiply, Replace, ReplaceKeepAlpha, Add }
-
-		public static Color MMColorize(this Color originalColor, Color targetColor, ColoringMode coloringMode, float lerpAmount = 1.0f)
+		public static Color MMColorize(
+			this Color originalColor, Color targetColor, ColoringMode coloringMode, float lerpAmount = 1.0f)
 		{
-			Color resultColor = Color.white;
+			var resultColor = Color.white;
 			switch (coloringMode)
 			{
 				case ColoringMode.Tint:
@@ -387,9 +384,8 @@ namespace MoreMountains.Feedbacks
 				case ColoringMode.Add:
 					resultColor = originalColor + targetColor;
 					break;
-				default:
-					break;
 			}
+
 			return Color.Lerp(originalColor, resultColor, lerpAmount);
 		}
 	}

@@ -6,14 +6,26 @@ namespace MoreMountains.Feedbacks
 	[AddComponentMenu("More Mountains/Springs/MM Spring Squash And Stretch")]
 	public class MMSpringSquashAndStretch : MMSpringFloatComponent<Transform>
 	{
-		public enum PossibleAxis { XtoYZ, XtoY, XtoZ, YtoXZ, YtoX, YtoZ, ZtoXZ, ZtoX, ZtoY }
+		public enum PossibleAxis
+		{
+			XtoYZ,
+			XtoY,
+			XtoZ,
+			YtoXZ,
+			YtoX,
+			YtoZ,
+			ZtoXZ,
+			ZtoX,
+			ZtoY
+		}
 
-		[MMInspectorGroup("Target", true, 17)] 
+		[MMInspectorGroup("Target", true, 17)]
 		public PossibleAxis Axis = PossibleAxis.XtoYZ;
 
-		protected Vector3 _newScale;
 		protected Vector3 _initialScale;
-		
+
+		protected Vector3 _newScale;
+
 		protected override void Initialization()
 		{
 			base.Initialization();
@@ -22,10 +34,10 @@ namespace MoreMountains.Feedbacks
 			FloatSpring.ClampSettings.ClampMinBounce = true;
 			_initialScale = Target.localScale;
 		}
-		
+
 		protected override void ApplyValue(float newValue)
 		{
-			float invertScale = 1 / Mathf.Sqrt(newValue);
+			var invertScale = 1 / Mathf.Sqrt(newValue);
 			switch (Axis)
 			{
 				case PossibleAxis.XtoYZ:
@@ -74,9 +86,10 @@ namespace MoreMountains.Feedbacks
 					_newScale.z = newValue;
 					break;
 			}
+
 			Target.localScale = _newScale;
 		}
-		
+
 		protected override void GrabCurrentValue()
 		{
 			FloatSpring.CurrentValue = Target.localScale.x;

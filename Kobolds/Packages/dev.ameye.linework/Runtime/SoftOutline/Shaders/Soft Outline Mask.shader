@@ -13,7 +13,7 @@ Shader "Hidden/Outlines/Soft Outline/Mask"
         Pass // 0: MASK
         {
             Name "MASK"
-            
+
             HLSLPROGRAM
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 
@@ -24,9 +24,9 @@ Shader "Hidden/Outlines/Soft Outline/Mask"
             #if UNITY_PLATFORM_ANDROID || UNITY_PLATFORM_WEBGL || UNITY_PLATFORM_UWP
                 #pragma target 3.5 DOTS_INSTANCING_ON
             #else
-                #pragma target 4.5 DOTS_INSTANCING_ON
+            #pragma target 4.5 DOTS_INSTANCING_ON
             #endif
-            
+
             struct Attributes
             {
                 float4 positionOS : POSITION;
@@ -44,7 +44,7 @@ Shader "Hidden/Outlines/Soft Outline/Mask"
                 Varyings OUT;
                 UNITY_SETUP_INSTANCE_ID(IN);
                 UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(OUT); // VR support
-                
+
                 OUT.positionHCS = TransformObjectToHClip(IN.positionOS.xyz);
 
                 return OUT;

@@ -19,7 +19,8 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor.Internal
         {
             OdinLocalizationReflectionValues.EnsureInit();
             
-            FieldInfo[] fields = typeof(OdinLocalizationReflectionValues).GetFields(BindingFlags.Static | BindingFlags.Public);
+            FieldInfo[] fields =
+ typeof(OdinLocalizationReflectionValues).GetFields(BindingFlags.Static | BindingFlags.Public);
 
             for (var i = 0; i < fields.Length; i++)
             {

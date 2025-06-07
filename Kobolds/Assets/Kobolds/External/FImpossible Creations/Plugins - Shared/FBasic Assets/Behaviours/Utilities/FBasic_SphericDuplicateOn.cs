@@ -1,169 +1,177 @@
 ﻿using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
+using Random = System.Random;
 
 namespace FIMSpace.Basics
 {
-    /// <summary>
-    /// FM: Class for duplicating objects on surface inside sphere drawed by this component's gizmos
-    /// </summary>
-    public class FBasic_SphericDuplicateOn : MonoBehaviour
-    {
-        public int RowCount = 32;
-        public float Radius = 5f;
-        public LayerMask LayerMask;
+	/// <summary>
+	///     FM: Class for duplicating objects on surface inside sphere drawed by this component's gizmos
+	/// </summary>
+	public class FBasic_SphericDuplicateOn : MonoBehaviour
+	{
+		public int RowCount = 32;
+		public float Radius = 5f;
+		public LayerMask LayerMask;
 
-        public Vector2 fromRange = Vector2.zero;
-        public Vector2 toRange = new Vector2(360, 360);
+		public Vector2 fromRange = Vector2.zero;
+		public Vector2 toRange = new(360, 360);
 
-        [Range(0f,1f)]
-        public float Randomize = 0f;
-        public int Seed = 99999;
-        private System.Random randomSeed;
+		[Range(0f, 1f)]
+		public float Randomize;
 
-        public GameObject ToDuplicate;
-        public Vector3 RotationOffset;
+		public int Seed = 99999;
 
-        public Vector3 RandomRotationLocalAxis = Vector3.up;
-        public Vector2 RandomRotationRange;
+		public GameObject ToDuplicate;
+		public Vector3 RotationOffset;
 
-        public Transform AttachTo = null;
-        public Transform AttachToNearestTransformOf = null;
+		public Vector3 RandomRotationLocalAxis = Vector3.up;
+		public Vector2 RandomRotationRange;
 
-        public List<GameObject> Generated;
+		public Transform AttachTo;
+		public Transform AttachToNearestTransformOf;
 
-        void OnDrawGizmos()
-        {
-            randomSeed = new System.Random(Seed);
+		public List<GameObject> Generated;
+		private Random randomSeed;
 
-            float step = 360f / (float)RowCount;
+		private void OnDrawGizmos()
+		{
+			randomSeed = new Random(Seed);
 
-            Gizmos.color = new Color(0.2f, 0.9f, 0.4f, 0.8f);
+			var step = 360f / RowCount;
 
-            for (float x = 0; x < RowCount; x++)
-            {
-                if (x * step < fromRange.x) continue;
-                if (x * step > toRange.x) continue;
+			Gizmos.color = new Color(0.2f, 0.9f, 0.4f, 0.8f);
 
-                for (float y = 0; y < RowCount; y++)
-                {
-                    if (y * step < fromRange.y) continue;
-                    if (y * step > toRange.y) continue;
+			for (float x = 0; x < RowCount; x++)
+			{
+				if (x * step < fromRange.x) continue;
+				if (x * step > toRange.x) continue;
 
-                    Quaternion rotation = Quaternion.Euler(x * step, y * step, 0f);
-                    Vector3 targetDir = rotation * -Vector3.forward;
-                    if (Randomize != 0f) targetDir += RandomVectorSeed(-Randomize, Randomize);
+				for (float y = 0; y < RowCount; y++)
+				{
+					if (y * step < fromRange.y) continue;
+					if (y * step > toRange.y) continue;
 
-                    Gizmos.DrawRay(transform.position + rotation * Vector3.forward * Radius, targetDir);
-                }
-            }
-        }
+					var rotation = Quaternion.Euler(x * step, y * step, 0f);
+					var targetDir = rotation * -Vector3.forward;
+					if (Randomize != 0f) targetDir += RandomVectorSeed(-Randomize, Randomize);
 
-        private Vector3 RandomVectorSeed(float rangeA, float rangeB)
-        {
-            return new Vector3(GetRandomRange( rangeA, rangeB), GetRandomRange(rangeA, rangeB), GetRandomRange(rangeA, rangeB));
-        }
+					Gizmos.DrawRay(transform.position + rotation * Vector3.forward * Radius, targetDir);
+				}
+			}
+		}
 
-        private float GetRandomRange(float rangeA, float rangeB)
-        {
-            return rangeA + (float)randomSeed.NextDouble() * (rangeB + Mathf.Abs(rangeA));
-        }
+		private Vector3 RandomVectorSeed(float rangeA, float rangeB)
+		{
+			return new Vector3(
+				GetRandomRange(rangeA, rangeB), GetRandomRange(rangeA, rangeB), GetRandomRange(rangeA, rangeB));
+		}
 
-        public void Duplicate()
-        {
-            randomSeed = new System.Random(Seed);
+		private float GetRandomRange(float rangeA, float rangeB)
+		{
+			return rangeA + (float) randomSeed.NextDouble() * (rangeB + Mathf.Abs(rangeA));
+		}
 
-            float step = 360f / (float)RowCount;
+		public void Duplicate()
+		{
+			randomSeed = new Random(Seed);
 
-            GameObject container = new GameObject("Duplicated-" + ToDuplicate.name + "-Container");
+			var step = 360f / RowCount;
 
-            Transform[] transforms = null;
-            if (AttachToNearestTransformOf) transforms = AttachToNearestTransformOf.GetComponentsInChildren<Transform>();
+			var container = new GameObject("Duplicated-" + ToDuplicate.name + "-Container");
 
-            for (float x = 0; x < RowCount; x++)
-            {
-                if (x * step < fromRange.x) continue;
-                if (x * step > toRange.x) continue;
+			Transform[] transforms = null;
+			if (AttachToNearestTransformOf)
+				transforms = AttachToNearestTransformOf.GetComponentsInChildren<Transform>();
 
-                for (float y = 0; y < RowCount; y++)
-                {
-                    if (y * step < fromRange.y) continue;
-                    if (y * step > toRange.y) continue;
+			for (float x = 0; x < RowCount; x++)
+			{
+				if (x * step < fromRange.x) continue;
+				if (x * step > toRange.x) continue;
 
-                    Quaternion rotation = Quaternion.Euler(x * step, y * step, 0f);
+				for (float y = 0; y < RowCount; y++)
+				{
+					if (y * step < fromRange.y) continue;
+					if (y * step > toRange.y) continue;
 
-                    Vector3 targetDir = rotation * -Vector3.forward;
-                    if (Randomize != 0f) targetDir += RandomVectorSeed(-Randomize, Randomize);
+					var rotation = Quaternion.Euler(x * step, y * step, 0f);
 
-                    RaycastHit hit;
-                    Ray ray = new Ray(transform.position + rotation * Vector3.forward * Radius, targetDir);
-                    Physics.Raycast(ray, out hit, Radius, LayerMask);
+					var targetDir = rotation * -Vector3.forward;
+					if (Randomize != 0f) targetDir += RandomVectorSeed(-Randomize, Randomize);
 
-                    if (hit.transform)
-                    {
-                        GameObject d = Instantiate(ToDuplicate);
-                        d.transform.position = hit.point;
-                        d.transform.rotation = Quaternion.LookRotation(hit.point + hit.normal - hit.point) * Quaternion.Euler(RotationOffset);
-                        d.transform.rotation *= Quaternion.AngleAxis(Random.Range(RandomRotationRange.x, RandomRotationRange.y), RandomRotationLocalAxis);
+					RaycastHit hit;
+					var ray = new Ray(transform.position + rotation * Vector3.forward * Radius, targetDir);
+					Physics.Raycast(ray, out hit, Radius, LayerMask);
 
-                        if (transforms != null)
-                        {
-                            Transform nearest = transforms[0];
-                            float nearestDist = Vector3.Distance(d.transform.position, nearest.position);
+					if (hit.transform)
+					{
+						var d = Instantiate(ToDuplicate);
+						d.transform.position = hit.point;
+						d.transform.rotation = Quaternion.LookRotation(hit.point + hit.normal - hit.point) *
+												Quaternion.Euler(RotationOffset);
+						d.transform.rotation *= Quaternion.AngleAxis(
+							UnityEngine.Random.Range(RandomRotationRange.x, RandomRotationRange.y),
+							RandomRotationLocalAxis);
 
-                            for (int i = 0; i < transforms.Length; i++)
-                            {
-                                float dist = Vector3.Distance(d.transform.position, transforms[i].position);
-                                if (dist < nearestDist) nearest = transforms[i];
-                            }
+						if (transforms != null)
+						{
+							var nearest = transforms[0];
+							var nearestDist = Vector3.Distance(d.transform.position, nearest.position);
 
-                            d.transform.SetParent(nearest, true);
-                        }
-                        else
-                            d.transform.SetParent(container.transform, true);
+							for (var i = 0; i < transforms.Length; i++)
+							{
+								var dist = Vector3.Distance(d.transform.position, transforms[i].position);
+								if (dist < nearestDist) nearest = transforms[i];
+							}
 
-                        Generated.Add(d);
-                    }
-                }
-            }
+							d.transform.SetParent(nearest, true);
+						}
+						else
+						{
+							d.transform.SetParent(container.transform, true);
+						}
 
-            if (AttachTo)
-                container.transform.SetParent(AttachTo, true);
+						Generated.Add(d);
+					}
+				}
+			}
 
-            Generated.Add(container);
-        }
+			if (AttachTo)
+				container.transform.SetParent(AttachTo, true);
 
-        private void PurgeGenerated()
-        {
-            for (int i = Generated.Count - 1; i >= 0; i--)
-            {
-                if (Generated[i]) GameObject.DestroyImmediate(Generated[i]);
-            }
+			Generated.Add(container);
+		}
 
-            Generated.Clear();
-        }
+		private void PurgeGenerated()
+		{
+			for (var i = Generated.Count - 1; i >= 0; i--)
+				if (Generated[i])
+					DestroyImmediate(Generated[i]);
+
+			Generated.Clear();
+		}
 
 
 #if UNITY_EDITOR
-        /// <summary>
-        /// FM: Editor class component to enchance controll over component from inspector window
-        /// </summary>
-        [UnityEditor.CustomEditor(typeof(FBasic_SphericDuplicateOn))]
-        public class FBasics_SphericDuplicateOnEditor : UnityEditor.Editor
-        {
-            public override void OnInspectorGUI()
-            {
-                FBasic_SphericDuplicateOn targetScript = (FBasic_SphericDuplicateOn)target;
-                DrawDefaultInspector();
+		/// <summary>
+		///     FM: Editor class component to enchance controll over component from inspector window
+		/// </summary>
+		[CustomEditor(typeof(FBasic_SphericDuplicateOn))]
+		public class FBasics_SphericDuplicateOnEditor : Editor
+		{
+			public override void OnInspectorGUI()
+			{
+				var targetScript = (FBasic_SphericDuplicateOn) target;
+				DrawDefaultInspector();
 
-                GUILayout.Space(10f);
+				GUILayout.Space(10f);
 
-                if (GUILayout.Button("Duplicate")) targetScript.Duplicate();
-                if (GUILayout.Button("Purge Generated")) targetScript.PurgeGenerated();
-            }
-        }
+				if (GUILayout.Button("Duplicate")) targetScript.Duplicate();
+				if (GUILayout.Button("Purge Generated")) targetScript.PurgeGenerated();
+			}
+		}
 
 
 #endif
-
-    }
+	}
 }

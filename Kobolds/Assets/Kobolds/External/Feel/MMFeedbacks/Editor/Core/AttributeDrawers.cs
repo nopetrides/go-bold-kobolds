@@ -11,32 +11,32 @@ namespace MoreMountains.Feedbacks
 	{
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
 		{
-			MMFEnumConditionAttribute enumConditionAttribute = (MMFEnumConditionAttribute)attribute;
-			bool enabled = GetConditionAttributeResult(enumConditionAttribute, property);
-			bool previouslyEnabled = GUI.enabled;
+			var enumConditionAttribute = (MMFEnumConditionAttribute) attribute;
+			var enabled = GetConditionAttributeResult(enumConditionAttribute, property);
+			var previouslyEnabled = GUI.enabled;
 			GUI.enabled = enabled;
-			if (!enumConditionAttribute.Hidden || enabled)
-			{
-				EditorGUI.PropertyField(position, property, label, true);
-			}
+			if (!enumConditionAttribute.Hidden || enabled) EditorGUI.PropertyField(position, property, label, true);
 			GUI.enabled = previouslyEnabled;
 		}
 
-		private bool GetConditionAttributeResult(MMFEnumConditionAttribute enumConditionAttribute, SerializedProperty property)
+		private bool GetConditionAttributeResult(
+			MMFEnumConditionAttribute enumConditionAttribute, SerializedProperty property)
 		{
-			bool enabled = true;
-			string propertyPath = property.propertyPath;
-			string conditionPath = propertyPath.Replace(property.name, enumConditionAttribute.ConditionEnum);
-			SerializedProperty sourcePropertyValue = property.serializedObject.FindProperty(conditionPath);
+			var enabled = true;
+			var propertyPath = property.propertyPath;
+			var conditionPath = propertyPath.Replace(property.name, enumConditionAttribute.ConditionEnum);
+			var sourcePropertyValue = property.serializedObject.FindProperty(conditionPath);
 
-			if ((sourcePropertyValue != null) && (sourcePropertyValue.propertyType == SerializedPropertyType.Enum))
+			if (sourcePropertyValue != null && sourcePropertyValue.propertyType == SerializedPropertyType.Enum)
 			{
-				int currentEnum = sourcePropertyValue.enumValueIndex;
+				var currentEnum = sourcePropertyValue.enumValueIndex;
 				enabled = enumConditionAttribute.ContainsBitFlag(currentEnum);
 			}
 			else
 			{
-				Debug.LogWarning("No matching boolean found for ConditionAttribute in object: " + enumConditionAttribute.ConditionEnum);
+				Debug.LogWarning(
+					"No matching boolean found for ConditionAttribute in object: " +
+					enumConditionAttribute.ConditionEnum);
 			}
 
 			return enabled;
@@ -44,22 +44,17 @@ namespace MoreMountains.Feedbacks
 
 		public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
 		{
-			MMFEnumConditionAttribute enumConditionAttribute = (MMFEnumConditionAttribute)attribute;
-			bool enabled = GetConditionAttributeResult(enumConditionAttribute, property);
-            
-			if (!enumConditionAttribute.Hidden || enabled)
-			{
-				return EditorGUI.GetPropertyHeight(property, label);
-			}
-			else
-			{
-				/*int multiplier = 1; // this multiplier fixes issues in differing property spacing between MMFeedbacks and MMF_Player
+			var enumConditionAttribute = (MMFEnumConditionAttribute) attribute;
+			var enabled = GetConditionAttributeResult(enumConditionAttribute, property);
+
+			if (!enumConditionAttribute.Hidden || enabled) return EditorGUI.GetPropertyHeight(property, label);
+
+			/*int multiplier = 1; // this multiplier fixes issues in differing property spacing between MMFeedbacks and MMF_Player
 				if (property.depth > 0)
 				{
 					multiplier = property.depth;
 				}*/
-				return -EditorGUIUtility.standardVerticalSpacing /** multiplier*/;
-			}
+			return -EditorGUIUtility.standardVerticalSpacing /** multiplier*/;
 		}
 	}
 
@@ -69,64 +64,51 @@ namespace MoreMountains.Feedbacks
 	{
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
 		{
-			MMFConditionAttribute conditionAttribute = (MMFConditionAttribute)attribute;
-			bool enabled = GetConditionAttributeResult(conditionAttribute, property);
-			bool previouslyEnabled = GUI.enabled;
+			var conditionAttribute = (MMFConditionAttribute) attribute;
+			var enabled = GetConditionAttributeResult(conditionAttribute, property);
+			var previouslyEnabled = GUI.enabled;
 			GUI.enabled = conditionAttribute.Negative ? !enabled : enabled;
-			if (ShouldDisplay(conditionAttribute, enabled))
-			{
-				EditorGUI.PropertyField(position, property, label, true);
-			}
+			if (ShouldDisplay(conditionAttribute, enabled)) EditorGUI.PropertyField(position, property, label, true);
 			GUI.enabled = previouslyEnabled;
 		}
 
 		private bool GetConditionAttributeResult(MMFConditionAttribute conditionAttribute, SerializedProperty property)
 		{
-			bool enabled = true;
-			string propertyPath = property.propertyPath;
-			string conditionPath = propertyPath.Replace(property.name, conditionAttribute.ConditionBoolean);
-			SerializedProperty sourcePropertyValue = property.serializedObject.FindProperty(conditionPath);
+			var enabled = true;
+			var propertyPath = property.propertyPath;
+			var conditionPath = propertyPath.Replace(property.name, conditionAttribute.ConditionBoolean);
+			var sourcePropertyValue = property.serializedObject.FindProperty(conditionPath);
 
 			if (sourcePropertyValue != null)
-			{
 				enabled = sourcePropertyValue.boolValue;
-			}
 			else
-			{
-				Debug.LogWarning("No matching boolean found for ConditionAttribute in object: " + conditionAttribute.ConditionBoolean);
-			}
+				Debug.LogWarning(
+					"No matching boolean found for ConditionAttribute in object: " +
+					conditionAttribute.ConditionBoolean);
 
 			return enabled;
 		}
-		
+
 		private bool ShouldDisplay(MMFConditionAttribute conditionAttribute, bool result)
 		{
-			bool shouldDisplay = !conditionAttribute.Hidden || result;
-			if (conditionAttribute.Negative)
-			{
-				shouldDisplay = !shouldDisplay;
-			}
+			var shouldDisplay = !conditionAttribute.Hidden || result;
+			if (conditionAttribute.Negative) shouldDisplay = !shouldDisplay;
 			return shouldDisplay;
 		}
 
 		public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
 		{
-			MMFConditionAttribute conditionAttribute = (MMFConditionAttribute)attribute;
-			bool enabled = GetConditionAttributeResult(conditionAttribute, property);
+			var conditionAttribute = (MMFConditionAttribute) attribute;
+			var enabled = GetConditionAttributeResult(conditionAttribute, property);
 
-			if (ShouldDisplay(conditionAttribute, enabled))
-			{
-				return EditorGUI.GetPropertyHeight(property, label);
-			}
-			else
-			{
-				/*int multiplier = 1; // this multiplier fixes issues in differing property spacing between MMFeedbacks and MMF_Player
+			if (ShouldDisplay(conditionAttribute, enabled)) return EditorGUI.GetPropertyHeight(property, label);
+
+			/*int multiplier = 1; // this multiplier fixes issues in differing property spacing between MMFeedbacks and MMF_Player
 				if (property.depth > 0)
 				{
 					//multiplier = property.depth;
 				}*/
-				return -EditorGUIUtility.standardVerticalSpacing /** multiplier*/; 
-			}
+			return -EditorGUIUtility.standardVerticalSpacing /** multiplier*/;
 		}
 	}
 
@@ -140,7 +122,6 @@ namespace MoreMountains.Feedbacks
 
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
 		{
-
 		}
 	}
 
@@ -151,14 +132,14 @@ namespace MoreMountains.Feedbacks
 	public class MMFInformationAttributeDrawer : PropertyDrawer
 	{
 		// determines the space after the help box, the space before the text box, and the width of the help box icon
-		const int spaceBeforeTheTextBox = 5;
-		const int spaceAfterTheTextBox = 10;
-		const int iconWidth = 55;
+		private const int spaceBeforeTheTextBox = 5;
+		private const int spaceAfterTheTextBox = 10;
+		private const int iconWidth = 55;
 
-		MMFInformationAttribute informationAttribute { get { return ((MMFInformationAttribute)attribute); } }
+		private MMFInformationAttribute informationAttribute => (MMFInformationAttribute) attribute;
 
 		/// <summary>
-		/// OnGUI, displays the property and the textbox in the specified order
+		///     OnGUI, displays the property and the textbox in the specified order
 		/// </summary>
 		/// <param name="rect">Rect.</param>
 		/// <param name="prop">Property.</param>
@@ -168,8 +149,8 @@ namespace MoreMountains.Feedbacks
 			if (MMMenuHelp.HelpEnabled)
 			{
 				EditorStyles.helpBox.richText = true;
-				Rect helpPosition = rect;
-				Rect textFieldPosition = rect;
+				var helpPosition = rect;
+				var textFieldPosition = rect;
 
 				if (!informationAttribute.MessageAfterProperty)
 				{
@@ -186,7 +167,8 @@ namespace MoreMountains.Feedbacks
 
 					helpPosition.height = DetermineTextboxHeight(informationAttribute.Message);
 					// we add the complete property height (property + helpbox, as overridden in this very script), and substract both to get just the property
-					helpPosition.y += GetPropertyHeight(prop, label) - DetermineTextboxHeight(informationAttribute.Message) - spaceAfterTheTextBox;
+					helpPosition.y += GetPropertyHeight(prop, label) -
+									DetermineTextboxHeight(informationAttribute.Message) - spaceAfterTheTextBox;
 				}
 
 				EditorGUI.HelpBox(helpPosition, informationAttribute.Message, informationAttribute.Type);
@@ -194,14 +176,14 @@ namespace MoreMountains.Feedbacks
 			}
 			else
 			{
-				Rect textFieldPosition = rect;
+				var textFieldPosition = rect;
 				textFieldPosition.height = GetPropertyHeight(prop, label);
 				EditorGUI.PropertyField(textFieldPosition, prop, label, true);
 			}
 		}
 
 		/// <summary>
-		/// Returns the complete height of the whole block (property + help text)
+		///     Returns the complete height of the whole block (property + help text)
 		/// </summary>
 		/// <returns>The block height.</returns>
 		/// <param name="property">Property.</param>
@@ -209,26 +191,23 @@ namespace MoreMountains.Feedbacks
 		public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
 		{
 			if (MMMenuHelp.HelpEnabled)
-			{
-				return EditorGUI.GetPropertyHeight(property) + DetermineTextboxHeight(informationAttribute.Message) + spaceAfterTheTextBox + spaceBeforeTheTextBox;
-			}
-			else
-			{
-				return EditorGUI.GetPropertyHeight(property);
-			}
+				return EditorGUI.GetPropertyHeight(property) + DetermineTextboxHeight(informationAttribute.Message) +
+						spaceAfterTheTextBox + spaceBeforeTheTextBox;
+
+			return EditorGUI.GetPropertyHeight(property);
 		}
 
 		/// <summary>
-		/// Determines the height of the textbox.
+		///     Determines the height of the textbox.
 		/// </summary>
 		/// <returns>The textbox height.</returns>
 		/// <param name="message">Message.</param>
 		protected virtual float DetermineTextboxHeight(string message)
 		{
-			GUIStyle style = new GUIStyle(EditorStyles.helpBox);
+			var style = new GUIStyle(EditorStyles.helpBox);
 			style.richText = true;
 
-			float newHeight = style.CalcHeight(new GUIContent(message), EditorGUIUtility.currentViewWidth - iconWidth);
+			var newHeight = style.CalcHeight(new GUIContent(message), EditorGUIUtility.currentViewWidth - iconWidth);
 			return newHeight;
 		}
 	}
@@ -250,6 +229,4 @@ namespace MoreMountains.Feedbacks
 			GUI.enabled = true; // Enable fields
 		}
 	}
-
-
 }

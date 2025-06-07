@@ -3,12 +3,12 @@
 namespace MoreMountains.Tools
 {
 	/// <summary>
-	/// RectTransform extensions
+	///     RectTransform extensions
 	/// </summary>
 	public static class MMRectTransformExtensions
 	{
 		/// <summary>
-		/// Sets the left offset of a rect transform to the specified value
+		///     Sets the left offset of a rect transform to the specified value
 		/// </summary>
 		/// <param name="rt"></param>
 		/// <param name="left"></param>
@@ -18,7 +18,7 @@ namespace MoreMountains.Tools
 		}
 
 		/// <summary>
-		/// Sets the right offset of a rect transform to the specified value
+		///     Sets the right offset of a rect transform to the specified value
 		/// </summary>
 		/// <param name="rt"></param>
 		/// <param name="right"></param>
@@ -28,7 +28,7 @@ namespace MoreMountains.Tools
 		}
 
 		/// <summary>
-		/// Sets the top offset of a rect transform to the specified value
+		///     Sets the top offset of a rect transform to the specified value
 		/// </summary>
 		/// <param name="rt"></param>
 		/// <param name="top"></param>
@@ -38,7 +38,7 @@ namespace MoreMountains.Tools
 		}
 
 		/// <summary>
-		/// Sets the bottom offset of a rect transform to the specified value
+		///     Sets the bottom offset of a rect transform to the specified value
 		/// </summary>
 		/// <param name="rt"></param>
 		/// <param name="bottom"></param>

@@ -20,6 +20,7 @@ namespace FIMSpace.FProceduralAnimation
             DrawCategoryButton( RagdollHandler.ERagdollAnimSection.Extra );
             if( Get.RagdollLogic == ERagdollLogic.JustBoneComponents ) GUI.backgroundColor = Color.white;
             EditorGUILayout.EndHorizontal();
+
             GUILayout.Space( 4f );
 
             if( Get._EditorCategory == RagdollHandler.ERagdollAnimSection.Setup )

@@ -7,22 +7,24 @@ using UnityEngine.Rendering.Universal;
 namespace MoreMountains.Feedbacks
 {
 	/// <summary>
-	/// Add this to a light 2D to have it receive MMLightShakeEvents from feedbacks or to shake it locally
+	///     Add this to a light 2D to have it receive MMLightShakeEvents from feedbacks or to shake it locally
 	/// </summary>
-	#if MM_URP
+#if MM_URP
 	[AddComponentMenu("More Mountains/Feedbacks/Shakers/Lights/MM Light 2DShaker URP")]
 	[RequireComponent(typeof(Light2D))]
-	#endif
+#endif
 	public class MMLight2DShaker_URP : MMShaker
 	{
-		#if MM_URP
+#if MM_URP
 		[MMInspectorGroup("Light", true, 37)]
 		/// the light to affect when playing the feedback
 		[Tooltip("the light to affect when playing the feedback")]
 		public Light2D BoundLight;
+
 		/// whether or not that light should be turned off on start
 		[Tooltip("whether or not that light should be turned off on start")]
 		public bool StartsOff = true;
+
 		/// whether or not the values should be relative or not
 		[Tooltip("whether or not the values should be relative or not")]
 		public bool RelativeValues = true;
@@ -31,6 +33,7 @@ namespace MoreMountains.Feedbacks
 		/// whether or not this shaker should modify color 
 		[Tooltip("whether or not this shaker should modify color")]
 		public bool ModifyColor = true;
+
 		/// the colors to apply to the light over time
 		[Tooltip("the colors to apply to the light over time")]
 		public Gradient ColorOverTime;
@@ -39,10 +42,12 @@ namespace MoreMountains.Feedbacks
 		/// the intensity to apply to the light over time
 		/// the curve to tween the intensity on
 		[Tooltip("the intensity to apply to the light over time")]
-		public AnimationCurve IntensityCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.3f, 1f), new Keyframe(1, 0));
+		public AnimationCurve IntensityCurve = new(new Keyframe(0, 0), new Keyframe(0.3f, 1f), new Keyframe(1, 0));
+
 		/// the value to remap the intensity curve's 0 to
 		[Tooltip("the value to remap the intensity curve's 0 to")]
-		public float RemapIntensityZero = 0f;
+		public float RemapIntensityZero;
+
 		/// the value to remap the intensity curve's 1 to
 		[Tooltip("the value to remap the intensity curve's 1 to")]
 		public float RemapIntensityOne = 1f;
@@ -50,10 +55,12 @@ namespace MoreMountains.Feedbacks
 		[MMInspectorGroup("Range", true, 39)]
 		/// the range to apply to the light over time
 		[Tooltip("the range to apply to the light over time")]
-		public AnimationCurve FalloffCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.3f, 1f), new Keyframe(1, 0));
+		public AnimationCurve FalloffCurve = new(new Keyframe(0, 0), new Keyframe(0.3f, 1f), new Keyframe(1, 0));
+
 		/// the value to remap the range curve's 0 to
 		[Tooltip("the value to remap the range curve's 0 to")]
-		public float FalloffRangeZero = 0f;
+		public float FalloffRangeZero;
+
 		/// the value to remap the range curve's 0 to
 		[Tooltip("the value to remap the range curve's 0 to")]
 		public float RemapFalloffOne = 10f;
@@ -61,10 +68,12 @@ namespace MoreMountains.Feedbacks
 		[MMInspectorGroup("Shadow Strength", true, 38)]
 		/// the range to apply to the light over time
 		[Tooltip("the range to apply to the light over time")]
-		public AnimationCurve ShadowStrengthCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.3f, 1f), new Keyframe(1, 0));
+		public AnimationCurve ShadowStrengthCurve = new(new Keyframe(0, 0), new Keyframe(0.3f, 1f), new Keyframe(1, 0));
+
 		/// the value to remap the shadow strength's curve's 0 to
 		[Tooltip("the value to remap the shadow strength's curve's 0 to")]
-		public float RemapShadowStrengthZero = 0f;
+		public float RemapShadowStrengthZero;
+
 		/// the value to remap the shadow strength's curve's 1 to
 		[Tooltip("the value to remap the shadow strength's curve's 1 to")]
 		public float RemapShadowStrengthOne = 1f;
@@ -89,44 +98,41 @@ namespace MoreMountains.Feedbacks
 		protected float _originalRemapShadowStrengthOne;
 
 		/// <summary>
-		/// On init we initialize our values
+		///     On init we initialize our values
 		/// </summary>
 		protected override void Initialization()
 		{
 			base.Initialization();
-			if (BoundLight == null)
-			{
-				BoundLight = this.gameObject.GetComponent<Light2D>();
-			}
+			if (BoundLight == null) BoundLight = gameObject.GetComponent<Light2D>();
 		}
 
 		/// <summary>
-		/// When that shaker gets added, we initialize its shake duration
+		///     When that shaker gets added, we initialize its shake duration
 		/// </summary>
 		protected virtual void Reset()
 		{
 			ShakeDuration = 1f;
 		}
-               
+
 		/// <summary>
-		/// Shakes values over time
+		///     Shakes values over time
 		/// </summary>
 		protected override void Shake()
 		{
-			float newRange = ShakeFloat(FalloffCurve, FalloffRangeZero, RemapFalloffOne, RelativeValues, _initialRange);
+			var newRange = ShakeFloat(FalloffCurve, FalloffRangeZero, RemapFalloffOne, RelativeValues, _initialRange);
 			BoundLight.shapeLightFalloffSize = newRange;
-			float newIntensity = ShakeFloat(IntensityCurve, RemapIntensityZero, RemapIntensityOne, RelativeValues, _initialIntensity);
+			var newIntensity = ShakeFloat(
+				IntensityCurve, RemapIntensityZero, RemapIntensityOne, RelativeValues, _initialIntensity);
 			BoundLight.intensity = newIntensity;
-			float newShadowStrength = ShakeFloat(ShadowStrengthCurve, RemapShadowStrengthZero, RemapShadowStrengthOne, RelativeValues, _initialShadowStrength);
+			var newShadowStrength = ShakeFloat(
+				ShadowStrengthCurve, RemapShadowStrengthZero, RemapShadowStrengthOne, RelativeValues,
+				_initialShadowStrength);
 			BoundLight.shadowIntensity = Mathf.Clamp01(newShadowStrength);
-			if (ModifyColor)
-			{
-				BoundLight.color = ColorOverTime.Evaluate(_remappedTimeSinceStart);
-			}            
+			if (ModifyColor) BoundLight.color = ColorOverTime.Evaluate(_remappedTimeSinceStart);
 		}
 
 		/// <summary>
-		/// Collects initial values on the target
+		///     Collects initial values on the target
 		/// </summary>
 		protected override void GrabInitialValues()
 		{
@@ -137,7 +143,7 @@ namespace MoreMountains.Feedbacks
 		}
 
 		/// <summary>
-		/// Resets the target's values
+		///     Resets the target's values
 		/// </summary>
 		protected override void ResetTargetValues()
 		{
@@ -149,7 +155,7 @@ namespace MoreMountains.Feedbacks
 		}
 
 		/// <summary>
-		/// Resets the shaker's values
+		///     Resets the shaker's values
 		/// </summary>
 		protected override void ResetShakerValues()
 		{
@@ -162,7 +168,7 @@ namespace MoreMountains.Feedbacks
 			RemapIntensityZero = _originalRemapIntensityZero;
 			RemapIntensityOne = _originalRemapIntensityOne;
 			FalloffCurve = _originalRangeCurve;
-			FalloffRangeZero  =_originalRemapRangeZero;
+			FalloffRangeZero = _originalRemapRangeZero;
 			RemapFalloffOne = _originalRemapRangeOne;
 			ShadowStrengthCurve = _originalShadowStrengthCurve;
 			RemapShadowStrengthZero = _originalRemapShadowStrengthZero;
@@ -170,7 +176,7 @@ namespace MoreMountains.Feedbacks
 		}
 
 		/// <summary>
-		/// Starts listening for events
+		///     Starts listening for events
 		/// </summary>
 		public override void StartListening()
 		{
@@ -179,7 +185,7 @@ namespace MoreMountains.Feedbacks
 		}
 
 		/// <summary>
-		/// Stops listening for events
+		///     Stops listening for events
 		/// </summary>
 		public override void StopListening()
 		{
@@ -187,17 +193,17 @@ namespace MoreMountains.Feedbacks
 			MMLight2DShakeEvent.Unregister(OnMMLight2DShakeEvent);
 		}
 
-		public virtual void OnMMLight2DShakeEvent(float shakeDuration, bool relativeValues, bool modifyColor, Gradient colorOverTime,
+		public virtual void OnMMLight2DShakeEvent(
+			float shakeDuration, bool relativeValues, bool modifyColor, Gradient colorOverTime,
 			AnimationCurve intensityCurve, float remapIntensityZero, float remapIntensityOne,
 			AnimationCurve rangeCurve, float remapRangeZero, float remapRangeOne,
 			AnimationCurve shadowStrengthCurve, float remapShadowStrengthZero, float remapShadowStrengthOne,
-			float feedbacksIntensity = 1.0f, MMChannelData channelData = null, bool resetShakerValuesAfterShake = true, bool resetTargetValuesAfterShake = true,
-			bool useRange = false, float eventRange = 0f, Vector3 eventOriginPosition = default(Vector3))
+			float feedbacksIntensity = 1.0f, MMChannelData channelData = null, bool resetShakerValuesAfterShake = true,
+			bool resetTargetValuesAfterShake = true,
+			bool useRange = false, float eventRange = 0f, Vector3 eventOriginPosition = default)
 		{
-			if (!CheckEventAllowed(channelData, useRange, eventRange, eventOriginPosition) || (!Interruptible && Shaking))
-			{
-				return;
-			}
+			if (!CheckEventAllowed(channelData, useRange, eventRange, eventOriginPosition) ||
+				(!Interruptible && Shaking)) return;
 
 			_resetShakerValuesAfterShake = resetShakerValuesAfterShake;
 			_resetTargetValuesAfterShake = resetTargetValuesAfterShake;
@@ -239,35 +245,53 @@ namespace MoreMountains.Feedbacks
 			Play();
 		}
 	}
-           
+
 	public struct MMLight2DShakeEvent
 	{
-		static private event Delegate OnEvent;
-		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)] private static void RuntimeInitialization() { OnEvent = null; }
-		static public void Register(Delegate callback) { OnEvent += callback; }
-		static public void Unregister(Delegate callback) { OnEvent -= callback; }
+		private static event Delegate OnEvent;
 
-		public delegate void Delegate(float shakeDuration, bool relativeValues, bool modifyColor, Gradient colorOverTime, 
-			AnimationCurve intensityCurve, float remapIntensityZero, float remapIntensityOne,
-			AnimationCurve rangeCurve, float remapRangeZero, float remapRangeOne, 
-			AnimationCurve shadowStrengthCurve, float remapShadowStrengthZero, float remapShadowStrengthOne,
-			float feedbacksIntensity = 1.0f, MMChannelData channelData = null, bool resetShakerValuesAfterShake = true, bool resetTargetValuesAfterShake = true,
-			bool useRange = false, float eventRange = 0f, Vector3 eventOriginPosition = default(Vector3));
+		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+		private static void RuntimeInitialization()
+		{
+			OnEvent = null;
+		}
 
-		static public void Trigger(float shakeDuration, bool relativeValues, bool modifyColor, Gradient colorOverTime,
+		public static void Register(Delegate callback)
+		{
+			OnEvent += callback;
+		}
+
+		public static void Unregister(Delegate callback)
+		{
+			OnEvent -= callback;
+		}
+
+		public delegate void Delegate(
+			float shakeDuration, bool relativeValues, bool modifyColor, Gradient colorOverTime,
 			AnimationCurve intensityCurve, float remapIntensityZero, float remapIntensityOne,
 			AnimationCurve rangeCurve, float remapRangeZero, float remapRangeOne,
 			AnimationCurve shadowStrengthCurve, float remapShadowStrengthZero, float remapShadowStrengthOne,
-			float feedbacksIntensity = 1.0f, MMChannelData channelData = null, bool resetShakerValuesAfterShake = true, bool resetTargetValuesAfterShake = true,
-			bool useRange = false, float eventRange = 0f, Vector3 eventOriginPosition = default(Vector3))
+			float feedbacksIntensity = 1.0f, MMChannelData channelData = null, bool resetShakerValuesAfterShake = true,
+			bool resetTargetValuesAfterShake = true,
+			bool useRange = false, float eventRange = 0f, Vector3 eventOriginPosition = default);
+
+		public static void Trigger(
+			float shakeDuration, bool relativeValues, bool modifyColor, Gradient colorOverTime,
+			AnimationCurve intensityCurve, float remapIntensityZero, float remapIntensityOne,
+			AnimationCurve rangeCurve, float remapRangeZero, float remapRangeOne,
+			AnimationCurve shadowStrengthCurve, float remapShadowStrengthZero, float remapShadowStrengthOne,
+			float feedbacksIntensity = 1.0f, MMChannelData channelData = null, bool resetShakerValuesAfterShake = true,
+			bool resetTargetValuesAfterShake = true,
+			bool useRange = false, float eventRange = 0f, Vector3 eventOriginPosition = default)
 		{
-			OnEvent?.Invoke(shakeDuration, relativeValues, modifyColor, colorOverTime,
+			OnEvent?.Invoke(
+				shakeDuration, relativeValues, modifyColor, colorOverTime,
 				intensityCurve, remapIntensityZero, remapIntensityOne,
 				rangeCurve, remapRangeZero, remapRangeOne,
-				shadowStrengthCurve, remapShadowStrengthZero, remapShadowStrengthOne, 
-				feedbacksIntensity, channelData, resetShakerValuesAfterShake, resetTargetValuesAfterShake, 
+				shadowStrengthCurve, remapShadowStrengthZero, remapShadowStrengthOne,
+				feedbacksIntensity, channelData, resetShakerValuesAfterShake, resetTargetValuesAfterShake,
 				useRange, eventRange, eventOriginPosition);
 		}
-		#endif
+#endif
 	}
 }

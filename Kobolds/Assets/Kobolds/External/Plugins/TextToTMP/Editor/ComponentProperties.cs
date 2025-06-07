@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,7 +8,8 @@ namespace TextToTMPNamespace
 {
 	public partial class TextToTMPWindow
 	{
-		private abstract class ComponentProperties<LegacyComponentType, UpgradedComponentType> where LegacyComponentType : Component where UpgradedComponentType : Component
+		private abstract class ComponentProperties<LegacyComponentType, UpgradedComponentType>
+			where LegacyComponentType : Component where UpgradedComponentType : Component
 		{
 			public GameObject gameObject;
 		}
@@ -56,7 +56,9 @@ namespace TextToTMPNamespace
 		{
 			public SelectableObjectProperties selectableProperties;
 
-			public GameObject textComponentGameObject; // See SelectableObjectProperties.targetGraphicGameObject for the reason that this is a GameObject
+			public GameObject
+				textComponentGameObject; // See SelectableObjectProperties.targetGraphicGameObject for the reason that this is a GameObject
+
 			public GameObject placeholderGameObject;
 
 			public char asteriskChar;
@@ -90,7 +92,10 @@ namespace TextToTMPNamespace
 			public SelectableObjectProperties selectableProperties;
 
 			public RectTransform template;
-			public GameObject captionTextGameObject; // See SelectableObjectProperties.targetGraphicGameObject for the reason that this is a GameObject
+
+			public GameObject
+				captionTextGameObject; // See SelectableObjectProperties.targetGraphicGameObject for the reason that this is a GameObject
+
 			public GameObject itemTextGameObject;
 			public Image captionImage;
 			public Image itemImage;
@@ -112,10 +117,13 @@ namespace TextToTMPNamespace
 			public bool interactable;
 			public Navigation navigation;
 			public SpriteState spriteState;
-			public GameObject targetGraphicGameObject; // Storing it as GameObject because if the Graphic points to a Text, then it will be converted to a TextMeshProUGUI and the only way we don't lose that reference is by storing the GameObject rather than the Graphic
+
+			public GameObject
+				targetGraphicGameObject; // Storing it as GameObject because if the Graphic points to a Text, then it will be converted to a TextMeshProUGUI and the only way we don't lose that reference is by storing the GameObject rather than the Graphic
+
 			public Selectable.Transition transition;
 
-			public SelectableObjectProperties( Selectable selectable )
+			public SelectableObjectProperties(Selectable selectable)
 			{
 				animationTriggers = selectable.animationTriggers;
 				image = selectable.image;
@@ -127,7 +135,7 @@ namespace TextToTMPNamespace
 				transition = selectable.transition;
 			}
 
-			public void ApplyTo( Selectable selectable )
+			public void ApplyTo(Selectable selectable)
 			{
 				selectable.animationTriggers = animationTriggers;
 				selectable.image = image;
@@ -135,7 +143,8 @@ namespace TextToTMPNamespace
 				selectable.interactable = interactable;
 				selectable.navigation = navigation;
 				selectable.spriteState = spriteState;
-				selectable.targetGraphic = targetGraphicGameObject ? targetGraphicGameObject.GetComponent<Graphic>() : null;
+				selectable.targetGraphic =
+					targetGraphicGameObject ? targetGraphicGameObject.GetComponent<Graphic>() : null;
 				selectable.transition = transition;
 			}
 		}
@@ -143,12 +152,20 @@ namespace TextToTMPNamespace
 		[Serializable]
 		private class UnityEventProperties
 		{
-			public enum TargetType { None, Text, InputField, Dropdown, TextMesh }
+			public enum TargetType
+			{
+				None,
+				Text,
+				InputField,
+				Dropdown,
+				TextMesh
+			}
 
 #if UNITY_2019_3_OR_NEWER
 			[SerializeReference]
 #endif
 			public object persistentCalls;
+
 			public TargetType[] targetTypes;
 			public GameObject[] targetGameObjects;
 		}

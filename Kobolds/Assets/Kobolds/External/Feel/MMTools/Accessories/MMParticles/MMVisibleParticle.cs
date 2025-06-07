@@ -1,20 +1,19 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 namespace MoreMountains.Tools
 {
 	/// <summary>
-	/// Adds this class to particles to force their sorting layer
+	///     Adds this class to particles to force their sorting layer
 	/// </summary>
 	[AddComponentMenu("More Mountains/Tools/Particles/MM Visible Particle")]
-	public class MMVisibleParticle : MonoBehaviour {
-
+	public class MMVisibleParticle : MonoBehaviour
+	{
 		/// <summary>
-		/// Sets the particle system's renderer to the Visible Particles sorting layer
+		///     Sets the particle system's renderer to the Visible Particles sorting layer
 		/// </summary>
-		protected virtual void Start () 
+		protected virtual void Start()
 		{
 			GetComponent<ParticleSystem>().GetComponent<Renderer>().sortingLayerName = "VisibleParticles";
-		}		
+		}
 	}
 }

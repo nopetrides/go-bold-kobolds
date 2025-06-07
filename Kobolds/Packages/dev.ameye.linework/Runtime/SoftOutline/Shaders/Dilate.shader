@@ -18,7 +18,7 @@ Shader "Hidden/Outlines/Soft Outline/Dilate"
         #include "Packages/com.unity.render-pipelines.core/Runtime/Utilities/Blit.hlsl"
 
         #pragma multi_compile_local _ SCALE_WITH_RESOLUTION
-        
+
         CBUFFER_START(UnityPerMaterial)
             float _KernelSize;
             float _ReferenceResolution;
@@ -44,12 +44,13 @@ Shader "Hidden/Outlines/Soft Outline/Dilate"
                 float3 nearestActivePixelColor = float3(0, 0, 0);
 
                 float scale = 1;
-                
+
                 #if defined(SCALE_WITH_RESOLUTION)
                 scale = 1 * _ScreenParams.y / _ReferenceResolution;
                 #endif
 
-                for (int x = -_KernelSize; x <= _KernelSize; x++) {
+                for (int x = -_KernelSize; x <= _KernelSize; x++)
+                {
                     float2 offset = float2(x, 0) * _BlitTexture_TexelSize.xy * scale;
                     float4 sample = SAMPLE_TEXTURE2D_X(_BlitTexture, sampler_BlitTexture, IN.texcoord + offset);
 
@@ -57,7 +58,8 @@ Shader "Hidden/Outlines/Soft Outline/Dilate"
                     float falloff = 1.0f - distance / _KernelSize;
                     sum += sample.a * falloff;
 
-                    if (distance < shortestActivePixelDistance && sample.a >= 1.0) {
+                    if (distance < shortestActivePixelDistance && sample.a >= 1.0)
+                    {
                         shortestActivePixelDistance = distance;
                         nearestActivePixelColor = sample.xyz;
                     }
@@ -85,12 +87,13 @@ Shader "Hidden/Outlines/Soft Outline/Dilate"
                 float brightestWeightedAlpha = 0;
 
                 float scale = 1;
-                
+
                 #if defined(SCALE_WITH_RESOLUTION)
                 scale = 1 * _ScreenParams.y / _ReferenceResolution;
                 #endif
 
-                for (int y = -_KernelSize; y <= _KernelSize; y++) {
+                for (int y = -_KernelSize; y <= _KernelSize; y++)
+                {
                     float2 offset = float2(0, y) * _BlitTexture_TexelSize.xy * scale;
                     float4 sample = SAMPLE_TEXTURE2D_X(_BlitTexture, sampler_BlitTexture, IN.texcoord + offset);
 
@@ -99,7 +102,8 @@ Shader "Hidden/Outlines/Soft Outline/Dilate"
                     float weightedValue = sample.a * falloff;
                     sum += weightedValue;
 
-                    if (weightedValue > brightestWeightedAlpha) {
+                    if (weightedValue > brightestWeightedAlpha)
+                    {
                         brightestWeightedAlpha = weightedValue;
                         brightestActivePixelColor = sample.xyz;
                     }

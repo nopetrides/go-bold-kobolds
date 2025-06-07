@@ -2,8 +2,7 @@
 
 namespace Febucci.Attributes
 {
-    public class CharsDisplayTimeAttribute : PropertyAttribute
-    {
-    }
-
+	public class CharsDisplayTimeAttribute : PropertyAttribute
+	{
+	}
 }

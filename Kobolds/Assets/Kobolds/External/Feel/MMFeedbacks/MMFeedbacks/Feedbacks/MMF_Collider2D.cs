@@ -1,60 +1,63 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Scripting.APIUpdating;
 
 namespace MoreMountains.Feedbacks
 {
 	/// <summary>
-	/// This feedback will let you enable/disable/toggle a target collider 2D, or change its trigger status
+	///     This feedback will let you enable/disable/toggle a target collider 2D, or change its trigger status
 	/// </summary>
 	[AddComponentMenu("")]
-	[FeedbackHelp("This feedback will let you enable/disable/toggle a target collider 2D, or change its trigger status")]
+	[FeedbackHelp(
+		"This feedback will let you enable/disable/toggle a target collider 2D, or change its trigger status")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
 	[FeedbackPath("GameObject/Collider2D")]
 	public class MMF_Collider2D : MMF_Feedback
 	{
+		/// the possible effects the feedback can have on the target collider's status
+		public enum Modes
+		{
+			Enable,
+			Disable,
+			ToggleActive,
+			Trigger,
+			NonTrigger,
+			ToggleTrigger
+		}
+
 		/// a static bool used to disable all feedbacks of this type at once
 		public static bool FeedbackTypeAuthorized = true;
-		/// sets the inspector color for this feedback
-		#if UNITY_EDITOR
-		public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.GameObjectColor; } }
-		public override bool EvaluateRequiresSetup() { return (TargetCollider2D == null); }
-		public override string RequiredTargetText { get { return TargetCollider2D != null ? TargetCollider2D.name : "";  } }
-		public override string RequiresSetupText { get { return "This feedback requires that a TargetCollider2D be set to be able to work properly. You can set one below."; } }
-		#endif
-		public override bool HasAutomatedTargetAcquisition => true;
-		protected override void AutomateTargetAcquisition() => TargetCollider2D = FindAutomatedTarget<Collider2D>();
 
-		/// the possible effects the feedback can have on the target collider's status 
-		public enum Modes { Enable, Disable, ToggleActive, Trigger, NonTrigger, ToggleTrigger }
+		protected bool _initialState;
+
+		/// the effect the feedback will have on the target collider's status
+		public Modes Mode = Modes.Disable;
 
 		[MMFInspectorGroup("Collider 2D", true, 12, true)]
 		/// the collider to act upon
 		[Tooltip("the collider to act upon")]
 		public Collider2D TargetCollider2D;
-		/// the effect the feedback will have on the target collider's status 
-		public Modes Mode = Modes.Disable;
 
-		protected bool _initialState;
+		public override bool HasAutomatedTargetAcquisition => true;
+
+		protected override void AutomateTargetAcquisition()
+		{
+			TargetCollider2D = FindAutomatedTarget<Collider2D>();
+		}
 
 		/// <summary>
-		/// On Play we change the state of our collider if needed
+		///     On Play we change the state of our collider if needed
 		/// </summary>
 		/// <param name="position"></param>
 		/// <param name="feedbacksIntensity"></param>
 		protected override void CustomPlayFeedback(Vector3 position, float feedbacksIntensity = 1.0f)
 		{
-			if (!Active || !FeedbackTypeAuthorized || (TargetCollider2D == null))
-			{
-				return;
-			} 
+			if (!Active || !FeedbackTypeAuthorized || TargetCollider2D == null) return;
 			ApplyChanges(Mode);
 		}
 
 		/// <summary>
-		/// Changes the state of the collider
+		///     Changes the state of the collider
 		/// </summary>
 		/// <param name="state"></param>
 		protected virtual void ApplyChanges(Modes mode)
@@ -89,16 +92,13 @@ namespace MoreMountains.Feedbacks
 					throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
 			}
 		}
-		
+
 		/// <summary>
-		/// On restore, we put our object back at its initial position
+		///     On restore, we put our object back at its initial position
 		/// </summary>
 		protected override void CustomRestoreInitialValues()
 		{
-			if (!Active || !FeedbackTypeAuthorized)
-			{
-				return;
-			}
+			if (!Active || !FeedbackTypeAuthorized) return;
 
 			switch (Mode)
 			{
@@ -122,5 +122,22 @@ namespace MoreMountains.Feedbacks
 					break;
 			}
 		}
+
+		/// sets the inspector color for this feedback
+#if UNITY_EDITOR
+		public override Color FeedbackColor
+		{
+			get { return MMFeedbacksInspectorColors.GameObjectColor; }
+		}
+
+		public override bool EvaluateRequiresSetup()
+		{
+			return TargetCollider2D == null;
+		}
+
+		public override string RequiredTargetText => TargetCollider2D != null ? TargetCollider2D.name : "";
+		public override string RequiresSetupText =>
+			"This feedback requires that a TargetCollider2D be set to be able to work properly. You can set one below.";
+#endif
 	}
 }

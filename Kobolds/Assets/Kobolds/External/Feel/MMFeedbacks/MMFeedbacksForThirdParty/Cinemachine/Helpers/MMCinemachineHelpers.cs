@@ -1,11 +1,11 @@
-using MoreMountains.Feedbacks;
-using MoreMountains.Tools;
-using UnityEngine;
 #if MM_CINEMACHINE
 using Cinemachine;
 #elif MM_CINEMACHINE3
 using Unity.Cinemachine;
 #endif
+using MoreMountains.Feedbacks;
+using MoreMountains.Tools;
+using UnityEngine;
 
 namespace MoreMountains.FeedbacksForThirdParty
 {
@@ -14,16 +14,17 @@ namespace MoreMountains.FeedbacksForThirdParty
 		public static GameObject AutomaticCinemachineShakersSetup(MMF_Player owner, string feedbackName)
 		{
 			GameObject virtualCameraGo = null;
-			
-			
-			#if MM_CINEMACHINE || MM_CINEMACHINE3
-			bool newVcam = false;
-			string additions = owner.name + " "+feedbackName+" feedback automatic shaker setup : ";
-			#endif
-			
-			#if MM_CINEMACHINE 
+
+
+#if MM_CINEMACHINE || MM_CINEMACHINE3
+			var newVcam = false;
+			var additions = owner.name + " " + feedbackName + " feedback automatic shaker setup : ";
+#endif
+
+#if MM_CINEMACHINE
 				//looks for a Cinemachine Brain in the scene
-				CinemachineBrain cinemachineBrain = (CinemachineBrain)Object.FindAnyObjectByType(typeof(CinemachineBrain));
+				CinemachineBrain cinemachineBrain =
+ (CinemachineBrain)Object.FindAnyObjectByType(typeof(CinemachineBrain));
 				if (cinemachineBrain == null)
 				{
 					cinemachineBrain = Camera.main.gameObject.AddComponent<CinemachineBrain>();
@@ -31,7 +32,8 @@ namespace MoreMountains.FeedbacksForThirdParty
 				}
 			
 				// looks for a vcam in the scene
-				CinemachineVirtualCamera virtualCamera = (CinemachineVirtualCamera)Object.FindAnyObjectByType(typeof(CinemachineVirtualCamera));
+				CinemachineVirtualCamera virtualCamera =
+ (CinemachineVirtualCamera)Object.FindAnyObjectByType(typeof(CinemachineVirtualCamera));
 				if (virtualCamera == null)
 				{
 					GameObject newVirtualCamera = new GameObject("CinemachineVirtualCamera");
@@ -50,49 +52,49 @@ namespace MoreMountains.FeedbacksForThirdParty
 					impulseListener = virtualCamera.gameObject.AddComponent<CinemachineImpulseListener>();
 					additions += "Added an impulse listener. ";
 			}
-			#elif MM_CINEMACHINE3
-				//looks for a Cinemachine Brain in the scene
-				CinemachineBrain cinemachineBrain = (CinemachineBrain)Object.FindAnyObjectByType(typeof(CinemachineBrain));
-				if (cinemachineBrain == null)
-				{
-					cinemachineBrain = Camera.main.gameObject.AddComponent<CinemachineBrain>();
-					additions += "Added a Cinemachine Brain to the scene. ";
-				}
-				// looks for a vcam in the scene
-				CinemachineCamera virtualCamera = (CinemachineCamera)Object.FindAnyObjectByType(typeof(CinemachineCamera));
-				if (virtualCamera == null)
-				{
-					GameObject newVirtualCamera = new GameObject("CinemachineCamera");
-					if (Camera.main != null)
-					{
-						newVirtualCamera.transform.position = Camera.main.transform.position;	
-					}
-					virtualCamera = newVirtualCamera.AddComponent<CinemachineCamera>();
-					additions += "Added a Cinemachine Camera to the scene. ";
-					newVcam = true;
-				}
-				virtualCameraGo = virtualCamera.gameObject;
-				CinemachineImpulseListener impulseListener = virtualCamera.GetComponent<CinemachineImpulseListener>();
-				if (impulseListener == null)
-				{
-					impulseListener = virtualCamera.gameObject.AddComponent<CinemachineImpulseListener>();
-					additions += "Added an impulse listener. ";
-				}
-			#endif
+#elif MM_CINEMACHINE3
+			//looks for a Cinemachine Brain in the scene
+			var cinemachineBrain = (CinemachineBrain) FindAnyObjectByType(typeof(CinemachineBrain));
+			if (cinemachineBrain == null)
+			{
+				cinemachineBrain = Camera.main.gameObject.AddComponent<CinemachineBrain>();
+				additions += "Added a Cinemachine Brain to the scene. ";
+			}
 
-			#if MM_CINEMACHINE || MM_CINEMACHINE3
+			// looks for a vcam in the scene
+			var virtualCamera = (CinemachineCamera) FindAnyObjectByType(typeof(CinemachineCamera));
+			if (virtualCamera == null)
+			{
+				var newVirtualCamera = new GameObject("CinemachineCamera");
+				if (Camera.main != null) newVirtualCamera.transform.position = Camera.main.transform.position;
+				virtualCamera = newVirtualCamera.AddComponent<CinemachineCamera>();
+				additions += "Added a Cinemachine Camera to the scene. ";
+				newVcam = true;
+			}
+
+			virtualCameraGo = virtualCamera.gameObject;
+			var impulseListener = virtualCamera.GetComponent<CinemachineImpulseListener>();
+			if (impulseListener == null)
+			{
+				impulseListener = virtualCamera.gameObject.AddComponent<CinemachineImpulseListener>();
+				additions += "Added an impulse listener. ";
+			}
+#endif
+
+#if MM_CINEMACHINE || MM_CINEMACHINE3
 			if (newVcam)
 			{
 				virtualCameraGo.MMGetOrAddComponent<MMCinemachineCameraShaker>();
 				virtualCameraGo.MMGetOrAddComponent<MMCinemachineZoom>();
 				virtualCameraGo.MMGetOrAddComponent<MMCinemachinePriorityListener>();
 				virtualCameraGo.MMGetOrAddComponent<MMCinemachineClippingPlanesShaker>();
-				virtualCameraGo.MMGetOrAddComponent<MMCinemachineFieldOfViewShaker>();	
-				additions += "Added camera shaker, zoom, priority listener, clipping planes shaker and field of view shaker to the Cinemachine Camera. ";
+				virtualCameraGo.MMGetOrAddComponent<MMCinemachineFieldOfViewShaker>();
+				additions +=
+					"Added camera shaker, zoom, priority listener, clipping planes shaker and field of view shaker to the Cinemachine Camera. ";
 			}
-			
-			MMDebug.DebugLogInfo( additions + "You're all set.");
-			#endif
+
+			MMDebug.DebugLogInfo(additions + "You're all set.");
+#endif
 			return virtualCameraGo;
 		}
 	}

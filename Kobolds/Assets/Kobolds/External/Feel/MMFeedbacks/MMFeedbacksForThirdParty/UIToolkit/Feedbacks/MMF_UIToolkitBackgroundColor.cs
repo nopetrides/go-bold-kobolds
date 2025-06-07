@@ -1,13 +1,11 @@
-﻿using System.Collections;
-using MoreMountains.Feedbacks;
+﻿using MoreMountains.Feedbacks;
 using UnityEngine;
 using UnityEngine.Scripting.APIUpdating;
-using UnityEngine.UIElements;
 
 namespace MoreMountains.FeedbacksForThirdParty
 {
 	/// <summary>
-	/// This feedback will let you change the background color of an element on a target UI Document
+	///     This feedback will let you change the background color of an element on a target UI Document
 	/// </summary>
 	[AddComponentMenu("")]
 	[FeedbackHelp("This feedback will let you change the background color of an element on a target UI Document")]
@@ -17,7 +15,7 @@ namespace MoreMountains.FeedbacksForThirdParty
 	{
 		protected override void ApplyColor(Color newColor)
 		{
-			foreach (VisualElement element in _visualElements)
+			foreach (var element in _visualElements)
 			{
 				element.style.backgroundColor = newColor;
 				HandleMarkDirty(element);

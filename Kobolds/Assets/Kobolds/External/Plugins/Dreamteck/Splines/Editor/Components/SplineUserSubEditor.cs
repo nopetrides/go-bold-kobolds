@@ -1,40 +1,30 @@
+using UnityEditor;
+
 namespace Dreamteck.Splines.Editor
 {
-    using System.Collections;
-    using System.Collections.Generic;
-    using UnityEngine;
-    using UnityEditor;
+	public class SplineUserSubEditor
+	{
+		public bool alwaysOpen = false;
+		protected SplineUserEditor editor;
+		private bool foldout;
+		protected string title = "";
+		protected SplineUser user;
 
-    public class SplineUserSubEditor
-    {
-        protected string title = "";
-        protected SplineUser user;
-        protected SplineUserEditor editor = null;
-        public bool alwaysOpen = false;
+		public SplineUserSubEditor(SplineUser user, SplineUserEditor editor)
+		{
+			this.editor = editor;
+			this.user = user;
+		}
 
-        public bool isOpen
-        {
-            get { return foldout || alwaysOpen; }
-        }
-        bool foldout = false;
+		public bool isOpen => foldout || alwaysOpen;
 
-        public SplineUserSubEditor(SplineUser user, SplineUserEditor editor)
-        {
-            this.editor = editor;
-            this.user = user;
-        }
+		public virtual void DrawInspector()
+		{
+			if (!alwaysOpen) foldout = EditorGUILayout.Foldout(foldout, title);
+		}
 
-        public virtual void DrawInspector()
-        {
-            if (!alwaysOpen)
-            {
-                foldout = EditorGUILayout.Foldout(foldout, title);
-            }
-        }
-
-        public virtual void DrawScene()
-        {
-
-        }
-    }
+		public virtual void DrawScene()
+		{
+		}
+	}
 }

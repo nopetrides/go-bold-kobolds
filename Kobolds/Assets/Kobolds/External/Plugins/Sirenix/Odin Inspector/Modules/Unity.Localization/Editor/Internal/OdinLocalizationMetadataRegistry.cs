@@ -14,19 +14,19 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor.Internal
 {
 	public class OdinLocalizationMetadataRegistry
 	{
-		public static readonly List<Type> AssetEntryMetadataTypes = new List<Type>();
+		public static readonly List<Type> AssetEntryMetadataTypes = new();
 
-		public static readonly List<Type> StringEntryMetadataTypes = new List<Type>();
+		public static readonly List<Type> StringEntryMetadataTypes = new();
 
-		public static readonly Dictionary<Type, bool> MetadataAllowsMultiple = new Dictionary<Type, bool>();
+		public static readonly Dictionary<Type, bool> MetadataAllowsMultiple = new();
 
 		static OdinLocalizationMetadataRegistry()
 		{
-			TypeCache.TypeCollection metadataTypes = TypeCache.GetTypesDerivedFrom(typeof(IMetadata));
+			var metadataTypes = TypeCache.GetTypesDerivedFrom(typeof(IMetadata));
 
 			for (var i = 0; i < metadataTypes.Count; i++)
 			{
-				Type currentType = metadataTypes[i];
+				var currentType = metadataTypes[i];
 
 				var attr = currentType.GetCustomAttribute<MetadataAttribute>();
 
@@ -38,17 +38,12 @@ namespace Sirenix.OdinInspector.Modules.Localization.Editor.Internal
 
 				MetadataAllowsMultiple[currentType] = attr.AllowMultiple;
 
-				MetadataType currentAllowedTypes = attr.AllowedTypes;
+				var currentAllowedTypes = attr.AllowedTypes;
 
 				if (currentAllowedTypes.HasFlag(MetadataType.StringTableEntry))
-				{
 					StringEntryMetadataTypes.Add(currentType);
-				}
 
-				if (currentAllowedTypes.HasFlag(MetadataType.AssetTableEntry))
-				{
-					AssetEntryMetadataTypes.Add(currentType);
-				}
+				if (currentAllowedTypes.HasFlag(MetadataType.AssetTableEntry)) AssetEntryMetadataTypes.Add(currentType);
 			}
 		}
 	}
